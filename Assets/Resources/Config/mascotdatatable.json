@@ -1,0 +1,55 @@
+[
+  {
+    "ID": "1",
+    "name": "橡皮鸭",
+    "description": "嘎！",
+    "stackable": false,
+    "rank": 1,
+    "mainSE": [
+      {
+        "$type": "SE_监听事件",
+        "evt": 1,
+        "actions": [
+          {
+            "ID": "1",
+            "conditions": [],
+            "actions": [
+              {
+                "$type": "GA_测试文字",
+                "text": "嘎——！"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "ID": "2",
+    "name": "鲨鱼",
+    "description": "凶狠猫鲨",
+    "stackable": true,
+    "rank": 1,
+    "mainSE": [
+      {
+        "$type": "SE_监听事件",
+        "evt": 2,
+        "actions": [
+          {
+            "ID": "1",
+            "conditions": [],
+            "actions": [
+              {
+                "$type": "GA_补充食材",
+                "value": {
+                  "$type": "DV_值",
+                  "number": 3
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,16 @@
+[
+  {
+    "ID": "wood",
+    "name": "木签",
+    "description": "这是一根木签",
+    "strategy": 0,
+    "sprite": "BBQ_0"
+  },
+  {
+    "ID": "iron",
+    "name": "铁签",
+    "description": "这是一根铁签",
+    "strategy": 0,
+    "sprite": "BBQ_1"
+  }
+]

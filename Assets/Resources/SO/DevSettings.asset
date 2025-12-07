@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc549de5bb0c38f4f895bc2c74846702, type: 3}
+  m_Name: DevSettings
+  m_EditorClassIdentifier: 
+  AnimSpeed: 0
+  UseAnimTimeScale: 1
+  AnimTimeScale: 4
+  AnimTimeScaleSpeed: 0.002
+  baseTimeScale: 2
+  maxTimeScale: 6
+  defaultAnimInterval: 0.1
+  targetFrameRate: 500
+  AddRarityTextColor: {r: 1, g: 0.9568628, b: 0.37254903, a: 1}
+  AddTasteTextColor: {r: 0.97647065, g: 0.61960787, b: 0.44705886, a: 1}
+  foodInstanceMoveAnimDelay: 0.04
+  tooltipMaxWidth: 450
+  tooltipPadding: {x: 10, y: 10}
+  archRadius: 2527.98
+  centerOffset: -2427.09
+  maxHandSizeForLayout: 11
+  maxSpacingAngle: 3.38
+  minSpacingAngle: 1.56
+  rate: 1.09
+  minPushAngle: 0.91
+  pushMaxAngle: 2.56
+  pushRange: 22
+  pushFalloffPower: 1.5
+  hoverScale: 1.4
+  hoverHeightOffset: 80
+  targetingHeightOffset: 40

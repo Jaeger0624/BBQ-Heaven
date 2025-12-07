@@ -1,0 +1,91 @@
+[
+  {
+    "ID": "1",
+    "name": "小晕",
+    "description": "小晕又把后厨搞砸了！",
+    "SkillDescription": "<color=yellow>被动：</color>每次制作完烤串后，将食材打乱",
+    "SEs": [
+      {
+        "$type": "SE_监听事件",
+        "evt": 1,
+        "actions": [
+          {
+            "ID": "1",
+            "conditions": [],
+            "actions": [
+              {
+                "$type": "GA_测试文字",
+                "text": "嘎——！"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "$type": "SE_监听事件",
+        "evt": 3,
+        "actions": [
+          {
+            "ID": "1",
+            "conditions": [],
+            "actions": [
+              {
+                "$type": "GA_随机移动食材",
+                "info": {
+                  "strategy": 0,
+                  "value": {
+                    "$type": "DV_食材实例数量"
+                  },
+                  "types": [
+                    1
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "Active": "",
+    "mascotList": [],
+    "stickList": [
+      "wood",
+      "wood",
+      "wood"
+    ]
+  },
+  {
+    "ID": "2",
+    "name": "三花",
+    "description": "可爱三花",
+    "SkillDescription": "<color=yellow>被动：</color>每天开始经营时，额外补充10个食材",
+    "SEs": [
+      {
+        "$type": "SE_监听事件",
+        "evt": 2,
+        "actions": [
+          {
+            "ID": "1",
+            "conditions": [],
+            "actions": [
+              {
+                "$type": "GA_补充食材",
+                "value": {
+                  "$type": "DV_值",
+                  "number": 10
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "Active": "",
+    "mascotList": [],
+    "stickList": [
+      "wood",
+      "wood",
+      "wood"
+    ]
+  }
+]

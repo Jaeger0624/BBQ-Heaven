@@ -1,0 +1,324 @@
+[
+  {
+    "ID": "tomato",
+    "name": "番茄",
+    "description": "这是一颗番茄",
+    "type": 1,
+    "tag": 0,
+    "rarity": 1,
+    "taste": 2,
+    "sprite": "Tomato",
+    "effectDescription": "添加到烤串时，随机将周围一个食材",
+    "CGAs": [
+      {
+        "type": 1,
+        "action": {
+          "ID": "1",
+          "conditions": [],
+          "actions": [
+            {
+              "$type": "GA_添加食材到烤串",
+              "info": {
+                "strategy": 1,
+                "value": {
+                  "$type": "DV_值",
+                  "number": 1
+                },
+                "types": [
+                  1
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": 0,
+        "action": {
+          "ID": "1",
+          "conditions": [],
+          "actions": [
+            {
+              "$type": "GA_为食材加属性",
+              "rarity": {
+                "$type": "DV_值",
+                "number": 1
+              },
+              "taste": {
+                "$type": "DV_值",
+                "number": 1
+              },
+              "info": {
+                "strategy": 1,
+                "value": {
+                  "$type": "DV_值",
+                  "number": 1
+                },
+                "types": [
+                  1,
+                  2
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "SEs": [],
+    "rank": 1
+  },
+  {
+    "ID": "apple",
+    "name": "苹果",
+    "description": "这是一颗苹果",
+    "type": 2,
+    "tag": 0,
+    "rarity": 2,
+    "taste": 1,
+    "sprite": "Apple",
+    "effectDescription": "如果食材周围有空位，则美味度+1、珍稀度+1",
+    "CGAs": [
+      {
+        "type": 1,
+        "action": {
+          "ID": "1",
+          "conditions": [
+            {
+              "$type": "Condition_DV检测",
+              "sign": 2,
+              "DV1": {
+                "$type": "DV_周围空位数"
+              },
+              "DV2": {
+                "$type": "DV_值",
+                "number": 1
+              }
+            }
+          ],
+          "actions": [
+            {
+              "$type": "GA_直接修改当前烧烤值",
+              "rarityValue": {
+                "$type": "DV_值",
+                "number": 1
+              },
+              "tasteValue": {
+                "$type": "DV_值",
+                "number": 1
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "SEs": [],
+    "rank": 1
+  },
+  {
+    "ID": "beer",
+    "name": "啤酒",
+    "description": "这是一瓶啤酒",
+    "type": 2,
+    "tag": 0,
+    "rarity": 2,
+    "taste": 2,
+    "sprite": "Beer",
+    "effectDescription": "如果食材周围有至少2个空位，则美味度+2、珍稀度+2",
+    "CGAs": [
+      {
+        "type": 1,
+        "action": {
+          "ID": "1",
+          "conditions": [
+            {
+              "$type": "Condition_食材周围空位",
+              "sign": 2,
+              "amount": 2
+            }
+          ],
+          "actions": [
+            {
+              "$type": "GA_直接修改当前烧烤值",
+              "rarityValue": {
+                "$type": "DV_值",
+                "number": 2
+              },
+              "tasteValue": {
+                "$type": "DV_值",
+                "number": 2
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "SEs": [],
+    "rank": 1
+  },
+  {
+    "ID": "chicken",
+    "name": "鸡肉",
+    "description": "一只鸡！",
+    "type": 4,
+    "tag": 1,
+    "rarity": 1,
+    "taste": 2,
+    "sprite": "Chicken",
+    "effectDescription": "添加到烤串上时\\n为周围随机1个未添加到烤串上的食材\\n+2美味度 +2珍稀度",
+    "CGAs": [
+      {
+        "type": 1,
+        "action": {
+          "ID": "1",
+          "conditions": [],
+          "actions": [
+            {
+              "$type": "GA_重复执行GA",
+              "value": {
+                "$type": "DV_值",
+                "number": 2
+              },
+              "action": {
+                "$type": "GA_为食材加属性",
+                "rarity": {
+                  "$type": "DV_值",
+                  "number": 1
+                },
+                "taste": {
+                  "$type": "DV_值",
+                  "number": 1
+                },
+                "info": {
+                  "strategy": 1,
+                  "value": {
+                    "$type": "DV_值",
+                    "number": 1
+                  },
+                  "types": [
+                    1,
+                    2
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "SEs": [],
+    "rank": 1
+  },
+  {
+    "ID": "shrimp",
+    "name": "虾",
+    "description": "一只跳跳虾！",
+    "type": 8,
+    "tag": 0,
+    "rarity": 1,
+    "taste": 1,
+    "sprite": "Shrimp",
+    "effectDescription": "完成烤串后\\n小虾会选择一个方向移动\\n并增加属性+1/+1",
+    "CGAs": [],
+    "SEs": [
+      {
+        "$type": "SE_监听事件",
+        "evt": 3,
+        "actions": [
+          {
+            "ID": "1",
+            "conditions": [],
+            "actions": [
+              {
+                "$type": "GA_食材位移",
+                "info": {
+                  "strategy": 3,
+                  "value": {
+                    "$type": "DV_值",
+                    "number": 1
+                  },
+                  "types": [
+                    1
+                  ]
+                },
+                "cellInfo": {
+                  "strategy": 0,
+                  "isRandom": true
+                }
+              }
+            ]
+          },
+          {
+            "ID": "2",
+            "conditions": [],
+            "actions": [
+              {
+                "$type": "GA_为食材加属性",
+                "rarity": {
+                  "$type": "DV_值",
+                  "number": 1
+                },
+                "taste": {
+                  "$type": "DV_值",
+                  "number": 1
+                },
+                "info": {
+                  "strategy": 3,
+                  "value": {
+                    "$type": "DV_值",
+                    "number": 1
+                  },
+                  "types": [
+                    1
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "rank": 1
+  },
+  {
+    "ID": "cherry",
+    "name": "樱桃",
+    "description": "成群结队的樱桃！",
+    "type": 2,
+    "tag": 0,
+    "rarity": 2,
+    "taste": 2,
+    "sprite": "Cherry",
+    "effectDescription": "被选中时\\n每与另一个樱桃相邻，则烧烤属性+2/+2",
+    "CGAs": [
+      {
+        "type": 3,
+        "action": {
+          "ID": "1",
+          "conditions": [],
+          "actions": [
+            {
+              "$type": "GA_重复执行GA",
+              "value": {
+                "$type": "DV_周围食材数",
+                "id": "cherry"
+              },
+              "action": {
+                "$type": "GA_直接修改当前烧烤值",
+                "rarityValue": {
+                  "$type": "DV_值",
+                  "number": 2
+                },
+                "tasteValue": {
+                  "$type": "DV_值",
+                  "number": 2
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "SEs": [],
+    "rank": 2
+  }
+]

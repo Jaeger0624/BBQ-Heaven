@@ -1,0 +1,122 @@
+[
+  {
+    "ID": "1",
+    "name": "测试",
+    "description": "测试！",
+    "cost": 0,
+    "target": 0,
+    "CGAs": [
+      {
+        "type": 0,
+        "action": {
+          "ID": "1",
+          "conditions": [],
+          "actions": [
+            {
+              "$type": "GA_抽牌",
+              "value": {
+                "$type": "DV_值",
+                "number": 1
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "ID": "2",
+    "name": "移动",
+    "description": "移动！",
+    "cost": 0,
+    "target": 2,
+    "CGAs": [
+      {
+        "type": 0,
+        "action": {
+          "ID": "1",
+          "conditions": [],
+          "actions": [
+            {
+              "$type": "GA_食材位移",
+              "info": {
+                "strategy": 4,
+                "value": {
+                  "$type": "DV_值",
+                  "number": 1
+                },
+                "types": [
+                  1
+                ]
+              },
+              "cellInfo": {
+                "strategy": 0,
+                "isRandom": false
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "ID": "3",
+    "name": "补充",
+    "description": "补充",
+    "cost": 0,
+    "target": 0,
+    "CGAs": [
+      {
+        "type": 0,
+        "action": {
+          "ID": "1",
+          "conditions": [],
+          "actions": [
+            {
+              "$type": "GA_补充食材",
+              "value": {
+                "$type": "DV_值",
+                "number": 1
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "ID": "4",
+    "name": "交换",
+    "description": "交换",
+    "cost": 0,
+    "target": 3,
+    "CGAs": [
+      {
+        "type": 0,
+        "action": {
+          "ID": "1",
+          "conditions": [],
+          "actions": [
+            {
+              "$type": "GA_食材换位",
+              "foodInfo": {
+                "strategy": 4,
+                "value": {
+                  "$type": "DV_值",
+                  "number": 1
+                },
+                "types": [
+                  1
+                ]
+              },
+              "cellInfo": {
+                "strategy": 1,
+                "isRandom": false
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

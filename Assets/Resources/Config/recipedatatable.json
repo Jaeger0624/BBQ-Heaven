@@ -1,0 +1,64 @@
+[
+  {
+    "ID": "1",
+    "name": "大餐",
+    "description": "完全是大餐！",
+    "ruleDescription": "烤串上的食物不少于6个",
+    "actionDescription": "补充1个食材",
+    "rules": [
+      {
+        "$type": "RecipeRule_动态值",
+        "DV1": {
+          "$type": "DV_当前构建烤串食材数量"
+        },
+        "sign": 2,
+        "DV2": {
+          "$type": "DV_值",
+          "number": 6
+        }
+      }
+    ],
+    "GA": [
+      {
+        "$type": "GA_补充食材",
+        "value": {
+          "$type": "DV_值",
+          "number": 1
+        }
+      }
+    ]
+  },
+  {
+    "ID": "2",
+    "name": "小巧精悍",
+    "description": "不饿不撑刚刚好！",
+    "ruleDescription": "烤串上的食物少于5个",
+    "actionDescription": "为烤串+5/+5",
+    "rules": [
+      {
+        "$type": "RecipeRule_动态值",
+        "DV1": {
+          "$type": "DV_当前构建烤串食材数量"
+        },
+        "sign": 3,
+        "DV2": {
+          "$type": "DV_值",
+          "number": 5
+        }
+      }
+    ],
+    "GA": [
+      {
+        "$type": "GA_直接修改当前烧烤值",
+        "rarityValue": {
+          "$type": "DV_值",
+          "number": 5
+        },
+        "tasteValue": {
+          "$type": "DV_值",
+          "number": 5
+        }
+      }
+    ]
+  }
+]

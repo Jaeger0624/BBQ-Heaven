@@ -1,0 +1,124 @@
+[
+  {
+    "ID": "1",
+    "name": "小鸟胃",
+    "description": "不能吃太多！",
+    "type": 0,
+    "tagCGAs": [
+      {
+        "GADescription": "<size=50>1.5x</size>",
+        "CDDescription": "食材少于4个",
+        "type": 1,
+        "cga": {
+          "ID": "1",
+          "conditions": [
+            {
+              "$type": "Condition_DV检测",
+              "sign": 3,
+              "DV1": {
+                "$type": "DV_售卖食材数量"
+              },
+              "DV2": {
+                "$type": "DV_值",
+                "number": 4
+              }
+            }
+          ],
+          "actions": [
+            {
+              "$type": "GA_创建满意度乘区",
+              "Name": "小鸟胃",
+              "value": 1.5
+            }
+          ]
+        }
+      },
+      {
+        "GADescription": "<size=50>0.8x</size>",
+        "CDDescription": "食材多于7个",
+        "type": 2,
+        "cga": {
+          "ID": "2",
+          "conditions": [
+            {
+              "$type": "Condition_DV检测",
+              "sign": 2,
+              "DV1": {
+                "$type": "DV_售卖食材数量"
+              },
+              "DV2": {
+                "$type": "DV_值",
+                "number": 7
+              }
+            }
+          ],
+          "actions": [
+            {
+              "$type": "GA_创建满意度乘区",
+              "Name": "小鸟胃",
+              "value": 0.8
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "ID": "2",
+    "name": "大胃王",
+    "description": "不能吃太少！",
+    "type": 0,
+    "tagCGAs": [
+      {
+        "GADescription": "",
+        "CDDescription": "",
+        "type": 0,
+        "cga": {
+          "ID": "1",
+          "conditions": [
+            {
+              "$type": "Condition_DV检测",
+              "sign": 2,
+              "DV1": {
+                "$type": "DV_售卖食材数量"
+              },
+              "DV2": {
+                "$type": "DV_值",
+                "number": 7
+              }
+            }
+          ],
+          "actions": [
+            {
+              "$type": "GA_创建满意度乘区",
+              "Name": "大胃王",
+              "value": 1.5
+            }
+          ]
+        }
+      },
+      {
+        "GADescription": "",
+        "CDDescription": "",
+        "type": 0,
+        "cga": {
+          "ID": "2",
+          "conditions": [
+            {
+              "$type": "Condition_DV检测",
+              "sign": 3,
+              "DV1": {
+                "$type": "DV_售卖食材数量"
+              },
+              "DV2": {
+                "$type": "DV_值",
+                "number": 4
+              }
+            }
+          ],
+          "actions": []
+        }
+      }
+    ]
+  }
+]
