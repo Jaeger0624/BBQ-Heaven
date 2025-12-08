@@ -33,6 +33,11 @@ public class PausePanel : MonoBehaviour, IController
         }
     }
 
+    void Start()
+    {
+        Hide();
+    }
+
     void OnEnable()
     {
         this.RegisterEvent<GameOverEvent>(OnGameOverEvent).UnRegisterWhenDisabled(this.gameObject);

@@ -50,6 +50,9 @@ TagManager:
   - name: TextInfo
     uniqueID: 285855243
     locked: 0
+  - name: Reference
+    uniqueID: 172708499
+    locked: 0
   m_RenderingLayers:
   - Default
   - Light Layer 1

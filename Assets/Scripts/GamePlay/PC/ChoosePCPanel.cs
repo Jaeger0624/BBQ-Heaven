@@ -47,7 +47,7 @@ public class ChoosePCPanel : MonoBehaviour, IController{
     {
         // Debug.Log("【ChoosePCPanel】选择玩家角色");
         int seed = setSeedPanel.GetSeed();
-        LoadingManger.Instance.LoadSceneAsync("BBQ demo 1", () => {
+        LoadingManger.Instance.LoadSceneAsync("BBQ demo new", () => {
             Debug.Log("【场景加载】完成");
             Debug.Log($"选择玩家角色: {selectedPCID}");
             // 加载完成后（0.5秒后）开始新游戏
