@@ -37,7 +37,7 @@ public class AnimationController : MonoBehaviour, IController
 
 
 
-public class SpawnTextEvent : IEvent{
+public class SpawnTextEvent : AbstractEvent{
     public string text;
     public float size;
     public (Color color, bool useColor) color;

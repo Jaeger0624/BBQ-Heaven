@@ -65,7 +65,7 @@ public class CreateBBQController : MonoBehaviour, IController, ICanSendEvent
     }
 }
 
-public class PlaceFoodInstanceEvent : IEvent{
+public class PlaceFoodInstanceEvent : AbstractEvent{
     public FoodInstanceView view;
     public int slotIndex;
     public PlaceFoodInstanceEvent(FoodInstanceView view, int slotIndex){

@@ -87,7 +87,7 @@ public class BoardView : MonoBehaviour, IController
     }
 }
 
-public class HideBoardEvent : IEvent{
+public class HideBoardEvent : AbstractEvent{
 }
-public class ShowBoardEvent : IEvent{
+public class ShowBoardEvent : AbstractEvent{
 }

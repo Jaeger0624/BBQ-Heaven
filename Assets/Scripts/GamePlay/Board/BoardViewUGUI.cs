@@ -90,10 +90,10 @@ public class BoardViewUGUI : MonoBehaviour, IController
     private void OnHighlightCells(HighlightCellsEvent evt) => HighlightCells(evt.positions, true);
     private void OnClearAllBoardsHighlight(ClearAllBoardsHighlight evt) => UnhighlightAll();
 }
-public class HighlightCellsEvent : IEvent{
+public class HighlightCellsEvent : AbstractEvent{
     public List<Vector2Int> positions;
     public HighlightCellsEvent(List<Vector2Int> positions){
         this.positions = positions;
     }
 }
-public class ClearAllBoardsHighlight : IEvent{}
+public class ClearAllBoardsHighlight : AbstractEvent{}

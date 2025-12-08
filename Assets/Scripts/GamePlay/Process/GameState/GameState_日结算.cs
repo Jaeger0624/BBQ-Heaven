@@ -17,4 +17,4 @@ public class GameState_日结算 : AbstractGameState
     }
 }
 
-public class 退出日结算_Event : IEvent{}
+public class 退出日结算_Event : AbstractEvent{}

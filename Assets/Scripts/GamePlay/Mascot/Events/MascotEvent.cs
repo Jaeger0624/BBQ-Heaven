@@ -3,7 +3,7 @@
 using QFramework;
 
 #region 事件
-public class MascotAddedEvent : IEvent{
+public class MascotAddedEvent : AbstractEvent{
     public readonly Mascot mascot;
     public MascotAddedEvent(Mascot mascot)
     {
@@ -11,7 +11,7 @@ public class MascotAddedEvent : IEvent{
     }
 }
 
-public class MascotRemovedEvent : IEvent{
+public class MascotRemovedEvent : AbstractEvent{
     public readonly Mascot mascot;
     public MascotRemovedEvent(Mascot mascot)
     {
@@ -19,7 +19,7 @@ public class MascotRemovedEvent : IEvent{
     }
 }
 
-public class MascotSoldEvent : IEvent{
+public class MascotSoldEvent : AbstractEvent{
     public readonly Mascot mascot;
     public MascotSoldEvent(Mascot mascot)
     {

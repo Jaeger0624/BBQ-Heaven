@@ -72,12 +72,12 @@ public class ShopView_日前提升 : MonoBehaviour, IController, ICanSendEvent
     }
 }
 
-public class CreateShop_日前提升 : IEvent{
+public class CreateShop_日前提升 : AbstractEvent{
     public List<IShopItem> shopItems;
     public CreateShop_日前提升(List<IShopItem> shopItems){
         this.shopItems = shopItems;
     }
 }
-public class HideShop_日前提升 : IEvent{
+public class HideShop_日前提升 : AbstractEvent{
     public HideShop_日前提升(){}
 }

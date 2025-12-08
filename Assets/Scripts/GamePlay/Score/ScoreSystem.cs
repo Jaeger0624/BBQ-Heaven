@@ -72,14 +72,14 @@ public class ScoreSystem : AbstractSystem, IScoreSystem
 }
 
 #region 事件
-public class ChangeScoreEvent : IEvent{
+public class ChangeScoreEvent : AbstractEvent{
     public int changeScore;
     public ChangeScoreEvent(int changeScore){
         this.changeScore = changeScore;
     }
 }
 
-public class SetTargetScoreEvent : IEvent{
+public class SetTargetScoreEvent : AbstractEvent{
     public int targetScore;
     public SetTargetScoreEvent(int targetScore){
         this.targetScore = targetScore;

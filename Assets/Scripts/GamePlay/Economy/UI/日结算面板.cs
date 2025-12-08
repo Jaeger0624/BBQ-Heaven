@@ -62,12 +62,12 @@ public class 日结算面板 : MonoBehaviour, IController
 }
 
 #region 事件
-public class CreateDailyEconomyPanelEvent : IEvent{
+public class CreateDailyEconomyPanelEvent : AbstractEvent{
     public DailyEconomyInfo dailyEconomyInfo;
     public CreateDailyEconomyPanelEvent(DailyEconomyInfo dailyEconomyInfo){
         this.dailyEconomyInfo = dailyEconomyInfo;
     }
 }
 
-public class CloseDailyEconomyPanelEvent : IEvent{}
+public class CloseDailyEconomyPanelEvent : AbstractEvent{}
 #endregion

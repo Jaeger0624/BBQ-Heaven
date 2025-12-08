@@ -168,12 +168,12 @@ public class ProcessSystem : AbstractSystem, IProcessSystem
 /// 流程推进事件：外部系统发送此事件来通知流程系统推进到下一个状态
 /// 这个事件只能逻辑层监听，不能被系统层监听
 /// </summary>
-public class ProcessMoveNextEvent : IEvent
+public class ProcessMoveNextEvent : AbstractEvent
 {
     public ProcessMoveNextEvent(){}
 }
 
-public class GameOverEvent : IEvent
+public class GameOverEvent : AbstractEvent
 {
     public string reason;
     public GameOverEvent(string reason){

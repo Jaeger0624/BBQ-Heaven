@@ -83,9 +83,9 @@ public class ProcessController : MonoBehaviour, IController, ICanSendEvent
     
 }
 
-public class HideMainGamePlayEvent : IEvent{}
-public class ShowMainGamePlayEvent : IEvent{}
-public class ChangePanelEvent : IEvent{
+public class HideMainGamePlayEvent : AbstractEvent{}
+public class ShowMainGamePlayEvent : AbstractEvent{}
+public class ChangePanelEvent : AbstractEvent{
     public ProcessPanel newPanel;
     public ChangePanelEvent(ProcessPanel newPanel){
         this.newPanel = newPanel;

@@ -83,7 +83,7 @@ public class BBQController : MonoBehaviour, IController, ICanSendEvent
         return GameArchitecture.Interface;
     }
 }
-public class MoveBBQToRepositoryEvent : IEvent{
+public class MoveBBQToRepositoryEvent : AbstractEvent{
     public BBQView bbqView;
     public MoveBBQToRepositoryEvent(BBQView bbqView){
         this.bbqView = bbqView;

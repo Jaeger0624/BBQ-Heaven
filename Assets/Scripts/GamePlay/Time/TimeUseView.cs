@@ -43,13 +43,13 @@ public class TimeUseView : MonoBehaviour, IController{
 }
 
 
-public class ShowStickTimerEvent : IEvent{
+public class ShowStickTimerEvent : AbstractEvent{
     public int time;
     public ShowStickTimerEvent(int time){
         this.time = time;
     }
 }
 
-public class HideStickTimerEvent : IEvent{
+public class HideStickTimerEvent : AbstractEvent{
     public HideStickTimerEvent(){}
 }

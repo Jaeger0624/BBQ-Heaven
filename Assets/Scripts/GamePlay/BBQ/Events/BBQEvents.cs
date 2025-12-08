@@ -1,6 +1,6 @@
 using QFramework;
 
-public class AddBBQPropertyAnimEvent : IEvent{
+public class AddBBQPropertyAnimEvent : AbstractEvent{
     public int totalRarity;
     public int totalTaste;
     public int addRarity;
@@ -18,29 +18,29 @@ public class AddBBQPropertyAnimEvent : IEvent{
 
 
 #region BBQSystem事件
-public class CombineBBQEvent : IEvent{
+public class CombineBBQEvent : AbstractEvent{
     public BBQ bbq;
     public CombineBBQEvent(BBQ bbq){
         this.bbq = bbq;
     }
 }
-public class FinishCombineBBQEvent : IEvent{
+public class FinishCombineBBQEvent : AbstractEvent{
     public BBQ bbq;
     public FinishCombineBBQEvent(BBQ bbq){
         this.bbq = bbq;
     }
 }
 
-public class FinishCombineBBQEvent_动画 : IEvent{}
-public class CombineBBQEvent_动画 : IEvent{}
+public class FinishCombineBBQEvent_动画 : AbstractEvent{}
+public class CombineBBQEvent_动画 : AbstractEvent{}
 // 将烧烤实例添加到烧烤仓库中
-public class AddBBQToRepositoryEvent : IEvent{
+public class AddBBQToRepositoryEvent : AbstractEvent{
     public BBQ bbq;
     public AddBBQToRepositoryEvent(BBQ bbq){
         this.bbq = bbq;
     }
 }
-public class RemoveBBQFromRepositoryEvent : IEvent{
+public class RemoveBBQFromRepositoryEvent : AbstractEvent{
     public BBQ bbq;
     public RemoveBBQFromRepositoryEvent(BBQ bbq){
         this.bbq = bbq;

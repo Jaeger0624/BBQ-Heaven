@@ -955,6 +955,6 @@ namespace QFramework
     }
 #endif
 
-
     public interface IEvent{}
+    public abstract class AbstractEvent : IEvent{}
 }
