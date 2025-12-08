@@ -3,5 +3,5 @@ public enum UIPanelAction{
     Hide,
 }
 public enum UIPanelType{
-    StickPanel,
+    DialogPanel,
 }
