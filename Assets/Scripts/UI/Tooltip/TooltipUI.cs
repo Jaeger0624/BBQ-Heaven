@@ -88,7 +88,7 @@ public class TooltipUI : MonoBehaviour, IController{
             transform.position = GetAnchorPosition(screenPosition);
         }
         else{
-            if (parent == null) {Debug.LogError("Parent is null"); return;}
+            if (parent == null) return;
             Vector3 targetPosition = parent.targetTransform.position;
             Vector3 screenPosition = Camera.main.WorldToScreenPoint(targetPosition);
             transform.position = GetAnchorPosition(screenPosition);

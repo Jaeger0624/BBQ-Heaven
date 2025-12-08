@@ -57,6 +57,7 @@ public class BBQView : MonoBehaviour,IBeginDragHandler, IDragHandler, IEndDragHa
         for (int i = 0; i < slotCount; i++){
             RectTransform slotObject = new GameObject($"Slot_{i}").AddComponent<RectTransform>();
             slotObject.SetParent(foodParent);
+            slotObject.localScale = Vector3.one;
             slotObject.localPosition = new Vector3(0, 0, -0.1f);
             slotTransforms.Add(slotObject);
         }

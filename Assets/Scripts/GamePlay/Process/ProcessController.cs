@@ -12,7 +12,7 @@ public class ProcessController : MonoBehaviour, IController, ICanSendEvent
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
     [ReadOnly]
     public ProcessPanel currentPanel = ProcessPanel.Kitchen;
-    [SerializeField] private GameObject mainGamePlayUI;
+    [SerializeField] private CanvasGroup mainGamePlayUI;
     [SerializeField] private Button changePanelButton;
     void Start()
     {
@@ -28,11 +28,15 @@ public class ProcessController : MonoBehaviour, IController, ICanSendEvent
     }
     [Button("关闭主游戏界面")]
     public void HideMainGamePlay(){
-        mainGamePlayUI.SetActive(false);
+        mainGamePlayUI.alpha = 0;
+        mainGamePlayUI.blocksRaycasts = false;
+        mainGamePlayUI.interactable = false;
     }
     [Button("打开主游戏界面")]
     public void ShowMainGamePlay(){
-        mainGamePlayUI.SetActive(true);
+        mainGamePlayUI.alpha = 1;
+        mainGamePlayUI.blocksRaycasts = true;
+        mainGamePlayUI.interactable = true;
     }
     private void OnShowMainGame(ShowMainGamePlayEvent evt){
         ShowMainGamePlay();
