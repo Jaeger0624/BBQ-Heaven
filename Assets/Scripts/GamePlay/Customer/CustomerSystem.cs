@@ -338,30 +338,3 @@ public abstract class AbstractCustomerSystem : AbstractSystem, ICustomerSystem
     protected abstract void OnTimeTick(TimeTickEvent evt);
 }
 #endregion
-
-
-#region CustomerSystem事件
-public class AddCustomerEvent{
-    public List<Customer> customers = new List<Customer>();
-    public AddCustomerEvent(List<Customer> customers){
-        this.customers = customers;
-    }
-}
-
-/// <summary>
-/// 移除单一顾客事件
-/// </summary>
-public class RemoveCustomerEvent{
-    public List<Customer> customers = new List<Customer>();
-    public RemoveCustomerEvent(List<Customer> customers){
-        this.customers = customers;
-    }
-}
-
-public class CustomerAboutToLeaveEvent{
-    public string guid;
-    public CustomerAboutToLeaveEvent(string guid){
-        this.guid = guid;
-    }
-}
-#endregion

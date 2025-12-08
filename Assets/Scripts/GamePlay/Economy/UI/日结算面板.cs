@@ -61,13 +61,13 @@ public class 日结算面板 : MonoBehaviour, IController
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
 }
 
-public class CreateDailyEconomyPanelEvent{
+#region 事件
+public class CreateDailyEconomyPanelEvent : IEvent{
     public DailyEconomyInfo dailyEconomyInfo;
     public CreateDailyEconomyPanelEvent(DailyEconomyInfo dailyEconomyInfo){
         this.dailyEconomyInfo = dailyEconomyInfo;
     }
 }
 
-public class CloseDailyEconomyPanelEvent{
-
-}
+public class CloseDailyEconomyPanelEvent : IEvent{}
+#endregion

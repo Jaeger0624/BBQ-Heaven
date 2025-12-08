@@ -28,8 +28,6 @@ public class StickController : MonoBehaviour, IController{
     void Update()
     {
 
-        DetectScrollWheel();
-
         // 按下鼠标滚轮，则检测滚轮操作
         if (Input.GetMouseButtonDown(2)){
             if (stickSystem.selectedStick != null){
@@ -48,6 +46,12 @@ public class StickController : MonoBehaviour, IController{
     {
         this.UnRegisterEvent<AddStickEvent>(OnAddStick);
         this.UnRegisterEvent<RemoveStickEvent>(OnRemoveStick);
+    }
+    void Show(){
+
+    }
+    void Hide(){
+        
     }
     // 创建烤串视图
     public StickView CreateStickView(Stick stick){
@@ -105,44 +109,44 @@ public class StickController : MonoBehaviour, IController{
     }
 
 
-    void DetectScrollWheel(){
-        if (Time.time - lastScrollWheelTime >= scrollWheelCD) return;
+    // void DetectScrollWheel(){
+    //     if (Time.time - lastScrollWheelTime >= scrollWheelCD) return;
 
-        List<Stick> currentSticks = stickSystem.StickRepositorys();
+    //     List<Stick> currentSticks = stickSystem.StickRepositorys();
 
-        if (stickSystem.selectedStick != null){
-            int index = currentSticks.IndexOf(stickSystem.selectedStick);
-            if (Input.GetAxis("Mouse ScrollWheel") < 0){
-                // 上滑
-                int newIndex = (index + 1) % currentSticks.Count;
-                stickViews.ForEach(x => x.OnUnselect());
-                StickView nextStickView = stickViews.Find(x => x.stick == currentSticks[newIndex]);
-                nextStickView.OnSelect();
-            }
-            else if (Input.GetAxis("Mouse ScrollWheel") > 0){
-                int newIndex = (index - 1 + currentSticks.Count) % currentSticks.Count;
-                stickViews.ForEach(x => x.OnUnselect());
-                StickView previousStickView = stickViews.Find(x => x.stick == currentSticks[newIndex]);
-                previousStickView.OnSelect();
-            }
-            lastScrollWheelTime = Time.time;
-        }
-        else{
-            if (currentSticks.Count == 0) return;
-            if (Input.GetAxis("Mouse ScrollWheel") < 0){
-                // 上滑
-                stickViews.ForEach(x => x.OnUnselect());
-                StickView nextStickView = stickViews.Find(x => x.stick == currentSticks[0]);
-                nextStickView.OnSelect();
-            }
-            else if (Input.GetAxis("Mouse ScrollWheel") > 0){
-                // 下滑
-                stickViews.ForEach(x => x.OnUnselect());
-                StickView previousStickView = stickViews.Find(x => x.stick == currentSticks[currentSticks.Count - 1]);
-                previousStickView.OnSelect();
-            }
-            lastScrollWheelTime = Time.time;
-        }
-    }
+    //     if (stickSystem.selectedStick != null){
+    //         int index = currentSticks.IndexOf(stickSystem.selectedStick);
+    //         if (Input.GetAxis("Mouse ScrollWheel") < 0){
+    //             // 上滑
+    //             int newIndex = (index + 1) % currentSticks.Count;
+    //             stickViews.ForEach(x => x.OnUnselect());
+    //             StickView nextStickView = stickViews.Find(x => x.stick == currentSticks[newIndex]);
+    //             nextStickView.OnSelect();
+    //         }
+    //         else if (Input.GetAxis("Mouse ScrollWheel") > 0){
+    //             int newIndex = (index - 1 + currentSticks.Count) % currentSticks.Count;
+    //             stickViews.ForEach(x => x.OnUnselect());
+    //             StickView previousStickView = stickViews.Find(x => x.stick == currentSticks[newIndex]);
+    //             previousStickView.OnSelect();
+    //         }
+    //         lastScrollWheelTime = Time.time;
+    //     }
+    //     else{
+    //         if (currentSticks.Count == 0) return;
+    //         if (Input.GetAxis("Mouse ScrollWheel") < 0){
+    //             // 上滑
+    //             stickViews.ForEach(x => x.OnUnselect());
+    //             StickView nextStickView = stickViews.Find(x => x.stick == currentSticks[0]);
+    //             nextStickView.OnSelect();
+    //         }
+    //         else if (Input.GetAxis("Mouse ScrollWheel") > 0){
+    //             // 下滑
+    //             stickViews.ForEach(x => x.OnUnselect());
+    //             StickView previousStickView = stickViews.Find(x => x.stick == currentSticks[currentSticks.Count - 1]);
+    //             previousStickView.OnSelect();
+    //         }
+    //         lastScrollWheelTime = Time.time;
+    //     }
+    // }
 
 }

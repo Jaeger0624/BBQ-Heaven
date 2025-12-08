@@ -195,10 +195,3 @@ public class CardHandView : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
 }
 
-
-public class CardViewUseEvent{
-    public Card card;
-    public CardViewUseEvent(Card card){
-        this.card = card;
-    }
-}

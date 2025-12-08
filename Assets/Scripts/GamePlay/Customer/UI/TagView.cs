@@ -154,15 +154,3 @@ public class TagView : MonoBehaviour, IController, ICanSendEvent{
     }
     
 }
-
-
-public class ShowTagViewEvent{}
-public class HideTagViewEvent{}
-public class TagExecuteEvent{
-	public CustomerTag customerTag;
-	public List<bool> results;
-	public TagExecuteEvent(CustomerTag customerTag, List<bool> results){
-		this.customerTag = customerTag;
-		this.results = results;
-	}
-}

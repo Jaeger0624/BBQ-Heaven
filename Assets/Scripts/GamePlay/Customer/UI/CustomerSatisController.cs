@@ -193,7 +193,7 @@ public class CustomerSatisController : MonoBehaviour, IController{
 }
 
 
-public class UpdateStatisEvent : ICanGetSystem{
+public class UpdateStatisEvent : ICanGetSystem, IEvent{
     public string name = "未知";
     public float satis;
     public float multiplier;
@@ -217,8 +217,8 @@ public class UpdateStatisEvent : ICanGetSystem{
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
 }
 
-public class ShowStatisBarEvent{
+public class ShowStatisBarEvent : IEvent{
     public float satis;
 }
 
-public class HideStatisBarEvent{}
+public class HideStatisBarEvent : IEvent{}

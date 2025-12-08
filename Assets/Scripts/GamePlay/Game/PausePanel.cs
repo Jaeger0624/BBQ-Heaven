@@ -3,14 +3,15 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class PausePanel : UIPanel
+public class PausePanel : MonoBehaviour, IController
 {
     [SerializeField] private Button continueButton;
     [SerializeField] private Button exitButton;
+    [SerializeField] private CanvasGroup canvasGroup;
     
-    protected override void Awake()
+    void Awake()
     {
-        base.Awake();
+        canvasGroup = GetComponent<CanvasGroup>();
         
         // 确保按钮引用不为空后再添加监听器
         if (continueButton != null)
@@ -42,7 +43,16 @@ public class PausePanel : UIPanel
         // Debug.Log("【PausePanel】继续游戏");
         Hide();
     }
-    
+    public void Show(){
+        canvasGroup.alpha = 1;
+        canvasGroup.blocksRaycasts = true;
+        canvasGroup.interactable = true;
+    }
+    public void Hide(){
+        canvasGroup.alpha = 0;
+        canvasGroup.blocksRaycasts = false;
+        canvasGroup.interactable = false;
+    }
     public void OnExitButtonClick()
     {
         // Debug.Log("【PausePanel】退出游戏");
@@ -54,4 +64,5 @@ public class PausePanel : UIPanel
     {
         OnExitButtonClick();
     }
+    public IArchitecture GetArchitecture() => GameArchitecture.Interface;
 }

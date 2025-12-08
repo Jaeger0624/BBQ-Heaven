@@ -271,7 +271,7 @@ public interface IHaveAnim{
 }
 
 
-public class TriggerGAEvent{
+public class TriggerGAEvent : IEvent{
     public string triggerName;
     public TriggerGAEvent(string triggerName){
         this.triggerName = triggerName;

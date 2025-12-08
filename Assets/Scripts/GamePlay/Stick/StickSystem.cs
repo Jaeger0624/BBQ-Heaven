@@ -105,14 +105,14 @@ public class StickSystem : AbstractSystem, IStickSystem
 
 # region 烤串系统事件
 // 移除一个当日烤串
-public class RemoveStickEvent{
+public class RemoveStickEvent : IEvent{
     public Stick stick;
     public RemoveStickEvent(Stick stick){
         this.stick = stick;
     }
 }
 // 添加一个当日烤串
-public class AddStickEvent{
+public class AddStickEvent : IEvent{
     public Stick stick;
     public AddStickEvent(Stick stick){
         this.stick = stick;
@@ -120,7 +120,7 @@ public class AddStickEvent{
 }
 
 // 选中一个烤串
-public class SelectStickEvent{
+public class SelectStickEvent : IEvent{
     public Stick stick;
     public SelectStickEvent(Stick stick){
         this.stick = stick;
@@ -128,6 +128,6 @@ public class SelectStickEvent{
 }
 
 // 取消选中烤串
-public class UnselectStickEvent{
+public class UnselectStickEvent : IEvent{
 }
 #endregion

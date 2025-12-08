@@ -194,21 +194,21 @@ public class FoodSystem : AbstractSystem, IFoodSystem
 
 #region 食材系统事件
 
-public class CreateFoodInstanceEvent{
+public class CreateFoodInstanceEvent : IEvent{
     public FoodInstance foodInstance;
     public CreateFoodInstanceEvent(FoodInstance foodInstance){
         this.foodInstance = foodInstance;
     }
 }
 
-public class RemoveFoodInstanceEvent{
+public class RemoveFoodInstanceEvent : IEvent{
     public FoodInstance foodInstance;
     public RemoveFoodInstanceEvent(FoodInstance foodInstance){
         this.foodInstance = foodInstance;
     }
 }
 
-public class AddNewFoodToRepositoryEvent{
+public class AddNewFoodToRepositoryEvent : IEvent{
     public readonly string foodId;
     public readonly int amount;
     public AddNewFoodToRepositoryEvent(string foodId, int amount){
@@ -217,7 +217,7 @@ public class AddNewFoodToRepositoryEvent{
     }
 }
 
-public class DeleteFoodFromRepositoryEvent{
+public class DeleteFoodFromRepositoryEvent : IEvent{
     public readonly string id;
     public DeleteFoodFromRepositoryEvent(string id){
         this.id = id;
@@ -225,7 +225,7 @@ public class DeleteFoodFromRepositoryEvent{
 }
 
 
-public class UpdateFoodRepositoryAmountEvent{
+public class UpdateFoodRepositoryAmountEvent : IEvent{
     public readonly Dictionary<string, int> foodRepositoryAmounts;
     public UpdateFoodRepositoryAmountEvent(Dictionary<string, int> foodRepositoryAmounts){
         this.foodRepositoryAmounts = foodRepositoryAmounts;
@@ -233,7 +233,7 @@ public class UpdateFoodRepositoryAmountEvent{
 }
 
 
-public class MoveFoodInstanceEvent{
+public class MoveFoodInstanceEvent : IEvent{
     public readonly Vector2Int targetPosition;
     public readonly Vector2Int originPosition;
     public readonly string guid;

@@ -82,13 +82,13 @@ public class ShopView_日间商店 : MonoBehaviour, IController
 }
 
 #region 事件
-public class CreateShopEvent_日间商店{
+public class CreateShopEvent_日间商店 : IEvent{
     public Dictionary<ShopItemType, List<IShopItem>> shopItems;
     public CreateShopEvent_日间商店(Dictionary<ShopItemType, List<IShopItem>> shopItems){
         this.shopItems = shopItems;
     }
 }
-public class HideShopEvent_日间商店{
+public class HideShopEvent_日间商店 : IEvent{
     public HideShopEvent_日间商店(){}
 }
 #endregion

@@ -102,7 +102,7 @@ public class TimeSystem_默认 : AbstractSystem, ITimeSystem
 }
 
 #region 事件
-public class TimeTickEvent{
+public class TimeTickEvent : IEvent{
     public int timePoint;
     public TimeInfo currentTime;
     public TimeInfo targetTime;

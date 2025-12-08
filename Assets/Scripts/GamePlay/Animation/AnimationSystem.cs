@@ -378,7 +378,7 @@ public class EventTriggerAnimTask : IAnimTask
 }
 
 // 需要触发哪一个通道的动画
-public class TriggerAnimEvent{
+public class TriggerAnimEvent : IEvent{
     public AnimQueue animQueue;
     public float WaitTime = 0f;
     public TriggerAnimEvent(float waitTime,AnimQueue animQueue = AnimQueue.Default)

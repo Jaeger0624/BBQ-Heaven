@@ -12,7 +12,7 @@ using UnityEngine.UI;
 /// <summary>
 /// 选择玩家角色面板
 /// </summary>
-public class ChoosePCPanel : UIPanel, IController{
+public class ChoosePCPanel : MonoBehaviour, IController{
     [SerializeField] private ChoosePCView choosePCViewPrefab;
     [SerializeField] private Transform choosePCViewsContainer;
     [Header("按钮")]
@@ -25,9 +25,9 @@ public class ChoosePCPanel : UIPanel, IController{
     private List<ChoosePCView> choosePCViews = new List<ChoosePCView>();
 
     private string selectedPCID;
-
-    protected override void Awake() {
-        base.Awake();
+    [SerializeField] private CanvasGroup canvasGroup;
+    void Awake() {
+        canvasGroup = GetComponent<CanvasGroup>();
 
 
         choosePCButton.onClick.AddListener(OnChoosePCButtonClick);
@@ -61,6 +61,18 @@ public class ChoosePCPanel : UIPanel, IController{
         // Debug.Log("【ChoosePCPanel】关闭面板");
         Hide();
     }
+    public void Hide()
+    {
+        canvasGroup.alpha = 0;
+        canvasGroup.blocksRaycasts = false;
+        canvasGroup.interactable = false;
+    }
+    public void Show()
+    {
+        canvasGroup.alpha = 1;
+        canvasGroup.blocksRaycasts = true;
+        canvasGroup.interactable = true;
+    }
 
     public void OnChoosePC(PCData pcData){
         UpdateInfoPanel(pcData);
@@ -90,4 +102,5 @@ public class ChoosePCPanel : UIPanel, IController{
         description.Append("</size>");
         return description.ToString();
     }
+    public IArchitecture GetArchitecture() => GameArchitecture.Interface;
 }

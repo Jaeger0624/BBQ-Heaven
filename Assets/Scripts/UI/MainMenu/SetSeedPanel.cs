@@ -1,8 +1,9 @@
+using QFramework;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SetSeedPanel : MonoBehaviour, IUIPanel{
+public class SetSeedPanel : MonoBehaviour, IController{
     [SerializeField] private TMP_InputField seedInputField;
     [SerializeField] private Button randomButton;
     private int currentSeed;
@@ -46,4 +47,5 @@ public class SetSeedPanel : MonoBehaviour, IUIPanel{
     {
         this.gameObject.SetActive(false);
     }
+    public IArchitecture GetArchitecture() => GameArchitecture.Interface;
 }

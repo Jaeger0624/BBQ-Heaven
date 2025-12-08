@@ -122,18 +122,3 @@ public class CardSystem : AbstractSystem, ICardSystem
         cardPile.DiscardCard(cardPile.handPile);
     }
 }
-
-# region 卡牌系统事件
-public class CreateCardViewEvent{
-    public Card card;
-    public CreateCardViewEvent(Card card){
-        this.card = card;
-    }
-}
-public class RemoveCardViewEvent{
-    public Card card;
-    public RemoveCardViewEvent(Card card){
-        this.card = card;
-    }
-}
-#endregion

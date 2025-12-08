@@ -94,7 +94,7 @@ public enum EventStage{
 
 
 #region 事件
-public class StartNewDayEvent{
+public class StartNewDayEvent : IEvent{
     public int month;
     public int day;
     public EventStage stage;
@@ -108,7 +108,7 @@ public class StartNewDayEvent{
 
 
 
-public class EndDayEvent{
+public class EndDayEvent : IEvent{
     public int month;
     public int day;
     public EventStage stage;

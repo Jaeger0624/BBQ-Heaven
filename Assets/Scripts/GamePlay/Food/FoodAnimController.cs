@@ -84,14 +84,14 @@ public class FoodAnimController : MonoBehaviour, IController
     }
 }
 
-public class FoodInstanceViewAnimEvent{
+public class FoodInstanceViewAnimEvent : IEvent{
     public string guid;
     public FoodInstanceViewAnimEvent(string guid){
         this.guid = guid;
     }
 }
 
-public class FoodInstanceAddBaseValueEvent{
+public class FoodInstanceAddBaseValueEvent : IEvent{
     public string guid;
     public int rarity;
     public int taste;
@@ -102,7 +102,7 @@ public class FoodInstanceAddBaseValueEvent{
     }
 }
 
-public class FoodInstanceExecuteActionEvent{
+public class FoodInstanceExecuteActionEvent : IEvent{
     public string guid;
     public FoodInstanceExecuteActionEvent(string guid){
         this.guid = guid;

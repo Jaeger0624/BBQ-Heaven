@@ -55,11 +55,11 @@ namespace QFramework
 
         TResult SendQuery<TResult>(IQuery<TResult> query);
 
-        void SendEvent<T>() where T : new();
-        void SendEvent<T>(T e);
+        void SendEvent<T>() where T : IEvent, new();
+        void SendEvent<T>(T e) where T : IEvent;
 
-        IUnRegister RegisterEvent<T>(Action<T> onEvent);
-        void UnRegisterEvent<T>(Action<T> onEvent);
+        IUnRegister RegisterEvent<T>(Action<T> onEvent) where T : IEvent;
+        void UnRegisterEvent<T>(Action<T> onEvent) where T : IEvent;
 
         void Deinit();
     }
@@ -185,13 +185,13 @@ namespace QFramework
 
         private TypeEventSystem mTypeEventSystem = new TypeEventSystem();
 
-        public void SendEvent<TEvent>() where TEvent : new() => mTypeEventSystem.Send<TEvent>();
+        public void SendEvent<TEvent>() where TEvent : IEvent, new() => mTypeEventSystem.Send<TEvent>();
 
-        public void SendEvent<TEvent>(TEvent e) => mTypeEventSystem.Send<TEvent>(e);
+        public void SendEvent<TEvent>(TEvent e) where TEvent : IEvent => mTypeEventSystem.Send<TEvent>(e);
 
-        public IUnRegister RegisterEvent<TEvent>(Action<TEvent> onEvent) => mTypeEventSystem.Register<TEvent>(onEvent);
+        public IUnRegister RegisterEvent<TEvent>(Action<TEvent> onEvent) where TEvent : IEvent => mTypeEventSystem.Register<TEvent>(onEvent);
 
-        public void UnRegisterEvent<TEvent>(Action<TEvent> onEvent) => mTypeEventSystem.UnRegister<TEvent>(onEvent);
+        public void UnRegisterEvent<TEvent>(Action<TEvent> onEvent) where TEvent : IEvent => mTypeEventSystem.UnRegister<TEvent>(onEvent);
     }
 
     public interface IOnEvent<T>
@@ -398,10 +398,10 @@ namespace QFramework
 
     public static class CanRegisterEventExtension
     {
-        public static IUnRegister RegisterEvent<T>(this ICanRegisterEvent self, Action<T> onEvent) =>
+        public static IUnRegister RegisterEvent<T>(this ICanRegisterEvent self, Action<T> onEvent) where T : IEvent =>
             self.GetArchitecture().RegisterEvent<T>(onEvent);
 
-        public static void UnRegisterEvent<T>(this ICanRegisterEvent self, Action<T> onEvent) =>
+        public static void UnRegisterEvent<T>(this ICanRegisterEvent self, Action<T> onEvent) where T : IEvent =>
             self.GetArchitecture().UnRegisterEvent<T>(onEvent);
     }
 
@@ -427,10 +427,10 @@ namespace QFramework
 
     public static class CanSendEventExtension
     {
-        public static void SendEvent<T>(this ICanSendEvent self) where T : new() =>
+        public static void SendEvent<T>(this ICanSendEvent self) where T : IEvent, new() =>
             self.GetArchitecture().SendEvent<T>();
 
-        public static void SendEvent<T>(this ICanSendEvent self, T e) => self.GetArchitecture().SendEvent<T>(e);
+        public static void SendEvent<T>(this ICanSendEvent self, T e) where T : IEvent => self.GetArchitecture().SendEvent<T>(e);
     }
 
     public interface ICanSendQuery : IBelongToArchitecture
@@ -954,4 +954,7 @@ namespace QFramework
         public static void InstallPackageKit() => UnityEngine.Application.OpenURL("https://qframework.cn/qf");
     }
 #endif
+
+
+    public interface IEvent{}
 }

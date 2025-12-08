@@ -105,5 +105,3 @@ public class CardPile : ICanSendEvent{
 }
 
 
-
-public class PileUpdateEvent{}

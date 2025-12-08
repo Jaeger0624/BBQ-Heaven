@@ -165,7 +165,7 @@ public class DealSystem : AbstractSystem, IDealSystem
 }
 
 #region 交易事件
-public class DealStartedEvent{
+public class DealStartedEvent : IEvent{
 	public BBQ bbq;
 	public Customer customer;
 	public DealStartedEvent(BBQ bbq, Customer customer){
@@ -173,7 +173,7 @@ public class DealStartedEvent{
 		this.customer = customer;
 	}
 }
-public class DealCompletedEvent{
+public class DealCompletedEvent : IEvent{
 	public DealResult result;
 	public DealCompletedEvent(DealResult result){
 		this.result = result;

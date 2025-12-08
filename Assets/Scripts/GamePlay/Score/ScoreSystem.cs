@@ -71,17 +71,18 @@ public class ScoreSystem : AbstractSystem, IScoreSystem
     }
 }
 
-
-public class ChangeScoreEvent{
+#region 事件
+public class ChangeScoreEvent : IEvent{
     public int changeScore;
     public ChangeScoreEvent(int changeScore){
         this.changeScore = changeScore;
     }
 }
 
-public class SetTargetScoreEvent{
+public class SetTargetScoreEvent : IEvent{
     public int targetScore;
     public SetTargetScoreEvent(int targetScore){
         this.targetScore = targetScore;
     }
 }
+#endregion
