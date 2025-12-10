@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using QFramework;
+using Sirenix.Serialization;
 namespace cfg{
 public partial class CGA : ICanGetSystem, IHaveAnim{
+    [NonSerialized]
     private List<IHaveAnim> animTasks = new List<IHaveAnim>();
     public CGA(CGA cga){
         this.ID = cga.ID;

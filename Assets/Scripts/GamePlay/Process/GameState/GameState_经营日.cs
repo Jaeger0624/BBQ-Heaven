@@ -7,6 +7,9 @@ public class GameState_经营日 : AbstractGameState
     public override void OnEnter(){
 
         Debug.Log("【GameState】进入经营日状态");
+
+
+
         this.SendEvent(new ShowMainGamePlayEvent());
         this.SendEvent(new ChangePanelEvent(ProcessPanel.Kitchen));
 

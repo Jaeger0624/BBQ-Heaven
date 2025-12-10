@@ -1,4 +1,5 @@
 using System;
+using Sirenix.Serialization;
 using UnityEngine;
 public interface ISavable{
     void Save(GameArchive archive);
@@ -14,8 +15,10 @@ public class GameArchive
     }
     // metadata
     public string saveTime;
+    [OdinSerialize]
     // 玩家信息
     public PlayerInfoData playerInfoData = new PlayerInfoData();
+    [OdinSerialize]
     // 游戏进程
     public GameProcessData gameProcessData = new GameProcessData();
 }

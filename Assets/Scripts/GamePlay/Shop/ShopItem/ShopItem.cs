@@ -51,7 +51,7 @@ public class FoodShopItem : AbstractShopItem{
         this.tooltipInfo = new TooltipInfo(foodData.Description);
     }
     public override void OnBuy(){
-        Debug.Log($"购买食材包: {name} 数量: {amount}");
+        // Debug.Log($"购买食材包: {name} 数量: {amount}");
 
         // 1. 扣除金币
         this.GetSystem<IEconomySystem>().CostCoin(price);

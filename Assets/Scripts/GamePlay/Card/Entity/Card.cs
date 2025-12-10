@@ -1,28 +1,49 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using cfg;
 using QFramework;
+using Sirenix.Serialization;
+using UnityEngine;
 
 /// <summary>
 /// 卡牌系统 - 实例层
 /// </summary>
 [Serializable]
 public class Card : ICanGetSystem{
-    public readonly string guid;
-    public readonly string id;
+    [OdinSerialize]
+    public string guid { get; private set; }
+    [OdinSerialize]
+    public string id { get; private set; }
     public string name;
     public string description;
     public int cost;
     public CardTargetType targetType => cardData.Target;
-    private readonly CardData cardData;
+    [NonSerialized]
+    private CardData cardData;
     public Card(CardData cardData){
         this.guid = Guid.NewGuid().ToString();
         this.id = cardData.ID;
+        this.cardData = cardData;
         this.name = cardData.Name;
         this.description = cardData.Description;
         this.cost = cardData.Cost;
+    }
+
+    [OnDeserialized]
+    private void OnDeserialized(StreamingContext context){
+        if (string.IsNullOrEmpty(id)){
+            Debug.LogError("卡牌ID为空");
+            return;
+        }
+        CardData cardData = this.GetSystem<IDataSystem>().GetCardData(id);
+        if (cardData == null){
+            Debug.LogError($"卡牌数据不存在: {id}");
+            return;
+        }
         this.cardData = cardData;
+        // Debug.Log($"加载卡牌数据: {id} - {name}");
     }
 
     public void OnUse(List<object> param){

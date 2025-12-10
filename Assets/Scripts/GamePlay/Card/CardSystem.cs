@@ -52,10 +52,16 @@ public class CardSystem : AbstractSystem, ICardSystem
     public void Save(GameArchive archive)
     {
         archive.playerInfoData.cardRepositorys = cardRepository;
+        Debug.Log($"卡牌仓库数量: {cardRepository.Count}");
     }
     public void Load(GameArchive archive)
     {
-        cardRepository = archive.playerInfoData.cardRepositorys.ToDictionary(card => card.Key, card => card.Value);
+        Dictionary<string, Card> newCardRepository = archive.playerInfoData.cardRepositorys.ToDictionary(card => card.Key, card => card.Value);
+        if (newCardRepository.Count == 0){
+            Debug.LogError("卡牌仓库为空，无法加载");
+            return;
+        }
+        cardRepository = newCardRepository;
     }
     private void OnStartNewDay(StartNewDayEvent evt)
     {
@@ -96,6 +102,10 @@ public class CardSystem : AbstractSystem, ICardSystem
 
     public void InitCardPile()
     {
+        if (cardRepository.Count == 0){
+            Debug.LogError("卡牌仓库为空，无法初始化卡牌堆");
+            return;
+        }
         cardPile = new CardPile(cardRepository.Values.ToList());
         this.SendEvent(new PileUpdateEvent());
     }

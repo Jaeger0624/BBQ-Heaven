@@ -8,7 +8,7 @@ using UnityEngine;
 /// </summary>
 public class FoodController : MonoBehaviour, IController
 {
-    private FoodSystem foodSystem => this.GetSystem<FoodSystem>();
+    private IFoodSystem foodSystem => this.GetSystem<IFoodSystem>();
     private FoodAnimController foodAnimController;
     [SerializeField] private GameObject foodInstanceViewPrefab;
     [SerializeField] private Transform supplyStartPoint;

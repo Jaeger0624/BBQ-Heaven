@@ -29,10 +29,6 @@ public class GameTest : MonoBehaviour, IController, ICanSendEvent{
             this.GetSystem<IProcessSystem>().StartNewGame(new NewGameInfo("1", Random.Range(0, 1000000)));
         }
 #endif
-
-        // 注册所有配方
-        this.GetSystem<IRecipeSystem>().RegisterAllRecipes();
-
         // 播放背景音乐
         AudioManager.Instance.AudioService.PlayBGM("1");
 

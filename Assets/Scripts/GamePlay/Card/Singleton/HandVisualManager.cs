@@ -58,6 +58,10 @@ public class HandVisualManager : MonoBehaviour
 
     public CardHandView AddCard(Card card, GameObject cardPrefab)
     {
+        if (card == null){
+            Debug.LogError("Card is null");
+            return null;
+        }
         GameObject go = Instantiate(cardPrefab, cardContainer);
         CardHandView view = go.GetComponent<CardHandView>();
         view.Init(card);

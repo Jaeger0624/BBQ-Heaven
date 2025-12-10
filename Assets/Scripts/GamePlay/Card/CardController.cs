@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 using cfg;
 using DG.Tweening;
 using QFramework;
@@ -30,6 +31,17 @@ public class CardController : MonoBehaviour, IController
         this.UnRegisterEvent<CombineBBQEvent>(OnCombineBBQEvent);
         this.UnRegisterEvent<FinishCombineBBQEvent_动画>(OnFinishCombineBBQEvent_动画);
     }
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.C)){
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine($"cardViews数量: {cardViews.Count}");
+            foreach (var card in cardViews){
+                sb.AppendLine($"{card.Key} - {card.Value.card.name}");
+            }
+            Debug.Log(sb.ToString());
+        }
+    }
     private void OnCombineBBQEvent(CombineBBQEvent e) => Hide();
     private void OnFinishCombineBBQEvent_动画(FinishCombineBBQEvent_动画 e) => Show();
     private void OnCreateCardViewEvent(CreateCardViewEvent e) => CreateCard(e.card);
@@ -44,6 +56,10 @@ public class CardController : MonoBehaviour, IController
         transform.DOLocalMove(hidePosition, 0.5f).SetUpdate(true).SetEase(Ease.InBack);
     }
     private void CreateCard(Card card){
+        if (card == null){
+            Debug.LogError("Card is null");
+            return;
+        }
         CardHandView cardHandView = HandVisualManager.Instance.AddCard(card, cardHandViewPrefab);
         cardViews.Add(card.guid, cardHandView);
     }
@@ -58,17 +74,5 @@ public class CardController : MonoBehaviour, IController
     private void UseCard(Card card){
         // 1. 传给卡牌系统使用（后续处理等卡牌系统反应）
         this.GetSystem<ICardSystem>().UseCard(card, new List<object>());
-    }
-
-
-    [Button]
-    private void AddCard(){
-        CardData cardData = this.GetSystem<IDataSystem>().GetCardData("1");
-        if (cardData == null){
-            Debug.LogError("CardData not found");
-            return;
-        }
-        Card card = new Card(cardData);
-        CreateCard(card);
     }
 }

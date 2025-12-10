@@ -10,7 +10,7 @@ using UnityEngine.UI;
 public class CardHandView : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler, IDragHandler
 , IController, ICanSendEvent
 {
-    public Card card { get; private set; } = null; 
+    public Card card { get; private set; }
     
     [Header("UI Components")]
     public RectTransform rectTransform;
@@ -28,7 +28,7 @@ public class CardHandView : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     public bool IsDragging { get; private set; } = false;
     
     // --- 修改点：改为 Public 属性，让 Manager 可以读取 ---
-    public bool IsTargetingMode => card.targetType != CardTargetType.无;
+    public bool IsTargetingMode => card != null && card.targetType != CardTargetType.无;
 
     // 平滑参数
     private float moveSpeed = 15f;
@@ -47,6 +47,10 @@ public class CardHandView : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     public void Init(Card card)
     {
+        if (card == null){
+            Debug.LogError("Card is null");
+            return;
+        }
         this.card = card;
         UpdateVisual();
     }
@@ -62,6 +66,10 @@ public class CardHandView : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     private void Update()
     {
         // --- 修改点：逻辑分流 ---
+        if (card == null){
+            Debug.LogError("Card is null");
+            return;
+        }
         // 1. 普通拖拽：完全由 OnDrag 控制位置，Update 不干涉 (return)
         if (IsDragging && !IsTargetingMode) return;
 

@@ -27,6 +27,7 @@ public class ProcessMaker_单月 : IProcessBuilder{
 public class ProcessMaker_单日 : IProcessBuilder{
     public IGameState GetProcess(){
         IGameState process = new GameState_日();
+        process.AddSubState(new GameState_保存游戏());
         process.AddSubState(new GameState_日前提升());
         process.AddSubState(new GameState_经营日());
         process.AddSubState(new GameState_日结算());

@@ -43,8 +43,10 @@ public class GameState_开始新游戏 : AbstractGameState
         // 2. 初始化角色（添加基本串、初始吉祥物、初始被动技能、创建主动技能）
         this.GetSystem<IPCSystem>().InitPC(pc);
 
+        // 3. 注册所有配方
+        this.GetSystem<IRecipeSystem>().RegisterAllRecipes();
 
-        // 3. 添加初始食材
+        // 4. 添加初始食材
         List<FoodPack> foodPacks = new List<FoodPack>
         {
             new FoodPack("apple", 20),

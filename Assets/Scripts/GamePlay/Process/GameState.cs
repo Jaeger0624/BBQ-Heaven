@@ -10,6 +10,7 @@ public interface IGameState{
     List<IGameState> SubStates { get; }
     IGameState CurrentSubState { get; }
     void OnEnter();
+    void OnAfterActivate();
     void OnExit();
     void Move();
     void AddSubState(IGameState state);
@@ -29,7 +30,9 @@ public abstract class AbstractGameState : IGameState, IController, ICanSendEvent
     public void ReviseCurrentSubState(IGameState state) => CurrentSubState = state;
     private bool isMoving = false; // 防止递归调用的标志
     public abstract void OnEnter();
+    public virtual void OnAfterActivate(){}
     public abstract void OnExit();
+
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
     public void AddSubState(IGameState state)
     {
