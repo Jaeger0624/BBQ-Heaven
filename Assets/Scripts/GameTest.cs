@@ -165,7 +165,7 @@ public class GameTest : MonoBehaviour, IController, ICanSendEvent{
         if (GUILayout.Button("添加一个预定顾客")){
             CustomerFactory_默认影响权重 customerFactory = new CustomerFactory_默认影响权重();
             Customer customer = customerFactory.GenerateCustomer();
-            float arriveTime = Random.Range(0.1f, 1f);
+            float arriveTime = 0.1f + 0.9f * this.GetSystem<IRngSystem>().GetSubRng<ICustomerSystem>().NextFloat();
             Debug.Log($"添加一个预定顾客: {customer.name} 到达时间: {arriveTime}");
             this.GetSystem<ICustomerSystem>().PreScheduleCustomer(new ScheduleInfo(customer, arriveTime));
         }
@@ -194,8 +194,8 @@ public class GameTest : MonoBehaviour, IController, ICanSendEvent{
                 .Where(x => x.state == FoodInstanceState.棋盘上)
                 .ToList();
             List<BoardCell> emptyCells = this.GetSystem<IBoardSystem>().GetEmptyCells();
-            Vector2Int randomPosition = emptyCells[UnityEngine.Random.Range(0, emptyCells.Count)].position;
-            FoodInstance foodInstance = foodInstances[UnityEngine.Random.Range(0, foodInstances.Count)];
+            Vector2Int randomPosition = this.GetSystem<IRngSystem>().GetSubRng<IBoardSystem>().PickOne(emptyCells).position;
+            FoodInstance foodInstance = this.GetSystem<IRngSystem>().GetSubRng<IFoodSystem>().PickOne(foodInstances);
             this.GetSystem<IFoodSystem>().foodInstanceMover.MoveFoodInstanceTo(randomPosition,
                                                                                foodInstance, true);
         }
@@ -308,7 +308,7 @@ public class GameTest : MonoBehaviour, IController, ICanSendEvent{
             currentSeed = seed;
         }
         if (GUILayout.Button("设置种子")){
-            rng.SetSeed(currentSeed);
+            rng = new Rng(currentSeed);
             Debug.Log($"【GameTest】设置种子: {currentSeed}");
         }
         if (GUILayout.Button("获取随机Float")){
@@ -330,7 +330,8 @@ public class GameTest : MonoBehaviour, IController, ICanSendEvent{
                 .GetFoodInstances().Values
                 .Where(x => x.state == FoodInstanceState.棋盘上)
                 .ToList();
-            FoodInstance foodInstance = foodInstances[UnityEngine.Random.Range(0, foodInstances.Count)];
+
+            FoodInstance foodInstance = this.GetSystem<IRngSystem>().GetSubRng<IFoodSystem>().PickOne(foodInstances);
 
             this.GetSystem<IGASystem>().ApplyGA(this, gameAction, new List<object>{foodInstance});
         }    

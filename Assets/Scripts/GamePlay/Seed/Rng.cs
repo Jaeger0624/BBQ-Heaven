@@ -5,34 +5,56 @@ using System.Linq;
 public class Rng
 {
     private Random _rand;
-    public int Seed { get; private set; }
-    public Rng(int seed)
+    public readonly int _initialSeed;
+
+    // 【关键】记录当前已经调用了多少次，用于存档
+    public int CallCount { get; private set; }
+    public Rng(int initSeed)
     {
-        Seed = seed;
-        _rand = new Random(seed);
+        _initialSeed = initSeed;
+        Reset();
     }
 
-    public int NextInt(int min, int max)
-        => _rand.Next(min, max);
+    public int NextInt(int min, int max){
+        CallCount++;
+        return _rand.Next(min, max);
+    }
 
     public float NextFloat()
-        => (float)_rand.NextDouble();
-
-    public bool NextBool(float trueProbability = 0.5f)
-        => NextFloat() < trueProbability;
-
-    public T PickOne<T>(IList<T> list)
-        => list[NextInt(0, list.Count)];
-
-    public List<T> PickMany<T>(IList<T> list, int count)
-        => list.OrderBy(x => NextFloat()).Take(count).ToList();
-
-    public void Reset()
-        => _rand = new Random(Seed);
-
-    public void SetSeed(int seed)
     {
-        Seed = seed;
-        _rand = new Random(seed);
+        CallCount++;
+        return (float)_rand.NextDouble();
+    }
+
+    public bool NextBool(float trueProbability = 0.5f){
+        return NextFloat() < trueProbability;
+    }
+    public T PickOne<T>(IList<T> list){
+        if (list.Count == 0) return default(T);
+        return list[NextInt(0, list.Count)];
+    }
+    public List<T> PickMany<T>(IList<T> list, int count){
+        var result = new List<T>(list);
+        int n = result.Count;
+        count = Math.Min(count, n);
+
+        for (int i = 0; i < count; i++)
+        {
+            int r = i + NextInt(0, n - i);
+            (result[r], result[i]) = (result[i], result[r]);
+        }
+        return result.GetRange(0, count);
+    }
+    public void Reset(){
+        _rand = new Random(_initialSeed);
+        CallCount = 0;
+    }
+
+    public void RestoreState(int targetCallCount){
+        Reset();
+        while (CallCount < targetCallCount){
+            _rand.Next();
+            CallCount++;
+        }
     }
 }

@@ -27,6 +27,7 @@ public class ExtraTool : IController{
     public static List<FoodInstance> GetFoodInstances(List<FoodInstanceState> types, GetFoodInstanceStrategy strategy, int amount, FoodInstance origin, List<object> param){
         IFoodSystem foodSystem = GameArchitecture.Interface.GetSystem<IFoodSystem>();
         IBoardSystem boardSystem = GameArchitecture.Interface.GetSystem<IBoardSystem>();
+        Rng rng = GameArchitecture.Interface.GetSystem<IRngSystem>().GetSubRng<IFoodSystem>();
         List<FoodInstance> foods = new List<FoodInstance>();
         switch (strategy){
             case GetFoodInstanceStrategy.随机:
@@ -95,7 +96,7 @@ public class ExtraTool : IController{
 
         if (foods.Count == 0) return new List<FoodInstance>();
         if (foods.Count < amount) return foods;
-        return foods.RandomSelect(amount);
+        return rng.PickMany<FoodInstance>(foods, amount);
     }
 
     public IArchitecture GetArchitecture()

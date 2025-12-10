@@ -1,11 +1,14 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using QFramework;
 using UnityEngine;
 
-public class CustomerLookMaker{
+public class CustomerLookMaker : ICanGetSystem{
     private Dictionary<CustomerLookType, List<int>> customerLooks = new Dictionary<CustomerLookType, List<int>>();
     private Dictionary<string, CustomerLook> lookDict = new Dictionary<string, CustomerLook>();
+
+    public IArchitecture GetArchitecture() => GameArchitecture.Interface;
 
     /// <summary> 生成顾客外观 </summary>
     public CustomerLook GetCustomerLook(string name, IGetCustomerLookStrategy getCustomerLookStrategy){
@@ -32,7 +35,8 @@ public class CustomerLookMaker{
         }
         indices = customerLooks[lookType];
 
-        int index = indices[Random.Range(0, indices.Count)];
+        Rng rng = this.GetSystem<IRngSystem>().GetSubRng<ICustomerSystem>();
+        int index = rng.PickOne(indices);
         indices.Remove(index);
         return index;
     }
@@ -44,8 +48,9 @@ public interface IGetCustomerLookStrategy{
 
 public class GetCustomerLookStrategy_纯随机 : IGetCustomerLookStrategy{
     public CustomerLook GetCustomerLook(string name, Dictionary<CustomerLookType, List<int>> customerLooks){
+        Rng rng = GameArchitecture.Interface.GetSystem<IRngSystem>().GetSubRng<ICustomerSystem>();
         // 纯随机，直接返回一个随机索引
-        return new CustomerLook(customerLooks[CustomerLookType.Appearance][Random.Range(0, customerLooks[CustomerLookType.Appearance].Count)]);
+        return new CustomerLook(rng.PickOne(customerLooks[CustomerLookType.Appearance]));
     }
 }
 
@@ -74,7 +79,9 @@ public class GetCustomerLookStrategy_根据字典生成 : IGetCustomerLookStrate
             customerLooks[lookType] = new List<int>(Enumerable.Range(0, 15));
         }
         indices = customerLooks[lookType];
-        int index = indices[Random.Range(0, indices.Count)];
+        
+        Rng rng = GameArchitecture.Interface.GetSystem<IRngSystem>().GetSubRng<ICustomerSystem>();
+        int index = rng.PickOne(indices);
         indices.Remove(index);
         return index;
     }

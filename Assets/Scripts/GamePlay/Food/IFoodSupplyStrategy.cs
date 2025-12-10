@@ -41,15 +41,17 @@ public class FoodSupplyStrategy_随机填满 : FoodSupplyStrategyBase
         List<FoodInstance> newInstances = new List<FoodInstance>();
 
         List<Food> foodList = foodRepositorys.Values.ToList();
+
+        Rng rng = GameArchitecture.Interface.GetSystem<IRngSystem>().GetSubRng<IFoodSystem>();
         while (foodList.Count > 0){
             // 如果空位为0，则退出循环
             if (emptyCells.Count == 0) break;
 
             // 随机获取一个空位
-            BoardCell emptyCell = emptyCells[UnityEngine.Random.Range(0, emptyCells.Count)];    
+            BoardCell emptyCell = rng.PickOne(emptyCells);    
             
             // 随机获取一个食物
-            Food food = foodList[UnityEngine.Random.Range(0, foodList.Count)];
+            Food food = rng.PickOne(foodList);
             foodList.Remove(food);
             
             // 创建食材实例
@@ -81,15 +83,16 @@ public class FoodSupplyStrategy_随机指定数量 : FoodSupplyStrategyBase
         List<FoodInstance> newInstances = new List<FoodInstance>();
 
         List<Food> foodList = foodRepositorys.Values.ToList();
+        Rng rng = GameArchitecture.Interface.GetSystem<IRngSystem>().GetSubRng<IFoodSystem>();
         int foodAmount = 0;
         while (foodList.Count > 0 && foodAmount < amount){
             // 如果空位为0，则退出循环
             if (emptyCells.Count == 0) break;
             // 随机获取一个空位
-            BoardCell emptyCell = emptyCells[UnityEngine.Random.Range(0, emptyCells.Count)];    
+            BoardCell emptyCell = rng.PickOne(emptyCells);    
             
             // 随机获取一个食物
-            Food food = foodList[UnityEngine.Random.Range(0, foodList.Count)];
+            Food food = rng.PickOne(foodList);
             foodList.Remove(food);
             
             // 创建食材实例

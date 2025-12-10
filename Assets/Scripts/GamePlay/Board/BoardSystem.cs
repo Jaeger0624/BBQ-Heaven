@@ -47,7 +47,7 @@ public class BoardSystem : AbstractSystem, IBoardSystem
         }.Where(x => x != null).ToList();
     }
     public BoardCell GetRandomEmptyCell(){
-        return GetEmptyCells()[UnityEngine.Random.Range(0, GetEmptyCells().Count)];
+        return this.GetSystem<IRngSystem>().GetSubRng<IBoardSystem>().PickOne(GetEmptyCells());
     }
     protected override void OnInit()
     {

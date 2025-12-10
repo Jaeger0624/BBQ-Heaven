@@ -8,6 +8,7 @@ using UnityEngine;
 namespace cfg{
     public partial class GetCellInfo : ICanGetSystem{
         public IArchitecture GetArchitecture() => GameArchitecture.Interface;
+        private Rng rng => this.GetSystem<IRngSystem>().GetSubRng<IBoardSystem>();
         public GetCellInfo(GetCellStrategy strategy, bool isRandom){
             this.Strategy = strategy;
             this.IsRandom = isRandom;
@@ -21,7 +22,7 @@ namespace cfg{
                     return Observable.Return<BoardCell>(null);
                 }
                 if (IsRandom){
-                    BoardCell randomCell = emptyCells[UnityEngine.Random.Range(0, emptyCells.Count)];
+                    BoardCell randomCell = rng.PickOne(emptyCells);
                     return Observable.Return(randomCell);
                 }
                 else{
@@ -41,7 +42,7 @@ namespace cfg{
                     return Observable.Return<BoardCell>(null);
                 }
                 if (IsRandom){
-                    BoardCell randomCell = foodCells[UnityEngine.Random.Range(0, foodCells.Count)];
+                    BoardCell randomCell = rng.PickOne(foodCells);
                     return Observable.Return(randomCell);
                 }
                 else{

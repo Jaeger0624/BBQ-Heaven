@@ -37,6 +37,9 @@ public class GameState_开始新游戏 : AbstractGameState
         }
     }
     private void StartNewGame(NewGameInfo newGameInfo){
+        // 0. 重置随机种子
+        this.GetSystem<IRngSystem>().SetMainSeed(newGameInfo.seed);
+        
         // 1. 创建角色
         PlayerCharacter pc = this.GetSystem<IPCSystem>().ChoosePC(newGameInfo.pcID);
 
@@ -56,6 +59,8 @@ public class GameState_开始新游戏 : AbstractGameState
             new FoodPack("cherry", 20),
         };
         this.GetSystem<IFoodSystem>().AddFoodToRepository(foodPacks);
+
+
 
         Debug.Log("【GameSystem】新游戏初始化完成");
     }

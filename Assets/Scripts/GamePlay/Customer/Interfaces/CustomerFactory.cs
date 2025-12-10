@@ -23,9 +23,11 @@ public class CustomerFactory_默认影响权重 : ICustomerFactory{
         List<string> customerSurnames = new List<string>(){
             "小"
         };
-        string name = customerSurnames[Random.Range(0, customerSurnames.Count)] + customerNames[Random.Range(0, customerNames.Count)];
+
+        Rng rng = GameArchitecture.Interface.GetSystem<IRngSystem>().GetSubRng<ICustomerSystem>();
+        string name = rng.PickOne(customerSurnames) + rng.PickOne(customerNames);
         
-        int random = Random.Range(-1, 2);
+        int random = rng.NextInt(-1, 2);
         
         // 生成一个随机耐心阈值
         int patienceMax = 30 + 5 * random;
@@ -49,7 +51,9 @@ public class CustomerFactory_默认顾客 : ICustomerFactory
         List<string> customerSurnames = new List<string>(){
             "王","李","张","刘","陈","杨","赵","黄","周","吴"
         };
-        string name = customerSurnames[Random.Range(0, customerSurnames.Count)] + customerNames[Random.Range(0, customerSurnames.Count)];
+        Rng rng = GameArchitecture.Interface.GetSystem<IRngSystem>().GetSubRng<ICustomerSystem>();
+        
+        string name = rng.PickOne(customerSurnames) + rng.PickOne(customerNames);
         Customer customer = new Customer(name, 3);
         return customer;
     }

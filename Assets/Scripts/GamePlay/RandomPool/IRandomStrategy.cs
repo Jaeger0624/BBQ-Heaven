@@ -19,22 +19,22 @@ public class Random_纯随机 : AbstractRandomStrategy{
     public override List<T> Random<T>(int amount){
         IDataSystem dataSystem = this.GetSystem<IDataSystem>();
         List<T> result = new List<T>();
-        Type type;
+        Rng rng = null;
         if (typeof(T) == typeof(FoodData)){
             result = dataSystem.GetAllFoodData().Select(item => item as T).ToList();
-            type = typeof(IFoodSystem);
+            rng = this.GetSystem<IRngSystem>().GetSubRng<IFoodSystem>();
         }
         else if (typeof(T) == typeof(MascotData)){
             result = dataSystem.GetAllMascotData().Select(item => item as T).ToList();
-            type = typeof(IMascotSystem);
+            rng = this.GetSystem<IRngSystem>().GetSubRng<IMascotSystem>();
         }
         else if (typeof(T) == typeof(StickData)){
             result = dataSystem.GetAllStickData().Select(item => item as T).ToList();
-            type = typeof(IStickSystem);
+            rng = this.GetSystem<IRngSystem>().GetSubRng<IStickSystem>();
         }
         if (result.Count == 0) return new List<T>();
         amount = Mathf.Min(amount, result.Count);
-        List<T> randomResult = result.RandomSelect(amount);
+        List<T> randomResult = rng.PickMany<T>(result, amount);
         return randomResult;
     }
 }

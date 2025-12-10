@@ -5,7 +5,7 @@ using QFramework;
 using UnityEngine;
 
 [Serializable]
-public class CardPile : ICanSendEvent{
+public class CardPile : ICanSendEvent, ICanGetSystem{
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
     public List<Card> handPile;
     public List<Card> drawPile;
@@ -61,17 +61,10 @@ public class CardPile : ICanSendEvent{
     }
 
     private void ShuffleDrawPile(){
-        // 1. 将抽牌堆中的卡牌洗牌
-        var rand = new System.Random();
-        int n = drawPile.Count;
-        while (n > 1)
-        {
-            n--;
-            int k = rand.Next(n + 1);
-            var value = drawPile[k];
-            drawPile[k] = drawPile[n];
-            drawPile[n] = value;
-        }
+        // 使用子系统种子完成洗牌
+        Rng rng = this.GetSystem<IRngSystem>().GetSubRng<ICardSystem>();
+
+        drawPile = rng.PickMany<Card>(drawPile, drawPile.Count).ToList();
     }
 
     /// <summary> 弃置卡牌 </summary>

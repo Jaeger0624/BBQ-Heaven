@@ -89,8 +89,9 @@ public class Preference{
         List<FoodType> foodTypes = new List<FoodType>();
         List<FoodType> allFoodTypes = Enum.GetValues(typeof(FoodType)).Cast<FoodType>().ToList();
 
+        Rng rng = GameArchitecture.Interface.GetSystem<IRngSystem>().GetSubRng<ICustomerSystem>();
         // 随机配备一个食材类型
-        foodTypes.AddRange(allFoodTypes.RandomSelect(1));
+        foodTypes.AddRange(rng.PickMany(allFoodTypes, 1));
 
         List<string> recipeIds = new List<string>();
         List<string> foodIds = new List<string>();

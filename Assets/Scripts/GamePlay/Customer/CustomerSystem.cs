@@ -38,6 +38,7 @@ public class CustomerSystem_新 : AbstractCustomerSystem
     // 保留两位小数
     private float customerPer5Minutes => Mathf.Round((naturalArriveChance * 5) * 100) / 100;
     private ICustomerFactory customerFactory;
+    private Rng rng => this.GetSystem<IRngSystem>().GetSubRng<ICustomerSystem>();
     protected override void OnStartNewDay(StartNewDayEvent evt)
     {
         if (!evt.StageMeet(EventStage.System)) return;
@@ -127,7 +128,7 @@ public class CustomerSystem_新 : AbstractCustomerSystem
                 continue;
             }
 
-            if (UnityEngine.Random.value <= naturalArriveChance){
+            if (rng.NextFloat() <= naturalArriveChance){
                 Customer customer = customerFactory.GenerateCustomer();
                 customersToCreate.Add(customer);
             }
@@ -156,7 +157,7 @@ public class CustomerSystem_新 : AbstractCustomerSystem
         // 处理后的概率 -> 0.6666 * 0.6666 = 0.4444
         float newChance = (float)Math.Pow(ratio, 2);
 
-        if (UnityEngine.Random.value <= newChance){
+        if (rng.NextFloat() <= newChance){
             preScheduledCustomers.RemoveAll(info => info.Item1 == customer);
             return customer;
         }

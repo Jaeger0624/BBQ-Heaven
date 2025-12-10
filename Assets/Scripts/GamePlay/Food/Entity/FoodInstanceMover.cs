@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class FoodInstanceMover : ICanGetSystem, ICanSendEvent
 {
+    private Rng rng => this.GetSystem<IRngSystem>().GetSubRng<IFoodSystem>();
     public IArchitecture GetArchitecture() =>
         GameArchitecture.Interface;
     
@@ -39,7 +40,7 @@ public class FoodInstanceMover : ICanGetSystem, ICanSendEvent
         List<MoveFoodInstanceEvent> moveEvents = new List<MoveFoodInstanceEvent>();
         // 3. 随机移动到棋盘上的空位
         foreach (var foodInstance in foodInstances){
-            BoardCell emptyCell = emptyCells[UnityEngine.Random.Range(0, emptyCells.Count)];
+            BoardCell emptyCell = rng.PickOne(emptyCells);
             moveEvents.Add(this.MoveTo(foodInstance, emptyCell, showAnimDirect));
             emptyCells.Remove(emptyCell);
         }
