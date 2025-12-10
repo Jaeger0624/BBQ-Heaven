@@ -79,7 +79,7 @@
     "effectDescription": "如果食材周围有空位，则美味度+1、珍稀度+1",
     "CGAs": [
       {
-        "type": 1,
+        "type": 3,
         "action": {
           "ID": "1",
           "conditions": [
@@ -126,7 +126,7 @@
     "effectDescription": "如果食材周围有至少2个空位，则美味度+2、珍稀度+2",
     "CGAs": [
       {
-        "type": 1,
+        "type": 3,
         "action": {
           "ID": "1",
           "conditions": [

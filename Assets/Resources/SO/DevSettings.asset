@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AnimSpeed: 0
   UseAnimTimeScale: 1
-  AnimTimeScale: 4
+  AnimTimeScale: 4.23
   AnimTimeScaleSpeed: 0.002
   baseTimeScale: 2
   maxTimeScale: 6

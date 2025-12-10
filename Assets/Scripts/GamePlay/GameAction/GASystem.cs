@@ -167,6 +167,7 @@ public class GASystem : AbstractSystem, IGASystem{
             // 1. 评估条件 (同步)
             if (!EvaluateConditions(sender, cga.Conditions, param))
             {
+                Debug.Log($"【GASystem】条件不满足，直接结束: {sender.GetType().Name}");
                 return Observable.ReturnUnit(); // 条件不满足，直接结束
             }
 

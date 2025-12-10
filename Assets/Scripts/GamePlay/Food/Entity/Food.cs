@@ -2,24 +2,29 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using cfg;
+using QFramework;
+using Sirenix.Serialization;
 using UnityEngine;
 
 /// <summary>
 /// 食材仓库类
 /// </summary>
-public class Food {
+public class Food : ICanGetSystem{
+    [OdinSerialize]
     public string guid { get; private set; }
     public string name => foodData.Name;
     public bool isTemporary = false;
-    public readonly FoodData foodData;
+    public FoodData foodData => this.GetSystem<IDataSystem>().GetFoodData(foodDataId);
+    [OdinSerialize]
+    public string foodDataId { get; private set; }
     public FoodType foodType;
     public FoodTag foodTag;
     public Dictionary<FoodGAType, List<CGA>> foodGAs;
     public List<SustainEffect> sustainEffects => foodData.SEs;
     public Food(FoodData foodData, bool isTemporary = false){
-        this.foodData = foodData;
         this.guid = Guid.NewGuid().ToString();
         this.isTemporary = isTemporary;
+        this.foodDataId = foodData.ID;
         this.foodType = foodData.Type;
         this.foodTag = foodData.Tag;
 
@@ -32,6 +37,7 @@ public class Food {
             foodGAs[cga.Type].Add(new CGA(cga.Action));
         }
     }
+    public IArchitecture GetArchitecture() => GameArchitecture.Interface;
 }
 
 public class FoodPack{

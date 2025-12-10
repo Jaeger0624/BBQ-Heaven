@@ -118,13 +118,5 @@
         }
       }
     ]
-  },
-  {
-    "ID": "5",
-    "name": "",
-    "description": "",
-    "cost": 0,
-    "target": 0,
-    "CGAs": []
   }
 ]

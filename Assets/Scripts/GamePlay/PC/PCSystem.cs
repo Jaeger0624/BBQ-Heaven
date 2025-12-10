@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using cfg;
 using QFramework;
 using UnityEngine;
@@ -68,7 +69,8 @@ public class PCSystem : AbstractSystem, IPCSystem
         {
             this.GetSystem<ICardSystem>().AddCardToRepository(cardID);
         }
-        // 4. 添加初始被动技能
+
+        // 5. 添加初始被动技能
         foreach (var se in currentPC.data.SEs)
         {
             Debug.Log($"添加角色被动技能: {se.GetType().Name}");

@@ -18,6 +18,10 @@ public class CardPileView : MonoBehaviour, IController
         UpdateVisual();
     }
     public void UpdateVisual(){
+        if (this.GetSystem<ICardSystem>().CardPile == null){
+            Debug.LogError("CardPile is null");
+            return;
+        }
         if (cardPileType == CardPileType.抽牌堆){
             cardAmountText.text = this.GetSystem<ICardSystem>().CardPile.drawPile.Count.ToString();
         }else if (cardPileType == CardPileType.弃牌堆){

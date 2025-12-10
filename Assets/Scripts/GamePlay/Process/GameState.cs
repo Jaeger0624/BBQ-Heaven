@@ -15,6 +15,7 @@ public interface IGameState{
     void AddSubState(IGameState state);
     void RemoveSubState(IGameState state);
     void SetParentState(IGameState state);
+    void ReviseCurrentSubState(IGameState state);
 }
 
 /// <summary>
@@ -25,6 +26,7 @@ public abstract class AbstractGameState : IGameState, IController, ICanSendEvent
     public IGameState ParentState { get; private set; } = null;
     public List<IGameState> SubStates { get; private set; } = new List<IGameState>();
     public IGameState CurrentSubState { get; private set; } = null;
+    public void ReviseCurrentSubState(IGameState state) => CurrentSubState = state;
     private bool isMoving = false; // 防止递归调用的标志
     public abstract void OnEnter();
     public abstract void OnExit();

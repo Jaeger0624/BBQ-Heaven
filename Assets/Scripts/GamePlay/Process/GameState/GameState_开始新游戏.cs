@@ -5,10 +5,28 @@ using UnityEngine;
 public class GameState_开始新游戏 : AbstractGameState
 {
     private NewGameInfo newGameInfo;
+    private GameArchive archive;
+    private bool isNewGame = true;
+    public GameState_开始新游戏(NewGameInfo newGameInfo){
+        this.newGameInfo = newGameInfo;
+        this.isNewGame = true;
+    }
+    public GameState_开始新游戏(GameArchive archive){
+        this.archive = archive;
+        this.isNewGame = false;
+    }
     public override void OnEnter()
     {
-        Debug.Log("【GameState】进入开始新游戏状态");
-        StartNewGame(newGameInfo);
+        if (isNewGame)
+        {
+            Debug.Log("<color=green>【GameState】进入开始新游戏状态</color>");
+            StartNewGame(newGameInfo);
+        }
+        else
+        {
+            Debug.Log("<color=yellow>【GameState】加载游戏状态</color>");
+            this.GetSystem<ISaveSystem>().LoadGame(archive);
+        }
     }
     public override void OnExit()
     {
@@ -18,15 +36,13 @@ public class GameState_开始新游戏 : AbstractGameState
             Debug.Log("【GameState】游戏结束！");
         }
     }
-    public GameState_开始新游戏(NewGameInfo newGameInfo){
-        this.newGameInfo = newGameInfo;
-    }
     private void StartNewGame(NewGameInfo newGameInfo){
         // 1. 创建角色
         PlayerCharacter pc = this.GetSystem<IPCSystem>().ChoosePC(newGameInfo.pcID);
 
         // 2. 初始化角色（添加基本串、初始吉祥物、初始被动技能、创建主动技能）
         this.GetSystem<IPCSystem>().InitPC(pc);
+
 
         // 3. 添加初始食材
         List<FoodPack> foodPacks = new List<FoodPack>
@@ -40,9 +56,5 @@ public class GameState_开始新游戏 : AbstractGameState
         this.GetSystem<IFoodSystem>().AddFoodToRepository(foodPacks);
 
         Debug.Log("【GameSystem】新游戏初始化完成");
-        
-        // 4. 初始化完成后，推进流程到下一个状态
-        // 流程会自动进入第一个子状态（经营月），然后进入经营日的第一个子状态
-        // this.SendEvent(new ProcessMoveNextEvent());
     }
 }

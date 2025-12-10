@@ -69,6 +69,7 @@ public class FoodSystem : AbstractSystem, IFoodSystem
     private void OnStartNewDay(StartNewDayEvent evt)
     {
         if (!evt.StageMeet(EventStage.System)) return;
+        Debug.Log("【FoodSystem】开始新一天：食材仓库数量：" + foodRepositorys.Count);
         // 初始化食材仓库
         foodPile = new FoodPile(foodRepositorys.Values.ToList());
         foodPile.Init();

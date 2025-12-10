@@ -7,10 +7,12 @@ using UnityEngine;
 
 public interface ISaveSystem : ISystem{
     void SaveGame();
-    void LoadGame();
+    void LoadGame(GameArchive gameArchive);
+    GameArchive GetGameArchive();
 }
 public class SaveSystem : AbstractSystem, ISaveSystem{
-    private string savePath => Application.persistentDataPath + "/save.json";
+    // 存到Persistent文件夹下
+    private string savePath => "Assets/Persistent/save.json";
     protected override void OnInit()
     {
     }
@@ -34,30 +36,32 @@ public class SaveSystem : AbstractSystem, ISaveSystem{
         
         Debug.Log($"游戏已保存至: {savePath}");
     }
-    public void LoadGame(){
+    public void LoadGame(GameArchive gameArchive){
+        Debug.Log("游戏读取成功！");
+
+        foreach(var system in GetAllSystems()){
+            system.Load(gameArchive);
+        }
+    }
+
+    public GameArchive GetGameArchive(){
         if (!File.Exists(savePath)) 
         {
             Debug.LogWarning("存档文件不存在！");
-            return;
+            return null;
         }
-
-        try 
+        byte[] bytes = File.ReadAllBytes(savePath);
+        GameArchive gameArchive = SerializationUtility.DeserializeValue<GameArchive>(bytes, DataFormat.Binary);
+        if (gameArchive == null)
         {
-            // 1. 【核心修改】使用 Odin 反序列化
-            byte[] bytes = File.ReadAllBytes(savePath);
-            var gameArchive = SerializationUtility.DeserializeValue<GameArchive>(bytes, DataFormat.Binary);
-
-            if (gameArchive == null){
-                Debug.LogError("读取存档失败: 存档文件为空");
-                return;
-            }
-
-            Debug.Log("游戏读取成功！");
+            Debug.LogError("存档文件解析失败！");
+            return null;
         }
-        catch (System.Exception e)
+        else
         {
-            Debug.LogError($"读取存档失败: {e.Message}");
+            Debug.Log("存档文件解析成功！");
         }
+        return gameArchive;
     }
 
     private IEnumerable<ISavable> GetAllSystems(){

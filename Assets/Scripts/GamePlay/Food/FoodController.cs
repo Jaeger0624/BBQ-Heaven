@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 using QFramework;
 using UnityEngine;
 
@@ -23,6 +24,18 @@ public class FoodController : MonoBehaviour, IController
         this.RegisterEvent<CreateFoodInstanceEvent>(OnCreateFoodInstanceEvent).UnRegisterWhenDisabled(this);
         this.RegisterEvent<RemoveFoodInstanceEvent>(OnRemoveFoodInstanceEvent).UnRegisterWhenDisabled(this);
         this.RegisterEvent<MoveFoodInstanceEvent>(OnMoveFoodInstanceEvent).UnRegisterWhenDisabled(this);
+    }
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.F)){
+            // 打印食材仓库信息
+            Dictionary<string, Food> foodRepositorys = foodSystem.FoodRepositorys();
+            StringBuilder sb = new StringBuilder();
+            foreach (var food in foodRepositorys){
+                sb.AppendLine($"食材仓库信息: {food.Key} - {food.Value.foodData.Name} - {food.Value.foodData.ID}");
+            }
+            Debug.Log(sb.ToString());
+        }
     }
 
 

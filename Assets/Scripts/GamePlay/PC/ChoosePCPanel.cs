@@ -26,6 +26,11 @@ public class ChoosePCPanel : MonoBehaviour, IController{
 
     private string selectedPCID;
     [SerializeField] private CanvasGroup canvasGroup;
+
+    void Start()
+    {
+        Hide();
+    }
     void Awake() {
         canvasGroup = GetComponent<CanvasGroup>();
 

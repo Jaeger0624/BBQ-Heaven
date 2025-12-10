@@ -47,7 +47,10 @@ public partial class Condition_食材周围空位
     {
         if (sender == null || !(sender is FoodInstance foodInstance)) return false;
 
-        if (foodInstance.state != FoodInstanceState.棋盘上) return false;
+        if (foodInstance.state != FoodInstanceState.棋盘上 && foodInstance.state != FoodInstanceState.被选中){
+            // Debug.Log($"【Condition_食材周围空位】食材不在棋盘上: {foodInstance.name}, 当前状态：{foodInstance.state}");
+            return false;
+        }
 
         // 检测食材周围是否有空位
         Vector2Int instancePos = foodInstance.position;

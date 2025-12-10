@@ -16,6 +16,8 @@ public class PlayerInfoData{
 // 游戏进程数据
 [Serializable]
 public class GameProcessData{
+    // 日月信息
     public int month;
     public int day;
+    public List<int> stateIndexes;
 }

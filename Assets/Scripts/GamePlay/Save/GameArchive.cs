@@ -6,7 +6,7 @@ public interface ISavable{
 }
 
 [Serializable]
-public class GameArchive : MonoBehaviour
+public class GameArchive
 {
     public GameArchive()
     {
@@ -15,8 +15,7 @@ public class GameArchive : MonoBehaviour
     // metadata
     public string saveTime;
     // 玩家信息
-    public PlayerInfoData playerInfoData;
+    public PlayerInfoData playerInfoData = new PlayerInfoData();
     // 游戏进程
-    public GameProcessData gameProcessData;
-    
+    public GameProcessData gameProcessData = new GameProcessData();
 }

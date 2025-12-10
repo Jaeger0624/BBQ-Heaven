@@ -1,14 +1,16 @@
+using System.Collections.Generic;
 using QFramework;
 using UnityEngine;
 
 /// <summary>
 /// 流程系统接口
 /// </summary>
-public interface IProcessSystem : ISystem{
+public interface IProcessSystem : ISystem, ISavable{
     bool GameStarted { get; }
     IGameState RootState { get; }
     IGameState CurrentActiveState { get; }
     void StartNewGame(NewGameInfo newGameInfo);
+    void LoadGame(GameArchive archive);
     void GameOver(string reason);
     void AddNewStateToRoot(IGameState state);
 }
@@ -48,6 +50,70 @@ public class ProcessSystem : AbstractSystem, IProcessSystem
         CurrentActiveState = null;
         processBuilder = null;
         GameStarted = false;
+    }
+
+    public void Save(GameArchive archive)
+    {
+        List<int> stateIndexes = new List<int>();
+        if (RootState == null) return;
+        // 获取所有子状态的索引
+        IGameState currentState = CurrentActiveState;
+        while (currentState != null)
+        {
+            IGameState parentState = currentState.ParentState;
+            if (parentState == null) break;
+            stateIndexes.Insert(0, parentState.SubStates.IndexOf(currentState));
+            currentState = parentState;
+        }
+        archive.gameProcessData.stateIndexes = stateIndexes;
+
+        Debug.Log("【ProcessSystem】保存游戏进程: " + string.Join(", ", stateIndexes));
+    }
+    public void Load(GameArchive archive)
+    {
+        RestoreProcess(archive.gameProcessData.stateIndexes);
+    }
+
+    private void RestoreProcess(List<int> stateIndexes)
+    {
+        if (RootState == null){
+            Debug.LogError("【ProcessSystem】根状态为空，无法恢复游戏进程");
+            return;
+        }
+        IGameState currentState = RootState;
+        for (int i = 0; i < stateIndexes.Count; i++)
+        {
+            if (currentState.SubStates.Count <= stateIndexes[i])
+            {
+                // TODO:做错误处理逻辑
+                Debug.LogError("【ProcessSystem】子状态索引超出范围，无法恢复游戏进程");
+                return;
+            }
+            IGameState subState = currentState.SubStates[stateIndexes[i]];
+            currentState.ReviseCurrentSubState(subState);
+
+            // 切换
+            currentState = currentState.SubStates[stateIndexes[i]];
+        }
+        currentState.OnEnter();
+        UpdateCurrentActiveState();
+    }
+    public void LoadGame(GameArchive archive)
+    {
+        if (GameStarted) return;
+
+
+        //TODO: 1. 需要能根据存档信息调整，先写死一个
+        processBuilder = new ProcessMaker_默认(archive);
+        RootState = processBuilder.GetProcess();
+        GameStarted = true;
+
+
+        // 2. 推动RootState
+        if (RootState != null)
+        {
+            RootState.OnEnter();
+        }
     }
 
     /// <summary>
