@@ -7,6 +7,9 @@ using UnityEngine;
 [Serializable]
 public class FoodPile : ICanGetSystem, ICanSendEvent{
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
+    /// <summary>
+    /// 当前食材仓库
+    /// </summary>
     public List<Food> FoodSet = new List<Food>();
     public List<Food> DrawFoodPile;
     public Dictionary<string, FoodInstance> FoodInstances;
@@ -14,6 +17,15 @@ public class FoodPile : ICanGetSystem, ICanSendEvent{
         FoodSet = foodInventory.ToList();
         DrawFoodPile = new List<Food>();
         FoodInstances = new Dictionary<string, FoodInstance>();
+    }
+    public void LoadFoodPile(FoodPile foodPile){
+        // 1. 设置FoodSet
+        FoodSet = foodPile.FoodSet.ToList();
+        
+        // 2. 创建新的FoodInstances
+        foreach (var foodInstance in foodPile.FoodInstances){
+            CreateFoodInstance(foodInstance.Value.food, foodInstance.Value.position);
+        }
     }
     public void Init(){
         DrawFoodPile = FoodSet.ToList();
@@ -81,4 +93,10 @@ public class FoodPile : ICanGetSystem, ICanSendEvent{
         }
         return foodInstance;
     }
+
+
+    // // 加载FoodPile数据
+    // public FoodInstance LoadFoodInstance(FoodInstanceData foodInstanceData){
+    //     return CreateFoodInstance(foodInstanceData.food, foodInstanceData.position);
+    // }
 }

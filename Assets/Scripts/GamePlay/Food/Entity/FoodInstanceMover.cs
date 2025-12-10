@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class FoodInstanceMover : ICanGetSystem, ICanSendEvent
 {
-    private Dictionary<string, FoodInstance> foodInstances => this.GetSystem<IFoodSystem>().GetFoodInstances();
     public IArchitecture GetArchitecture() =>
         GameArchitecture.Interface;
     

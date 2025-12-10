@@ -6,7 +6,7 @@ using UnityEngine;
 /// 玩家角色系统 - 系统层
 /// 用于处理玩家角色（Player Character）相关的逻辑
 /// </summary>
-public interface IPCSystem : ISystem{
+public interface IPCSystem : ISystem, ISavable{
     PlayerCharacter ChoosePC(string id);
     void InitPC(PlayerCharacter playerCharacter);
 }
@@ -21,6 +21,14 @@ public class PCSystem : AbstractSystem, IPCSystem
     protected override void OnDeinit()
     {
         ClearPC();
+    }
+    public void Save(GameArchive archive)
+    {
+        archive.playerInfoData.playerCharacter = currentPC;
+    }
+    public void Load(GameArchive archive)
+    {
+        LoadPC(archive.playerInfoData.playerCharacter);
     }
     public PlayerCharacter ChoosePC(string id)
     {
@@ -52,21 +60,34 @@ public class PCSystem : AbstractSystem, IPCSystem
         {
             this.GetSystem<MascotSystem>().AddMascot(mascotID);
         }
-        // 3. 添加初始被动技能
+
+        // 3. 添加基础卡牌
+        // 获取第一张卡牌的ID
+        string cardID = this.GetSystem<IDataSystem>().GetAllCardData().Count.ToString();
+        for (int i = 0; i < 10; i++)
+        {
+            this.GetSystem<ICardSystem>().AddCardToRepository(cardID);
+        }
+        // 4. 添加初始被动技能
         foreach (var se in currentPC.data.SEs)
         {
             Debug.Log($"添加角色被动技能: {se.GetType().Name}");
             this.GetSystem<IGASystem>().ApplySE(currentPC, se);
         }
 
-        // 4. 创建主动技能
+        // 5. 创建主动技能
+    }
 
-        //TODO: 5. 添加基础卡牌
-        // 获取第一张卡牌的ID
-        string cardID = this.GetSystem<IDataSystem>().GetAllCardData().Count.ToString();
-        for (int i = 0; i < 10; i++)
+    private void LoadPC(PlayerCharacter playerCharacter)
+    {
+        currentPC = playerCharacter;
+        Debug.Log($"加载玩家角色: {currentPC.data.Name}");
+
+        // 1. 注册被动技能：
+        foreach (var se in currentPC.data.SEs)
         {
-            this.GetSystem<ICardSystem>().AddCardToRepository(cardID);
+            Debug.Log($"注册角色被动技能: {se.GetType().Name}");
+            this.GetSystem<IGASystem>().ApplySE(currentPC, se);
         }
     }
 

@@ -3,7 +3,7 @@ using System.Linq;
 using QFramework;
 using UnityEngine;
 
-public interface IGameSystem : ISystem{
+public interface IGameSystem : ISystem, ISavable{
     public int CurrentDay { get; }
     public int MaxDay { get; set; }
     public void StartMonth();
@@ -32,6 +32,21 @@ public class GameSystem : AbstractSystem, IGameSystem
         currentMonth = 0;
         maxDay = 3;
         maxMonth = 3;
+    }
+
+    protected override void OnDeinit(){
+
+    }
+
+    public void Save(GameArchive archive)
+    {
+        archive.gameProcessData.month = currentMonth;
+        archive.gameProcessData.day = currentDay;
+    }
+    public void Load(GameArchive archive)
+    {
+        currentMonth = archive.gameProcessData.month;
+        currentDay = archive.gameProcessData.day;
     }
 
     public void StartMonth(){
@@ -91,32 +106,3 @@ public enum EventStage{
     System,
     After
 }
-
-
-#region 事件
-public class StartNewDayEvent : AbstractEvent{
-    public int month;
-    public int day;
-    public EventStage stage;
-    public StartNewDayEvent(int month, int day, EventStage stage){
-        this.month = month;
-        this.day = day;
-        this.stage = stage;
-    }
-    public bool StageMeet(EventStage stage) => this.stage == stage;
-}
-
-
-
-public class EndDayEvent : AbstractEvent{
-    public int month;
-    public int day;
-    public EventStage stage;
-    public EndDayEvent(int month, int day, EventStage stage){
-        this.month = month;
-        this.day = day;
-        this.stage = stage;
-    }
-    public bool StageMeet(EventStage stage) => this.stage == stage;
-}
-#endregion

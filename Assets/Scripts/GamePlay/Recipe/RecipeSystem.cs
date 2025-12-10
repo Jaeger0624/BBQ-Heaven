@@ -4,7 +4,7 @@ using System.Text;
 using QFramework;
 using UnityEngine;
 
-public interface IRecipeSystem : ISystem{
+public interface IRecipeSystem : ISystem, ISavable{
     List<Recipe> Recipes();
     /// <summary>
     /// 执行配方匹配
@@ -18,7 +18,25 @@ public class RecipeSystem : AbstractSystem, IRecipeSystem
 {
     private List<Recipe> recipeRepository;
     public List<Recipe> Recipes() => recipeRepository;
-    private IMatchRecipeStrategy matchRecipeStrategy;   
+    private IMatchRecipeStrategy matchRecipeStrategy;  
+    protected override void OnInit()
+    {
+        recipeRepository = new List<Recipe>();
+        matchRecipeStrategy = new MatchRecipeStrategy_默认();
+    }
+    protected override void OnDeinit()
+    {
+        recipeRepository.Clear();
+    }
+    public void Save(GameArchive archive)
+    {
+        archive.playerInfoData.recipes = recipeRepository;
+    }
+    public void Load(GameArchive archive)
+    {
+        recipeRepository = archive.playerInfoData.recipes;
+    }
+
     // 在BBQ构建完毕后，执行配方匹配
     public void MatchRecipe(List<object> param)
     {
@@ -50,15 +68,7 @@ public class RecipeSystem : AbstractSystem, IRecipeSystem
         // 2. 执行匹配成功的配方
         matchedRecipes.ForEach(recipe => ExecuteRecipe(recipe, param));
     }
-    protected override void OnInit()
-    {
-        recipeRepository = new List<Recipe>();
-        matchRecipeStrategy = new MatchRecipeStrategy_默认();
-    }
-    protected override void OnDeinit()
-    {
-        recipeRepository.Clear();
-    }
+
     public void RegisterRecipe(string id){
         Recipe recipe = new Recipe(this.GetSystem<IDataSystem>().GetRecipeData(id));
         // Debug.Log($"【RecipeSystem】注册配方: {recipe.name}");

@@ -4,7 +4,7 @@ using QFramework;
 using UnityEngine;
 using UniRx;
 using System.Linq;
-public interface IFoodSystem : ISystem{
+public interface IFoodSystem : ISystem, ISavable{
     FoodSupplyer foodSupplyer {get; set;}  // 承担补充食物的职责
     FoodInstanceMover foodInstanceMover {get; set;}  // 承担移动食材实例的职责
     FoodInstance GetFoodInstance(string guid);
@@ -31,10 +31,8 @@ public interface IFoodSystem : ISystem{
 /// </summary>
 public class FoodSystem : AbstractSystem, IFoodSystem
 {
-    public Dictionary<string, Food> foodRepositorys;  // 食材仓库字典
+    private Dictionary<string, Food> foodRepositorys;  // 食材仓库字典
     public Dictionary<string, Food> FoodRepositorys() => foodRepositorys;
-    // ID -> 食材数量
-    public Dictionary<string, int> totalRespository;  // 食材仓库食材数量字典
     // 当前剩余补充机会
     public FoodSupplyer foodSupplyer {get; set;}
     public FoodInstanceMover foodInstanceMover {get; set;}
@@ -42,7 +40,6 @@ public class FoodSystem : AbstractSystem, IFoodSystem
     protected override void OnInit()
     {
         foodRepositorys = new Dictionary<string, Food>();
-        totalRespository = new Dictionary<string, int>();
         this.RegisterEvent<StartNewDayEvent>(OnStartNewDay);
         this.RegisterEvent<EndDayEvent>(OnEndDay);
 
@@ -57,6 +54,17 @@ public class FoodSystem : AbstractSystem, IFoodSystem
         this.UnRegisterEvent<EndDayEvent>(OnEndDay);
 
         foodPile = null;
+    }
+    public void Save(GameArchive archive)
+    {
+        archive.playerInfoData.foodRepositorys = foodRepositorys;
+    }
+
+    public void Load(GameArchive archive)
+    {
+        // 根据FoodRepositorys创建新的FoodRepositorys
+        foodRepositorys = archive.playerInfoData.foodRepositorys.ToDictionary(food => food.Key, food => food.Value);
+
     }
     private void OnStartNewDay(StartNewDayEvent evt)
     {
@@ -128,31 +136,7 @@ public class FoodSystem : AbstractSystem, IFoodSystem
                 Food food = new Food(foodData, isTemporary);
                 foodRepositorys.Add(food.guid, food);
             }
-
-            if (totalRespository.TryGetValue(foodPack.foodId, out int amount)){
-                totalRespository[foodPack.foodId] = amount + foodPack.quantity;
-            }
-            else{
-                totalRespository.Add(foodPack.foodId, foodPack.quantity);
-                this.SendEvent(new AddNewFoodToRepositoryEvent(foodPack.foodId, foodPack.quantity));
-            }
         }
-        // 发送更新事件，通知视图更新
-        this.SendEvent(new UpdateFoodRepositoryAmountEvent(GetFoodRepositoryAmounts()));
-    }
-    private void DeleteFoodFromTotalRepository(string guid, int amount){
-        Food food = foodRepositorys[guid];
-        foodRepositorys.Remove(guid);
-        if (totalRespository.TryGetValue(food.foodData.ID, out int count)){
-            if (count - amount <= 0){
-                totalRespository.Remove(food.foodData.ID);
-                this.SendEvent(new DeleteFoodFromRepositoryEvent(food.foodData.ID));
-            }
-            else{
-                totalRespository[food.foodData.ID] = count - amount;
-            }
-        }
-        
         // 发送更新事件，通知视图更新
         this.SendEvent(new UpdateFoodRepositoryAmountEvent(GetFoodRepositoryAmounts()));
     }
@@ -190,58 +174,5 @@ public class FoodSystem : AbstractSystem, IFoodSystem
     }
     public ReactiveProperty<int> GetCurrentSupplyCount() => foodSupplyer.supplyChance;
 
+
 }
-
-#region 食材系统事件
-
-public class CreateFoodInstanceEvent : AbstractEvent{
-    public FoodInstance foodInstance;
-    public CreateFoodInstanceEvent(FoodInstance foodInstance){
-        this.foodInstance = foodInstance;
-    }
-}
-
-public class RemoveFoodInstanceEvent : AbstractEvent{
-    public FoodInstance foodInstance;
-    public RemoveFoodInstanceEvent(FoodInstance foodInstance){
-        this.foodInstance = foodInstance;
-    }
-}
-
-public class AddNewFoodToRepositoryEvent : AbstractEvent{
-    public readonly string foodId;
-    public readonly int amount;
-    public AddNewFoodToRepositoryEvent(string foodId, int amount){
-        this.foodId = foodId;
-        this.amount = amount;
-    }
-}
-
-public class DeleteFoodFromRepositoryEvent : AbstractEvent{
-    public readonly string id;
-    public DeleteFoodFromRepositoryEvent(string id){
-        this.id = id;
-    }
-}
-
-
-public class UpdateFoodRepositoryAmountEvent : AbstractEvent{
-    public readonly Dictionary<string, int> foodRepositoryAmounts;
-    public UpdateFoodRepositoryAmountEvent(Dictionary<string, int> foodRepositoryAmounts){
-        this.foodRepositoryAmounts = foodRepositoryAmounts;
-    }
-}
-
-
-public class MoveFoodInstanceEvent : AbstractEvent{
-    public readonly Vector2Int targetPosition;
-    public readonly Vector2Int originPosition;
-    public readonly string guid;
-    public MoveFoodInstanceEvent(Vector2Int targetPosition, Vector2Int originPosition, string guid){
-        this.targetPosition = targetPosition;
-        this.originPosition = originPosition;
-        this.guid = guid;
-    }
-}
-#endregion
-

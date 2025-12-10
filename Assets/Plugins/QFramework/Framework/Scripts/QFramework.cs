@@ -62,6 +62,9 @@ namespace QFramework
         void UnRegisterEvent<T>(Action<T> onEvent) where T : IEvent;
 
         void Deinit();
+
+        // 补充获取所有系统的方法
+        IEnumerable<object> GetAllSystems();
     }
 
     public abstract class Architecture<T> : IArchitecture where T : Architecture<T>, new()
@@ -192,6 +195,8 @@ namespace QFramework
         public IUnRegister RegisterEvent<TEvent>(Action<TEvent> onEvent) where TEvent : IEvent => mTypeEventSystem.Register<TEvent>(onEvent);
 
         public void UnRegisterEvent<TEvent>(Action<TEvent> onEvent) where TEvent : IEvent => mTypeEventSystem.UnRegister<TEvent>(onEvent);
+    
+        public IEnumerable<object> GetAllSystems() => mContainer.GetInstancesByType<object>();
     }
 
     public interface IOnEvent<T>

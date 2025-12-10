@@ -362,7 +362,7 @@ public partial class GA_创建满意度乘区 : GameAction
 
             // 2. 为食材添加GA
             foreach (FoodInstance foodInstance in foodInstances){
-                foodInstance.AddGA(Actions, Type);
+                // foodInstance.AddGA(Actions, Type);
             }
 
             // 3. 设置动画播放器

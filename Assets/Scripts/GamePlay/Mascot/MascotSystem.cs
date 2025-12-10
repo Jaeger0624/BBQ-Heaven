@@ -4,7 +4,7 @@ using cfg;
 using QFramework;
 using UnityEngine;
 
-public interface IMascotSystem : ISystem{
+public interface IMascotSystem : ISystem, ISavable{
     Dictionary<string, Mascot> Mascots { get; }
     public void AddMascot(string id);
     public void RemoveMascot(string id);
@@ -17,6 +17,23 @@ public class MascotSystem : AbstractSystem, IMascotSystem
     private Dictionary<string, Mascot> mascots;
     public Dictionary<string, Mascot> Mascots => mascots;
 
+    protected override void OnInit()
+    {
+        mascots = new Dictionary<string, Mascot>();
+    }
+    protected override void OnDeinit()
+    {
+        mascots.Clear();
+    }
+    public void Save(GameArchive archive)
+    {
+        archive.playerInfoData.mascots = mascots.Values.ToList();
+    }
+    public void Load(GameArchive archive)
+    {
+        List<Mascot> mascotsToLoad = archive.playerInfoData.mascots;
+        mascotsToLoad.ForEach(mascot => LoadMascot(mascot));
+    }
     public void AddMascot(string mascotID)
     {
 
@@ -38,6 +55,15 @@ public class MascotSystem : AbstractSystem, IMascotSystem
         }
         mascot = new Mascot(mascotData);
         mascots.Add(mascotID, mascot);
+        mascot.OnAdd();
+
+        this.SendEvent(new MascotAddedEvent(mascot));
+    }
+
+    private void LoadMascot(Mascot mascot)
+    {
+        // TODO: 设置堆叠数量
+        mascots.Add(mascot.ID, mascot);
         mascot.OnAdd();
 
         this.SendEvent(new MascotAddedEvent(mascot));
@@ -73,10 +99,6 @@ public class MascotSystem : AbstractSystem, IMascotSystem
             return;
         }
         Debug.LogError($"吉祥物 {mascotID} 不存在,但尝试出售");
-    }
-    protected override void OnInit()
-    {
-        mascots = new Dictionary<string, Mascot>();
     }
 }
 

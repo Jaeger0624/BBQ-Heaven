@@ -1,6 +1,7 @@
+using System;
 using cfg;
 using QFramework;
-
+[Serializable]
 public partial class PlayerCharacter : ICanGetSystem{
     public string ID => data.ID;
     public string name;

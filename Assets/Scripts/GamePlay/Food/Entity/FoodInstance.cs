@@ -5,6 +5,14 @@ using cfg;
 using QFramework;
 using UniRx;
 using UnityEngine;
+
+public class FoodInstanceData{
+    public Food food;
+    public Vector2Int position;
+    public FoodInstanceState state;
+    public int rarity;
+    public int taste;
+}
 /// <summary>
 /// 食材实例类
 /// </summary>
@@ -38,11 +46,6 @@ public partial class FoodInstance : IAnimPlayer, ICanGetSystem{
         this.cgas = cgas;
         this.sustainEffects = food.sustainEffects.Select(x => x.Clone()).ToList();
     }
-
-    public void AddGA(List<GameAction> actions, FoodGAType foodGAType){
-        //TODO:
-    }
-
     public void SetState(FoodInstanceState state){
         if (this.state == state){
             return;

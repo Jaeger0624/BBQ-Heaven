@@ -79,6 +79,8 @@ public class GameArchitecture : Architecture<GameArchitecture>
         sb.Append("\nSelectorSystem - 选择系统");
         Interface.RegisterSystem<IDialogueSystem>(new DialogueSystem());  // 对话系统
         sb.Append("\nDialogueSystem - 对话系统");
+        Interface.RegisterSystem<ISaveSystem>(new SaveSystem());  // 存档系统
+        sb.Append("\nSaveSystem - 存档系统");
         // Debug.Log(sb.ToString());
     }
 

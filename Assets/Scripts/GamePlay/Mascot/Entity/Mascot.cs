@@ -35,7 +35,6 @@ public class Mascot : ICanGetSystem{
             this.GetSystem<IGASystem>().RemoveSE(this, se);
         }
     }
-
     public void OnStack()
     {
         if (!data.Stackable){

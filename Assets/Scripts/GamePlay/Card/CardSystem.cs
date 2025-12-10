@@ -8,7 +8,7 @@ public enum CardSystemState{
     选择目标,
     卡牌使用中,
 }
-public interface ICardSystem : ISystem{
+public interface ICardSystem : ISystem, ISavable{
     CardPile CardPile { get; }
     CardSystemState State { get; set; }
     void InitCardPile();
@@ -49,7 +49,14 @@ public class CardSystem : AbstractSystem, ICardSystem
         this.UnRegisterEvent<FinishCombineBBQEvent>(OnFinishCombineBBQ);
         this.UnRegisterEvent<EndDayEvent>(OnEndDay);
     }
-
+    public void Save(GameArchive archive)
+    {
+        archive.playerInfoData.cardRepositorys = cardRepository;
+    }
+    public void Load(GameArchive archive)
+    {
+        cardRepository = archive.playerInfoData.cardRepositorys.ToDictionary(card => card.Key, card => card.Value);
+    }
     private void OnStartNewDay(StartNewDayEvent evt)
     {
         if (!evt.StageMeet(EventStage.System)) return;

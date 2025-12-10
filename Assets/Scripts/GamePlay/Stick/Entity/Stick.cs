@@ -5,6 +5,7 @@ using UnityEngine;
 /// <summary>
 /// 烤串系统 - 实例层
 /// </summary>
+[Serializable]
 public class Stick : ICanGetSystem{
     public string guid { get; private set; }
     public string name => stickData.Name;

@@ -4,7 +4,7 @@ using cfg;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using System.Linq;
-public interface IStickSystem : ISystem
+public interface IStickSystem : ISystem, ISavable
 {
     Stick selectedStick { get; }
     Stick AddStickToRepository(string id);
@@ -36,6 +36,14 @@ public class StickSystem : AbstractSystem, IStickSystem
     protected override void OnDeinit()
     {
         this.UnRegisterEvent<StartNewDayEvent>(OnStartNewDayEvent);
+    }
+    public void Save(GameArchive archive)
+    {
+        archive.playerInfoData.stickRepositorys = stickRepository;
+    }
+    public void Load(GameArchive archive)
+    {
+        stickRepository = archive.playerInfoData.stickRepositorys.ToDictionary(stick => stick.Key, stick => stick.Value);
     }
     private void OnStartNewDayEvent(StartNewDayEvent evt)
     {

@@ -3,7 +3,7 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.Timeline;
 
-public interface IEconomySystem : ISystem{
+public interface IEconomySystem : ISystem, ISavable{
     int baseScore{get;}
     int maxInterestScore{get;}
     int profitScore{get;}
@@ -32,7 +32,14 @@ public class EconomySystem : AbstractSystem, IEconomySystem
     {
         coin.Dispose();
     }
-
+    public void Save(GameArchive archive)
+    {
+        archive.playerInfoData.coin = coin.Value;
+    }
+    public void Load(GameArchive archive)
+    {
+        coin.Value = archive.playerInfoData.coin;
+    }
     public void AddCoin(int amount)
     {
         coin.Value += amount;
