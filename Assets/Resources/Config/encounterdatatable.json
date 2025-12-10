@@ -1,0 +1,30 @@
+[
+  {
+    "ID": "1",
+    "name": "黄金时期",
+    "description": "得分+50%",
+    "type": 1,
+    "num": 3,
+    "SEs": [
+      {
+        "$type": "SE_基于线性GA",
+        "onAddAction": [
+          {
+            "$type": "GA_修改得分乘区",
+            "value": 1.5,
+            "sender": "黄金时期",
+            "isAdd": true
+          }
+        ],
+        "onRemoveAction": [
+          {
+            "$type": "GA_修改得分乘区",
+            "value": 1.5,
+            "sender": "黄金时期",
+            "isAdd": false
+          }
+        ]
+      }
+    ]
+  }
+]

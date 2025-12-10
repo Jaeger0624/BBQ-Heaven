@@ -21,6 +21,7 @@ public partial class Tables
     public MascotDataTable MascotDataTable {get; }
     public PCDataTable PCDataTable {get; }
     public CardDataTable CardDataTable {get; }
+    public EncounterDataTable EncounterDataTable {get; }
 
     public Tables(System.Func<string, JSONNode> loader)
     {
@@ -31,6 +32,7 @@ public partial class Tables
         MascotDataTable = new MascotDataTable(loader("mascotdatatable"));
         PCDataTable = new PCDataTable(loader("pcdatatable"));
         CardDataTable = new CardDataTable(loader("carddatatable"));
+        EncounterDataTable = new EncounterDataTable(loader("encounterdatatable"));
         ResolveRef();
     }
     
@@ -43,6 +45,7 @@ public partial class Tables
         MascotDataTable.ResolveRef(this);
         PCDataTable.ResolveRef(this);
         CardDataTable.ResolveRef(this);
+        EncounterDataTable.ResolveRef(this);
     }
 }
 

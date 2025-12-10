@@ -13,6 +13,9 @@ using SimpleJSON;
 
 namespace cfg
 {
+/// <summary>
+/// 卡牌
+/// </summary>
 public sealed partial class GA_抽牌 : GameAction
 {
     public GA_抽牌(JSONNode _buf)  : base(_buf) 

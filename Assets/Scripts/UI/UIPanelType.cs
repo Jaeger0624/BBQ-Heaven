@@ -4,4 +4,6 @@ public enum UIPanelAction{
 }
 public enum UIPanelType{
     DialogPanel,
+    KitchenPanel,
+    CustomerPanel,
 }

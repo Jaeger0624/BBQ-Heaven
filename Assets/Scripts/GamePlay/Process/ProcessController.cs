@@ -60,6 +60,7 @@ public class ProcessController : MonoBehaviour, IController, ICanSendEvent
             HideKitchenPanel();
             currentPanel = ProcessPanel.Customer;
             this.SendEvent(new ChangePanelEvent(ProcessPanel.Customer));
+
         }else{
             ShowKitchenPanel();
             HideCustomerPanel();
@@ -70,14 +71,18 @@ public class ProcessController : MonoBehaviour, IController, ICanSendEvent
 
     // 厨房视图
     private void ShowKitchenPanel(){
+        this.SendEvent(new UIPanelEvent(UIPanelType.KitchenPanel, UIPanelAction.Show));
     }
     private void HideKitchenPanel(){
+        this.SendEvent(new UIPanelEvent(UIPanelType.KitchenPanel, UIPanelAction.Hide));
     }
 
     private void ShowCustomerPanel(){
 
+        this.SendEvent(new UIPanelEvent(UIPanelType.CustomerPanel, UIPanelAction.Show));
     }
     private void HideCustomerPanel(){
+        this.SendEvent(new UIPanelEvent(UIPanelType.CustomerPanel, UIPanelAction.Hide));
     }
     
     

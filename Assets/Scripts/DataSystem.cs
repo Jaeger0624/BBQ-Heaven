@@ -28,6 +28,10 @@ public interface IDataSystem : ISystem{
     CardData GetCardData(string id);
     List<CardData> GetAllCardData();
 
+    // 获取遭遇配置
+    EncounterData GetEncounterData(string id);
+    List<EncounterData> GetAllEncounterData();
+
 }
 public class DataSystem : AbstractSystem, IDataSystem{
 
@@ -83,5 +87,15 @@ public class DataSystem : AbstractSystem, IDataSystem{
     protected override void OnInit()
     {
         GenerateData();
+    }
+
+    public EncounterData GetEncounterData(string id)
+    {
+        return tables.EncounterDataTable.Get(id);
+    }
+
+    public List<EncounterData> GetAllEncounterData()
+    {
+        return tables.EncounterDataTable.DataList;
     }
 }

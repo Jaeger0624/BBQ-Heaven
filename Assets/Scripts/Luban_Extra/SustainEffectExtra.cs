@@ -56,12 +56,12 @@ namespace cfg{
     // 主要用于被动类的吉祥物（例如：最大补充数+2）
     public partial class SE_基于线性GA : SustainEffect{
         public SE_基于线性GA(SE_基于线性GA se){
-            this.Actions = new List<GameAction>(se.Actions.Select(x => x.Clone()));
+            this.OnAddAction = new List<GameAction>(se.OnAddAction.Select(x => x.Clone()));
             this.OnRemoveAction = new List<GameAction>(se.OnRemoveAction.Select(x => x.Clone()));
         }
         public override void OnAdd(object sender)
         {
-            foreach (var action in Actions){
+            foreach (var action in OnAddAction){
                 action.ApplyMultiplier(StackNumber);
                 this.GetSystem<IGASystem>().ApplyGA(sender, action, null);
             }
@@ -71,7 +71,7 @@ namespace cfg{
             // 2. 再添加新的效果
             int diff = newStackNumber - StackNumber;
             StackNumber = newStackNumber;
-            foreach (var action in Actions){
+            foreach (var action in OnAddAction){
                 action.ApplyMultiplier(diff);
                 this.GetSystem<IGASystem>().ApplyGA(sender, action, null);
             }

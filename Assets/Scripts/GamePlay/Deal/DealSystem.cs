@@ -17,6 +17,9 @@ public interface IDealSystem : ISystem{
 	DealResult PreviewDeal(BBQ bbq, Customer customer);
     // 读取当前正在处理的交易（供 GA 等效果访问）
     Deal GetCurrentDeal();
+
+	void AddScoreMultiplier(string name, float multiplier);
+	void RemoveScoreMultiplier(string name);
 }
 
 public class DealSystem : AbstractSystem, IDealSystem
@@ -24,8 +27,27 @@ public class DealSystem : AbstractSystem, IDealSystem
     private Deal currentDeal = null;
 	private IEarnMoneyStrategy earnMoneyStrategy = new EarnMoneyStrategy_原值();
     public Deal GetCurrentDeal() => currentDeal;
-	
-    protected override void OnInit(){}
+	private Dictionary<string, float> scoreMultipliers = new Dictionary<string, float>();
+
+    protected override void OnInit()
+	{
+		scoreMultipliers = new Dictionary<string, float>();
+	}
+	public void AddScoreMultiplier(string name, float multiplier)
+	{
+		if (!scoreMultipliers.ContainsKey(name)){
+			scoreMultipliers.Add(name, multiplier);
+		}
+	}
+	public void RemoveScoreMultiplier(string name)
+	{
+		if (scoreMultipliers.ContainsKey(name)){
+			scoreMultipliers.Remove(name);
+		}
+		else{
+			Debug.LogError($"【DealSystem】尝试移除不存在的得分乘区: {name}");
+		}
+	}
 	public void ExecuteDeal(BBQ bbq, Customer customer)
     {
 		if (bbq == null || customer == null) return;
@@ -102,10 +124,20 @@ public class DealSystem : AbstractSystem, IDealSystem
 		int rarity = bbq.totalRarity.Value;
 		int taste = bbq.totalTaste.Value;
 		float rawPrice = satisfaction * rarity * taste;
+
+		// 获取其他得分乘区
+		Dictionary<string, float> otherMultipliers = scoreMultipliers;
+
+		foreach (var multiplier in otherMultipliers){
+			rawPrice *= multiplier.Value;
+		}
 		int roundedRawPrice = Mathf.RoundToInt(rawPrice);
 
+		// 计算价格
 		int money = earnMoneyStrategy.EarnMoney(roundedRawPrice);
-		DealResult result = new DealResult(bbq, customer, satisfaction, Satis, rarity, taste, money, rawPrice);
+
+
+		DealResult result = new DealResult(bbq, customer, satisfaction, Satis, otherMultipliers, rarity, taste, money, rawPrice);
 
 		// 基础计算完成：派发事件，允许 GA 基于当前交易对结果进行调整
 		return result;

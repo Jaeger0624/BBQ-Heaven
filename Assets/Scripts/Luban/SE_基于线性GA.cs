@@ -17,7 +17,7 @@ public sealed partial class SE_基于线性GA : SustainEffect
 {
     public SE_基于线性GA(JSONNode _buf)  : base(_buf) 
     {
-        { var __json0 = _buf["actions"]; if(!__json0.IsArray) { throw new SerializationException(); } Actions = new System.Collections.Generic.List<GameAction>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { GameAction __v0;  { if(!__e0.IsObject) { throw new SerializationException(); }  __v0 = global::cfg.GameAction.DeserializeGameAction(__e0);  }  Actions.Add(__v0); }   }
+        { var __json0 = _buf["onAddAction"]; if(!__json0.IsArray) { throw new SerializationException(); } OnAddAction = new System.Collections.Generic.List<GameAction>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { GameAction __v0;  { if(!__e0.IsObject) { throw new SerializationException(); }  __v0 = global::cfg.GameAction.DeserializeGameAction(__e0);  }  OnAddAction.Add(__v0); }   }
         { var __json0 = _buf["onRemoveAction"]; if(!__json0.IsArray) { throw new SerializationException(); } OnRemoveAction = new System.Collections.Generic.List<GameAction>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { GameAction __v0;  { if(!__e0.IsObject) { throw new SerializationException(); }  __v0 = global::cfg.GameAction.DeserializeGameAction(__e0);  }  OnRemoveAction.Add(__v0); }   }
     }
 
@@ -29,7 +29,7 @@ public sealed partial class SE_基于线性GA : SustainEffect
     /// <summary>
     /// 动作列表
     /// </summary>
-    public readonly System.Collections.Generic.List<GameAction> Actions;
+    public readonly System.Collections.Generic.List<GameAction> OnAddAction;
     /// <summary>
     /// 动作列表
     /// </summary>
@@ -41,14 +41,14 @@ public sealed partial class SE_基于线性GA : SustainEffect
     public override void ResolveRef(Tables tables)
     {
         base.ResolveRef(tables);
-        foreach (var _e in Actions) { _e?.ResolveRef(tables); }
+        foreach (var _e in OnAddAction) { _e?.ResolveRef(tables); }
         foreach (var _e in OnRemoveAction) { _e?.ResolveRef(tables); }
     }
 
     public override string ToString()
     {
         return "{ "
-        + "actions:" + Luban.StringUtil.CollectionToString(Actions) + ","
+        + "onAddAction:" + Luban.StringUtil.CollectionToString(OnAddAction) + ","
         + "onRemoveAction:" + Luban.StringUtil.CollectionToString(OnRemoveAction) + ","
         + "}";
     }

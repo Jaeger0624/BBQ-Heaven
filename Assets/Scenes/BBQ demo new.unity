@@ -9145,6 +9145,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1161451998}
   - component: {fileID: 1161451999}
+  - component: {fileID: 1161452000}
+  - component: {fileID: 1161452001}
   m_Layer: 5
   m_Name: "\u4E32\u7B7E\u7BA1\u7406\u5668"
   m_TagString: Untagged
@@ -9186,6 +9188,38 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stickViewPrefab: {fileID: 2889929991266531139, guid: 339ef6845698019479bfe58cebd32b68, type: 3}
   stickViewContainer: {fileID: 340209963}
+--- !u!114 &1161452000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1161451997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be3fe415b71994f4b9f5676e301f7649, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvasGroup: {fileID: 1161452001}
+  currentPanelType: 1
+  onShow:
+    m_PersistentCalls:
+      m_Calls: []
+  onHide:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!225 &1161452001
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1161451997}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1173862508
 GameObject:
   m_ObjectHideFlags: 0
@@ -17415,7 +17449,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1672986230254023067, guid: 4b0b33e978bcdcd4c95339400b48f0d0, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 344.07
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1888688214262151321, guid: 4b0b33e978bcdcd4c95339400b48f0d0, type: 3}
       propertyPath: m_Pivot.x
