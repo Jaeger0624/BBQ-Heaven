@@ -46,7 +46,6 @@ public class TimeController : MonoBehaviour, IController
     }
 
     private void ResetProcessBar(){
-        // processBar.SetNormalizedProgress(0f);
         progressBar.DOValue(0f, duration).SetEase(Ease.OutBack, amplitude, easeTime);
     }
     private void SetProcessBar(TimeInfo currentTime, TimeInfo targetTime){
