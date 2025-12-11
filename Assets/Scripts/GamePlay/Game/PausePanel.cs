@@ -62,6 +62,7 @@ public class PausePanel : MonoBehaviour, IController
     {
         // Debug.Log("【PausePanel】退出游戏");
         SceneManager.LoadSceneAsync("MainMenu");
+
         GameArchitecture.ResetGame();
     }
 

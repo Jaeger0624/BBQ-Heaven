@@ -22,6 +22,8 @@ public partial class Tables
     public PCDataTable PCDataTable {get; }
     public CardDataTable CardDataTable {get; }
     public EncounterDataTable EncounterDataTable {get; }
+    public LevelDataTable LevelDataTable {get; }
+    public DifficultyDataTable DifficultyDataTable {get; }
 
     public Tables(System.Func<string, JSONNode> loader)
     {
@@ -33,6 +35,8 @@ public partial class Tables
         PCDataTable = new PCDataTable(loader("pcdatatable"));
         CardDataTable = new CardDataTable(loader("carddatatable"));
         EncounterDataTable = new EncounterDataTable(loader("encounterdatatable"));
+        LevelDataTable = new LevelDataTable(loader("leveldatatable"));
+        DifficultyDataTable = new DifficultyDataTable(loader("difficultydatatable"));
         ResolveRef();
     }
     
@@ -46,6 +50,8 @@ public partial class Tables
         PCDataTable.ResolveRef(this);
         CardDataTable.ResolveRef(this);
         EncounterDataTable.ResolveRef(this);
+        LevelDataTable.ResolveRef(this);
+        DifficultyDataTable.ResolveRef(this);
     }
 }
 

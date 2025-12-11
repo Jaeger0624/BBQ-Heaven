@@ -20,6 +20,7 @@ public class GameArchitecture : Architecture<GameArchitecture>
         // 先反初始化
         if (mArchitecture != null)
         {
+            Debug.Log("<color=red>【GameArchitecture】重置游戏</color>");
             Interface.Deinit();
         }
         // 重新初始化架构（这会创建新的架构实例并调用 Init()）

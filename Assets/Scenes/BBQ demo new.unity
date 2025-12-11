@@ -11806,13 +11806,22 @@ MonoBehaviour:
               inWeight: 0
               outWeight: 0.046798028
             - serializedVersion: 3
-              time: 1
-              value: 1.0033684
-              inSlope: -0.9353039
-              outSlope: -0.9353039
+              time: 0.61011916
+              value: 1.1852666
+              inSlope: 0.10523261
+              outSlope: 0.10523261
               tangentMode: 0
               weightedMode: 0
-              inWeight: 0.09359604
+              inWeight: 0.33333334
+              outWeight: 0.32403237
+            - serializedVersion: 3
+              time: 1
+              value: 1.0033684
+              inSlope: 0.05609695
+              outSlope: 0.05609695
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0.68289065
               outWeight: 0
             m_PreInfinity: 2
             m_PostInfinity: 2
@@ -18901,7 +18910,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1672986230254023067, guid: 4b0b33e978bcdcd4c95339400b48f0d0, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 344.07
       objectReference: {fileID: 0}
     - target: {fileID: 1888688214262151321, guid: 4b0b33e978bcdcd4c95339400b48f0d0, type: 3}
       propertyPath: m_Pivot.x
