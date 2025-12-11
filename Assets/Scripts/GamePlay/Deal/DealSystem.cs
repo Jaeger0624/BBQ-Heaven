@@ -37,12 +37,14 @@ public class DealSystem : AbstractSystem, IDealSystem
 	{
 		if (!scoreMultipliers.ContainsKey(name)){
 			scoreMultipliers.Add(name, multiplier);
+			Debug.Log($"【DealSystem】添加得分乘区: {name}, 乘区: {multiplier}");
 		}
 	}
 	public void RemoveScoreMultiplier(string name)
 	{
 		if (scoreMultipliers.ContainsKey(name)){
 			scoreMultipliers.Remove(name);
+			Debug.Log($"【DealSystem】移除得分乘区: {name}");
 		}
 		else{
 			Debug.LogError($"【DealSystem】尝试移除不存在的得分乘区: {name}");

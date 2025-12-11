@@ -52,7 +52,7 @@ public class CardSystem : AbstractSystem, ICardSystem
     public void Save(GameArchive archive)
     {
         archive.playerInfoData.cardRepositorys = cardRepository;
-        Debug.Log($"卡牌仓库数量: {cardRepository.Count}");
+        // Debug.Log($"卡牌仓库数量: {cardRepository.Count}");
     }
     public void Load(GameArchive archive)
     {

@@ -81,6 +81,8 @@ public class GameArchitecture : Architecture<GameArchitecture>
         sb.Append("\nDialogueSystem - 对话系统");
         Interface.RegisterSystem<ISaveSystem>(new SaveSystem());  // 存档系统
         sb.Append("\nSaveSystem - 存档系统");
+        Interface.RegisterSystem<IEncounterSystem>(new EncounterSystem());  // 事件系统
+        sb.Append("\nEncounterSystem - 事件系统");
         // Debug.Log(sb.ToString());
     }
 

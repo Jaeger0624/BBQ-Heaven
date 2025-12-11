@@ -6,4 +6,5 @@ public enum UIPanelType{
     DialogPanel,
     KitchenPanel,
     CustomerPanel,
+    EncounterPanel,
 }

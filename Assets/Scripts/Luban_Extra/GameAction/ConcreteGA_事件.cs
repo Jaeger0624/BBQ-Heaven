@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using QFramework;
 
 namespace cfg{
     public partial class GA_修改得分乘区 : GameAction
@@ -15,7 +16,12 @@ namespace cfg{
         }
         public override void Execute(object sender, List<object> param)
         {
-
+            if (IsAdd){
+                this.GetSystem<IDealSystem>().AddScoreMultiplier(Sender, Value);
+            }
+            else{
+                this.GetSystem<IDealSystem>().RemoveScoreMultiplier(Sender);
+            }
         }
         public override IAnimTask GetAnimTask()
         {

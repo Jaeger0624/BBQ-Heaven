@@ -32,16 +32,20 @@ public class UIPanel : MonoBehaviour, IController{
         }
     }
     public void Show(){
+        onShow.Invoke();
+
+        if (canvasGroup == null) return;
         canvasGroup.alpha = 1;
         canvasGroup.blocksRaycasts = true;
         canvasGroup.interactable = true;
-        onShow.Invoke();
     }
     public void Hide(){
+        onHide.Invoke();
+
+        if (canvasGroup == null) return;
         canvasGroup.alpha = 0;
         canvasGroup.blocksRaycasts = false;
         canvasGroup.interactable = false;
-        onHide.Invoke();
     }
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
 }

@@ -28,9 +28,13 @@ public class EncounterSystem : AbstractSystem, IEncounterSystem
     public List<ActiveEncounter> ActiveEncounters => _activeEncounters;
     protected override void OnInit()
     {
+        this.RegisterEvent<TimeTickEvent>(OnTimeTickEvent);
+        this.RegisterEvent<FinishCombineBBQEvent>(OnCombineBBQEvent);
     }
     protected override void OnDeinit()
     {
+        this.UnRegisterEvent<TimeTickEvent>(OnTimeTickEvent);
+        this.UnRegisterEvent<FinishCombineBBQEvent>(OnCombineBBQEvent);
     }
     public void StartEncounter(string id)
     {   
@@ -42,7 +46,7 @@ public class EncounterSystem : AbstractSystem, IEncounterSystem
         }
         ActiveEncounter activeEncounter = new ActiveEncounter{
             encounterData = encounterData,
-            currentNum = encounterData.Num,
+            currentNum = 0,
             totalNum = encounterData.Num,
             // RuntimeSE = encounterData.SE.Clone(),
             RuntimeSEs = new List<SustainEffect>(encounterData.SEs.Select(x => x.Clone()))
@@ -53,6 +57,8 @@ public class EncounterSystem : AbstractSystem, IEncounterSystem
             this.GetSystem<IGASystem>().ApplySE(this, runtimeSE);
         }
         _activeEncounters.Add(activeEncounter);
+        Debug.Log($"【EncounterSystem】添加事件: {activeEncounter.encounterData.Name}");
+        this.SendEvent(new AddEncounterEvent(activeEncounter));
     }
     public void EndEncounter(string id)
     {
@@ -67,5 +73,40 @@ public class EncounterSystem : AbstractSystem, IEncounterSystem
             this.GetSystem<IGASystem>().RemoveSE(this, runtimeSE);
         }
         _activeEncounters.Remove(activeEncounter);
+        Debug.Log($"【EncounterSystem】移除事件: {activeEncounter.encounterData.Name}");
+        this.SendEvent(new RemoveEncounterEvent(activeEncounter));
+    }
+    // 生命周期管理
+    // 时间Tick事件
+    private void OnTimeTickEvent(TimeTickEvent evt)
+    {
+        foreach (var activeEncounter in _activeEncounters)
+        {
+            if (activeEncounter.encounterData.Type == EncounterType.时间){
+                activeEncounter.currentNum += evt.timePoint;
+            }
+        }
+        HandleEncounter();
+    }
+    // 完成烧烤事件
+    private void OnCombineBBQEvent(FinishCombineBBQEvent evt)
+    {
+        foreach (var activeEncounter in _activeEncounters)
+        {
+            if (activeEncounter.encounterData.Type == EncounterType.串数)
+            {
+                activeEncounter.currentNum ++;
+            }
+        }
+        HandleEncounter();
+    }
+    private void HandleEncounter(){
+        foreach (var activeEncounter in _activeEncounters)
+        {
+            if (activeEncounter.currentNum >= activeEncounter.totalNum)
+            {
+                EndEncounter(activeEncounter.encounterData.ID);
+            }
+        }
     }
 }

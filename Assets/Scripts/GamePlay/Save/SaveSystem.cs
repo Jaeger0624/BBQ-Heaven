@@ -20,7 +20,7 @@ public class SaveSystem : AbstractSystem, ISaveSystem{
     {
     }
     public void SaveGame(){
-        Debug.Log("Save Game");
+        // Debug.Log("Save Game");
 
         GameArchive gameArchive = new GameArchive();
         // 获取GameArchitecture中的所有系统
@@ -37,7 +37,7 @@ public class SaveSystem : AbstractSystem, ISaveSystem{
         Debug.Log($"游戏已保存至: {savePath}");
     }
     public void LoadGame(GameArchive gameArchive){
-        Debug.Log("游戏读取成功！");
+        // Debug.Log("游戏读取成功！");
 
         foreach(var system in GetAllSystems()){
             system.Load(gameArchive);
