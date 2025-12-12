@@ -8,9 +8,12 @@ public class UIPanel : MonoBehaviour, IController{
     [SerializeField] private UIPanelType currentPanelType;
     public UnityEvent onShow;
     public UnityEvent onHide;
-    void Start()
+    void Awake()
     {
         Hide();
+    }
+    void Start()
+    {
         this.RegisterEvent<UIPanelEvent>(OnUIPanelEvent);
         
     }

@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class MainMenuController : MonoBehaviour, IController
+public class MainMenuController : MonoBehaviour, IController, ICanSendEvent
 {
     [SerializeField] private Button startButton;
     [SerializeField] private Button exitButton;
@@ -19,6 +19,7 @@ public class MainMenuController : MonoBehaviour, IController
     }
     void Start()
     {
+        this.SendEvent(new UIPanelEvent(UIPanelType.主菜单交互界面, UIPanelAction.Show));
         // 检查是否存在存档
         if (this.GetSystem<ISaveSystem>().GetGameArchive() != null)
         {
@@ -40,9 +41,8 @@ public class MainMenuController : MonoBehaviour, IController
     }
     private void OnStartButtonClick()
     {
-        // Debug.Log("【MainMenu】开始游戏");
-        // SceneManager.LoadScene("BBQ demo 1");
-        ShowChoosePCPanel();
+        this.SendEvent(new UIPanelEvent(UIPanelType.选关界面, UIPanelAction.Show));
+        this.SendEvent(new UIPanelEvent(UIPanelType.主菜单交互界面, UIPanelAction.Hide));
     }
     private void OnExitButtonClick()
     {

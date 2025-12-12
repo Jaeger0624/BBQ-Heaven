@@ -31,6 +31,12 @@ public interface IDataSystem : ISystem{
     // 获取遭遇配置
     EncounterData GetEncounterData(string id);
     List<EncounterData> GetAllEncounterData();
+    //获取关卡配置
+    LevelData GetLevelData(string id);
+    List<LevelData> GetAllLevelData();
+    //获取难度配置
+    DifficultyData GetDifficultyData(int id);
+    List<DifficultyData> GetAllDifficultyData();
 
 }
 public class DataSystem : AbstractSystem, IDataSystem{
@@ -97,5 +103,22 @@ public class DataSystem : AbstractSystem, IDataSystem{
     public List<EncounterData> GetAllEncounterData()
     {
         return tables.EncounterDataTable.DataList;
+    }
+
+    public LevelData GetLevelData(string id)
+    {
+        return tables.LevelDataTable.Get(id);
+    }
+    public List<LevelData> GetAllLevelData()
+    {
+        return tables.LevelDataTable.DataList;
+    }
+    public DifficultyData GetDifficultyData(int id)
+    {
+        return tables.DifficultyDataTable.Get(id);
+    }
+    public List<DifficultyData> GetAllDifficultyData()
+    {
+        return tables.DifficultyDataTable.DataList;
     }
 }

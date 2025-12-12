@@ -15,6 +15,7 @@ MonoBehaviour:
   sceneDatas_byGuid:
     keys:
     - 37047d2fed1fddb4b9e36c3cad745512
+    - 59a13578dbff1674381021dc17597b2e
     values:
     - goDatas_byGlobalId:
         keys:
@@ -42,6 +43,29 @@ MonoBehaviour:
           isColorRecursive: 0
         - colorIndex: 0
           iconNameOrGuid: NetworkDiscovery Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+    - goDatas_byGlobalId:
+        keys:
+        - globalObjectIdString: GlobalObjectId_V1-2-59a13578dbff1674381021dc17597b2e-759234950-0
+        - globalObjectIdString: GlobalObjectId_V1-2-59a13578dbff1674381021dc17597b2e-307196439-0
+        - globalObjectIdString: GlobalObjectId_V1-2-59a13578dbff1674381021dc17597b2e-19853220-0
+        - globalObjectIdString: GlobalObjectId_V1-2-59a13578dbff1674381021dc17597b2e-923081043-0
+        values:
+        - colorIndex: 0
+          iconNameOrGuid: NetworkDiscovery Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 0
+          iconNameOrGuid: NetworkDiscovery Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 0
+          iconNameOrGuid: Button Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 0
+          iconNameOrGuid: Button Icon
           isIconRecursive: 0
           isColorRecursive: 0
   bookmarks: []
