@@ -10,9 +10,7 @@ public class ForceChangeSize : MonoBehaviour
         contentSizeFitter = GetComponent<ContentSizeFitter>();
     }
 
-    void LateUpdate()
-    {
-        contentSizeFitter.SetLayoutHorizontal();
-        contentSizeFitter.SetLayoutVertical();
+    private void Update() {
+        LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
     }
 }

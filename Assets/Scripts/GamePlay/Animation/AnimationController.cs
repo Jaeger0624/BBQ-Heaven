@@ -1,12 +1,15 @@
 using QFramework;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 public class AnimationController : MonoBehaviour, IController
 {
-    TextSpawner textSpawner;
+    ITextSpawner textSpawner;
+
+    // MM
     private void Awake()
     {
-        textSpawner = GetComponent<TextSpawner>();
+        textSpawner = GetComponent<ITextSpawner>();
     }
     void OnEnable()
     {
@@ -16,18 +19,21 @@ public class AnimationController : MonoBehaviour, IController
     {
         this.UnRegisterEvent<SpawnTextEvent>(OnSpawnTextEvent);
     }
+    [Button]
+    public void TestSpawnText(){
+
+    }
     private void OnSpawnTextEvent(SpawnTextEvent evt){
         if (evt.lifetime.HasValue){
-            textSpawner.Spawn(evt.text, evt.size, evt.position, evt.color.color, evt.lifetime.Value);
+            textSpawner.Spawn(evt.text, evt.size, evt.position, evt.color.color, evt.lifetime.Value, true);
             return;
         }
 
         if (evt.color.useColor){
-            textSpawner.Spawn(evt.text, evt.size, evt.position, evt.color.color);
+            textSpawner.Spawn(evt.text, evt.size, evt.position, evt.color.color, null, true);
         } else {
-            textSpawner.Spawn(evt.text, evt.size, evt.position);
+            textSpawner.Spawn(evt.text, evt.size, evt.position, Color.white, null, true);
         }
-        // Debug.Log($"生成文本: {evt.text}, 大小: {evt.size}, 颜色: {evt.color}, 位置: {evt.position}");
     }
     public IArchitecture GetArchitecture()
     {

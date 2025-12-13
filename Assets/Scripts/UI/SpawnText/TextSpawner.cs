@@ -4,8 +4,10 @@ using TMPro;
 using UnityEngine;
 using UniRx;
 using Sirenix.OdinInspector;
-
-public class TextSpawner : MonoBehaviour{
+public interface ITextSpawner{
+    void Spawn(string content, float size, Vector3 worldPosition, Color color, float? overrideLifetime, bool useUnscaledTime);
+}
+public class TextSpawner : MonoBehaviour, ITextSpawner{
     public Queue<string> textQueue = new Queue<string>();
     
     [Header("Prefab & Parent")]
