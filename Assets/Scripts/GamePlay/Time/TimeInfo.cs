@@ -38,4 +38,13 @@ public class TimeInfo{
     public TimeInfo GetOriginalTimeInfo(){
         return new TimeInfo(originalMinute, originalHour);
     }
+
+    public TimeInfo Clone(int timeOffset){
+        TimeInfo res = new TimeInfo(originalMinute, originalHour);
+        // 加到当前时间点
+        res.OnAddTimePoint(GetTotalTimePoint()-GetOriginalTimeInfo().GetTotalTimePoint());
+        // 加到目标时间点
+        res.OnAddTimePoint(timeOffset);
+        return res;
+    }
 }

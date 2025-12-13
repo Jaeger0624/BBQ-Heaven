@@ -25,9 +25,6 @@ public class BoardController : MonoBehaviour, IController, ICanSendEvent
         if (TryGetGridIndex(screenPos, out Vector2Int gridIndex)){
             // Debug.Log($"gridIndex: {gridIndex}");
             BoardCell newHoveredCell = boardViewUGUI.boardCellDict[gridIndex].cell;
-            
-            // 1. 检测左键输入
-
 
             // 2. 如果鼠标在棋盘上，且按下右键，则修改横竖方向
             if (Input.GetMouseButtonDown(1)){
@@ -42,7 +39,8 @@ public class BoardController : MonoBehaviour, IController, ICanSendEvent
         }
         else{
             boardViewUGUI.UnhighlightAll();
-            this.SendEvent(new HideStickTimerEvent());
+            this.SendEvent(new HideBBQPreviewEvent());
+            this.SendEvent(new TimePreviewEvent(0));
             hoveredCell = null;
         }
 
@@ -54,7 +52,8 @@ public class BoardController : MonoBehaviour, IController, ICanSendEvent
         // 如果未选中烤串，则不更新视图
         if (this.GetSystem<IStickSystem>().selectedStick == null){
             // Debug.Log("未选中烤串");
-            this.SendEvent(new HideStickTimerEvent());
+            this.SendEvent(new HideBBQPreviewEvent());
+            this.SendEvent(new TimePreviewEvent(0));
             return;
         }
         //TODO: 暂时写死，后续需要优化
@@ -65,11 +64,24 @@ public class BoardController : MonoBehaviour, IController, ICanSendEvent
         Stick selectedStick = this.GetSystem<IStickSystem>().selectedStick;
         int amount = this.GetSystem<ITimeSystem>().GetCostTime(foodInstances, selectedStick);
         
-        this.SendEvent(new ShowStickTimerEvent(amount));
+        this.SendEvent(new ShowBBQPreviewEvent(PreviewBBQ(selectedStick, foodInstances)));
+        this.SendEvent(new TimePreviewEvent(amount));
 
 
         List<BoardCell> highlightedCells = updateStrategy.GetRange(hoveredCellPos);
         boardViewUGUI.HighlightCells(highlightedCells.Select(x => x.position).ToList(), true);
+    }
+    // 预览BBQ结果
+    private BBQPreview PreviewBBQ(Stick selectedStick, List<FoodInstance> foodInstances){
+        int totalRarity = 0;
+        int totalTaste = 0;
+        int totalTimeCost = 0;
+        foreach (var foodInstance in foodInstances){
+            totalRarity += foodInstance.rarity;
+            totalTaste += foodInstance.taste;
+        }
+        totalTimeCost = this.GetSystem<ITimeSystem>().GetCostTime(foodInstances, selectedStick);
+        return new BBQPreview(totalRarity, totalTaste, totalTimeCost);
     }
 
     private void OnChangePanel(ChangePanelEvent evt){

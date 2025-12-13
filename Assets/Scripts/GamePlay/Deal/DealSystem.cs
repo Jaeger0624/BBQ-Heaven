@@ -80,9 +80,7 @@ public class DealSystem : AbstractSystem, IDealSystem
 			new DelayAnimTask(0.5f, true),
 			new ActionAnimTask(() => this.SendEvent(new HideStatisBarEvent())),
 		}));
-
-
-
+		
 		// 消耗资源：食材实例彻底移除
 		foreach (var food in bbq.foodInstances)
 		{

@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class BBQView : MonoBehaviour,IBeginDragHandler, IDragHandler, IEndDragHandler, IController
+public class BBQView : MonoBehaviour,IBeginDragHandler, IDragHandler, IEndDragHandler, IController, ICanSendEvent
 {
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
     [SerializeField] public Transform foodParent;
@@ -89,6 +89,15 @@ public class BBQView : MonoBehaviour,IBeginDragHandler, IDragHandler, IEndDragHa
         worldPosition.z = 0;
         // 相机屏幕位置，不是相对位置
         rectTransform.position = worldPosition - offset;
+
+
+        CustomerView customerView = eventData.RaycastGetUI<CustomerView>();
+        if (customerView != null){
+            this.SendEvent(new TimePreviewEvent(SettingManager.Instance.GameplaySettings.soldBBQTime_默认));
+        }
+        else{
+            this.SendEvent(new TimePreviewEvent(0));
+        }
     }
 
     // 结束拖拽时，判断是否拖拽到了顾客身上，如果是的话，调用DealSystem的ExecuteDeal方法

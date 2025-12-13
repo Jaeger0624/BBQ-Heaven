@@ -97,3 +97,8 @@ public class HighlightCellsEvent : AbstractEvent{
     }
 }
 public class ClearAllBoardsHighlight : AbstractEvent{}
+
+#region 事件
+public class HideBoardEvent : AbstractEvent{}
+public class ShowBoardEvent : AbstractEvent{}
+#endregion

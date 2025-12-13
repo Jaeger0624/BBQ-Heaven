@@ -39,9 +39,10 @@ public class BBQController : MonoBehaviour, IController, ICanSendEvent
             }
             AudioManager.Instance.AudioService.Play("Score 5");
             this.GetSystem<IBBQSystem>().FinishBBQ(selectedStick, foodInstances);
-            this.SendEvent(new HideStickTimerEvent());
+            this.SendEvent(new HideBBQPreviewEvent());
         }
     }
+
 
     private void OnMoveBBQToRepository(MoveBBQToRepositoryEvent e){
         // 1. 创建个插槽
@@ -87,5 +88,16 @@ public class MoveBBQToRepositoryEvent : AbstractEvent{
     public BBQView bbqView;
     public MoveBBQToRepositoryEvent(BBQView bbqView){
         this.bbqView = bbqView;
+    }
+}
+
+public class BBQPreview{
+    public int totalRarity;
+    public int totalTaste;
+    public int totalTimeCost;
+    public BBQPreview(int totalRarity, int totalTaste, int totalTimeCost){
+        this.totalRarity = totalRarity;
+        this.totalTaste = totalTaste;
+        this.totalTimeCost = totalTimeCost;
     }
 }
