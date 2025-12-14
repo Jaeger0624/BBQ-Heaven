@@ -118,5 +118,41 @@
         }
       }
     ]
+  },
+  {
+    "ID": "5",
+    "name": "左移",
+    "description": "",
+    "cost": 0,
+    "target": 1,
+    "CGAs": [
+      {
+        "type": 0,
+        "action": {
+          "ID": "1",
+          "conditions": [],
+          "actions": [
+            {
+              "$type": "GA_方向位移",
+              "info": {
+                "strategy": 4,
+                "value": {
+                  "$type": "DV_值",
+                  "number": 1
+                },
+                "types": [
+                  1
+                ]
+              },
+              "dir": 3,
+              "value": {
+                "$type": "DV_值",
+                "number": 2
+              }
+            }
+          ]
+        }
+      }
+    ]
   }
 ]

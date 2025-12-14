@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using cfg;
 using PrimeTweenDemo;
 using QFramework;
 using UniRx;
@@ -13,7 +14,6 @@ public interface IBoardSystem : ISystem{
     List<BoardCell> GetEmptyCells();
     void ClickCell(Vector2Int position);
     BoardCell GetCell(Vector2Int position);
-    void SetCellInstance(Vector2Int position, string instanceGuid);
     List<BoardCell> GetAdjacentCells(Vector2Int position);
     BoardCell GetRandomEmptyCell();
     BoardCell GetStopPosition(Vector2Int origin, Vector2Int direction);
@@ -21,6 +21,15 @@ public interface IBoardSystem : ISystem{
     // SelectorSystem 需要用到的方法 
     void HighlightCells(List<Vector2Int> positions);
     void ClearHighlight();
+
+
+    // 和棋盘实例相关的操作
+    void SetCellInstance(Vector2Int position, string instanceGuid);
+
+
+    // 和地块相关的操作
+    void SetCellTile(Vector2Int position, string tileID);
+    void TriggerTileEvent(BoardCell boardCell, BoardEntity boardEntity, TileEffectType type);
 }
 /// <summary>
 /// 棋盘系统，提供与棋盘有关的信息与操作
@@ -109,5 +118,16 @@ public class BoardSystem : AbstractSystem, IBoardSystem
     }
     public void ClearHighlight(){
         this.SendEvent(new ClearAllBoardsHighlight());
+    }
+
+    public void SetCellTile(Vector2Int position, string tileID)
+    {
+        BoardCell cell = grid.GetCell(position.x, position.y);
+        cell.SetTile(tileID);
+        _boardStateChangedSubject.OnNext(Unit.Default);
+    }
+
+    public void TriggerTileEvent(BoardCell boardCell, BoardEntity boardEntity, TileEffectType type)
+    {
     }
 }

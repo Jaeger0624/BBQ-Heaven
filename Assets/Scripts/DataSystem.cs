@@ -37,7 +37,9 @@ public interface IDataSystem : ISystem{
     //获取难度配置
     DifficultyData GetDifficultyData(int id);
     List<DifficultyData> GetAllDifficultyData();
-
+    //获取地块配置
+    TileData GetTileData(string id);
+    List<TileData> GetAllTileData();
 }
 public class DataSystem : AbstractSystem, IDataSystem{
 
@@ -120,5 +122,15 @@ public class DataSystem : AbstractSystem, IDataSystem{
     public List<DifficultyData> GetAllDifficultyData()
     {
         return tables.DifficultyDataTable.DataList;
+    }
+
+    public TileData GetTileData(string id)
+    {
+        return tables.TileDataTable.Get(id);
+    }
+
+    public List<TileData> GetAllTileData()
+    {
+        return tables.TileDataTable.DataList;
     }
 }

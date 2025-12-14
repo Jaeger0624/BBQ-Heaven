@@ -33,6 +33,7 @@ public abstract partial class GameAction : Luban.BeanBase
             case "GA_使食材获得GA": return new GA_使食材获得GA(_buf);
             case "GA_随机移动食材": return new GA_随机移动食材(_buf);
             case "GA_食材位移": return new GA_食材位移(_buf);
+            case "GA_方向位移": return new GA_方向位移(_buf);
             case "GA_食材换位": return new GA_食材换位(_buf);
             case "GA_食材随机冲锋": return new GA_食材随机冲锋(_buf);
             case "GA_抽牌": return new GA_抽牌(_buf);

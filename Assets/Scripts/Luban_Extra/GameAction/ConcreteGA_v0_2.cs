@@ -115,4 +115,80 @@ namespace cfg{
         public override void Execute(object sender, List<object> param){}
         public override IAnimTask GetAnimTask(){return null;}
     }
+
+    public partial class GA_方向位移 : GameAction
+    {
+        List<MoveFoodInstanceEvent> moveEvents = new List<MoveFoodInstanceEvent>();
+        public GA_方向位移(Direction direction, DynamicValue value, GetFoodInstancesInfo info)
+        {
+            this.Dir = direction;
+            this.Value = value;
+            this.Info = info;
+        }
+
+        public override GameAction Clone()
+        {
+            return new GA_方向位移(Dir, Value, Info);
+        }
+
+        public override void Execute(object sender, List<object> param)
+        {
+            moveEvents.Clear();
+            // 1. 处理方向
+            if (Dir == Direction.无)
+            {
+                Debug.LogError("【GA_方向位移】方向不能为无");
+                return;
+            }
+            Direction finalDirection = Dir;
+            if (Dir == Direction.上下文)
+            {
+                DirectionContext directionContext = param.FirstOrDefault(x => x is DirectionContext) as DirectionContext;
+                if (directionContext == null)
+                {
+                    Debug.LogError("【GA_方向位移】没有方向上下文");
+                    return;
+                }
+                finalDirection = directionContext.direction;
+            }
+
+            // 2. 获取食材
+            FoodInstance origin = param.FirstOrDefault(x => x is FoodInstance) as FoodInstance;
+            if (origin == null)
+            {
+                origin = sender as FoodInstance;
+                Debug.LogWarning($"[GA_方向位移] 没有食材，使用发送者作为食材: {sender}");
+            }
+            List<FoodInstance> targets = Info.GetFoodInstances(origin, param);
+            if (targets == null || targets.Count == 0)
+            {
+                Debug.LogWarning($"[GA_方向位移] 没有目标食材");
+                return;
+            }
+
+
+            // 3. 实际执行位移
+            foreach (var target in targets)
+            {
+                for (int i = 0; i < Value.GetValue(target, param); i++)
+                {    
+                    moveEvents.Add(this.GetSystem<IFoodSystem>().foodInstanceMover.DirectionalMove(target, finalDirection, true));
+                }
+            }
+        }
+        private void SendAnims(){
+            foreach (var evt in moveEvents)
+            {
+                this.SendEvent(evt);
+            }
+        }
+
+        public override IAnimTask GetAnimTask()
+        {
+            return new SequenceAnimTask(new List<IAnimTask>{
+                new ActionAnimTask(() => SendAnims()),
+                new DelayAnimTask(SettingManager.Instance.DefaultAnimInterval),
+            });
+        }
+    }
 }

@@ -6,21 +6,13 @@ using QFramework;
 using UniRx;
 using UnityEngine;
 
-public class FoodInstanceData{
-    public Food food;
-    public Vector2Int position;
-    public FoodInstanceState state;
-    public int rarity;
-    public int taste;
-}
 /// <summary>
 /// 食材实例类
 /// </summary>
-public partial class FoodInstance : IAnimPlayer, ICanGetSystem{  
-    public string guid => food.guid;
+public partial class FoodInstance : BoardEntity, IAnimPlayer{  
+    public override BoardEntityType type => BoardEntityType.食材;
     public string name => food.name;
     public Food food;
-    public Vector2Int position;
     /// <summary>实例状态，主要用于程序逻辑判断</summary>
     public FoodInstanceState state {get; private set;} = FoodInstanceState.无;
     /// <summary>实例状态，主要决定动画和View的显示</summary>
@@ -32,7 +24,7 @@ public partial class FoodInstance : IAnimPlayer, ICanGetSystem{
     public List<CGA> cgas = new List<CGA>();
     public List<SustainEffect> sustainEffects = new List<SustainEffect>();
     public Action OnViewStatusChanged;
-    public FoodInstance( Food food, Vector2Int position){
+    public FoodInstance(Food food, Vector2Int position) : base(){
         this.food = food;
         this.position = position;
         //TODO: 可能之后会增加初始化逻辑，比如CGA等，先这样处理

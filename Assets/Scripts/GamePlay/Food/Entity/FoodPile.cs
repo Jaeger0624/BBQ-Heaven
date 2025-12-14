@@ -46,6 +46,8 @@ public class FoodPile : ICanGetSystem, ICanSendEvent{
         this.GetSystem<IBoardSystem>().SetCellInstance(position, foodInstance.guid);
         // 4. 添加到食材实例列表
         FoodInstances.Add(foodInstance.guid, foodInstance);
+        // 5. 注册到棋盘实体系统
+        this.GetSystem<IBoardEntitySystem>().RegisterEntity(foodInstance, position);
 
         this.SendEvent(new CreateFoodInstanceEvent(foodInstance));
         Dictionary<string, int> foodRepositoryAmounts = this.GetSystem<IFoodSystem>().GetFoodRepositoryAmounts();
@@ -70,6 +72,10 @@ public class FoodPile : ICanGetSystem, ICanSendEvent{
             // 从棋盘上移除
             this.GetSystem<IBoardSystem>().SetCellInstance(foodInstance.position, null);
         }
+        // 从棋盘实体系统中移除
+        this.GetSystem<IBoardEntitySystem>().UnregisterEntity(foodInstance);
+
+        // 发送移除食材实例事件
         this.SendEvent(new RemoveFoodInstanceEvent(foodInstance));
 
         FoodInstances.Remove(guid);

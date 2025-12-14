@@ -11,14 +11,13 @@
 
 namespace cfg
 { 
-    public enum Direction
+    /// <summary>
+    /// 地块效果类型
+    /// </summary>
+    public enum TileEffectType
     {
-        无 = 0,
-        上 = 1,
-        下 = 2,
-        左 = 3,
-        右 = 4,
-        上下文 = 5,
+        实体被放置 = 0,
+        实体移动进入 = 1,
     }
 
 } 

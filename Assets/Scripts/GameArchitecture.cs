@@ -84,6 +84,8 @@ public class GameArchitecture : Architecture<GameArchitecture>
         sb.Append("\nSaveSystem - 存档系统");
         Interface.RegisterSystem<IEncounterSystem>(new EncounterSystem());  // 事件系统
         sb.Append("\nEncounterSystem - 事件系统");
+        Interface.RegisterSystem<IBoardEntitySystem>(new BoardEntitySystem());  // 棋盘实体系统
+        sb.Append("\nBoardEntitySystem - 棋盘实体系统");
         // Debug.Log(sb.ToString());
     }
 
