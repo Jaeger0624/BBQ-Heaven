@@ -19,7 +19,7 @@ namespace cfg{
             return Observable.Create<GAResult>(observer =>
             {
                 // 1. 准备局部变量
-                var moveEvents = new List<MoveFoodInstanceEvent>();
+                var moveEvents = new List<MoveEntityEvent>();
 
                 // 2. 获取食材目标列表
                 FoodInstance origin = null;
@@ -64,7 +64,7 @@ namespace cfg{
                             {
                                 observer.OnError(new Exception($"[GA_食材换位] 格子上没有食材实例: {secondCell.instanceGuid}"));
                             }
-                            var evt = foodSystem.foodInstanceMover.ExchangeFoodInstances(origin, secondFoodInstance, false);
+                            var evt = this.GetSystem<IBoardEntitySystem>().Mover.ExchangeEntities(origin, secondFoodInstance, false);
                             moveEvents.AddRange(evt);
                         },
                         ex => 
@@ -88,7 +88,7 @@ namespace cfg{
             });
         }
 
-        private void BuildAndReturnResult(object sender, List<MoveFoodInstanceEvent> moveEvents, IObserver<GAResult> observer){
+        private void BuildAndReturnResult(object sender, List<MoveEntityEvent> moveEvents, IObserver<GAResult> observer){
             var animSequence = new List<IAnimTask>();
             if (sender is IAnimPlayer animPlayer)
             {
@@ -118,7 +118,7 @@ namespace cfg{
 
     public partial class GA_方向位移 : GameAction
     {
-        List<MoveFoodInstanceEvent> moveEvents = new List<MoveFoodInstanceEvent>();
+        List<MoveEntityEvent> moveEvents = new List<MoveEntityEvent>();
         public GA_方向位移(Direction direction, DynamicValue value, GetFoodInstancesInfo info)
         {
             this.Dir = direction;
@@ -172,7 +172,8 @@ namespace cfg{
             {
                 for (int i = 0; i < Value.GetValue(target, param); i++)
                 {    
-                    moveEvents.Add(this.GetSystem<IFoodSystem>().foodInstanceMover.DirectionalMove(target, finalDirection, true));
+                    Vector2Int direction = finalDirection.ToVector2Int();
+                    moveEvents.Add(this.GetSystem<IBoardEntitySystem>().Mover.DirectionalMove(target, direction, true));
                 }
             }
         }

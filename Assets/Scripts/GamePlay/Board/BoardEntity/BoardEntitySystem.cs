@@ -3,6 +3,7 @@ using System.Linq;
 using QFramework;
 using UnityEngine;
 public interface IBoardEntitySystem : ISystem{
+    BoardEntityMover Mover {get;}
     void RegisterEntity(BoardEntity entity, Vector2Int position);
     void UnregisterEntity(BoardEntity entity);
     BoardEntity GetEntity(string guid);
@@ -11,6 +12,13 @@ public interface IBoardEntitySystem : ISystem{
 public class BoardEntitySystem : AbstractSystem, IBoardEntitySystem
 {
     private Dictionary<string, BoardEntity> _entities = new Dictionary<string, BoardEntity>();
+
+    public BoardEntityMover Mover{get; private set;}
+    protected override void OnInit()
+    {
+        _entities = new Dictionary<string, BoardEntity>();
+        Mover = new BoardEntityMover();
+    }
     public BoardEntity GetEntity(string guid)
     {
         if (string.IsNullOrEmpty(guid)) return null;
@@ -31,8 +39,5 @@ public class BoardEntitySystem : AbstractSystem, IBoardEntitySystem
         entity.position = new Vector2Int(-1, -1);
     }
 
-    protected override void OnInit()
-    {
-        _entities = new Dictionary<string, BoardEntity>();
-    }
+
 }

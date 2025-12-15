@@ -3,19 +3,13 @@ using cfg;
 using QFramework;
 using UnityEngine;
 
-public class FoodInstanceMover : ICanGetSystem, ICanSendEvent
+public class BoardEntityMover : ICanGetSystem, ICanSendEvent
 {
-    private Rng rng => this.GetSystem<IRngSystem>().GetSubRng<IFoodSystem>();
+    private Rng rng => this.GetSystem<IRngSystem>().GetSubRng<IBoardSystem>();
     public IArchitecture GetArchitecture() =>
         GameArchitecture.Interface;
-
-    public MoveFoodInstanceEvent DirectionalMove(FoodInstance foodInstance, Direction direction, bool showAnimDirect = false){
-        // 获取目标位置
-        Vector2Int newPos = foodInstance.position + direction.ToVector2Int();
-        return MoveFoodInstanceTo(newPos, foodInstance, showAnimDirect);
-    }
-    public MoveFoodInstanceEvent MoveFoodInstanceTo(Vector2Int newPos, FoodInstance foodInstance, bool showAnimDirect = false){
-        Vector2Int originPosition = foodInstance.position;
+    public MoveEntityEvent MoveEntityTo(Vector2Int newPos, BoardEntity entity, bool showAnimDirect = false){
+        Vector2Int originPosition = entity.position;
         BoardCell cell = this.GetSystem<IBoardSystem>().GetCell(newPos);
 
         if (cell == null){ return null; }
@@ -27,7 +21,7 @@ public class FoodInstanceMover : ICanGetSystem, ICanSendEvent
             BoardEntity targetEntity = this.GetSystem<IBoardEntitySystem>().GetEntity(targetGuid);
             
             if (targetEntity != null){
-                TriggerCollision(foodInstance, targetEntity);
+                TriggerCollision(entity, targetEntity);
                 return null;
             }
             else{
@@ -40,51 +34,51 @@ public class FoodInstanceMover : ICanGetSystem, ICanSendEvent
         this.GetSystem<IBoardSystem>().SetCellInstance(originPosition, null);
 
         // 3. 移到指定位置
-        return this.MoveTo(foodInstance, cell, showAnimDirect);
+        return this.MoveTo(entity, cell, showAnimDirect);
     }
 
     // 先将食材实例从棋盘上移除，然后随机移动到棋盘上的空位
-    public List<MoveFoodInstanceEvent> RandomMoveFoodInstances(List<FoodInstance> foodInstances, bool showAnimDirect = false){
-        Debug.Log($"【FoodInstanceMover】随机移动食材实例: {foodInstances.Count}");
+    public List<MoveEntityEvent> RandomMoveEntities(List<BoardEntity> entities, bool showAnimDirect = false){
+        Debug.Log($"【BoardEntityMover】随机移动实体: {entities.Count}");
         // 1. 先将选中食材实例从棋盘上移除
-        foodInstances.ForEach(foodInstance => {
-            Vector2Int originPosition = foodInstance.position;
+        entities.ForEach(entity => {
+            Vector2Int originPosition = entity.position;
             this.GetSystem<IBoardSystem>().SetCellInstance(originPosition, null);
         });
 
         // 2. 获取棋盘上的空位
         List<BoardCell> emptyCells = this.GetSystem<IBoardSystem>().GetEmptyCells();
-        List<MoveFoodInstanceEvent> moveEvents = new List<MoveFoodInstanceEvent>();
+        List<MoveEntityEvent> moveEvents = new List<MoveEntityEvent>();
         // 3. 随机移动到棋盘上的空位
-        foreach (var foodInstance in foodInstances){
+        foreach (var entity in entities){
             BoardCell emptyCell = rng.PickOne(emptyCells);
-            moveEvents.Add(this.PlaceTo(foodInstance, emptyCell, showAnimDirect));
+            moveEvents.Add(this.PlaceTo(entity, emptyCell, showAnimDirect));
             emptyCells.Remove(emptyCell);
         }
         return moveEvents;
     }
-    private MoveFoodInstanceEvent MoveTo(FoodInstance foodInstance, BoardCell cell, bool showAnimDirect = false){
-        foodInstance.position = cell.position;
-        cell.SetInstance(foodInstance.guid);
-        return new MoveFoodInstanceEvent(cell.position, foodInstance.position, foodInstance.guid);
+    private MoveEntityEvent MoveTo(BoardEntity entity, BoardCell cell, bool showAnimDirect = false){
+        entity.position = cell.position;
+        cell.SetInstance(entity.guid);
+        return new MoveEntityEvent(cell.position, entity.position, entity);
     }
-    private MoveFoodInstanceEvent PlaceTo(FoodInstance foodInstance, BoardCell cell, bool showAnimDirect = false){
-        foodInstance.position = cell.position;
-        cell.SetInstance(foodInstance.guid);
-        return new MoveFoodInstanceEvent(cell.position, foodInstance.position, foodInstance.guid);
+    private MoveEntityEvent PlaceTo(BoardEntity entity, BoardCell cell, bool showAnimDirect = false){
+        entity.position = cell.position;
+        cell.SetInstance(entity.guid);
+        return new MoveEntityEvent(cell.position, entity.position, entity);
     }
 
-    public MoveFoodInstanceEvent FoodInstanceLineMove(FoodInstance foodInstance, Vector2Int direction, bool showAnimDirect = false){
-        BoardCell stopPosition = this.GetSystem<IBoardSystem>().GetStopPosition(foodInstance.position, direction);
-        if (stopPosition.position == foodInstance.position){
+    public MoveEntityEvent DirectionalMove(BoardEntity entity, Vector2Int direction, bool showAnimDirect = false){
+        BoardCell stopPosition = this.GetSystem<IBoardSystem>().GetStopPosition(entity.position, direction);
+        if (stopPosition.position == entity.position){
             return null;
         }
-        int distance = (int)Vector2Int.Distance(foodInstance.position, stopPosition.position);
-        return MoveTo(foodInstance, stopPosition, showAnimDirect);
+        int distance = (int)Vector2Int.Distance(entity.position, stopPosition.position);
+        return MoveTo(entity, stopPosition, showAnimDirect);
     }
 
-    public List<MoveFoodInstanceEvent> ExchangeFoodInstances(FoodInstance first, FoodInstance second, bool showAnimDirect = false){
-        List<MoveFoodInstanceEvent> moveEvents = new List<MoveFoodInstanceEvent>();
+    public List<MoveEntityEvent> ExchangeEntities(BoardEntity first, BoardEntity second, bool showAnimDirect = false){
+        List<MoveEntityEvent> moveEvents = new List<MoveEntityEvent>();
         
         // 1. 分别从棋盘上移除
         this.GetSystem<IBoardSystem>().SetCellInstance(first.position, null);
@@ -118,5 +112,16 @@ public class FoodInstanceMover : ICanGetSystem, ICanSendEvent
         
         // 4. 触发被动方的碰撞效果
 
+    }
+}
+
+public class MoveEntityEvent : AbstractEvent{
+    public Vector2Int newPos;
+    public Vector2Int originPosition;
+    public string entityGuid;
+    public MoveEntityEvent(Vector2Int newPos, Vector2Int originPosition, BoardEntity entity){
+        this.newPos = newPos;
+        this.originPosition = originPosition;
+        this.entityGuid = entity.guid;
     }
 }

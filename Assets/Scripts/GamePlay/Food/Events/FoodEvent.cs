@@ -42,17 +42,5 @@ public class UpdateFoodRepositoryAmountEvent : AbstractEvent{
         this.foodRepositoryAmounts = foodRepositoryAmounts;
     }
 }
-
-
-public class MoveFoodInstanceEvent : AbstractEvent{
-    public readonly Vector2Int targetPosition;
-    public readonly Vector2Int originPosition;
-    public readonly string guid;
-    public MoveFoodInstanceEvent(Vector2Int targetPosition, Vector2Int originPosition, string guid){
-        this.targetPosition = targetPosition;
-        this.originPosition = originPosition;
-        this.guid = guid;
-    }
-}
 #endregion
 

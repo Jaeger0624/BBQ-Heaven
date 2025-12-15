@@ -395,11 +395,11 @@ public partial class GA_创建满意度乘区 : GameAction
     public partial class GA_随机移动食材 : GameAction
     {
         IAnimPlayer animPlayer = null;
-        private List<MoveFoodInstanceEvent> moveEvents = new List<MoveFoodInstanceEvent>();
+        private List<MoveEntityEvent> moveEvents = new List<MoveEntityEvent>();
         public GA_随机移动食材(GetFoodInstancesInfo info){
             this.Info = info;
             animPlayer = null;
-            moveEvents = new List<MoveFoodInstanceEvent>();
+            moveEvents = new List<MoveEntityEvent>();
         }
         public override GameAction Clone()=> new GA_随机移动食材(Info);
         public override void Execute(object sender, List<object> param)
@@ -412,7 +412,8 @@ public partial class GA_创建满意度乘区 : GameAction
             if (foodInstances == null) return;
             if (foodInstances.Count == 0) return;
 
-            moveEvents.AddRange(this.GetSystem<IFoodSystem>().foodInstanceMover.RandomMoveFoodInstances(foodInstances));
+            List<BoardEntity> entities = foodInstances.Select(x => x as BoardEntity).ToList();
+            moveEvents.AddRange(this.GetSystem<IBoardEntitySystem>().Mover.RandomMoveEntities(entities));
 
             if (sender is IAnimPlayer newAnimPlayer){
                 this.animPlayer = newAnimPlayer;
@@ -447,7 +448,7 @@ public partial class GA_创建满意度乘区 : GameAction
         return Observable.Create<GAResult>(observer =>
         {
             // --- 1. 准备局部变量 ---
-            var moveEvents = new List<MoveFoodInstanceEvent>();
+            var moveEvents = new List<MoveEntityEvent>();
             
             // --- 2. 获取食材目标列表 ---
             FoodInstance origin = null;
@@ -487,7 +488,7 @@ public partial class GA_创建满意度乘区 : GameAction
                     {
                         // Debug.Log($"[GA_食材位移] 选择到格子: {x.cell.position}");
                         // 每次用户选择完一个格子，执行移动逻辑
-                        var evt = foodSystem.foodInstanceMover.MoveFoodInstanceTo(x.cell.position, x.foodInstance, true);
+                        var evt = this.GetSystem<IBoardEntitySystem>().Mover.MoveEntityTo(x.cell.position, x.foodInstance, true);
                         moveEvents.Add(evt);
                     },
                     ex => 
@@ -514,7 +515,7 @@ public partial class GA_创建满意度乘区 : GameAction
         });
     }
 
-    private void BuildAndReturnResult(object sender, List<MoveFoodInstanceEvent> moveEvents, IObserver<GAResult> observer)
+    private void BuildAndReturnResult(object sender, List<MoveEntityEvent> moveEvents, IObserver<GAResult> observer)
     {
         // 构建动画任务
         var animSequence = new List<IAnimTask>();
@@ -551,10 +552,10 @@ public partial class GA_创建满意度乘区 : GameAction
     public partial class GA_食材随机冲锋 : GameAction{
         private IAnimPlayer animPlayer = null;
         public override GameAction Clone() => new GA_食材随机冲锋(Info);
-        private List<MoveFoodInstanceEvent> moveEvents = new List<MoveFoodInstanceEvent>();
+        private List<MoveEntityEvent> moveEvents = new List<MoveEntityEvent>();
         public GA_食材随机冲锋(GetFoodInstancesInfo info){
             this.Info = info;
-            moveEvents = new List<MoveFoodInstanceEvent>();
+            moveEvents = new List<MoveEntityEvent>();
         }
         public override void Execute(object sender, List<object> param)
         {

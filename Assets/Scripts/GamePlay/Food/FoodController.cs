@@ -23,7 +23,7 @@ public class FoodController : MonoBehaviour, IController
     {
         this.RegisterEvent<CreateFoodInstanceEvent>(OnCreateFoodInstanceEvent).UnRegisterWhenDisabled(this);
         this.RegisterEvent<RemoveFoodInstanceEvent>(OnRemoveFoodInstanceEvent).UnRegisterWhenDisabled(this);
-        this.RegisterEvent<MoveFoodInstanceEvent>(OnMoveFoodInstanceEvent).UnRegisterWhenDisabled(this);
+        this.RegisterEvent<MoveEntityEvent>(OnMoveEntityEvent).UnRegisterWhenDisabled(this);
     }
     void Update()
     {
@@ -84,13 +84,13 @@ public class FoodController : MonoBehaviour, IController
         }));
         this.GetSystem<IAnimationSystem>().Play();
     }
-    void OnMoveFoodInstanceEvent(MoveFoodInstanceEvent e)
+    void OnMoveEntityEvent(MoveEntityEvent e)
     {
-        if (!foodInstanceViews.TryGetValue(e.guid, out FoodInstanceView foodInstanceView)) return;
+        if (!foodInstanceViews.TryGetValue(e.entityGuid, out FoodInstanceView foodInstanceView)) return;
 
         Vector3 originPos = foodInstanceView.transform.position;
         // 1. 获取食材实例视图的父物体
-        Transform cellTransform = boardView.GetCellTransform(e.targetPosition);
+        Transform cellTransform = boardView.GetCellTransform(e.newPos);
         float scale = foodInstanceView.transform.localScale.x;
         foodInstanceView.transform.SetParent(cellTransform,true);
         foodInstanceView.transform.localScale = new Vector3(scale, scale, 1);

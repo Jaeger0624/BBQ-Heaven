@@ -6,7 +6,6 @@ using UniRx;
 using System.Linq;
 public interface IFoodSystem : ISystem, ISavable{
     FoodSupplyer foodSupplyer {get; set;}  // 承担补充食物的职责
-    FoodInstanceMover foodInstanceMover {get; set;}  // 承担移动食材实例的职责
     FoodInstance GetFoodInstance(string guid);
     FoodInstance GetFoodInstance(Vector2Int position);
     Dictionary<string, FoodInstance> GetFoodInstances();
@@ -35,7 +34,6 @@ public class FoodSystem : AbstractSystem, IFoodSystem
     public Dictionary<string, Food> FoodRepositorys() => foodRepositorys;
     // 当前剩余补充机会
     public FoodSupplyer foodSupplyer {get; set;}
-    public FoodInstanceMover foodInstanceMover {get; set;}
     public FoodPile foodPile;
     protected override void OnInit()
     {
@@ -44,7 +42,6 @@ public class FoodSystem : AbstractSystem, IFoodSystem
         this.RegisterEvent<EndDayEvent>(OnEndDay);
 
         foodSupplyer = new FoodSupplyer(new FoodSupplyStrategy_随机指定数量(), 40, 20, 10);
-        foodInstanceMover = new FoodInstanceMover();
 
         foodPile = null;
     }
