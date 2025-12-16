@@ -41,6 +41,11 @@ public class MainMenuController : MonoBehaviour, IController, ICanSendEvent
     }
     private void OnStartButtonClick()
     {
+        // 1. 清除当前新游戏信息
+        this.GetSystem<BlackboardSystem>().newGameInfo = new NewGameInfo("1", UnityEngine.Random.Range(0, 1000000), null, null);
+
+
+        // 2. 显示选择玩家角色面板
         this.SendEvent(new UIPanelEvent(UIPanelType.选关界面, UIPanelAction.Show));
         this.SendEvent(new UIPanelEvent(UIPanelType.主菜单交互界面, UIPanelAction.Hide));
     }

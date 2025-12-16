@@ -26,7 +26,9 @@ public class GameTest : MonoBehaviour, IController, ICanSendEvent{
         // 等0.2秒后开始新游戏
         yield return new WaitForSecondsRealtime(0.25f);
         if (!this.GetSystem<IProcessSystem>().GameStarted){
-            this.GetSystem<IProcessSystem>().StartNewGame(new NewGameInfo("1", Random.Range(0, 1000000)));
+            DifficultyData difficultyData = this.GetSystem<IDataSystem>().GetDifficultyData(0);
+            LevelData levelData = this.GetSystem<IDataSystem>().GetLevelData("1");
+            this.GetSystem<IProcessSystem>().StartNewGame(new NewGameInfo("1", Random.Range(0, 1000000), difficultyData, levelData));
         }
 #endif
         // 播放背景音乐

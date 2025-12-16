@@ -4,7 +4,7 @@ using UnityEngine;
 // 用于提供全局访问点，主要是用于控制器之间方便的通信
 public class BlackboardSystem : AbstractSystem
 {
-    
+    public NewGameInfo newGameInfo = new NewGameInfo("1", Random.Range(0, 1000000), null, null);
     public BoardCell hoveredCell = null;
     public FoodInstance currentFoodInstance = null;
     private FoodInstance oldInstance = null;

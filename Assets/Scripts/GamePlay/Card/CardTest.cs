@@ -7,8 +7,6 @@ public class CardTest : MonoBehaviour, IController
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
 
     private void Start() {
-        SettingManager.Instance.IsTest = true;
-        
         for (int i = 0; i < 10; i++) {
             this.GetSystem<ICardSystem>().AddCardToRepository("1");
         }

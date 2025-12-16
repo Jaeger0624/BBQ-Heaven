@@ -14,9 +14,9 @@ public class SetSeedPanel : MonoBehaviour, IController{
     }
     private void Start()
     {
-        currentSeed = UnityEngine.Random.Range(0, 1000000);
+
         seedInputField.contentType = TMP_InputField.ContentType.IntegerNumber;
-        seedInputField.text = currentSeed.ToString();
+        GenerateRandomSeed();
         randomButton.onClick.AddListener(OnRandomButtonClick);
         seedInputField.onValueChanged.AddListener(OnValueChanged);
     }
@@ -25,10 +25,17 @@ public class SetSeedPanel : MonoBehaviour, IController{
         seedInputField.onValueChanged.RemoveListener(OnValueChanged);
         randomButton.onClick.RemoveListener(OnRandomButtonClick);
     }
-    private void OnRandomButtonClick() 
+
+    private void GenerateRandomSeed()
     {
         currentSeed = UnityEngine.Random.Range(0, 1000000);
         seedInputField.text = currentSeed.ToString();
+
+        this.GetSystem<BlackboardSystem>().newGameInfo.seed = currentSeed;
+    }
+    private void OnRandomButtonClick() 
+    {
+        GenerateRandomSeed();
     }
     private void OnValueChanged(string text)
     {

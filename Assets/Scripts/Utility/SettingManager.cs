@@ -17,7 +17,6 @@ public class SettingManager : MonoBehaviour, IController,ICanSendEvent{
     }
     public float DefaultAnimInterval => _devSettings.defaultAnimInterval;
     private float currentTimeScale = 0;
-    public bool IsTest = false;
     void Awake(){
         if (_instance != null)
         {
@@ -86,11 +85,8 @@ public class SettingManager : MonoBehaviour, IController,ICanSendEvent{
 
     void Update()
     {
-        // 测试模式下，时间缩放为1
-        if (IsTest){
-            Time.timeScale = 1f;
-            return;
-        }
+        #if UNITY_EDITOR
+
 
         if (DevSettings.UseAnimTimeScale){
             Time.timeScale = DevSettings.AnimTimeScale;
@@ -107,6 +103,8 @@ public class SettingManager : MonoBehaviour, IController,ICanSendEvent{
                 Time.timeScale = currentTimeScale;
             }
         }
+
+        #endif
     }
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
     /// <summary>

@@ -50,14 +50,18 @@ public class ChoosePCPanel : MonoBehaviour, IController{
     }
     private void OnChoosePCButtonClick()
     {
-        // Debug.Log("【ChoosePCPanel】选择玩家角色");
-        int seed = setSeedPanel.GetSeed();
+        NewGameInfo newGameInfo = this.GetSystem<BlackboardSystem>().newGameInfo;
+
+        if (newGameInfo == null){
+            Debug.LogError("【ChoosePCPanel】新游戏信息为空");
+            return;
+        }
         LoadingManger.Instance.LoadSceneAsync("BBQ demo new", () => {
             Debug.Log("【场景加载】完成");
             Debug.Log($"选择玩家角色: {selectedPCID}");
             // 加载完成后（0.5秒后）开始新游戏
             Observable.Timer(TimeSpan.FromSeconds(0.2f)).Subscribe(_ => {
-                this.GetSystem<IProcessSystem>().StartNewGame(new NewGameInfo(selectedPCID, seed));
+                this.GetSystem<IProcessSystem>().StartNewGame(newGameInfo);
             }).AddTo(LoadingManger.Instance.gameObject);
         });
     }
@@ -83,6 +87,8 @@ public class ChoosePCPanel : MonoBehaviour, IController{
         UpdateInfoPanel(pcData);
         SetButtonInteractable(pcData.ID);
         selectedPCID = pcData.ID;
+
+        this.GetSystem<BlackboardSystem>().newGameInfo.pcID = pcData.ID;
     }
 
     private void SetButtonInteractable(string currentPCID){

@@ -11,11 +11,10 @@ public class UIPanel : MonoBehaviour, IController{
     void Awake()
     {
         Hide();
+        this.RegisterEvent<UIPanelEvent>(OnUIPanelEvent);
     }
     void Start()
     {
-        this.RegisterEvent<UIPanelEvent>(OnUIPanelEvent);
-        
     }
     void OnDestroy()
     {

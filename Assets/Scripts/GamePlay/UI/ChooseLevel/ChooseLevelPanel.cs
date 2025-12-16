@@ -15,6 +15,14 @@ public class ChooseLevelPanel : MonoBehaviour, IController
     private int currentLevel = 1;
     private int maxLevel;
 
+    public void OnShow(){
+        currentDifficulty = 0;
+        currentLevel = 1;
+
+        SetInfo();
+        UpdateVisual();
+    }
+
     void Start()
     {
         maxDifficulty = this.GetSystem<IDataSystem>().GetAllDifficultyData().Count-1;
@@ -28,6 +36,7 @@ public class ChooseLevelPanel : MonoBehaviour, IController
             currentLevel = 1;
             return;
         }
+        SetInfo();
         UpdateVisual();
     }
     public void ChooseNextLevel()
@@ -38,6 +47,7 @@ public class ChooseLevelPanel : MonoBehaviour, IController
             currentLevel = maxLevel;
             return;
         }
+        SetInfo();
         UpdateVisual();
     }
     public void ChoosePreviousDifficulty()
@@ -58,12 +68,19 @@ public class ChooseLevelPanel : MonoBehaviour, IController
             currentDifficulty = maxDifficulty;
             return;
         }
+        SetInfo();
         UpdateVisual();
     }
     public void ChooseDifficulty(int difficulty)
     {
         currentDifficulty = difficulty;
+        SetInfo();
         UpdateVisual();
+    }
+    private void SetInfo(){
+        NewGameInfo newGameInfo = this.GetSystem<BlackboardSystem>().newGameInfo;
+        newGameInfo.difficultyData = this.GetSystem<IDataSystem>().GetDifficultyData(currentDifficulty);
+        newGameInfo.levelData = this.GetSystem<IDataSystem>().GetLevelData(currentLevel.ToString());
     }
     private void UpdateVisual()
     {
