@@ -6,14 +6,20 @@ using UnityEngine;
 public class RecipeController : MonoBehaviour, IController, ICanSendEvent
 {
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
-
+    [SerializeField] private GameObject recipePreviewViewPrefab;
+    [SerializeField] private Transform recipePreviewContainer;
+    private List<RecipePreviewView> views = new List<RecipePreviewView>();
     void OnEnable()
     {
         this.RegisterEvent<MatchRecipeEvent>(OnMatchRecipe);
+        this.RegisterEvent<MatchRecipePreviewEvent>(OnMatchRecipePreview);
+        this.RegisterEvent<ResetRecipePreviewViewsEvent>(OnResetViews);
     }
     void OnDisable()
     {
         this.UnRegisterEvent<MatchRecipeEvent>(OnMatchRecipe);
+        this.UnRegisterEvent<MatchRecipePreviewEvent>(OnMatchRecipePreview);
+        this.UnRegisterEvent<ResetRecipePreviewViewsEvent>(OnResetViews);
     }
 
     private void OnMatchRecipe(MatchRecipeEvent evt)
@@ -37,7 +43,26 @@ public class RecipeController : MonoBehaviour, IController, ICanSendEvent
         this.GetSystem<IAnimationSystem>().Append(animTask);
         this.GetSystem<IAnimationSystem>().Play();
     }
+    private void OnMatchRecipePreview(MatchRecipePreviewEvent evt)
+    {
+        ResetRecipePreviewViews();
+        // 1. 展示配方消息
+        foreach (var preview in evt.recipePreviews)
+        {
+            RecipePreviewView recipePreviewView = Instantiate(recipePreviewViewPrefab, recipePreviewContainer).GetComponent<RecipePreviewView>();
+            recipePreviewView.Bind(preview);
+            views.Add(recipePreviewView);
+        }
+    }
+    private void OnResetViews(ResetRecipePreviewViewsEvent evt) => ResetRecipePreviewViews();
 
+    private void ResetRecipePreviewViews(){
+        foreach (var view in views)
+        {
+            view.Remove();
+        }
+        views.Clear();
+    }
     private string BuildRecipeText(Recipe recipe){
         StringBuilder sb = new StringBuilder();
         sb.Append("<size=6> 激活配方:</size>");

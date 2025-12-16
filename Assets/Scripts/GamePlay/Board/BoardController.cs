@@ -12,6 +12,7 @@ public class BoardController : MonoBehaviour, IController, ICanSendEvent
     private float cellSize => boardViewUGUI.gridLayoutGroup.cellSize.x;
     private RectTransform gridContainer => boardViewUGUI.gridLayoutGroup.transform as RectTransform;
     BoardCell hoveredCell;
+    private List<BoardCell> highlightedCells = new List<BoardCell>();
     void Start()
     {
         this.RegisterEvent<ChangePanelEvent>(OnChangePanel).UnRegisterWhenGameObjectDestroyed(this.gameObject);
@@ -26,34 +27,45 @@ public class BoardController : MonoBehaviour, IController, ICanSendEvent
             // Debug.Log($"gridIndex: {gridIndex}");
             BoardCell newHoveredCell = boardViewUGUI.boardCellDict[gridIndex].cell;
 
-            // 2. 如果鼠标在棋盘上，且按下右键，则修改横竖方向
             if (Input.GetMouseButtonDown(1)){
                 IStickStrategy.IsHorizontal = !IStickStrategy.IsHorizontal;
-                // Debug.Log($"IsHorizontal: {IStickStrategy.IsHorizontal}");
-                UpdateView(hoveredCell.position);
+            }
+
+            IStickStrategy updateStrategy = this.GetSystem<IStickSystem>().selectedStick.strategy;
+            List<BoardCell> highlightedCells = updateStrategy.GetRange(newHoveredCell.position);
+
+
+            if (Input.GetMouseButtonDown(1)){
+                UpdateView(newHoveredCell.position, highlightedCells);
             }
             else if (hoveredCell != newHoveredCell && newHoveredCell != null){
-                hoveredCell = newHoveredCell;
-                UpdateView(hoveredCell.position);
+
+                if (!highlightedCells.SequenceEqual(this.highlightedCells)){
+                    hoveredCell = newHoveredCell;
+                    UpdateView(hoveredCell.position, highlightedCells);
+                }
             }
         }
         else{
             boardViewUGUI.UnhighlightAll();
-            this.SendEvent(new HideBBQPreviewEvent());
-            this.SendEvent(new TimePreviewEvent(0));
+            highlightedCells.Clear();
+            SendClearEvents();
             hoveredCell = null;
         }
 
         this.GetSystem<BlackboardSystem>().hoveredCell = hoveredCell;
         
     }
-
-    public void UpdateView(Vector2Int hoveredCellPos){
+    private void SendClearEvents(){
+        this.SendEvent(new HideBBQPreviewEvent());
+        this.SendEvent(new TimePreviewEvent(0));
+        this.SendEvent(new ResetRecipePreviewViewsEvent());
+    }
+    public void UpdateView(Vector2Int hoveredCellPos, List<BoardCell> highlightedCells){
         // 如果未选中烤串，则不更新视图
         if (this.GetSystem<IStickSystem>().selectedStick == null){
             // Debug.Log("未选中烤串");
-            this.SendEvent(new HideBBQPreviewEvent());
-            this.SendEvent(new TimePreviewEvent(0));
+            SendClearEvents();
             return;
         }
         //TODO: 暂时写死，后续需要优化
@@ -63,9 +75,9 @@ public class BoardController : MonoBehaviour, IController, ICanSendEvent
         List<FoodInstance> foodInstances = updateStrategy.GetFood(hoveredCellPos);
         Stick selectedStick = this.GetSystem<IStickSystem>().selectedStick;
         int amount = this.GetSystem<ITimeSystem>().GetCostTime(foodInstances, selectedStick);
-        
 
-        List<BoardCell> highlightedCells = updateStrategy.GetRange(hoveredCellPos);
+        // 2. 更新高亮单元格
+        this.highlightedCells = highlightedCells;
         boardViewUGUI.HighlightCells(highlightedCells.Select(x => x.position).ToList(), true);
 
         BBQPreview preview = PreviewBBQ(selectedStick, foodInstances, highlightedCells);

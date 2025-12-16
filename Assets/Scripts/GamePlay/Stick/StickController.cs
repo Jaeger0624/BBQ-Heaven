@@ -12,7 +12,7 @@ using UnityEngine;
 /// 职责：
 /// 1. 创建与移除烤串视图
 /// 2. 检测烤串选择，并提示UI更新
-public class StickController : MonoBehaviour, IController{
+public class StickController : MonoBehaviour, IController, ICanSendEvent{
     [SerializeField] private GameObject stickViewPrefab;
     [SerializeField] private Transform stickViewContainer;  // 烤串父物体
 
@@ -33,8 +33,16 @@ public class StickController : MonoBehaviour, IController{
             if (stickSystem.selectedStick != null){
                 stickViews.ForEach(x => x.OnUnselect());
                 stickSystem.UnselectStick();
+
+
+                SendClearEvents();
             }
         }
+    }
+    private void SendClearEvents(){
+        this.SendEvent(new HideBBQPreviewEvent());
+        this.SendEvent(new TimePreviewEvent(0));
+        this.SendEvent(new ResetRecipePreviewViewsEvent());
     }
     void OnEnable()
     {

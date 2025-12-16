@@ -22,3 +22,6 @@ public class MatchRecipePreviewEvent : AbstractEvent{
         this.recipePreviews = recipePreviews;
     }
 }
+public class ResetRecipePreviewViewsEvent : AbstractEvent{
+    public ResetRecipePreviewViewsEvent(){}
+}

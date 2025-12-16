@@ -39,7 +39,10 @@ public class BBQController : MonoBehaviour, IController, ICanSendEvent
             }
             AudioManager.Instance.AudioService.Play("Score 5");
             this.GetSystem<IBBQSystem>().FinishBBQ(selectedStick, foodInstances);
+
+            // 3. 清空预览
             this.SendEvent(new HideBBQPreviewEvent());
+            this.SendEvent(new ResetRecipePreviewViewsEvent());
         }
     }
 
