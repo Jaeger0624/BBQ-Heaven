@@ -14,10 +14,10 @@
           "conditions": [
             {
               "$type": "Condition_DV检测",
-              "sign": 3,
               "DV1": {
                 "$type": "DV_售卖食材数量"
               },
+              "sign": 3,
               "DV2": {
                 "$type": "DV_值",
                 "number": 4
@@ -42,10 +42,10 @@
           "conditions": [
             {
               "$type": "Condition_DV检测",
-              "sign": 2,
               "DV1": {
                 "$type": "DV_售卖食材数量"
               },
+              "sign": 2,
               "DV2": {
                 "$type": "DV_值",
                 "number": 7
@@ -78,10 +78,10 @@
           "conditions": [
             {
               "$type": "Condition_DV检测",
-              "sign": 2,
               "DV1": {
                 "$type": "DV_售卖食材数量"
               },
+              "sign": 2,
               "DV2": {
                 "$type": "DV_值",
                 "number": 7
@@ -106,10 +106,10 @@
           "conditions": [
             {
               "$type": "Condition_DV检测",
-              "sign": 3,
               "DV1": {
                 "$type": "DV_售卖食材数量"
               },
+              "sign": 3,
               "DV2": {
                 "$type": "DV_值",
                 "number": 4

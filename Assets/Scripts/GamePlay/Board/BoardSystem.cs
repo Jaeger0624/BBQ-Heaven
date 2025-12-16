@@ -16,7 +16,7 @@ public interface IBoardSystem : ISystem{
     BoardCell GetCell(Vector2Int position);
     List<BoardCell> GetAdjacentCells(Vector2Int position);
     BoardCell GetRandomEmptyCell();
-    BoardCell GetStopPosition(Vector2Int origin, Vector2Int direction);
+    BoardCell GetStopPosition(Vector2Int origin, Vector2Int direction, int distance, out BoardEntity entity);
 
     // SelectorSystem 需要用到的方法 
     void HighlightCells(List<Vector2Int> positions);
@@ -99,17 +99,26 @@ public class BoardSystem : AbstractSystem, IBoardSystem
         _boardStateChangedSubject.OnNext(Unit.Default);
     }
 
-    public BoardCell GetStopPosition(Vector2Int origin, Vector2Int direction){
-        BoardCell res = grid.GetCell(origin.x, origin.y);
-        while (true){
-            origin += direction;
-            // 要么撞墙，要么碰到食材
-            if (origin.x < 0 || origin.x >= grid.width || origin.y < 0 || origin.y >= grid.height || !grid.GetCell(origin.x, origin.y).IsEmpty()){
+    public BoardCell GetStopPosition(Vector2Int origin, Vector2Int direction, int distance, out BoardEntity entity){
+        Vector2Int res = origin;
+        entity = null;
+        for (int i = 0; i < distance; i++){
+            res += direction;
+
+            // 到墙边要停止
+            if (res.x < 0 || res.x >= grid.width || res.y < 0 || res.y >= grid.height){
+                res -= direction;
                 break;
             }
-            res = grid.GetCell(origin.x, origin.y);
+
+            // 碰到食材要停止（但可以到食材上）
+            if (!grid.GetCell(res.x, res.y).IsEmpty()){
+                entity = this.GetSystem<IBoardEntitySystem>().GetEntity(grid.GetCell(res.x, res.y).instanceGuid);
+                res -= direction;
+                break;
+            }
         }
-        return res;
+        return grid.GetCell(res.x, res.y);
     }
 
     public void HighlightCells(List<Vector2Int> positions){

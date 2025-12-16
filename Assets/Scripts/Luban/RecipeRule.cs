@@ -13,35 +13,35 @@ using SimpleJSON;
 
 namespace cfg
 {
-/// <summary>
-/// 配方规则，通过才能执行
-/// </summary>
-public abstract partial class RecipeRule : Luban.BeanBase
+public sealed partial class RecipeRule : Luban.BeanBase
 {
     public RecipeRule(JSONNode _buf) 
     {
+        { if(!_buf["rank"].IsNumber) { throw new SerializationException(); }  Rank = _buf["rank"]; }
+        { if(!_buf["action"].IsObject) { throw new SerializationException(); }  Action = global::cfg.CGA.DeserializeCGA(_buf["action"]);  }
     }
 
     public static RecipeRule DeserializeRecipeRule(JSONNode _buf)
     {
-        switch ((string)_buf["$type"])
-        {
-            case "RecipeRule_食材共存": return new RecipeRule_食材共存(_buf);
-            case "RecipeRule_类型共存": return new RecipeRule_类型共存(_buf);
-            case "RecipeRule_动态值": return new RecipeRule_动态值(_buf);
-            default: throw new SerializationException();
-        }
+        return new RecipeRule(_buf);
     }
 
+    public readonly int Rank;
+    public readonly CGA Action;
    
+    public const int __ID__ = 1641924042;
+    public override int GetTypeId() => __ID__;
 
-    public virtual void ResolveRef(Tables tables)
+    public  void ResolveRef(Tables tables)
     {
+        Action?.ResolveRef(tables);
     }
 
     public override string ToString()
     {
         return "{ "
+        + "rank:" + Rank + ","
+        + "action:" + Action + ","
         + "}";
     }
 }

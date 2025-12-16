@@ -64,7 +64,7 @@ namespace cfg{
                             {
                                 observer.OnError(new Exception($"[GA_食材换位] 格子上没有食材实例: {secondCell.instanceGuid}"));
                             }
-                            var evt = this.GetSystem<IBoardEntitySystem>().Mover.ExchangeEntities(origin, secondFoodInstance, false);
+                            var evt = this.GetSystem<IBoardEntitySystem>().Mover.ExchangeEntities(origin, secondFoodInstance);
                             moveEvents.AddRange(evt);
                         },
                         ex => 
@@ -170,16 +170,15 @@ namespace cfg{
             // 3. 实际执行位移
             foreach (var target in targets)
             {
-                for (int i = 0; i < Value.GetValue(target, param); i++)
-                {    
-                    Vector2Int direction = finalDirection.ToVector2Int();
-                    moveEvents.Add(this.GetSystem<IBoardEntitySystem>().Mover.DirectionalMove(target, direction, true));
-                }
+                int steps = Value.GetValue(target, param);
+                Vector2Int direction = finalDirection.ToVector2Int();
+                moveEvents.Add(this.GetSystem<IBoardEntitySystem>().Mover.DirectionalMove(target, direction, steps));
             }
         }
         private void SendAnims(){
             foreach (var evt in moveEvents)
             {
+                if (evt == null) continue;
                 this.SendEvent(evt);
             }
         }

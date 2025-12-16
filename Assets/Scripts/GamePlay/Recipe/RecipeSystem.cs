@@ -10,6 +10,7 @@ public interface IRecipeSystem : ISystem, ISavable{
     /// 执行配方匹配
     /// </summary>
     /// <param name="bbq"></param>
+    void MatchRecipePreview(BBQPreview preview);
     void MatchRecipe(List<object> param);
     void RegisterRecipe(string id);
     void RegisterAllRecipes();
@@ -23,10 +24,15 @@ public class RecipeSystem : AbstractSystem, IRecipeSystem
     {
         recipeRepository = new List<Recipe>();
         matchRecipeStrategy = new MatchRecipeStrategy_默认();
+
+
+        this.RegisterEvent<ShowBBQPreviewEvent>(OnShowBBQPreview);
     }
     protected override void OnDeinit()
     {
         recipeRepository.Clear();
+
+        this.UnRegisterEvent<ShowBBQPreviewEvent>(OnShowBBQPreview);
     }
     public void Save(GameArchive archive)
     {
@@ -35,6 +41,30 @@ public class RecipeSystem : AbstractSystem, IRecipeSystem
     public void Load(GameArchive archive)
     {
         recipeRepository = archive.playerInfoData.recipes;
+    }
+
+    private void OnShowBBQPreview(ShowBBQPreviewEvent evt)
+    {
+        MatchRecipePreview(evt.preview);
+    }
+
+    public void MatchRecipePreview(BBQPreview preview)
+    {
+        List<RecipePreview> recipePreviews = new List<RecipePreview>();
+        StringBuilder sb = new StringBuilder();
+        sb.AppendLine($"【RecipeSystem】预览匹配：");
+        foreach (var recipe in recipeRepository)
+        {
+            int rank = recipe.PreviewMatch(new List<object>{preview});
+            if (rank > 0)
+            {
+                recipePreviews.Add(new RecipePreview(rank, recipe));
+
+                sb.AppendLine($"- {recipe.name}, 第{rank}档");
+            }
+        }
+        Debug.Log(sb.ToString());
+        this.SendEvent(new MatchRecipePreviewEvent(recipePreviews));
     }
 
     // 在BBQ构建完毕后，执行配方匹配
@@ -59,12 +89,8 @@ public class RecipeSystem : AbstractSystem, IRecipeSystem
             string matchedRecipesString = string.Join(", ", matchedRecipes.Select(x => x.name));
             Debug.Log($"【RecipeSystem】匹配成功的配方: {matchedRecipesString}");
         }
-
-        
         // 1.1 发送匹配成功事件
         this.SendEvent(new MatchRecipeEvent(matchedRecipes));
-
-
         // 2. 执行匹配成功的配方
         matchedRecipes.ForEach(recipe => ExecuteRecipe(recipe, param));
     }
@@ -75,8 +101,8 @@ public class RecipeSystem : AbstractSystem, IRecipeSystem
         recipeRepository.Add(recipe);
     }
 
-    private void ExecuteRecipe(Recipe recipe, List<object> param){
-        recipe.GA.ForEach(ga => this.GetSystem<IGASystem>().ApplyGA(recipe, ga, param));
+    private void ExecuteRecipe(Recipe recipe, List<object> param){      
+    
     }
 
     public void RegisterAllRecipes(){

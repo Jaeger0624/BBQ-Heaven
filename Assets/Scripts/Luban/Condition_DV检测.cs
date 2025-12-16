@@ -17,8 +17,8 @@ public sealed partial class Condition_DV检测 : Condition
 {
     public Condition_DV检测(JSONNode _buf)  : base(_buf) 
     {
-        { if(!_buf["sign"].IsNumber) { throw new SerializationException(); }  Sign = (BoolSign)_buf["sign"].AsInt; }
         { if(!_buf["DV1"].IsObject) { throw new SerializationException(); }  DV1 = global::cfg.DynamicValue.DeserializeDynamicValue(_buf["DV1"]);  }
+        { if(!_buf["sign"].IsNumber) { throw new SerializationException(); }  Sign = (BoolSign)_buf["sign"].AsInt; }
         { if(!_buf["DV2"].IsObject) { throw new SerializationException(); }  DV2 = global::cfg.DynamicValue.DeserializeDynamicValue(_buf["DV2"]);  }
     }
 
@@ -27,8 +27,8 @@ public sealed partial class Condition_DV检测 : Condition
         return new Condition_DV检测(_buf);
     }
 
-    public readonly BoolSign Sign;
     public readonly DynamicValue DV1;
+    public readonly BoolSign Sign;
     public readonly DynamicValue DV2;
    
     public const int __ID__ = -1393272479;
@@ -44,8 +44,8 @@ public sealed partial class Condition_DV检测 : Condition
     public override string ToString()
     {
         return "{ "
-        + "sign:" + Sign + ","
         + "DV1:" + DV1 + ","
+        + "sign:" + Sign + ","
         + "DV2:" + DV2 + ","
         + "}";
     }

@@ -12,16 +12,13 @@
 namespace cfg
 { 
     /// <summary>
-    /// 食材GA类型
+    /// 其他实体GA类型
     /// </summary>
-    public enum FoodGAType
+    public enum EntityGAType
     {
-        放上棋盘时 = 0,
-        放上烤串前 = 1,
-        放上烤串后 = 2,
-        被选中时 = 3,
-        碰撞时 = 4,
-        被碰撞时 = 5,
+        被选中时 = 0,
+        碰撞时 = 1,
+        被碰撞时 = 2,
     }
 
 } 

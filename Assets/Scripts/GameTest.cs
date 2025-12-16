@@ -197,7 +197,7 @@ public class GameTest : MonoBehaviour, IController, ICanSendEvent{
             Vector2Int randomPosition = this.GetSystem<IRngSystem>().GetSubRng<IBoardSystem>().PickOne(emptyCells).position;
             FoodInstance foodInstance = this.GetSystem<IRngSystem>().GetSubRng<IFoodSystem>().PickOne(foodInstances);
             this.GetSystem<IBoardEntitySystem>().Mover.MoveEntityTo(randomPosition,
-                                                                               foodInstance, true);
+                                                                               foodInstance);
         }
         if (GUILayout.Button("随机移动所有食材实例")){
             List<BoardEntity> entities = this.GetSystem<IFoodSystem>()
@@ -206,7 +206,7 @@ public class GameTest : MonoBehaviour, IController, ICanSendEvent{
                 .Select(x => x as BoardEntity)
                 .ToList();
 
-            this.GetSystem<IBoardEntitySystem>().Mover.RandomMoveEntities(entities, true);
+            this.GetSystem<IBoardEntitySystem>().Mover.RandomMoveEntities(entities);
         }
     }
 

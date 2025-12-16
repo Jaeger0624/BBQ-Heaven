@@ -59,20 +59,26 @@ public class BoardController : MonoBehaviour, IController, ICanSendEvent
         //TODO: 暂时写死，后续需要优化
         IStickStrategy updateStrategy = this.GetSystem<IStickSystem>().selectedStick.strategy;
 
-        // 计算时间消耗
+        // 1. 计算时间消耗
         List<FoodInstance> foodInstances = updateStrategy.GetFood(hoveredCellPos);
         Stick selectedStick = this.GetSystem<IStickSystem>().selectedStick;
         int amount = this.GetSystem<ITimeSystem>().GetCostTime(foodInstances, selectedStick);
         
-        this.SendEvent(new ShowBBQPreviewEvent(PreviewBBQ(selectedStick, foodInstances)));
-        this.SendEvent(new TimePreviewEvent(amount));
-
 
         List<BoardCell> highlightedCells = updateStrategy.GetRange(hoveredCellPos);
         boardViewUGUI.HighlightCells(highlightedCells.Select(x => x.position).ToList(), true);
+
+        BBQPreview preview = PreviewBBQ(selectedStick, foodInstances, highlightedCells);
+
+        // 2. 设置预览
+        this.GetSystem<IBBQSystem>().SetPreview(preview);
+
+        // 3. 发送预览事件
+        this.SendEvent(new ShowBBQPreviewEvent(preview));
+        this.SendEvent(new TimePreviewEvent(amount));
     }
     // 预览BBQ结果
-    private BBQPreview PreviewBBQ(Stick selectedStick, List<FoodInstance> foodInstances){
+    private BBQPreview PreviewBBQ(Stick selectedStick, List<FoodInstance> foodInstances, List<BoardCell> highlightedCells){
         int totalRarity = 0;
         int totalTaste = 0;
         int totalTimeCost = 0;
@@ -81,7 +87,7 @@ public class BoardController : MonoBehaviour, IController, ICanSendEvent
             totalTaste += foodInstance.taste;
         }
         totalTimeCost = this.GetSystem<ITimeSystem>().GetCostTime(foodInstances, selectedStick);
-        return new BBQPreview(totalRarity, totalTaste, totalTimeCost);
+        return new BBQPreview(totalRarity, totalTaste, totalTimeCost, highlightedCells);
     }
 
     private void OnChangePanel(ChangePanelEvent evt){

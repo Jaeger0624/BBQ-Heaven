@@ -95,9 +95,11 @@ public class BBQPreview{
     public int totalRarity;
     public int totalTaste;
     public int totalTimeCost;
-    public BBQPreview(int totalRarity, int totalTaste, int totalTimeCost){
+    public List<BoardCell> boardCells;
+    public BBQPreview(int totalRarity, int totalTaste, int totalTimeCost, List<BoardCell> boardCells){
         this.totalRarity = totalRarity;
         this.totalTaste = totalTaste;
         this.totalTimeCost = totalTimeCost;
+        this.boardCells = boardCells;
     }
 }

@@ -85,10 +85,10 @@
           "conditions": [
             {
               "$type": "Condition_DV检测",
-              "sign": 2,
               "DV1": {
                 "$type": "DV_周围空位数"
               },
+              "sign": 2,
               "DV2": {
                 "$type": "DV_值",
                 "number": 1

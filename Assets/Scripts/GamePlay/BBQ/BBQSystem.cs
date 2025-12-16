@@ -6,7 +6,9 @@ using Reflex.Attributes;
 using UnityEngine;
 
 public interface IBBQSystem : ISystem{
+    BBQPreview PreviewFoodInstances { get;}
     BBQ GetCurrentBBQ();
+    void SetPreview(BBQPreview preview);
     void FinishBBQ(Stick stick, List<FoodInstance> foodInstances);
     void SetCalculator(IBBQCalculator calculator);
 }
@@ -22,6 +24,10 @@ public class BBQSystem : AbstractSystem, IBBQSystem
     // 当前在运算，待存储的烧烤实例
     private BBQ currentBBQ;
     private IBBQCalculator calculator = new BBQCalculator_食材基础值逐个加();
+
+    public BBQPreview PreviewFoodInstances { get; private set; }
+    public void SetPreview(BBQPreview preview) => PreviewFoodInstances = preview;
+
     public BBQ GetCurrentBBQ() => currentBBQ;
     
     protected override void OnInit()

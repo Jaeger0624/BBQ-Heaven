@@ -7,23 +7,23 @@
     "actionDescription": "补充1个食材",
     "rules": [
       {
-        "$type": "RecipeRule_动态值",
-        "DV1": {
-          "$type": "DV_当前构建烤串食材数量"
-        },
-        "sign": 2,
-        "DV2": {
-          "$type": "DV_值",
-          "number": 6
-        }
-      }
-    ],
-    "GA": [
-      {
-        "$type": "GA_补充食材",
-        "value": {
-          "$type": "DV_值",
-          "number": 1
+        "rank": 1,
+        "action": {
+          "ID": "",
+          "conditions": [
+            {
+              "$type": "Condition_DV检测",
+              "DV1": {
+                "$type": "DV_当前构建烤串食材数量"
+              },
+              "sign": 2,
+              "DV2": {
+                "$type": "DV_值",
+                "number": 6
+              }
+            }
+          ],
+          "actions": []
         }
       }
     ]
@@ -36,27 +36,23 @@
     "actionDescription": "为烤串+5/+5",
     "rules": [
       {
-        "$type": "RecipeRule_动态值",
-        "DV1": {
-          "$type": "DV_当前构建烤串食材数量"
-        },
-        "sign": 3,
-        "DV2": {
-          "$type": "DV_值",
-          "number": 5
-        }
-      }
-    ],
-    "GA": [
-      {
-        "$type": "GA_直接修改当前烧烤值",
-        "rarityValue": {
-          "$type": "DV_值",
-          "number": 5
-        },
-        "tasteValue": {
-          "$type": "DV_值",
-          "number": 5
+        "rank": 1,
+        "action": {
+          "ID": "",
+          "conditions": [
+            {
+              "$type": "Condition_DV检测",
+              "DV1": {
+                "$type": "DV_当前构建烤串食材数量"
+              },
+              "sign": 3,
+              "DV2": {
+                "$type": "DV_值",
+                "number": 5
+              }
+            }
+          ],
+          "actions": []
         }
       }
     ]

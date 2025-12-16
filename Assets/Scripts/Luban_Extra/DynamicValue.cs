@@ -60,19 +60,32 @@ namespace cfg{
     public partial class DV_当前构建烤串食材数量 : DynamicValue {
         public override int GetValue(object target, List<object> param)
         {
-            if (target == null){
-                Debug.LogError("当前烧烤为空");
-                return 0;
-            }
+            
             // 读取上下文
             BBQProcessContext context = param?.FirstOrDefault() as BBQProcessContext;
-            if (context == null){
-                Debug.LogError("上下文为空");
+            BBQPreview preview = param?.FirstOrDefault() as BBQPreview;
+            if (context == null && preview == null){
+                Debug.LogError("上下文或预览为空");
                 return 0;
             }
-            BBQ currentBBQ = context.targetBBQ;
-            if (currentBBQ == null) {Debug.LogError("当前烧烤为空"); return 0;}
-            return currentBBQ.foodInstances.Count;
+
+            if (context != null){
+                BBQ currentBBQ = context.targetBBQ;
+                if (currentBBQ == null) {Debug.LogError("当前烧烤为空"); return 0;}
+                return currentBBQ.foodInstances.Count;
+            }
+            else{
+                int res = 0;
+                foreach (BoardCell boardCell in preview.boardCells){
+                    if (boardCell.instanceGuid != null){
+                        BoardEntity boardEntity = this.GetSystem<IBoardEntitySystem>().GetEntity(boardCell.instanceGuid);
+                        if (boardEntity != null && boardEntity is FoodInstance foodInstance){
+                            res++;
+                        }
+                    }
+                }
+                return res;
+            }
         }
     }
 

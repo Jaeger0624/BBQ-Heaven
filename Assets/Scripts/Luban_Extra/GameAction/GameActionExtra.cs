@@ -488,7 +488,7 @@ public partial class GA_创建满意度乘区 : GameAction
                     {
                         // Debug.Log($"[GA_食材位移] 选择到格子: {x.cell.position}");
                         // 每次用户选择完一个格子，执行移动逻辑
-                        var evt = this.GetSystem<IBoardEntitySystem>().Mover.MoveEntityTo(x.cell.position, x.foodInstance, true);
+                        var evt = this.GetSystem<IBoardEntitySystem>().Mover.MoveEntityTo(x.cell.position, x.foodInstance);
                         moveEvents.Add(evt);
                     },
                     ex => 

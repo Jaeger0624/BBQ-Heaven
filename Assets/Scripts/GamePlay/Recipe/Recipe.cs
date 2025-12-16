@@ -12,7 +12,6 @@ public class Recipe{
     public string ruleDescription;
     public string actionDescription;
     public List<RecipeRule> rules;
-    public List<GameAction> GA;
     private RecipeData recipeData;
     public Recipe(RecipeData recipeData){
         this.recipeData = recipeData;
@@ -21,7 +20,18 @@ public class Recipe{
         this.ruleDescription = recipeData.RuleDescription;
         this.actionDescription = recipeData.ActionDescription;
         this.rules = recipeData.Rules;
-        this.GA = recipeData.GA.Select(x => x.Clone()).ToList();
         this.recipeData = recipeData;
+    }
+
+    public int PreviewMatch(List<object> param)
+    {
+        foreach (var rule in rules)
+        {
+            if (rule.EvaluatePreview(param))
+            {
+                return rule.Rank;
+            }
+        }
+        return 0;
     }
 }

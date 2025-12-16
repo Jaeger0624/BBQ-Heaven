@@ -23,7 +23,6 @@ public sealed partial class RecipeData : Luban.BeanBase
         { if(!_buf["ruleDescription"].IsString) { throw new SerializationException(); }  RuleDescription = _buf["ruleDescription"]; }
         { if(!_buf["actionDescription"].IsString) { throw new SerializationException(); }  ActionDescription = _buf["actionDescription"]; }
         { var __json0 = _buf["rules"]; if(!__json0.IsArray) { throw new SerializationException(); } Rules = new System.Collections.Generic.List<RecipeRule>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { RecipeRule __v0;  { if(!__e0.IsObject) { throw new SerializationException(); }  __v0 = global::cfg.RecipeRule.DeserializeRecipeRule(__e0);  }  Rules.Add(__v0); }   }
-        { var __json0 = _buf["GA"]; if(!__json0.IsArray) { throw new SerializationException(); } GA = new System.Collections.Generic.List<GameAction>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { GameAction __v0;  { if(!__e0.IsObject) { throw new SerializationException(); }  __v0 = global::cfg.GameAction.DeserializeGameAction(__e0);  }  GA.Add(__v0); }   }
     }
 
     public static RecipeData DeserializeRecipeData(JSONNode _buf)
@@ -51,14 +50,7 @@ public sealed partial class RecipeData : Luban.BeanBase
     /// 效果描述
     /// </summary>
     public readonly string ActionDescription;
-    /// <summary>
-    /// 配方规则列表，Match依据
-    /// </summary>
     public readonly System.Collections.Generic.List<RecipeRule> Rules;
-    /// <summary>
-    /// GAList
-    /// </summary>
-    public readonly System.Collections.Generic.List<GameAction> GA;
    
     public const int __ID__ = 1641487992;
     public override int GetTypeId() => __ID__;
@@ -66,7 +58,6 @@ public sealed partial class RecipeData : Luban.BeanBase
     public  void ResolveRef(Tables tables)
     {
         foreach (var _e in Rules) { _e?.ResolveRef(tables); }
-        foreach (var _e in GA) { _e?.ResolveRef(tables); }
     }
 
     public override string ToString()
@@ -78,7 +69,6 @@ public sealed partial class RecipeData : Luban.BeanBase
         + "ruleDescription:" + RuleDescription + ","
         + "actionDescription:" + ActionDescription + ","
         + "rules:" + Luban.StringUtil.CollectionToString(Rules) + ","
-        + "GA:" + Luban.StringUtil.CollectionToString(GA) + ","
         + "}";
     }
 }

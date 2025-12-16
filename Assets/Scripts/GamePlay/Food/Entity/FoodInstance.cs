@@ -11,7 +11,7 @@ using UnityEngine;
 /// </summary>
 public partial class FoodInstance : BoardEntity, IAnimPlayer{  
     public override BoardEntityType type => BoardEntityType.食材;
-    public string name => food.name;
+    public override string name => food.name;
     public Food food;
     /// <summary>实例状态，主要用于程序逻辑判断</summary>
     public FoodInstanceState state {get; private set;} = FoodInstanceState.无;
@@ -21,7 +21,6 @@ public partial class FoodInstance : BoardEntity, IAnimPlayer{
     public int rarity;
     public int taste;
     // Runtime部分：不保存
-    public List<CGA> cgas = new List<CGA>();
     public List<SustainEffect> sustainEffects = new List<SustainEffect>();
     public Action OnViewStatusChanged;
     public FoodInstance(Food food, Vector2Int position) : base(){
@@ -35,7 +34,6 @@ public partial class FoodInstance : BoardEntity, IAnimPlayer{
         foreach (var cga in food.foodGAs.Values.SelectMany(x => x)){
             cgas.Add(new CGA(cga));
         }
-        this.cgas = cgas;
         this.sustainEffects = food.sustainEffects.Select(x => x.Clone()).ToList();
     }
     public void SetState(FoodInstanceState state){

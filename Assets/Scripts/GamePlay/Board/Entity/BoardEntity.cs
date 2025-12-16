@@ -7,6 +7,7 @@ public enum BoardEntityType{
 }
 public abstract class BoardEntity : ICanGetSystem{
     public string guid { get; private set; }
+    public abstract string name { get; }
     public Vector2Int position;
     public abstract BoardEntityType type { get; }
     public BoardEntity(){
