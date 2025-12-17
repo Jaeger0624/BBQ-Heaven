@@ -8,6 +8,8 @@ using UnityEngine;
 
 public class EncounterController : MonoBehaviour, IController, ICanSendEvent
 {
+    [Header("信息")]
+    [Header("遭遇弹窗面板")]
     [SerializeField] private TextMeshProUGUI nameText;
     [SerializeField] private TextMeshProUGUI descriptionText;
     void Update()

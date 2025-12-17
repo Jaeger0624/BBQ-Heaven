@@ -16,10 +16,50 @@
               "DV1": {
                 "$type": "DV_当前构建烤串食材数量"
               },
-              "sign": 2,
+              "sign": 4,
               "DV2": {
                 "$type": "DV_值",
                 "number": 6
+              }
+            }
+          ],
+          "actions": []
+        }
+      },
+      {
+        "rank": 2,
+        "action": {
+          "ID": "",
+          "conditions": [
+            {
+              "$type": "Condition_DV检测",
+              "DV1": {
+                "$type": "DV_当前构建烤串食材数量"
+              },
+              "sign": 4,
+              "DV2": {
+                "$type": "DV_值",
+                "number": 7
+              }
+            }
+          ],
+          "actions": []
+        }
+      },
+      {
+        "rank": 3,
+        "action": {
+          "ID": "",
+          "conditions": [
+            {
+              "$type": "Condition_DV检测",
+              "DV1": {
+                "$type": "DV_当前构建烤串食材数量"
+              },
+              "sign": 2,
+              "DV2": {
+                "$type": "DV_值",
+                "number": 8
               }
             }
           ],
@@ -45,10 +85,50 @@
               "DV1": {
                 "$type": "DV_当前构建烤串食材数量"
               },
-              "sign": 3,
+              "sign": 4,
               "DV2": {
                 "$type": "DV_值",
                 "number": 5
+              }
+            }
+          ],
+          "actions": []
+        }
+      },
+      {
+        "rank": 2,
+        "action": {
+          "ID": "",
+          "conditions": [
+            {
+              "$type": "Condition_DV检测",
+              "DV1": {
+                "$type": "DV_当前构建烤串食材数量"
+              },
+              "sign": 4,
+              "DV2": {
+                "$type": "DV_值",
+                "number": 4
+              }
+            }
+          ],
+          "actions": []
+        }
+      },
+      {
+        "rank": 3,
+        "action": {
+          "ID": "",
+          "conditions": [
+            {
+              "$type": "Condition_DV检测",
+              "DV1": {
+                "$type": "DV_当前构建烤串食材数量"
+              },
+              "sign": 3,
+              "DV2": {
+                "$type": "DV_值",
+                "number": 3
               }
             }
           ],

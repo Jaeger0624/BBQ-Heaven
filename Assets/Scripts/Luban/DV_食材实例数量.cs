@@ -13,6 +13,9 @@ using SimpleJSON;
 
 namespace cfg
 {
+/// <summary>
+/// 构建阶段获取currentBBQ的动态值
+/// </summary>
 public sealed partial class DV_食材实例数量 : DynamicValue
 {
     public DV_食材实例数量(JSONNode _buf)  : base(_buf) 
