@@ -44,6 +44,9 @@ TagManager:
   - name: BBQ
     uniqueID: 3271255317
     locked: 0
+  - name: Selection
+    uniqueID: 4198010011
+    locked: 0
   - name: Dialogue
     uniqueID: 3776644103
     locked: 0
@@ -52,6 +55,9 @@ TagManager:
     locked: 0
   - name: Reference
     uniqueID: 172708499
+    locked: 0
+  - name: "\u9876\u5C42"
+    uniqueID: 2998754943
     locked: 0
   m_RenderingLayers:
   - Default
