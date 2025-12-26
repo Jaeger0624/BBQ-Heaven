@@ -40,6 +40,14 @@ public interface IDataSystem : ISystem{
     //获取地块配置
     TileData GetTileData(string id);
     List<TileData> GetAllTileData();
+
+    //获取抉择遭遇事件配置
+    InstantEncounterData GetInstantEncounterData(string id);
+    List<InstantEncounterData> GetAllInstantEncounterData();
+
+    // 获取选项配置
+    OptionData GetOptionData(string id);
+    List<OptionData> GetAllOptionData();
 }
 public class DataSystem : AbstractSystem, IDataSystem{
 
@@ -132,5 +140,22 @@ public class DataSystem : AbstractSystem, IDataSystem{
     public List<TileData> GetAllTileData()
     {
         return tables.TileDataTable.DataList;
+    }
+
+    public InstantEncounterData GetInstantEncounterData(string id)
+    {
+        return tables.InstantEncounterDataTable.Get(id);
+    }
+    public List<InstantEncounterData> GetAllInstantEncounterData()
+    {
+        return tables.InstantEncounterDataTable.DataList;
+    }
+    public OptionData GetOptionData(string id)
+    {
+        return tables.OptionDataTable.Get(id);
+    }
+    public List<OptionData> GetAllOptionData()
+    {
+        return tables.OptionDataTable.DataList;
     }
 }

@@ -25,6 +25,8 @@ public partial class Tables
     public LevelDataTable LevelDataTable {get; }
     public DifficultyDataTable DifficultyDataTable {get; }
     public TileDataTable TileDataTable {get; }
+    public InstantEncounterDataTable InstantEncounterDataTable {get; }
+    public OptionDataTable OptionDataTable {get; }
 
     public Tables(System.Func<string, JSONNode> loader)
     {
@@ -39,6 +41,8 @@ public partial class Tables
         LevelDataTable = new LevelDataTable(loader("leveldatatable"));
         DifficultyDataTable = new DifficultyDataTable(loader("difficultydatatable"));
         TileDataTable = new TileDataTable(loader("tiledatatable"));
+        InstantEncounterDataTable = new InstantEncounterDataTable(loader("instantencounterdatatable"));
+        OptionDataTable = new OptionDataTable(loader("optiondatatable"));
         ResolveRef();
     }
     
@@ -55,6 +59,8 @@ public partial class Tables
         LevelDataTable.ResolveRef(this);
         DifficultyDataTable.ResolveRef(this);
         TileDataTable.ResolveRef(this);
+        InstantEncounterDataTable.ResolveRef(this);
+        OptionDataTable.ResolveRef(this);
     }
 }
 

@@ -1,0 +1,35 @@
+[
+  {
+    "ID": "默认",
+    "name": "默认",
+    "description": "",
+    "effectDescription": "",
+    "action": {
+      "ID": "",
+      "conditions": [],
+      "actions": []
+    }
+  },
+  {
+    "ID": "砍价_接受",
+    "name": "接受砍价",
+    "description": "",
+    "effectDescription": "",
+    "action": {
+      "ID": "",
+      "conditions": [],
+      "actions": []
+    }
+  },
+  {
+    "ID": "砍价_不接受",
+    "name": "",
+    "description": "",
+    "effectDescription": "",
+    "action": {
+      "ID": "",
+      "conditions": [],
+      "actions": []
+    }
+  }
+]

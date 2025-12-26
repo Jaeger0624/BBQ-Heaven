@@ -16,23 +16,23 @@ namespace cfg
 /// <summary>
 /// 卡牌检索信息
 /// </summary>
-public sealed partial class CardInfo : Luban.BeanBase
+public sealed partial class CardSearchInfo : Luban.BeanBase
 {
-    public CardInfo(JSONNode _buf) 
+    public CardSearchInfo(JSONNode _buf) 
     {
         { if(!_buf["amount"].IsNumber) { throw new SerializationException(); }  Amount = _buf["amount"]; }
         { if(!_buf["rank"].IsNumber) { throw new SerializationException(); }  Rank = (Rank)_buf["rank"].AsInt; }
     }
 
-    public static CardInfo DeserializeCardInfo(JSONNode _buf)
+    public static CardSearchInfo DeserializeCardSearchInfo(JSONNode _buf)
     {
-        return new CardInfo(_buf);
+        return new CardSearchInfo(_buf);
     }
 
     public readonly int Amount;
     public readonly Rank Rank;
    
-    public const int __ID__ = 56078334;
+    public const int __ID__ = 1603713478;
     public override int GetTypeId() => __ID__;
 
     public  void ResolveRef(Tables tables)

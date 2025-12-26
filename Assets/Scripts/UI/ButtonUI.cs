@@ -4,6 +4,7 @@ using DG.Tweening;
 using QFramework;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -18,6 +19,7 @@ public enum ButtonAnim
 public class ButtonUI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, IController, ICanSendEvent
 {
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
+    [SerializeField] private TextMeshProUGUI buttonText;
     public UnityEvent OnClick;
     public ButtonAnim anim = ButtonAnim.Scale;
     public void OnPointerClick(PointerEventData eventData)
@@ -39,5 +41,10 @@ public class ButtonUI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
         {
             transform.DOScale(1f, 0.12f).SetEase(Ease.OutSine).SetUpdate(true);
         }
+    }
+
+    public void SetText(string text){
+        if (buttonText == null) return;
+        buttonText.text = text;
     }
 }
