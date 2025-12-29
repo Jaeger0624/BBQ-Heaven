@@ -29,16 +29,44 @@ public class EconomySystem : AbstractSystem, IEconomySystem
     {
         coin = new ReactiveProperty<int>(0);
         this.RegisterEvent<StartNewDayEvent>(OnStartNewDay);
+        this.RegisterEvent<DealCompletedEvent>(OnDealCompleted);
+        this.RegisterEvent<AddEncounterEvent>(OnAddEncounter);
     }
     protected override void OnDeinit()
     {
         coin.Dispose();
         this.UnRegisterEvent<StartNewDayEvent>(OnStartNewDay);
+        this.UnRegisterEvent<DealCompletedEvent>(OnDealCompleted);
+        this.UnRegisterEvent<AddEncounterEvent>(OnAddEncounter);
     }
     public void OnStartNewDay(StartNewDayEvent evt)
     {
         if (!evt.StageMeet(EventStage.System)) return;
         dailyInfo = new DailyInfo();
+    }
+    public void OnDealCompleted(DealCompletedEvent evt)
+    {
+        // 1. 增加交易次数
+        dailyInfo.dealCount++;
+
+        // 2. 更新最佳交易
+        if (dailyInfo.BestDeal == null || evt.result.price > dailyInfo.BestDeal.price)
+        {
+            dailyInfo.BestDeal = evt.result;
+        }
+
+        // 3. 更新食材销量
+        foreach (var foodInstance in evt.result.bbq.foodInstances)
+        {
+            string foodID = foodInstance.food.foodDataId;
+            if (dailyInfo.FoodSales.ContainsKey(foodID)) dailyInfo.FoodSales[foodID]++;
+            else dailyInfo.FoodSales[foodID] = 1;
+        }
+    }
+    public void OnAddEncounter(AddEncounterEvent evt)
+    {
+        // 1. 增加遭遇次数
+        dailyInfo.EncounterNames.Add(evt.activeEncounter.encounterData.Name);
     }
     public void Save(GameArchive archive)
     {
@@ -78,7 +106,7 @@ public class EconomySystem : AbstractSystem, IEconomySystem
     public void UseDailyEconomy(DailyInfo dailyInfo)
     {
         AddCoin(dailyInfo.DailyEconomy.totalScore);
-        this.SendEvent(new CreateDailyEconomyPanelEvent(dailyInfo.DailyEconomy));
+        this.SendEvent(new CreateDailyEconomyPanelEvent(dailyInfo));
     }
 }
 

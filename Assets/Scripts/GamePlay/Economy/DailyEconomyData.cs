@@ -7,16 +7,11 @@ public class DailyInfo {
     // --- 过程数据 (白天积累) ---
     public int ServedCustomerCount = 0;
     public List<string> EncounterNames = new List<string>();
-    
     // 最佳交易记录
     public DealResult BestDeal = null; 
-    
+    public int dealCount = 0;
     // 食材销量 (ID -> 数量)
     public Dictionary<string, int> FoodSales = new Dictionary<string, int>();
-
-    // --- 结果数据 (晚上计算) ---
-    public int BaseScore;
-
     public DailyEconomy DailyEconomy;
     // --- 辅助方法：记录一笔交易 ---
     public void RecordDeal(DealResult result) {
