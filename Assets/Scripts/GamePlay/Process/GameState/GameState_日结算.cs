@@ -5,8 +5,8 @@ public class GameState_日结算 : AbstractGameState
 {
     public override void OnEnter(){
         Debug.Log("【GameState】进入日结算状态");
-        IGetDailyEconomyStrategy getDailyEconomyStrategy = new GetDailyEconomyStrategy_默认();
-        this.GetSystem<IEconomySystem>().UseDailyEconomy(this.GetSystem<IEconomySystem>().GetDailyEconomyInfo(getDailyEconomyStrategy));
+        IGetDailyEconomy getDailyEconomyStrategy = new GetDailyEconomyStrategy_默认();
+        this.GetSystem<IEconomySystem>().UseDailyEconomy(this.GetSystem<IEconomySystem>().GetDailyInfo(getDailyEconomyStrategy));
     
     }
     public override void OnExit(){

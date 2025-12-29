@@ -10,12 +10,12 @@ public interface IEconomySystem : ISystem, ISavable{
     ReactiveProperty<int> coin { get; }
     void AddCoin(int amount);
     void CostCoin(int amount);
-    DailyEconomyInfo GetDailyEconomyInfo(IGetDailyEconomyStrategy getDailyEconomyStrategy);
+    DailyInfo GetDailyInfo(IGetDailyEconomy getDailyEconomyStrategy);
     /// <summary>
     /// 生效日结算
     /// </summary>
     /// <param name="dailyEconomyInfo"></param>
-    void UseDailyEconomy(DailyEconomyInfo dailyEconomyInfo);
+    void UseDailyEconomy(DailyInfo dailyEconomyData);
 }
 public class EconomySystem : AbstractSystem, IEconomySystem
 {
@@ -24,13 +24,21 @@ public class EconomySystem : AbstractSystem, IEconomySystem
     public int profitScore{get; set;} = 2;
     // Q币，用于购买道具和升级等
     public ReactiveProperty<int> coin { get; private set; }
+    private DailyInfo dailyInfo;
     protected override void OnInit()
     {
         coin = new ReactiveProperty<int>(0);
+        this.RegisterEvent<StartNewDayEvent>(OnStartNewDay);
     }
     protected override void OnDeinit()
     {
         coin.Dispose();
+        this.UnRegisterEvent<StartNewDayEvent>(OnStartNewDay);
+    }
+    public void OnStartNewDay(StartNewDayEvent evt)
+    {
+        if (!evt.StageMeet(EventStage.System)) return;
+        dailyInfo = new DailyInfo();
     }
     public void Save(GameArchive archive)
     {
@@ -55,54 +63,40 @@ public class EconomySystem : AbstractSystem, IEconomySystem
         coin.Value -= amount;
     }
 
-    public DailyEconomyInfo GetDailyEconomyInfo(IGetDailyEconomyStrategy getDailyEconomyStrategy){
-        if (getDailyEconomyStrategy == null){
-            getDailyEconomyStrategy = new GetDailyEconomyStrategy_默认();
+    public DailyInfo GetDailyInfo(IGetDailyEconomy getDailyEconomyStrategy)
+    {
+        DailyEconomy dailyEconomyInfo = getDailyEconomyStrategy.GetDailyEconomyInfo();
+
+        if (dailyInfo == null)
+        {
+            dailyInfo = new DailyInfo();
+            Debug.LogError("【EconomySystem】每日信息为空，创建新的每日信息");
         }
-        return getDailyEconomyStrategy.GetDailyEconomyInfo();
+        dailyInfo.DailyEconomy = dailyEconomyInfo;
+        return dailyInfo;
     }
-    public void UseDailyEconomy(DailyEconomyInfo dailyEconomyInfo){
-        // 1. 获取金币
-        int coin = dailyEconomyInfo.totalScore;
-
-        AddCoin(coin);
-
-        // 2. 创建日结算面板
-        this.SendEvent(new CreateDailyEconomyPanelEvent(dailyEconomyInfo));
+    public void UseDailyEconomy(DailyInfo dailyInfo)
+    {
+        AddCoin(dailyInfo.DailyEconomy.totalScore);
+        this.SendEvent(new CreateDailyEconomyPanelEvent(dailyInfo.DailyEconomy));
     }
 }
 
 
-public class DailyEconomyInfo{
-    public int baseScore{get;} // 基础
-    public int interestScore{get;} // 利息（基础最大值为5）
-    public int profitScore{get;} // 利润
-    public int totalScore{get;} // 总得分
-
-    public DailyEconomyInfo(int baseScore, int interestScore, int profitScore){
-        this.baseScore = baseScore;
-        this.interestScore = interestScore;
-        this.profitScore = profitScore;
-        this.totalScore = baseScore + interestScore + profitScore;
-    }
-
+public interface IGetDailyEconomy{
+    DailyEconomy GetDailyEconomyInfo();
 }
-
-
-public interface IGetDailyEconomyStrategy{
-    DailyEconomyInfo GetDailyEconomyInfo();
-}
-public abstract class AbstractGetDailyEconomyStrategy : IGetDailyEconomyStrategy, ICanGetSystem{
+public abstract class AbstractGetDailyEconomyStrategy : IGetDailyEconomy, ICanGetSystem{
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
-    public abstract DailyEconomyInfo GetDailyEconomyInfo();
+    public abstract DailyEconomy GetDailyEconomyInfo();
 }
 
 public class GetDailyEconomyStrategy_默认 : AbstractGetDailyEconomyStrategy{
-    public override DailyEconomyInfo GetDailyEconomyInfo(){
+    public override DailyEconomy GetDailyEconomyInfo(){
         int baseScore = this.GetSystem<IEconomySystem>().baseScore;
         int interestScore = GetInterestScore();
         int profitScore = GetProfitScore();
-        return new DailyEconomyInfo(baseScore, interestScore, profitScore);
+        return new DailyEconomy(baseScore, interestScore, profitScore);
     }
 
     private int GetInterestScore(){
@@ -133,16 +127,16 @@ public class GetDailyEconomyStrategy_默认 : AbstractGetDailyEconomyStrategy{
 }
 
 public class GetDailyEconomyStrategy_零 : AbstractGetDailyEconomyStrategy{
-    public override DailyEconomyInfo GetDailyEconomyInfo(){
-        return new DailyEconomyInfo(0, 0, 0);
+    public override DailyEconomy GetDailyEconomyInfo(){
+        return new DailyEconomy(0, 0, 0);
     }
 }
 
 public class GetDailyEconomyStrategy_拉满 : AbstractGetDailyEconomyStrategy{
-    public override DailyEconomyInfo GetDailyEconomyInfo(){
+    public override DailyEconomy GetDailyEconomyInfo(){
         int baseScore = this.GetSystem<IEconomySystem>().baseScore;
         int maxInterestScore = this.GetSystem<IEconomySystem>().maxInterestScore;
         int profitScore = this.GetSystem<IEconomySystem>().profitScore;
-        return new DailyEconomyInfo(baseScore, maxInterestScore, profitScore);
+        return new DailyEconomy(baseScore, maxInterestScore, profitScore);
     }
 }

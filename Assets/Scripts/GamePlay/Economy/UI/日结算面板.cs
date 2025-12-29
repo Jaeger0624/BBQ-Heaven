@@ -9,7 +9,7 @@ public class 日结算面板 : MonoBehaviour, IController
     [SerializeField] private TextMeshProUGUI _scoreText_利润得分;
     [SerializeField] private TextMeshProUGUI _scoreText_奖金得分;
     [SerializeField] private TextMeshProUGUI _scoreText_总得分;
-    private DailyEconomyInfo dailyEconomyInfo;
+    private DailyEconomy dailyEconomyInfo;
     [SerializeField] private CanvasGroup canvasGroup;
     void Awake()
     {
@@ -34,7 +34,7 @@ public class 日结算面板 : MonoBehaviour, IController
     {
         OnHide();
     }
-    private void SetInfo(DailyEconomyInfo dailyEconomyInfo){
+    private void SetInfo(DailyEconomy dailyEconomyInfo){
         this.dailyEconomyInfo = dailyEconomyInfo;
         UpdateScoreText();
     }
@@ -63,8 +63,8 @@ public class 日结算面板 : MonoBehaviour, IController
 
 #region 事件
 public class CreateDailyEconomyPanelEvent : AbstractEvent{
-    public DailyEconomyInfo dailyEconomyInfo;
-    public CreateDailyEconomyPanelEvent(DailyEconomyInfo dailyEconomyInfo){
+    public DailyEconomy dailyEconomyInfo;
+    public CreateDailyEconomyPanelEvent(DailyEconomy dailyEconomyInfo){
         this.dailyEconomyInfo = dailyEconomyInfo;
     }
 }

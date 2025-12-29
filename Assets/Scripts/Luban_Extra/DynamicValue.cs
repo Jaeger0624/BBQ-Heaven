@@ -92,7 +92,6 @@ namespace cfg{
     public partial class DV_食材实例数量 : DynamicValue {
         public override int GetValue(object target, List<object> param)
         {
-            
             int res = this.GetSystem<IFoodSystem>().GetFoodInstances().Where(x => x.Value.state == FoodInstanceState.棋盘上).Count();
             return res;
         }
@@ -108,6 +107,50 @@ namespace cfg{
                 return 0;
             }
             return context.targetBBQ.foodInstances.Count;
+        }
+    }
+
+    public partial class DV_回文串 : DynamicValue {
+        public override int GetValue(object target, List<object> param)
+        {
+            BBQProcessContext context = param?.FirstOrDefault() as BBQProcessContext;
+            BBQPreview preview = param?.FirstOrDefault() as BBQPreview;
+
+            if (context == null && preview == null){
+                Debug.LogError("上下文或预览为空");
+                return 0;
+            }
+            
+            // 分析回文序列
+            if (context != null){
+                int PalindromeCount = 0;
+
+
+                List<FoodInstance> foodInstances = context.targetBBQ.foodInstances;
+                int MaxCount = foodInstances.Count / 2;
+                for (int i = 0; i < MaxCount; i++){
+                    FoodInstance first = foodInstances[i];
+                    FoodInstance last = foodInstances[foodInstances.Count - i - 1];
+                    if (first.food.foodData.ID == last.food.foodData.ID){
+                        PalindromeCount++;
+                    }
+                }
+                return PalindromeCount;
+            }
+            else{
+                List<BoardEntity> boardEntities = preview.boardCells.Select(x => this.GetSystem<IBoardEntitySystem>().GetEntity(x.instanceGuid)).ToList();
+                List<FoodInstance> foodInstances = boardEntities.Where(x => x is FoodInstance).Cast<FoodInstance>().ToList();
+                int PalindromeCount = 0;
+                int MaxCount = foodInstances.Count / 2;
+                for (int i = 0; i < MaxCount; i++){
+                    FoodInstance first = foodInstances[i];
+                    FoodInstance last = foodInstances[foodInstances.Count - i - 1];
+                    if (first.food.foodData.ID == last.food.foodData.ID){
+                        PalindromeCount++;
+                    }
+                }
+                return PalindromeCount;
+            }
         }
     }
 }

@@ -50,7 +50,7 @@ public class RecipeSystem : AbstractSystem, IRecipeSystem
 
     public void MatchRecipePreview(BBQPreview preview)
     {
-        List<RecipePreview> recipePreviews = new List<RecipePreview>();
+        List<RecipeResult> recipePreviews = new List<RecipeResult>();
         StringBuilder sb = new StringBuilder();
         sb.AppendLine($"【RecipeSystem】预览匹配：");
         foreach (var recipe in recipeRepository)
@@ -58,12 +58,12 @@ public class RecipeSystem : AbstractSystem, IRecipeSystem
             int rank = recipe.PreviewMatch(new List<object>{preview});
             if (rank > 0)
             {
-                recipePreviews.Add(new RecipePreview(rank, recipe));
+                recipePreviews.Add(new RecipeResult(rank, recipe));
 
                 sb.AppendLine($"- {recipe.name}, 第{rank}档");
             }
         }
-        Debug.Log(sb.ToString());
+        // Debug.Log(sb.ToString());
         this.SendEvent(new MatchRecipePreviewEvent(recipePreviews));
     }
 
@@ -80,19 +80,28 @@ public class RecipeSystem : AbstractSystem, IRecipeSystem
         BBQ bbq = context.targetBBQ;
 
         // 1. 获取匹配成功的配方列表
-        List<Recipe> matchedRecipes = matchRecipeStrategy.Match(bbq, recipeRepository);
-        if (matchedRecipes.Count == 0)
+        List<RecipeResult> matchedRecipeResult = new List<RecipeResult>();
+        foreach (var recipe in recipeRepository)
+        {
+            int rank = recipe.PreviewMatch(new List<object>{context});
+            if (rank > 0)
+            {
+                matchedRecipeResult.Add(new RecipeResult(rank, recipe));
+            }
+        }
+
+        if (matchedRecipeResult.Count == 0)
         {
             Debug.Log($"【RecipeSystem】没有匹配到任何配方");
         }
         else{
-            string matchedRecipesString = string.Join(", ", matchedRecipes.Select(x => x.name));
+            string matchedRecipesString = string.Join(", ", matchedRecipeResult.Select(x => x.recipe.name));
             Debug.Log($"【RecipeSystem】匹配成功的配方: {matchedRecipesString}");
         }
         // 1.1 发送匹配成功事件
-        this.SendEvent(new MatchRecipeEvent(matchedRecipes));
+        this.SendEvent(new MatchRecipeEvent(matchedRecipeResult));
         // 2. 执行匹配成功的配方
-        matchedRecipes.ForEach(recipe => ExecuteRecipe(recipe, param));
+        matchedRecipeResult.ForEach(recipeResult => ExecuteRecipe(recipeResult.recipe, param));
     }
 
     public void RegisterRecipe(string id){

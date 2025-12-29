@@ -14,7 +14,7 @@ public class RecipePreviewView : MonoBehaviour{
     [SerializeField] private MMF_Player createFeedback;
     [SerializeField] private MMF_Player removeFeedback;
     private LayoutElement layoutElement;
-    private RecipePreview recipePreview;
+    private RecipeResult recipePreview;
     void Awake()
     {
         layoutElement = gameObject.AddComponent<LayoutElement>();
@@ -23,7 +23,7 @@ public class RecipePreviewView : MonoBehaviour{
     {
         createFeedback.PlayFeedbacks();
     }
-    public void Bind(RecipePreview recipePreview){
+    public void Bind(RecipeResult recipePreview){
         this.recipePreview = recipePreview;
         UpdateVisual();
     }

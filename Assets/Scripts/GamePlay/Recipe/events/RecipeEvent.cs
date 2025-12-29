@@ -2,23 +2,23 @@ using System.Collections.Generic;
 using QFramework;
 
 public class MatchRecipeEvent : AbstractEvent{
-    public List<Recipe> matchedRecipes;
-    public MatchRecipeEvent(List<Recipe> matchedRecipes){
-        this.matchedRecipes = matchedRecipes;
+    public List<RecipeResult> matchedRecipePreviews;
+    public MatchRecipeEvent(List<RecipeResult> matchedRecipePreviews){
+        this.matchedRecipePreviews = matchedRecipePreviews;
     }
 }
 
-public class RecipePreview{
+public class RecipeResult{
     public int rank;
     public Recipe recipe;
-    public RecipePreview(int rank, Recipe recipe){
+    public RecipeResult(int rank, Recipe recipe){
         this.rank = rank;
         this.recipe = recipe;
     }
 }
 public class MatchRecipePreviewEvent : AbstractEvent{
-    public List<RecipePreview> recipePreviews;
-    public MatchRecipePreviewEvent(List<RecipePreview> recipePreviews){
+    public List<RecipeResult> recipePreviews;
+    public MatchRecipePreviewEvent(List<RecipeResult> recipePreviews){
         this.recipePreviews = recipePreviews;
     }
 }

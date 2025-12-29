@@ -80,6 +80,7 @@ public class BoardController : MonoBehaviour, IController, ICanSendEvent
         this.highlightedCells = highlightedCells;
         boardViewUGUI.HighlightCells(highlightedCells.Select(x => x.position).ToList(), true);
 
+
         BBQPreview preview = PreviewBBQ(selectedStick, foodInstances, highlightedCells);
 
         // 2. 设置预览

@@ -26,12 +26,12 @@ public class RecipeController : MonoBehaviour, IController, ICanSendEvent
     {
         List<IAnimTask> animTasks = new List<IAnimTask>();
         // 1. 展示配方消息
-        foreach (var recipe in evt.matchedRecipes)
+        foreach (var recipeResult in evt.matchedRecipePreviews)
         {
             float time = SettingManager.Instance.AnimSettings.textSpawnLifetime_配方;
             Vector3 position = AnimUtility.GetTextSpawnPosition(Vector3.zero);
             animTasks.Add(new SpawnTextAnimationTask
-            (BuildRecipeText(recipe), 8f, Color.white, position, time));
+            (BuildRecipeText(recipeResult.recipe), 8f, Color.white, position, time));
             animTasks.Add(new DelayAnimTask(time, true));
         }
         animTasks.Add(new ActionAnimTask(() => this.SendEvent(new TriggerGAEvent("配方演出动画结束"))));

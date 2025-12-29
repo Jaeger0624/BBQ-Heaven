@@ -43,6 +43,8 @@ public class ScoreSystem : AbstractSystem, IScoreSystem
         this.GetSystem<IAnimationSystem>().Append(new ActionAnimTask(() => {
             this.SendEvent(new ChangeScoreEvent(changeScore));
         }));
+
+        this.GetSystem<IAnimationSystem>().Play();
     }
 
     private void SetTargetScore(int targetScore)

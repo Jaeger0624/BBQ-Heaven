@@ -4186,7 +4186,7 @@ MonoBehaviour:
   m_ChildAlignment: 4
   m_StartCorner: 2
   m_StartAxis: 1
-  m_CellSize: {x: 105, y: 105}
+  m_CellSize: {x: 100, y: 100}
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 1
   m_ConstraintCount: 8
@@ -11060,8 +11060,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 65}
-  m_SizeDelta: {x: 885.81, y: 892.43}
+  m_AnchoredPosition: {x: 0, y: 72.8}
+  m_SizeDelta: {x: 858.62, y: 865.04}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1173862510
 MonoBehaviour:
@@ -14787,7 +14787,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1572203323}
-  - component: {fileID: 1572203324}
   m_Layer: 0
   m_Name: "\u906D\u9047\u9009\u62E9\u9762\u677F"
   m_TagString: Untagged
@@ -14814,23 +14813,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1572203324
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1572203322}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62428069c3ac8a54f9397593349d716f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canvasGroup: {fileID: 0}
-  titleText: {fileID: 0}
-  descriptionText: {fileID: 0}
-  optionsContainer: {fileID: 0}
-  optionButtonPrefab: {fileID: 0}
 --- !u!1 &1578447278
 GameObject:
   m_ObjectHideFlags: 0
@@ -22278,7 +22260,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1672986230254023067, guid: 4b0b33e978bcdcd4c95339400b48f0d0, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 344.07
       objectReference: {fileID: 0}
     - target: {fileID: 1888688214262151321, guid: 4b0b33e978bcdcd4c95339400b48f0d0, type: 3}
       propertyPath: m_Pivot.x

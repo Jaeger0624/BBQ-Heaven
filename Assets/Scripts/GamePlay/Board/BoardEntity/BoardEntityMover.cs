@@ -76,7 +76,7 @@ public class BoardEntityMover : ICanGetSystem, ICanSendEvent
         Debug.Log($"【BoardEntityMover】方向移动实体: {entity.name} 向 {directionEnum} 移动 {distance} 步");
         BoardCell endCell = this.GetSystem<IBoardSystem>().GetStopPosition(entity.position, direction, distance, out BoardEntity target);
         if (target != null){
-            Debug.Log($"触发碰撞: {entity.name} 和 {target.name}");
+            Debug.Log($"<color=orange>触发碰撞: {entity.name} 和 {target.name}</color>");
             TriggerCollision(entity, target);
         }
         return MoveEntityTo(endCell.position, entity);
