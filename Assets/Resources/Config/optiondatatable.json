@@ -23,7 +23,7 @@
   },
   {
     "ID": "砍价_不接受",
-    "name": "",
+    "name": "不接受！",
     "description": "",
     "effectDescription": "",
     "action": {

@@ -35,7 +35,6 @@ public class EncounterController : MonoBehaviour, IController, ICanSendEvent
 
     private void OnAddEncounter(AddEncounterEvent evt)
     {
-        Debug.Log($"添加事件: {evt.activeEncounter.encounterData.ID}");
         nameText.text = evt.activeEncounter.encounterData.Name;
         descriptionText.text = evt.activeEncounter.encounterData.Description;
 

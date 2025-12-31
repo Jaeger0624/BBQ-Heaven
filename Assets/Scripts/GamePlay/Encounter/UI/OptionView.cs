@@ -6,6 +6,7 @@ using UnityEngine;
 public class OptionView : MonoBehaviour, IController
 {
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
+    [SerializeField] private TextMeshProUGUI nameText;
     [SerializeField] private TextMeshProUGUI descriptionText;
     [SerializeField] private TextMeshProUGUI effectDescriptionText;
     [SerializeField] private ButtonUI button;
@@ -13,6 +14,7 @@ public class OptionView : MonoBehaviour, IController
 
     public void Bind(OptionData optionData)
     {
+        nameText.text = optionData.Name;
         descriptionText.text = optionData.Description;
         effectDescriptionText.text = optionData.EffectDescription;
         CGA cga = new CGA(optionData.Action);

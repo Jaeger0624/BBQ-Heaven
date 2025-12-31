@@ -136,5 +136,74 @@
         }
       }
     ]
+  },
+  {
+    "ID": "3",
+    "name": "优雅回文",
+    "description": "回文串！",
+    "ruleDescription": "",
+    "actionDescription": "",
+    "rules": [
+      {
+        "rank": 1,
+        "action": {
+          "ID": "",
+          "conditions": [
+            {
+              "$type": "Condition_DV检测",
+              "DV1": {
+                "$type": "DV_回文串"
+              },
+              "sign": 4,
+              "DV2": {
+                "$type": "DV_值",
+                "number": 2
+              }
+            }
+          ],
+          "actions": []
+        }
+      },
+      {
+        "rank": 2,
+        "action": {
+          "ID": "",
+          "conditions": [
+            {
+              "$type": "Condition_DV检测",
+              "DV1": {
+                "$type": "DV_回文串"
+              },
+              "sign": 4,
+              "DV2": {
+                "$type": "DV_值",
+                "number": 3
+              }
+            }
+          ],
+          "actions": []
+        }
+      },
+      {
+        "rank": 3,
+        "action": {
+          "ID": "",
+          "conditions": [
+            {
+              "$type": "Condition_DV检测",
+              "DV1": {
+                "$type": "DV_回文串"
+              },
+              "sign": 4,
+              "DV2": {
+                "$type": "DV_值",
+                "number": 4
+              }
+            }
+          ],
+          "actions": []
+        }
+      }
+    ]
   }
 ]

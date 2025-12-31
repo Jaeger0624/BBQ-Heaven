@@ -26,6 +26,8 @@ MonoBehaviour:
         - globalObjectIdString: GlobalObjectId_V1-2-37047d2fed1fddb4b9e36c3cad745512-1662015720-0
         - globalObjectIdString: GlobalObjectId_V1-2-37047d2fed1fddb4b9e36c3cad745512-423452050-0
         - globalObjectIdString: GlobalObjectId_V1-2-37047d2fed1fddb4b9e36c3cad745512-1175858656-0
+        - globalObjectIdString: GlobalObjectId_V1-2-37047d2fed1fddb4b9e36c3cad745512-2065834018-0
+        - globalObjectIdString: GlobalObjectId_V1-2-37047d2fed1fddb4b9e36c3cad745512-52977273-0
         values:
         - colorIndex: 3
           iconNameOrGuid: 
@@ -53,6 +55,14 @@ MonoBehaviour:
           isColorRecursive: 0
         - colorIndex: 0
           iconNameOrGuid: Light Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 0
+          iconNameOrGuid: NetworkDiscovery Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 0
+          iconNameOrGuid: NetworkDiscovery Icon
           isIconRecursive: 0
           isColorRecursive: 0
     - goDatas_byGlobalId:

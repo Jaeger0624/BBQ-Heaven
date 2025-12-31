@@ -13,10 +13,10 @@ public class RemoveEncounterEvent : AbstractEvent{
         this.activeEncounter = activeEncounter;
     }
 }
-public class StartInstantEncounterEvent : AbstractEvent{
-    public InstantEncounterData data;
-    public StartInstantEncounterEvent(InstantEncounterData data){
-        this.data = data;
+public class TriggerInstantEncounterEvent : AbstractEvent{
+    public InstantEncounter instantEncounter;
+    public TriggerInstantEncounterEvent(InstantEncounter instantEncounter){
+        this.instantEncounter = instantEncounter;
     }
 }
 #endregion

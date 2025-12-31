@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using cfg;
 using DG.Tweening;
 using QFramework;
+using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,33 +20,40 @@ public class EncounterInteractionPanel : MonoBehaviour, IController
     private List<OptionView> optionViews = new List<OptionView>();
 
     // 缓存当前正在处理的遭遇数据
-    private InstantEncounterData currentData;
+    private InstantEncounter currentEncounter;
 
     void Start()
     {
         Hide(true);
-        this.RegisterEvent<StartInstantEncounterEvent>(OnStartInstantEncounter);
+        this.RegisterEvent<TriggerInstantEncounterEvent>(OnStartInstantEncounter);
     }
 
     void OnDestroy()
     {
-        this.UnRegisterEvent<StartInstantEncounterEvent>(OnStartInstantEncounter);
+        this.UnRegisterEvent<TriggerInstantEncounterEvent>(OnStartInstantEncounter);
+    }
+    [Button("测试")]
+    private void Test(){
+        this.GetSystem<IEncounterSystem>().TriggerInstantEncounter("1");
     }
 
-    private void OnStartInstantEncounter(StartInstantEncounterEvent evt)
+    private void OnStartInstantEncounter(TriggerInstantEncounterEvent evt)
     {
-        currentData = evt.data;
+        currentEncounter = evt.instantEncounter;
         UpdateView();
         Show();
     }
 
     private void UpdateView()
     {
-        if (currentData == null) return;
+        if (currentEncounter == null){
+            Debug.LogError("当前瞬间遭遇为空");
+            return;
+        }
 
         // 1. 设置文本
-        titleText.text = currentData.Name;
-        descriptionText.text = currentData.Description;
+        titleText.text = currentEncounter.Name;
+        descriptionText.text = currentEncounter.Description;
 
         // 2. 生成选项
         RefreshOptions();
@@ -80,30 +88,25 @@ public class EncounterInteractionPanel : MonoBehaviour, IController
         }
         optionViews.Clear();
 
-        if (currentData.Options == null || currentData.Options.Count == 0)
+        if (currentEncounter.options == null || currentEncounter.options.Count == 0)
         {
             // 如果没有配置选项，生成一个默认的"确定"按钮
             CreateOptionView(this.GetSystem<IDataSystem>().GetOptionData("默认"));
             return;
         }
-
-        foreach (var option in currentData.Options)
+        foreach (var option in currentEncounter.options)
         {
-            // 获取选项配置
-            OptionData optionData = this.GetSystem<IDataSystem>().GetOptionData(option);
-
-            // 创建按钮
-            CreateOptionView(optionData);
+            CreateOptionView(option);
         }
     }
 
-    private void CreateOptionView(OptionData optionData)
+    private void CreateOptionView(OptionData option)
     {
         // 1. 创建选项视图
         OptionView optionView = Instantiate(optionViewPrefab, optionsContainer).GetComponent<OptionView>();
 
         // 2. 绑定数据
-        optionView.Bind(optionData);
+        optionView.Bind(option);
         
         // 3. 添加到列表
         optionViews.Add(optionView);

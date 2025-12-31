@@ -10,6 +10,7 @@ using UnityEngine;
 public interface IEncounterSystem : ISystem{
     void StartEncounter(string id);
     void EndEncounter(string id);
+    void TriggerInstantEncounter(string id);
     List<ActiveEncounter> ActiveEncounters { get; }
 }
 
@@ -108,5 +109,23 @@ public class EncounterSystem : AbstractSystem, IEncounterSystem
                 EndEncounter(activeEncounter.encounterData.ID);
             }
         }
+    }
+
+    public void TriggerInstantEncounter(string id)
+    {
+        // 1. 获取瞬间遭遇数据
+        InstantEncounterData instantEncounterData = this.GetSystem<IDataSystem>().GetInstantEncounterData(id);
+        if (instantEncounterData == null) {Debug.LogError($"瞬间遭遇 {id} 不存在"); return;}
+
+        // 2. 获取选项
+        List<OptionData> options = instantEncounterData.Options.Select(x => this.GetSystem<IDataSystem>().GetOptionData(x)).ToList();
+        if (options.Count == 0){Debug.LogError($"瞬间遭遇 {id} 没有选项"); return;}
+
+        // 3. 创建瞬间遭遇实例
+        InstantEncounter instantEncounter = new InstantEncounter(instantEncounterData, options);
+
+        // 4. 发送事件
+        this.SendEvent(new TriggerInstantEncounterEvent(instantEncounter));
+        Debug.Log($"【EncounterSystem】触发瞬间遭遇: {instantEncounter.Name}");
     }
 }
