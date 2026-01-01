@@ -19,4 +19,11 @@ public class TriggerInstantEncounterEvent : AbstractEvent{
         this.instantEncounter = instantEncounter;
     }
 }
+
+public class SelectOptionEvent : AbstractEvent{
+    public OptionData optionData;
+    public SelectOptionEvent(OptionData optionData){
+        this.optionData = optionData;
+    }
+}
 #endregion

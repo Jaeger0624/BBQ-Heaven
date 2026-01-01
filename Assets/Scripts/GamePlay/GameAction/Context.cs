@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using QFramework;
 
 public class DealContext{
-    public readonly BBQ targetBBQ;
-    public readonly Customer targetCustomer;
-	public readonly CustomerSatisfaction targetCustomerSatisfaction;
+    public readonly BBQ BBQ;
+    public readonly Customer Customer;
+	public readonly CustomerSatisfaction Satisfaction;
+
+    public readonly Dictionary<string, float> OtherMultipliers;
 
     public DealContext(BBQ targetBBQ, Customer targetCustomer, CustomerSatisfaction targetCustomerSatisfaction){
-        this.targetBBQ = targetBBQ;
-        this.targetCustomer = targetCustomer;
-        this.targetCustomerSatisfaction = targetCustomerSatisfaction;
-
+        this.BBQ = targetBBQ;
+        this.Customer = targetCustomer;
+        this.Satisfaction = targetCustomerSatisfaction;
+        this.OtherMultipliers = new Dictionary<string, float>();
     }
 }
 

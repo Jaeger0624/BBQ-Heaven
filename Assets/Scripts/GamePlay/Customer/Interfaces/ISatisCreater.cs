@@ -7,14 +7,14 @@ using UnityEngine;
 public interface ISatisCreater{
     public string Name { get; }
     bool hasUsed { get; set; }
-    float Calculate(BBQ bbq, Customer customer);
+    float Calculate(DealContext context);
     IAnimTask GetAnimTask();
 }
 
 public abstract class AbstractSatisCreater : ISatisCreater, ICanGetSystem{
     public abstract string Name { get; }
     public bool hasUsed { get; set; } = true;
-    public abstract float Calculate(BBQ bbq, Customer customer);
+    public abstract float Calculate(DealContext context);
     public abstract IAnimTask GetAnimTask();
 
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
@@ -25,19 +25,17 @@ public class SatisCreater_测试 : AbstractSatisCreater
     private List<string> foodInstancesGuids = new List<string>();
     public override string Name => "测试";
     private IAnimTask animTask;
-    public override float Calculate(BBQ bbq, Customer customer)
+    public override float Calculate(DealContext context)
     {
         foodInstancesGuids.Clear();
-        foodInstancesGuids.AddRange(bbq.foodInstances.Select(x => x.guid));
+        foodInstancesGuids.AddRange(context.BBQ.foodInstances.Select(x => x.guid));
         float res = 1f;
         List<IAnimTask> animTasks = new List<IAnimTask>();
-        // 0. 创建上下文
-        CustomerSatisfaction satisfaction = this.GetSystem<ICustomerSystem>().Satisfaction;
-        DealContext context = new DealContext(bbq, customer, satisfaction);
+
         foodInstancesGuids.ForEach(x => {
             // 1. 执行乘区（真正乘到满意度上的）
             GameAction ga = new GA_创建满意度乘区(1.1f, Name, false);
-            this.GetSystem<IGASystem>().ApplyGA(customer, ga, new List<object>{context});
+            this.GetSystem<IGASystem>().ApplyGA(context.Customer, ga, new List<object>{context});
             // 2. 添加动画任务
             Transform target = SettingManager.Instance.SatisfactionTextParent;
             animTasks.Add(AnimCombine_顾客Tag.Anim_Tag触发_单一突出(x, 1.1f, Name, target));
@@ -56,9 +54,10 @@ public class SatisCreater_测试 : AbstractSatisCreater
 public class SatisCreater_具体食材 : AbstractSatisCreater
 {
     public override string Name => "具体食材";
-    public override float Calculate(BBQ bbq, Customer customer)
+    public override float Calculate(DealContext context)
     {
-        
+        Customer customer = context.Customer;
+        BBQ bbq = context.BBQ;
         List<Food> Foods = bbq.foodInstances.Select(x => x.food).ToList();
         if (customer.preferences == null || customer.preferences.foodIds == null || customer.preferences.foodIds.Count == 0){
             hasUsed = false;
@@ -78,8 +77,10 @@ public class SatisCreater_食材类型 : AbstractSatisCreater
     public override string Name => "食材类型";
     private int amount = 0;
     private List<string> foodInstancesGuids = new List<string>();
-    public override float Calculate(BBQ bbq, Customer customer)
+    public override float Calculate(DealContext context)
     {
+        Customer customer = context.Customer;
+        BBQ bbq = context.BBQ;
         if (customer.preferences == null || customer.preferences.foodTypes == null || customer.preferences.foodTypes.Count == 0){
             hasUsed = false;
             return 1f;
@@ -102,8 +103,10 @@ public class SatisCreater_食材类型 : AbstractSatisCreater
 public class SatisCreater_配方喜好 : AbstractSatisCreater
 {
     public override string Name => "配方喜好";
-    public override float Calculate(BBQ bbq, Customer customer)
+    public override float Calculate(DealContext context)
     {
+        Customer customer = context.Customer;
+        BBQ bbq = context.BBQ;
         if (customer.preferences == null || customer.preferences.recipeIds == null || customer.preferences.recipeIds.Count == 0){
             hasUsed = false;
             return 1f;
@@ -123,7 +126,7 @@ public class SatisHolder : ICanGetSystem, ICanSendEvent{
     public SatisHolder(){
         this.satisCreaters = new List<ISatisCreater>{};
     }
-    public void Calculate(BBQ bbq, Customer customer){
+    public void Calculate(DealContext context){
 
         foreach (var satisCreater in satisCreaters){
             // 1. 执行计算（生成动画）

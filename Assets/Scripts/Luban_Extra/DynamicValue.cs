@@ -106,7 +106,7 @@ namespace cfg{
                 Debug.LogError("上下文为空");
                 return 0;
             }
-            return context.targetBBQ.foodInstances.Count;
+            return context.BBQ.foodInstances.Count;
         }
     }
 

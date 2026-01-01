@@ -10,7 +10,7 @@ using UnityEngine;
 public interface IEncounterSystem : ISystem{
     void StartEncounter(string id);
     void EndEncounter(string id);
-    void TriggerInstantEncounter(string id);
+    void TriggerInstantEncounter(string id, List<object> param);
     List<ActiveEncounter> ActiveEncounters { get; }
 }
 
@@ -29,13 +29,18 @@ public class EncounterSystem : AbstractSystem, IEncounterSystem
     public List<ActiveEncounter> ActiveEncounters => _activeEncounters;
     protected override void OnInit()
     {
+        // 1. 监听时间Tick事件
         this.RegisterEvent<TimeTickEvent>(OnTimeTickEvent);
+        // 2. 监听完成烧烤事件
         this.RegisterEvent<FinishCombineBBQEvent>(OnCombineBBQEvent);
+        // 3. 监听选择选项事件
+        this.RegisterEvent<SelectOptionEvent>(OnSelectOptionEvent);
     }
     protected override void OnDeinit()
     {
         this.UnRegisterEvent<TimeTickEvent>(OnTimeTickEvent);
         this.UnRegisterEvent<FinishCombineBBQEvent>(OnCombineBBQEvent);
+        this.UnRegisterEvent<SelectOptionEvent>(OnSelectOptionEvent);
     }
     public void StartEncounter(string id)
     {   
@@ -111,7 +116,8 @@ public class EncounterSystem : AbstractSystem, IEncounterSystem
         }
     }
 
-    public void TriggerInstantEncounter(string id)
+    // 触发瞬时遭遇必须要提供上下文
+    public void TriggerInstantEncounter(string id, List<object> param)
     {
         // 1. 获取瞬间遭遇数据
         InstantEncounterData instantEncounterData = this.GetSystem<IDataSystem>().GetInstantEncounterData(id);
@@ -127,5 +133,12 @@ public class EncounterSystem : AbstractSystem, IEncounterSystem
         // 4. 发送事件
         this.SendEvent(new TriggerInstantEncounterEvent(instantEncounter));
         Debug.Log($"【EncounterSystem】触发瞬间遭遇: {instantEncounter.Name}");
+    }
+    private void OnSelectOptionEvent(SelectOptionEvent evt) => HandleOption(evt.optionData);
+    private void HandleOption(OptionData optionData)
+    {
+        Debug.Log($"【EncounterSystem】选择选项: {optionData.Name}");
+        CGA cga = new CGA(optionData.Action);
+        this.GetSystem<IGASystem>().ApplyCGA(this, cga, null);
     }
 }

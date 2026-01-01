@@ -14,13 +14,14 @@ public interface IDealSystem : ISystem{
     // 执行交易
 	void ExecuteDeal(BBQ bbq, Customer customer);
 	// 仅计算不落账（用于预览）
-	DealResult PreviewDeal(BBQ bbq, Customer customer);
+	DealResult PreviewDeal(DealContext context);
     // 读取当前正在处理的交易（供 GA 等效果访问）
     Deal GetCurrentDeal();
 
 	void AddScoreMultiplier(string name, float multiplier);
 	void RemoveScoreMultiplier(string name);
 }
+
 
 public class DealSystem : AbstractSystem, IDealSystem
 {
@@ -50,6 +51,12 @@ public class DealSystem : AbstractSystem, IDealSystem
 			Debug.LogError($"【DealSystem】尝试移除不存在的得分乘区: {name}");
 		}
 	}
+	private void ResetSatisfaction(){	
+        // 暴露给GA的满意度计算
+        CustomerSatisfaction currentSatisfaction = this.GetSystem<ICustomerSystem>().Satisfaction;
+        if (currentSatisfaction != null) Debug.LogError("当前满意度应当为空");
+        this.GetSystem<ICustomerSystem>().Satisfaction = new CustomerSatisfaction();
+	}
 	public void ExecuteDeal(BBQ bbq, Customer customer)
     {
 		if (bbq == null || customer == null) return;
@@ -63,11 +70,15 @@ public class DealSystem : AbstractSystem, IDealSystem
 			new DelayAnimTask(0.5f, true),
 		}));
 
+		// 重置满意度
+		ResetSatisfaction();
+
+		// 创建上下文
+		DealContext context = new DealContext(bbq, customer, this.GetSystem<ICustomerSystem>().Satisfaction);
 
 		// 进行满意度的处理计算
-		DealResult result = CalculateInternal(bbq, customer, false);
-		
-		
+		DealResult result = CalculateInternal(context, false);
+				
 		Debug.Log(result.DealInfo());
 
 		// 将得分转换
@@ -105,24 +116,24 @@ public class DealSystem : AbstractSystem, IDealSystem
 		stick.TryReturnStick();
     }
 
-	public DealResult PreviewDeal(BBQ bbq, Customer customer)
+	public DealResult PreviewDeal(DealContext context)
 	{
-		if (bbq == null || customer == null) return null;
-		return CalculateInternal(bbq, customer, true);
+		if (context == null) return null;
+		return CalculateInternal(context, true);
 	}
 
-	private DealResult CalculateInternal(BBQ bbq, Customer customer, bool isPreview)    
+	private DealResult CalculateInternal(DealContext context, bool isPreview)    
 	{
         
 		// 获取满意度（含顾客身上 Tag 的效果执行）
-		if (!isPreview) Debug.Log($"【DealSystem】开始计算满意度：顾客:{customer.name}");
+		if (!isPreview) Debug.Log($"【DealSystem】开始计算满意度：顾客:{context.Customer.name}");
 
 		// 最终满意度总乘区
-		(float satisfaction, CustomerSatisfaction Satis) = GetSatisfaction(bbq, customer, isPreview);
+		(float satisfaction, CustomerSatisfaction Satis) = GetSatisfaction(context, isPreview);
 
 		// 定价：满意度乘区 × 珍稀度 × 美味度（耐心作为可选修正，不在基础公式中）
-		int rarity = bbq.totalRarity.Value;
-		int taste = bbq.totalTaste.Value;
+		int rarity = context.BBQ.totalRarity.Value;
+		int taste = context.BBQ.totalTaste.Value;
 		float rawPrice = satisfaction * rarity * taste;
 
 		// 获取其他得分乘区
@@ -137,7 +148,7 @@ public class DealSystem : AbstractSystem, IDealSystem
 		int money = earnMoneyStrategy.EarnMoney(roundedRawPrice);
 
 
-		DealResult result = new DealResult(bbq, customer, satisfaction, Satis, otherMultipliers, rarity, taste, money, rawPrice);
+		DealResult result = new DealResult(context.BBQ, context.Customer, satisfaction, Satis, otherMultipliers, rarity, taste, money, rawPrice);
 
 		// 基础计算完成：派发事件，允许 GA 基于当前交易对结果进行调整
 		return result;
@@ -150,33 +161,26 @@ public class DealSystem : AbstractSystem, IDealSystem
 
     //TODO: 此处安插公式计算顾客满意度
     private (float satisfaction, CustomerSatisfaction satisfactionSystem) GetSatisfaction(
-        BBQ bbq,
-        Customer customer,
+        DealContext context,
         bool isPreview)
 		{
-        ICustomerSystem customerSystem = this.GetSystem<ICustomerSystem>();
-
-        // 暴露给GA的满意度计算
-        CustomerSatisfaction currentSatisfaction = this.GetSystem<ICustomerSystem>().Satisfaction;
-        if (currentSatisfaction != null) Debug.LogError("当前满意度应当为空");
-        this.GetSystem<ICustomerSystem>().Satisfaction = new CustomerSatisfaction();
 
 		List<ISatisCreater> satisCreaters = new List<ISatisCreater>(){};
 
 		// 1. 执行满意度（内会执行GA）
-		satisCreaters.ForEach(x => x.Calculate(bbq, customer));
+		satisCreaters.ForEach(x => x.Calculate(context));
 
 		// 2. 添加动画任务（偏好）
 		satisCreaters.ForEach(x => this.GetSystem<IAnimationSystem>().Append(x.GetAnimTask()));
 		this.GetSystem<IAnimationSystem>().Play();
 
 		// 3. 显示标签视图
-		bool hasAnyTagTriggered = customer.customerTags.Any(tag => tag.Preview(customer, bbq).Any(x => x));
+		bool hasAnyTagTriggered = context.Customer.customerTags.Any(tag => tag.Preview(context).Any(x => x));
 		if (hasAnyTagTriggered) this.GetSystem<IAnimationSystem>().Append(AnimCombine_顾客Tag.Anim_顾客Tag_显示标签视图());
 
-		customer.customerTags.ForEach(tag => {
+		context.Customer.customerTags.ForEach(tag => {
 			// 4. 内部顺序显示Tag结算与CGA效果
-			tag.Execute(customer, bbq);
+			tag.Execute(context);
 		});
 
 		// 5. 隐藏标签视图
@@ -186,12 +190,13 @@ public class DealSystem : AbstractSystem, IDealSystem
 		}
 
         // 取回当前值后，设置为空
-        float satisfaction = customerSystem.Satisfaction.GetFinal();
+        float satisfaction = context.Satisfaction.GetFinal();
 
         // 获取并传出，随后设置为空
-        CustomerSatisfaction cur = customerSystem.Satisfaction;
-        customerSystem.Satisfaction = null;
+        CustomerSatisfaction cur = context.Satisfaction;
 
+		// 设置满意度为空
+		this.GetSystem<ICustomerSystem>().Satisfaction = null;
         return (satisfaction, cur);
     }
 }

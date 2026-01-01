@@ -6,8 +6,8 @@ using UnityEngine;
 
 public interface ICustomerTag{
     string name { get; }
-    void Execute(Customer customer, BBQ bbq);
-    List<bool> Preview(Customer customer, BBQ bbq);
+    void Execute(DealContext context);
+    List<bool> Preview(DealContext context);
 }
 
 public class CustomerTag : ICustomerTag, ICanGetSystem, ICanSendEvent
@@ -22,14 +22,9 @@ public class CustomerTag : ICustomerTag, ICanGetSystem, ICanSendEvent
             this.tagCGAs.Add(new TagCGA(tagCGA));
         }
     }
-    public void Execute(Customer customer, BBQ bbq)
+    public void Execute(DealContext context)
     {
-        List<bool> previewResults = Preview(customer, bbq);
-        // 0. 创建上下文
-        CustomerSatisfaction satisfaction = this.GetSystem<ICustomerSystem>().Satisfaction;
-        DealContext context = new DealContext(bbq, customer, satisfaction);
-
-
+        List<bool> previewResults = Preview(context);
         if (previewResults.Any(x => x)){
             // 1. 发送事件，先播放动画（而且不是实时，必须要异步延迟）
             this.GetSystem<IAnimationSystem>().Append(new ActionAnimTask(() => {
@@ -48,7 +43,7 @@ public class CustomerTag : ICustomerTag, ICanGetSystem, ICanSendEvent
             cga.Cga.Actions.ForEach(x => x.SetRelation(previewResults));
             
             // 2.2 执行
-            this.GetSystem<IGASystem>().ApplyCGA(customer, cga.Cga, new List<object>{context});
+            this.GetSystem<IGASystem>().ApplyCGA(context.Customer, cga.Cga, new List<object>{context});
         }
 
         int index = results.FindIndex(x => x == true);
@@ -61,16 +56,14 @@ public class CustomerTag : ICustomerTag, ICanGetSystem, ICanSendEvent
     }
     
     // 不实际执行，只返回是否满足条件的结果
-    public List<bool> Preview(Customer customer, BBQ bbq)
+    public List<bool> Preview(DealContext context)
     {
-        DealContext context = new DealContext(bbq, customer, this.GetSystem<ICustomerSystem>().Satisfaction);
-
         List<bool> results = new List<bool>();
         foreach (var cga in tagCGAs){
 
 
             // 1. 检测单个是否触发
-            bool result = cga.Cga.Conditions.All(x => x.Evaluate(customer, new List<object>{context}));
+            bool result = cga.Cga.Conditions.All(x => x.Evaluate(context.Customer, new List<object>{context}));
             
             // 2. 添加至最终结果
             results.Add(result);

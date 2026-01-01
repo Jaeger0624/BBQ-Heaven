@@ -26,15 +26,21 @@ public class EncounterInteractionPanel : MonoBehaviour, IController
     {
         Hide(true);
         this.RegisterEvent<TriggerInstantEncounterEvent>(OnStartInstantEncounter);
+        this.RegisterEvent<SelectOptionEvent>(OnSelectOption);
     }
 
     void OnDestroy()
     {
         this.UnRegisterEvent<TriggerInstantEncounterEvent>(OnStartInstantEncounter);
+        this.UnRegisterEvent<SelectOptionEvent>(OnSelectOption);
+    }
+    private void OnSelectOption(SelectOptionEvent evt)
+    {
+        Hide();
     }
     [Button("测试")]
     private void Test(){
-        this.GetSystem<IEncounterSystem>().TriggerInstantEncounter("1");
+        this.GetSystem<IEncounterSystem>().TriggerInstantEncounter("1", new List<object>());
     }
 
     private void OnStartInstantEncounter(TriggerInstantEncounterEvent evt)
