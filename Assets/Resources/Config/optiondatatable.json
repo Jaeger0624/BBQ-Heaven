@@ -13,19 +13,25 @@
   {
     "ID": "砍价_接受",
     "name": "接受砍价",
-    "description": "",
-    "effectDescription": "",
+    "description": "砍就砍吧！",
+    "effectDescription": "客人可能会带他的好朋友一起来",
     "action": {
-      "ID": "",
+      "ID": "1",
       "conditions": [],
-      "actions": []
+      "actions": [
+        {
+          "$type": "GA_创建临时乘区",
+          "Name": "砍价",
+          "value": 0.8
+        }
+      ]
     }
   },
   {
     "ID": "砍价_不接受",
     "name": "不接受！",
-    "description": "",
-    "effectDescription": "",
+    "description": "怎么可以！",
+    "effectDescription": "客人可能会愤然离去",
     "action": {
       "ID": "",
       "conditions": [],

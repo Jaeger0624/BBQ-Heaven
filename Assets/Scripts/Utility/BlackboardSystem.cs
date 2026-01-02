@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using QFramework;
 using UnityEngine;
 
@@ -9,7 +10,11 @@ public class BlackboardSystem : AbstractSystem
     public FoodInstance currentFoodInstance = null;
     private FoodInstance oldInstance = null;
 
+    // 2026.1.1:
+    // 添加一个全局上下文
+    public List<object> globalContext = new List<object>();
 
+    
     #region TimeSystem 时间
     public int makeBBQTime = 4;
     public int supplyFoodTime = 2;

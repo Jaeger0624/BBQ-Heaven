@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using cfg;
 using QFramework;
 #region 事件

@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using cfg;
 using QFramework;
+using UniRx;
 using UnityEngine;
 
 /// <summary>
@@ -10,7 +12,7 @@ using UnityEngine;
 public interface IEncounterSystem : ISystem{
     void StartEncounter(string id);
     void EndEncounter(string id);
-    void TriggerInstantEncounter(string id, List<object> param);
+    IObservable<string> TriggerInstantEncounter(string id, List<object> param);
     List<ActiveEncounter> ActiveEncounters { get; }
 }
 
@@ -27,6 +29,10 @@ public class EncounterSystem : AbstractSystem, IEncounterSystem
     Rng rng => this.GetSystem<IRngSystem>().GetSubRng<IEncounterSystem>();
     List<ActiveEncounter> _activeEncounters = new List<ActiveEncounter>();
     public List<ActiveEncounter> ActiveEncounters => _activeEncounters;
+    private List<object> currentParams = new List<object>();
+
+    // 使用 AsyncSubject 来等待当前遭遇完成
+    private AsyncSubject<string> _currentEncounterSubject;
     protected override void OnInit()
     {
         // 1. 监听时间Tick事件
@@ -117,15 +123,19 @@ public class EncounterSystem : AbstractSystem, IEncounterSystem
     }
 
     // 触发瞬时遭遇必须要提供上下文
-    public void TriggerInstantEncounter(string id, List<object> param)
+    public IObservable<string> TriggerInstantEncounter(string id, List<object> param)
     {
+        // 0. 上下文初始化
+        currentParams = new List<object>();
+        currentParams.AddRange(param);
+
         // 1. 获取瞬间遭遇数据
         InstantEncounterData instantEncounterData = this.GetSystem<IDataSystem>().GetInstantEncounterData(id);
-        if (instantEncounterData == null) {Debug.LogError($"瞬间遭遇 {id} 不存在"); return;}
+        if (instantEncounterData == null) {Debug.LogError($"瞬间遭遇 {id} 不存在"); return Observable.Return($"瞬间遭遇{id}不存在");}
 
         // 2. 获取选项
         List<OptionData> options = instantEncounterData.Options.Select(x => this.GetSystem<IDataSystem>().GetOptionData(x)).ToList();
-        if (options.Count == 0){Debug.LogError($"瞬间遭遇 {id} 没有选项"); return;}
+        if (options.Count == 0){Debug.LogError($"瞬间遭遇 {id} 没有选项"); return Observable.Return($"瞬间遭遇{id}没有选项");}
 
         // 3. 创建瞬间遭遇实例
         InstantEncounter instantEncounter = new InstantEncounter(instantEncounterData, options);
@@ -133,12 +143,28 @@ public class EncounterSystem : AbstractSystem, IEncounterSystem
         // 4. 发送事件
         this.SendEvent(new TriggerInstantEncounterEvent(instantEncounter));
         Debug.Log($"【EncounterSystem】触发瞬间遭遇: {instantEncounter.Name}");
+
+        // 5. 实例化 AsyncSubject
+        _currentEncounterSubject = new AsyncSubject<string>();
+
+        return _currentEncounterSubject;
     }
     private void OnSelectOptionEvent(SelectOptionEvent evt) => HandleOption(evt.optionData);
     private void HandleOption(OptionData optionData)
     {
         Debug.Log($"【EncounterSystem】选择选项: {optionData.Name}");
         CGA cga = new CGA(optionData.Action);
-        this.GetSystem<IGASystem>().ApplyCGA(this, cga, null);
+        this.GetSystem<IGASystem>().ApplyCGA(this, cga, currentParams);
+
+        if (_currentEncounterSubject != null)
+        {
+            _currentEncounterSubject.OnNext(optionData.Name);
+            _currentEncounterSubject.OnCompleted();
+            _currentEncounterSubject = null;
+        }
+        else{
+            Debug.LogError("【EncounterSystem】当前遭遇不存在");
+            return;
+        }
     }
 }

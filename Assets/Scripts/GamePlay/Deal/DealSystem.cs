@@ -3,6 +3,8 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System;
+using UniRx;
 
 
 /// <summary>
@@ -57,7 +59,7 @@ public class DealSystem : AbstractSystem, IDealSystem
         if (currentSatisfaction != null) Debug.LogError("当前满意度应当为空");
         this.GetSystem<ICustomerSystem>().Satisfaction = new CustomerSatisfaction();
 	}
-	public void ExecuteDeal(BBQ bbq, Customer customer)
+	public async void ExecuteDeal(BBQ bbq, Customer customer)
     {
 		if (bbq == null || customer == null) return;
 		// 设置当前交易并派发开始事件
@@ -75,6 +77,15 @@ public class DealSystem : AbstractSystem, IDealSystem
 
 		// 创建上下文
 		DealContext context = new DealContext(bbq, customer, this.GetSystem<ICustomerSystem>().Satisfaction);
+
+		string encounterId = "1";
+
+		if (!string.IsNullOrEmpty(encounterId))
+		{
+			// 【遭遇入口】等待遭遇结果
+			string encounterResult = await this.GetSystem<IEncounterSystem>().TriggerInstantEncounter(encounterId, new List<object>{context});
+			Debug.Log($"【DealSystem】遭遇结果: {encounterResult}");
+		}
 
 		// 进行满意度的处理计算
 		DealResult result = CalculateInternal(context, false);
@@ -137,11 +148,21 @@ public class DealSystem : AbstractSystem, IDealSystem
 		float rawPrice = satisfaction * rarity * taste;
 
 		// 获取其他得分乘区
-		Dictionary<string, float> otherMultipliers = scoreMultipliers;
+		Dictionary<string, float> otherMultipliers = new();
+		// 1. 添加得分乘区
+		foreach (var multiplier in scoreMultipliers){
+			otherMultipliers.Add(multiplier.Key, multiplier.Value);
+		}
+		// 2. 添加其他得分乘区
+		foreach (var multiplier in context.OtherMultipliers){
+			otherMultipliers.Add(multiplier.Key, multiplier.Value);
+		}
 
+		// 执行乘区计算
 		foreach (var multiplier in otherMultipliers){
 			rawPrice *= multiplier.Value;
 		}
+
 		int roundedRawPrice = Mathf.RoundToInt(rawPrice);
 
 		// 计算价格
