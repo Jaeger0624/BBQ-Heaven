@@ -97,8 +97,18 @@ namespace cfg{
 
             int foodBaseRarity = (int)foodInstance.rarity;
             int foodBaseTaste = (int)foodInstance.taste;
-            currentBBQ.SetTotalRarity(currentBBQ.totalRarity.Value + foodBaseRarity);
-            currentBBQ.SetTotalTaste(currentBBQ.totalTaste.Value + foodBaseTaste);
+
+            // 4. 判断是否暴击
+            float multiplier = 1f;
+            var rng = this.GetSystem<IRngSystem>().GetSubRng<IBBQSystem>();
+            if (rng.NextFloat() < foodInstance.baseCritRate){
+                multiplier = foodInstance.baseCritMultiplier;
+                Debug.Log($"【GA_添加单个食材基础值】食材实例{foodInstance.name}暴击，倍率：{multiplier}");
+            }
+
+
+            currentBBQ.SetTotalRarity((int)(currentBBQ.totalRarity.Value + foodBaseRarity * multiplier));
+            currentBBQ.SetTotalTaste((int)(currentBBQ.totalTaste.Value + foodBaseTaste * multiplier));
 
             foodInstanceViewAnimEvent = new FoodInstanceViewAnimEvent(foodInstance.guid);
             addBBQPropertyEvent = new AddBBQPropertyAnimEvent(currentBBQ.totalRarity.Value, currentBBQ.totalTaste.Value, foodBaseRarity, foodBaseTaste, $"{foodInstance.food.foodData.Name}");

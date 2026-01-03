@@ -15,11 +15,17 @@ public partial class FoodInstance : BoardEntity, IAnimPlayer{
     public Food food;
     /// <summary>实例状态，主要用于程序逻辑判断</summary>
     public FoodInstanceState state {get; private set;} = FoodInstanceState.无;
+
+    // 示例数据
+    public int rarity;
+    public int taste;
+    public float baseCritRate = 0.1f; // 基础暴击率
+    public float baseCritMultiplier = 1.5f; // 基础暴击倍率
+
+
     /// <summary>实例状态，主要决定动画和View的显示</summary>
     public readonly ReactiveProperty<FoodInstanceViewStatus> status = new ReactiveProperty<FoodInstanceViewStatus>(new FoodInstanceViewStatus(false));
     public FoodInstanceView foodInstanceView;
-    public int rarity;
-    public int taste;
     // Runtime部分：不保存
     public List<SustainEffect> sustainEffects = new List<SustainEffect>();
     public Action OnViewStatusChanged;

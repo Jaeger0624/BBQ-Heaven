@@ -53,6 +53,8 @@ public class BBQCalculator_食材基础值逐个加 : AbstractBBQCalculator{
             foodInstance.SetState(FoodInstanceState.烤串上);
         });
 
+
+
         // 执行食材实例的GA并执行
         this.GetSystem<IGASystem>().ApplyGA(foodInstance, new GA_添加单个食材基础值(foodInstance), new List<object>{context});
     }
