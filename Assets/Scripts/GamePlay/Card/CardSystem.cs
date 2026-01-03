@@ -92,7 +92,7 @@ public class CardSystem : AbstractSystem, ICardSystem
     public void AddCardToRepository(string cardId)
     {
         CardData cardData = this.GetSystem<IDataSystem>().GetCardData(cardId);
-        if (cardData == null) return;
+        if (cardData == null) {Debug.LogError("卡牌数据不存在：" + cardId); return;}
         Card card = new Card(cardData);
         cardRepository.Add(card.guid, card);
     }

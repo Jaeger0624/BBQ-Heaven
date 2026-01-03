@@ -24,11 +24,11 @@ public class SelectionPanel : MonoBehaviour, IController
         Hide(true);
         changeVisibleButton.OnClick.AddListener(OnChangeVisibleButtonClick);
         ShowChoices();
-        this.RegisterEvent<RequestCardSelectionEvent>(OnRequestSelection);
+        this.RegisterEvent<RequestSelectionEvent>(OnRequestSelection);
     }
     void OnDestroy()
     {
-        this.UnRegisterEvent<RequestCardSelectionEvent>(OnRequestSelection);
+        this.UnRegisterEvent<RequestSelectionEvent>(OnRequestSelection);
     }
     private void OnChangeVisibleButtonClick(){
         if (isChoicesVisible){
@@ -47,15 +47,15 @@ public class SelectionPanel : MonoBehaviour, IController
         cardDatas = this.GetSystem<IDataSystem>().GetAllCardData().OrderBy(x => Guid.NewGuid()).Take(3).ToList();
 
         // 构建回调
-        Action<CardData> onSelect = (cardData) =>
+        Action<string> onSelect = (cardId) =>
         {
-            Debug.Log("选择了一张卡牌：" + cardData.Name);
-            this.GetSystem<ICardSystem>().AddCardToRepository(cardData.ID);
+            Debug.Log("选择了一张卡牌：" + cardId);
+            this.GetSystem<ICardSystem>().AddCardToRepository(cardId);
         };
 
-        OnRequestSelection(new RequestCardSelectionEvent(cardDatas, "测试：请选择一张卡牌", onSelect));
+        OnRequestSelection(new RequestSelectionEvent(cardDatas.Select(x => x.ID).ToList(), "测试：请选择一张卡牌", SelectionType.Card, onSelect));
     }
-    private void OnRequestSelection(RequestCardSelectionEvent evt)
+    private void OnRequestSelection(RequestSelectionEvent evt)
     {
         // 1. 重置选择
         ResetSelection();
@@ -65,18 +65,18 @@ public class SelectionPanel : MonoBehaviour, IController
 
         // 3. 显示选择
         // 3. 生成选项
-        foreach (var cardData in evt.Choices)
+        foreach (var choice in evt.Choices)
         {
             var go = Instantiate(choicePrefab, selectionContainer);
 
             SelectionView selectionView = go.GetComponent<SelectionView>();
-            selectionView.Bind(cardData);
+            selectionView.Bind(choice, evt.SelectionType);
             
             // 绑定点击事件
             go.GetComponent<ButtonUI>().OnClick.AddListener(() =>
             {
                 // A. 触发回调，通知 GA 恢复执行
-                evt.OnSelect?.Invoke(cardData);
+                evt.OnSelect?.Invoke(choice);
                 
                 // B. 关闭面板
                 Hide();

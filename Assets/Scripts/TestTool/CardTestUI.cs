@@ -1,19 +1,20 @@
 using System.Linq;
 using cfg;
 using QFramework;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CardTestUI : MonoBehaviour, IController
 {
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
-    public InputField inputField;
-    public Button ButtonID;
-    public Button ButtonName;
+    public TMP_InputField inputField;
+    public ButtonUI ButtonID;
+    public ButtonUI ButtonName;
     void Start()
     {
-        ButtonID.onClick.AddListener(OnButtonIDClick);
-        ButtonName.onClick.AddListener(OnButtonNameClick);
+        ButtonID.OnClick.AddListener(OnButtonIDClick);
+        ButtonName.OnClick.AddListener(OnButtonNameClick);
     }
     void OnButtonIDClick()
     {
@@ -23,7 +24,7 @@ public class CardTestUI : MonoBehaviour, IController
         {
             Debug.LogError("卡牌数据不存在");
         }
-        this.GetSystem<ICardSystem>().AddC(cardData.ID);
+        this.GetSystem<ICardSystem>().AddCardToHand(cardData.ID);
     }
     void OnButtonNameClick()
     {

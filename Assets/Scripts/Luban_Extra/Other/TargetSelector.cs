@@ -68,7 +68,11 @@ public class TargetSelector{
             return new List<object>{target};
         }
         else if (targetType == CardTargetType.任意格子){
-            BoardCell targetCell = targetObject.GetComponentInParent<CellViewUI>().cell;
+            CellViewUI targetCellView = targetObject.GetComponentInParent<CellViewUI>();
+            if (targetCellView == null){
+                return null;
+            }
+            BoardCell targetCell = targetCellView.cell;
             if (targetCell == null){
                 return null;
             }
