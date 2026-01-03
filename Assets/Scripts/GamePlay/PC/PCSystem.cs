@@ -8,14 +8,23 @@ using UnityEngine;
 /// 用于处理玩家角色（Player Character）相关的逻辑
 /// </summary>
 public interface IPCSystem : ISystem, ISavable{
+    int Level { get; }
     PlayerCharacter ChoosePC(string id);
     void InitPC(PlayerCharacter playerCharacter);
+    // 增加口碑
+    void AddReputation(int amount);
 }
 
 
 public class PCSystem : AbstractSystem, IPCSystem
 {
+    public int Level { get; private set; } = 1;
+    private int reputation = 0;
     private PlayerCharacter currentPC;
+    public void AddReputation(int amount)
+    {
+        reputation += amount;
+    }
     protected override void OnInit()
     {
     }

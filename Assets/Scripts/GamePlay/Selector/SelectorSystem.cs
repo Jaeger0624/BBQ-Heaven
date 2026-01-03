@@ -5,12 +5,15 @@ using QFramework;
 using UniRx;
 using UnityEngine;
 
+// 负责目标选择和选择面板的显示的系统
 public interface ISelectorSystem : ISystem
 {
     IObservable<BoardCell> SelectCell(List<BoardCell> validCells);
+    void RequestSelection(ISelectionRequest selectionRequest);
 }
 public class SelectorSystem : AbstractSystem, ISelectorSystem
 {
+
     protected override void OnInit()
     {
         
@@ -51,5 +54,11 @@ public class SelectorSystem : AbstractSystem, ISelectorSystem
                 cancelSub.Dispose();
             });
         });
+    }
+
+    public void RequestSelection(ISelectionRequest selectionRequest)
+    {
+        RequestSelectionEvent evt = selectionRequest.Form();
+        this.SendEvent(evt);
     }
 }
