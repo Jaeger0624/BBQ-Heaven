@@ -395,43 +395,33 @@ public partial class GA_创建满意度乘区 : GameAction
     public partial class GA_随机移动食材 : GameAction
     {
         IAnimPlayer animPlayer = null;
-        private List<MoveEntityEvent> moveEvents = new List<MoveEntityEvent>();
         public GA_随机移动食材(GetFoodInstancesInfo info){
             this.Info = info;
             animPlayer = null;
-            moveEvents = new List<MoveEntityEvent>();
         }
         public override GameAction Clone()=> new GA_随机移动食材(Info);
         public override void Execute(object sender, List<object> param)
         {
             animPlayer = null;
-            moveEvents.Clear();
 
             FoodInstance origin = sender is FoodInstance ? sender as FoodInstance : null;
             List<FoodInstance> foodInstances = Info.GetFoodInstances(origin, param);
-            if (foodInstances == null) return;
-            if (foodInstances.Count == 0) return;
+            if (foodInstances == null) {Debug.LogError($"[GA_随机移动食材] 没有食材: {sender}"); return;}
+            if (foodInstances.Count == 0) {Debug.LogError($"[GA_随机移动食材] 没有食材: {sender}"); return;}
 
-            List<BoardEntity> entities = foodInstances.Select(x => x as BoardEntity).ToList();
-            moveEvents.AddRange(this.GetSystem<IBoardEntitySystem>().Mover.RandomMoveEntities(entities));
+            List<BoardEntity> entities = foodInstances.Cast<BoardEntity>().ToList();
+            this.GetSystem<IBoardEntitySystem>().Mover.RandomPlaceEntities(entities);
 
             if (sender is IAnimPlayer newAnimPlayer){
                 this.animPlayer = newAnimPlayer;
             }
         }
-        private void SendAnims(){
-            moveEvents.ForEach(evt => {
-                this.SendEvent(evt);
-            });
-        }
         public override IAnimTask GetAnimTask()
         {
             IAnimTask anim = animPlayer != null ? new SequenceAnimTask(new List<IAnimTask>{
-                new ActionAnimTask(() => SendAnims()),
                 AnimationConverter.Convert(animPlayer, "common"),
                 new DelayAnimTask(SettingManager.Instance.DefaultAnimInterval),
             }) : new SequenceAnimTask(new List<IAnimTask>{
-                new ActionAnimTask(() => SendAnims()),
                 new DelayAnimTask(SettingManager.Instance.DefaultAnimInterval),
             });
             return anim;
@@ -459,6 +449,7 @@ public partial class GA_创建满意度乘区 : GameAction
             if (origin == null)
             {
                 origin = sender as FoodInstance;
+
             }
 
             List<FoodInstance> targets = Info.GetFoodInstances(origin, param);
@@ -488,8 +479,7 @@ public partial class GA_创建满意度乘区 : GameAction
                     {
                         // Debug.Log($"[GA_食材位移] 选择到格子: {x.cell.position}");
                         // 每次用户选择完一个格子，执行移动逻辑
-                        var evt = this.GetSystem<IBoardEntitySystem>().Mover.MoveEntityTo(x.cell.position, x.foodInstance);
-                        moveEvents.Add(evt);
+                        this.GetSystem<IBoardEntitySystem>().Mover.PlaceEntity(x.foodInstance, x.cell);
                     },
                     ex => 
                     {

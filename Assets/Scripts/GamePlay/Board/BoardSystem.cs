@@ -21,15 +21,10 @@ public interface IBoardSystem : ISystem{
     // SelectorSystem 需要用到的方法 
     void HighlightCells(List<Vector2Int> positions);
     void ClearHighlight();
-
-
     // 和棋盘实例相关的操作
     void SetCellInstance(Vector2Int position, string instanceGuid);
-
-
     // 和地块相关的操作
     void SetCellTile(Vector2Int position, string tileID);
-    void TriggerTileEvent(BoardCell boardCell, BoardEntity boardEntity, TileEffectType type);
 }
 /// <summary>
 /// 棋盘系统，提供与棋盘有关的信息与操作
@@ -39,10 +34,12 @@ public class BoardSystem : AbstractSystem, IBoardSystem
     private Grid<BoardCell> grid;
     // 1. 定义一个 Subject (它是幕后的“广播站”)
     private Subject<BoardCell> _cellClickedSubject = new Subject<BoardCell>();
+    private Subject<Unit> _boardStateChangedSubject = new Subject<Unit>();
+    private TileHandler tileHandler = new TileHandler();
+
     // 2. 实现接口：将 Subject 也就是这个管道暴露出去供人订阅
     public IObservable<BoardCell> OnCellClicked => _cellClickedSubject;
     public IObservable<Unit> OnBoardStateChanged => _boardStateChangedSubject;
-    private Subject<Unit> _boardStateChangedSubject = new Subject<Unit>();
     public List<BoardCell> GetEmptyCells() => grid.GetAllCells().Where(x => x.IsEmpty()).ToList();
     public BoardCell GetCell(Vector2Int position) => grid.GetCell(position.x, position.y);
     public Grid<BoardCell> GetGrid() => grid;
@@ -64,6 +61,10 @@ public class BoardSystem : AbstractSystem, IBoardSystem
 
         _cellClickedSubject = new Subject<BoardCell>();
         _boardStateChangedSubject = new Subject<Unit>();
+
+
+        this.RegisterEvent<MoveEntityEvent>(tileHandler.EntityMove);
+        this.RegisterEvent<PlaceEntityEvent>(tileHandler.EntityPlaced);   
     }
     protected override void OnDeinit()
     {
@@ -72,6 +73,9 @@ public class BoardSystem : AbstractSystem, IBoardSystem
         _cellClickedSubject = null;
         _boardStateChangedSubject?.Dispose();
         _boardStateChangedSubject = null;
+
+        this.UnRegisterEvent<MoveEntityEvent>(tileHandler.EntityMove);
+        this.UnRegisterEvent<PlaceEntityEvent>(tileHandler.EntityPlaced);
     }
     public void ClickCell(Vector2Int position){
         // 获取逻辑层的数据
@@ -134,9 +138,7 @@ public class BoardSystem : AbstractSystem, IBoardSystem
         BoardCell cell = grid.GetCell(position.x, position.y);
         cell.SetTile(tileID);
         _boardStateChangedSubject.OnNext(Unit.Default);
-    }
-
-    public void TriggerTileEvent(BoardCell boardCell, BoardEntity boardEntity, TileEffectType type)
-    {
+        this.SendEvent(new UpdateCellTileEvent(position, tileID));
     }
 }
+

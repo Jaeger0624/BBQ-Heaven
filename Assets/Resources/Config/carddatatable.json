@@ -154,5 +154,27 @@
         }
       }
     ]
+  },
+  {
+    "ID": "6",
+    "name": "创造地形",
+    "description": "",
+    "cost": 0,
+    "target": 4,
+    "CGAs": [
+      {
+        "type": 0,
+        "action": {
+          "ID": "1",
+          "conditions": [],
+          "actions": [
+            {
+              "$type": "GA_修改地块",
+              "tileId": "Ice"
+            }
+          ]
+        }
+      }
+    ]
   }
 ]

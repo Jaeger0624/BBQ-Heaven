@@ -95,6 +95,12 @@ public class CardPile : ICanSendEvent, ICanGetSystem{
         this.SendEvent(new RemoveCardViewEvent(card));
         this.SendEvent(new PileUpdateEvent());
     }
+
+    public void AddCardToHand(Card card){
+        handPile.Add(card);
+        this.SendEvent(new CreateCardViewEvent(card));
+        this.SendEvent(new PileUpdateEvent());
+    }
 }
 
 

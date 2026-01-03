@@ -20,6 +20,7 @@ public sealed partial class TileData : Luban.BeanBase
         { if(!_buf["ID"].IsString) { throw new SerializationException(); }  ID = _buf["ID"]; }
         { if(!_buf["name"].IsString) { throw new SerializationException(); }  Name = _buf["name"]; }
         { if(!_buf["description"].IsString) { throw new SerializationException(); }  Description = _buf["description"]; }
+        { var __json0 = _buf["CGAs"]; if(!__json0.IsArray) { throw new SerializationException(); } CGAs = new System.Collections.Generic.List<TileCGA>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { TileCGA __v0;  { if(!__e0.IsObject) { throw new SerializationException(); }  __v0 = global::cfg.TileCGA.DeserializeTileCGA(__e0);  }  CGAs.Add(__v0); }   }
     }
 
     public static TileData DeserializeTileData(JSONNode _buf)
@@ -39,12 +40,14 @@ public sealed partial class TileData : Luban.BeanBase
     /// 地块描述
     /// </summary>
     public readonly string Description;
+    public readonly System.Collections.Generic.List<TileCGA> CGAs;
    
     public const int __ID__ = -2041834600;
     public override int GetTypeId() => __ID__;
 
     public  void ResolveRef(Tables tables)
     {
+        foreach (var _e in CGAs) { _e?.ResolveRef(tables); }
     }
 
     public override string ToString()
@@ -53,6 +56,7 @@ public sealed partial class TileData : Luban.BeanBase
         + "ID:" + ID + ","
         + "name:" + Name + ","
         + "description:" + Description + ","
+        + "CGAs:" + Luban.StringUtil.CollectionToString(CGAs) + ","
         + "}";
     }
 }

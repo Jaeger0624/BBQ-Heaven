@@ -21,6 +21,7 @@ public class BoardViewUGUI : MonoBehaviour, IController
         this.RegisterEvent<ShowBoardEvent>(OnShow);
         this.RegisterEvent<HighlightCellsEvent>(OnHighlightCells);
         this.RegisterEvent<ClearAllBoardsHighlight>(OnClearAllBoardsHighlight);
+        this.RegisterEvent<UpdateCellTileEvent>(OnUpdateCellTileEvent);
         UpdateBoardCell();
 
         Hide();
@@ -32,6 +33,7 @@ public class BoardViewUGUI : MonoBehaviour, IController
         this.UnRegisterEvent<ShowBoardEvent>(OnShow);
         this.UnRegisterEvent<HighlightCellsEvent>(OnHighlightCells);
         this.UnRegisterEvent<ClearAllBoardsHighlight>(OnClearAllBoardsHighlight);
+        this.UnRegisterEvent<UpdateCellTileEvent>(OnUpdateCellTileEvent);
     }
     public void HighlightCells(List<Vector2Int> positions, bool reset){
         // Debug.Log($"HighlightCells: {positions.Count}");
@@ -89,6 +91,11 @@ public class BoardViewUGUI : MonoBehaviour, IController
     }
     private void OnHighlightCells(HighlightCellsEvent evt) => HighlightCells(evt.positions, true);
     private void OnClearAllBoardsHighlight(ClearAllBoardsHighlight evt) => UnhighlightAll();
+    private void OnUpdateCellTileEvent(UpdateCellTileEvent evt){
+        if (boardCellDict.TryGetValue(evt.position, out CellViewUI cellViewUI)){
+            cellViewUI.UpdateVisual();
+        }
+    }
 }
 public class HighlightCellsEvent : AbstractEvent{
     public List<Vector2Int> positions;

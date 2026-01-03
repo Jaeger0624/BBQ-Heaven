@@ -14,12 +14,14 @@ public interface ICardSystem : ISystem, ISavable{
     void InitCardPile();
     // 添加卡牌到卡牌库
     void AddCardToRepository(string cardId);
+    void AddCardToHand(string cardId);
     // 从卡牌库中移除卡牌
     void RemoveCardFromRepository(string guid);
     List<Card> DrawCard(int count);
     void DiscardCard(List<Card> cards);
     void RefreshHandCards();
     void UseCard(Card card, List<object> param);
+
 }
 public class CardSystem : AbstractSystem, ICardSystem
 {
@@ -95,6 +97,13 @@ public class CardSystem : AbstractSystem, ICardSystem
         cardRepository.Add(card.guid, card);
     }
 
+    public void AddCardToHand(string cardId)
+    {
+        CardData cardData = this.GetSystem<IDataSystem>().GetCardData(cardId);
+        if (cardData == null) return;
+        Card card = new Card(cardData);
+        cardPile.AddCardToHand(card);
+    }
     public void RemoveCardFromRepository(string guid)
     {
         cardRepository.Remove(guid);
@@ -138,4 +147,5 @@ public class CardSystem : AbstractSystem, ICardSystem
         if (cardPile == null) {Debug.LogError("CardPile not initialized"); return;}
         cardPile.DiscardCard(cardPile.handPile);
     }
+
 }

@@ -24,6 +24,9 @@ public class FoodController : MonoBehaviour, IController
         this.RegisterEvent<CreateFoodInstanceEvent>(OnCreateFoodInstanceEvent).UnRegisterWhenDisabled(this);
         this.RegisterEvent<RemoveFoodInstanceEvent>(OnRemoveFoodInstanceEvent).UnRegisterWhenDisabled(this);
         this.RegisterEvent<MoveEntityEvent>(OnMoveEntityEvent).UnRegisterWhenDisabled(this);
+        this.RegisterEvent<PlaceEntityEvent>(OnPlaceEntityEvent).UnRegisterWhenDisabled(this);
+        this.RegisterEvent<SwapEntityEvent>(OnSwapEntityEvent).UnRegisterWhenDisabled(this);
+        
     }
     void Update()
     {
@@ -86,7 +89,7 @@ public class FoodController : MonoBehaviour, IController
     }
     void OnMoveEntityEvent(MoveEntityEvent e)
     {
-        if (!foodInstanceViews.TryGetValue(e.entityGuid, out FoodInstanceView foodInstanceView)) return;
+        if (!foodInstanceViews.TryGetValue(e.entity.guid, out FoodInstanceView foodInstanceView)) return;
 
         Vector3 originPos = foodInstanceView.transform.position;
         // 1. 获取食材实例视图的父物体
@@ -109,6 +112,64 @@ public class FoodController : MonoBehaviour, IController
         IAnimTask anim = new AttatchedAnimTask(new DelayAnimTask(delay), attachedAnimTasks);
         this.GetSystem<IAnimationSystem>().DirectlyPlay(anim);
     }
+    void OnPlaceEntityEvent(PlaceEntityEvent e)
+    {
+        if (!foodInstanceViews.TryGetValue(e.entity.guid, out FoodInstanceView foodInstanceView)) return;
+
+        Transform cellTransform = boardView.GetCellTransform(e.newPos);
+        float scale = foodInstanceView.transform.localScale.x;
+        foodInstanceView.transform.SetParent(cellTransform,true);
+        foodInstanceView.transform.localScale = new Vector3(scale, scale, 1);
+
+        Vector3 originPos = foodInstanceView.transform.position;
+        Vector3 targetPosition = cellTransform.position;
+        targetPosition.z = foodInstanceView.transform.position.z - 0.1f;
+
+        // 3. 播放移动动画
+        var attachedAnimTasks = new List<IAnimTask>
+        {
+            new ActionAnimTask(() => foodInstanceView.gameObject.SetActive(true)),
+            new MoveAnimationTask(foodInstanceView.transform, 0.4f, targetPosition, originPos)   
+        };
+        float delay = SettingManager.Instance.AnimSettings.foodInstanceMoveDelay_棋盘上移动;
+        IAnimTask anim = new AttatchedAnimTask(new DelayAnimTask(delay), attachedAnimTasks);
+        this.GetSystem<IAnimationSystem>().DirectlyPlay(anim);
+    }
+    void OnSwapEntityEvent(SwapEntityEvent e)
+    {
+        if (!foodInstanceViews.TryGetValue(e.entity1.guid, out FoodInstanceView foodInstanceView1)) return;
+        if (!foodInstanceViews.TryGetValue(e.entity2.guid, out FoodInstanceView foodInstanceView2)) return;
+
+        Vector3 originPos1 = foodInstanceView1.transform.position;
+        Vector3 originPos2 = foodInstanceView2.transform.position;
+        Transform cellTransform1 = boardView.GetCellTransform(e.entity1.position);
+        Transform cellTransform2 = boardView.GetCellTransform(e.entity2.position);
+        float scale1 = foodInstanceView1.transform.localScale.x;
+        float scale2 = foodInstanceView2.transform.localScale.x;
+        foodInstanceView1.transform.SetParent(cellTransform1,true);
+        foodInstanceView2.transform.SetParent(cellTransform2,true);
+        foodInstanceView1.transform.localScale = new Vector3(scale1, scale1, 1);
+        foodInstanceView2.transform.localScale = new Vector3(scale2, scale2, 1);
+
+        Vector3 targetPosition1 = cellTransform1.position;
+        targetPosition1.z = foodInstanceView1.transform.position.z - 0.1f;
+        Vector3 targetPosition2 = cellTransform2.position;
+        targetPosition2.z = foodInstanceView2.transform.position.z - 0.1f;
+
+        // 3. 播放移动动画
+        var attachedAnimTasks = new List<IAnimTask>
+        {
+            new ActionAnimTask(() => foodInstanceView1.gameObject.SetActive(true)),
+            new ActionAnimTask(() => foodInstanceView2.gameObject.SetActive(true)),
+            new MoveAnimationTask(foodInstanceView1.transform, 0.4f, targetPosition1, originPos1),
+            new MoveAnimationTask(foodInstanceView2.transform, 0.4f, targetPosition2, originPos2)   
+        };
+        float delay = SettingManager.Instance.AnimSettings.foodInstanceMoveDelay_棋盘上移动;
+        IAnimTask anim = new AttatchedAnimTask(new DelayAnimTask(delay), attachedAnimTasks);
+        this.GetSystem<IAnimationSystem>().DirectlyPlay(anim);
+    }
+
+    
     // 生成食材实例视图
     private FoodInstanceView GenerateFoodInstanceView(FoodInstance foodInstance){
         FoodInstanceView foodInstanceView = Instantiate(foodInstanceViewPrefab, transform).GetComponent<FoodInstanceView>();

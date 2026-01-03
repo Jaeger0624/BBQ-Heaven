@@ -8,10 +8,11 @@ public class BoardCell : IGridComponent, ICanGetSystem{
 
     // 地块信息
     public string TileID {get; private set; }
+
     public TileData TileData => this.GetSystem<IDataSystem>().GetTileData(TileID);
     public BoardCell(string instanceGuid, string tileID = null){
         this.instanceGuid = instanceGuid;
-        this.TileID = tileID;
+        this.TileID = tileID ?? "Default";
     }
     public void SetInstance(string instanceGuid) => this.instanceGuid = instanceGuid;
     public string DebugInfo() => $"{instanceGuid}";
@@ -23,4 +24,5 @@ public class BoardCell : IGridComponent, ICanGetSystem{
         this.TileID = tileID;
     }
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
+
 }

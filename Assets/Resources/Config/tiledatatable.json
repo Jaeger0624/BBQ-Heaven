@@ -1,1 +1,31 @@
-[]
+[
+  {
+    "ID": "Default",
+    "name": "默认",
+    "description": "默认的地块",
+    "CGAs": []
+  },
+  {
+    "ID": "Ice",
+    "name": "冰",
+    "description": "冰面，会滑",
+    "CGAs": [
+      {
+        "type": 1,
+        "action": {
+          "ID": "滑动",
+          "conditions": [],
+          "actions": [
+            {
+              "$type": "GA_滑行",
+              "value": {
+                "$type": "DV_值",
+                "number": 1
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

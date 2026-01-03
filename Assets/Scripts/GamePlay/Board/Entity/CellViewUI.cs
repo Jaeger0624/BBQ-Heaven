@@ -1,5 +1,6 @@
 
 using QFramework;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -9,16 +10,27 @@ public class CellViewUI : MonoBehaviour, IPointerClickHandler, IController{
     public BoardCell cell;
     [SerializeField] private Image image;
     [SerializeField] private Image highlightImage;
+    [SerializeField] private TextMeshProUGUI tileNameText;
     private bool isHighlighted = false;
     void Start()
     {
-        
+           
         Unhighlight();
     }
     public void Init(BoardCell cell){
         this.cell = cell;
+        UpdateVisual();
     }
-
+    public void UpdateVisual(){
+        
+        tileNameText.text = cell.TileData.Name;
+        if (cell.TileData.ID == "Default"){
+            tileNameText.gameObject.SetActive(false);
+        }
+        else{
+            tileNameText.gameObject.SetActive(true);
+        }
+    }
     public void Highlight(){
         // Debug.Log($"Highlight: {cell.position}");
         isHighlighted = true;

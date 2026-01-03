@@ -39,6 +39,8 @@ public abstract partial class GameAction : Luban.BeanBase
             case "GA_抽牌": return new GA_抽牌(_buf);
             case "GA_修改得分乘区": return new GA_修改得分乘区(_buf);
             case "GA_创建临时乘区": return new GA_创建临时乘区(_buf);
+            case "GA_滑行": return new GA_滑行(_buf);
+            case "GA_修改地块": return new GA_修改地块(_buf);
             default: throw new SerializationException();
         }
     }

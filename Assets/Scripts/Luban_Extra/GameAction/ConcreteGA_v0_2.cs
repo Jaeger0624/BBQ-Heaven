@@ -64,8 +64,7 @@ namespace cfg{
                             {
                                 observer.OnError(new Exception($"[GA_食材换位] 格子上没有食材实例: {secondCell.instanceGuid}"));
                             }
-                            var evt = this.GetSystem<IBoardEntitySystem>().Mover.ExchangeEntities(origin, secondFoodInstance);
-                            moveEvents.AddRange(evt);
+                            this.GetSystem<IBoardEntitySystem>().Mover.SwapEntities(origin, secondFoodInstance);
                         },
                         ex => 
                         {
@@ -172,7 +171,7 @@ namespace cfg{
             {
                 int steps = Value.GetValue(target, param);
                 Vector2Int direction = finalDirection.ToVector2Int();
-                moveEvents.Add(this.GetSystem<IBoardEntitySystem>().Mover.DirectionalMove(target, direction, steps));
+                this.GetSystem<IBoardEntitySystem>().Mover.DirectionalMove(target, direction, steps);
             }
         }
         private void SendAnims(){
@@ -190,5 +189,73 @@ namespace cfg{
                 new DelayAnimTask(SettingManager.Instance.DefaultAnimInterval),
             });
         }
+    }
+
+    public partial class GA_滑行 : GameAction
+    {
+        public GA_滑行(DynamicValue value)
+        {
+            this.Value = value;
+        }
+        public override GameAction Clone() => new GA_滑行(Value);
+        public override void Execute(object sender, List<object> param){
+
+            BoardEntity entity = param.FirstOrDefault(x => x is BoardEntity) as BoardEntity;
+            if (entity == null)
+            {
+                Debug.LogWarning($"[GA_滑行] 没有食材，使用发送者作为食材: {sender}");
+            }
+            entity = sender as BoardEntity;
+            if (entity == null)
+            {
+                Debug.LogError($"[GA_滑行] 没有食材: {sender}");
+                return;
+            }
+
+            int steps = Value.GetValue(entity, param);
+
+            // 2. 检查是否有方向记录
+            if (entity.lastMoveDirection == Vector2Int.zero){
+                Debug.LogError($"[GA_滑行] 没有方向记录: {entity.name}");
+                return;
+            }
+
+            Debug.Log($"[GA_滑行] 滑行: {entity.name} 方向: {entity.lastMoveDirection}");
+
+            this.GetSystem<IBoardEntitySystem>().Mover.DirectionalMove(entity, entity.lastMoveDirection, steps);
+        }
+        public override IAnimTask GetAnimTask(){return null;}
+    }
+
+
+    public partial class GA_修改地块 : GameAction
+    {
+        public GA_修改地块(string tileId)
+        {
+            this.TileId = tileId;   
+        }
+        public override GameAction Clone() => new GA_修改地块(TileId);
+
+        public override void Execute(object sender, List<object> param){}
+        public override IObservable<GAResult> ExecuteAsync(object sender, List<object> param){
+
+            BoardCell targetCell = param.FirstOrDefault(x => x is BoardCell) as BoardCell;
+            if (targetCell == null)
+            {
+                Debug.LogError($"[GA_修改地块] 没有目标地块: {sender}");
+                return Observable.Return<GAResult>(GAResult.Empty);
+            }
+            TileData tileData = this.GetSystem<IDataSystem>().GetTileData(TileId);
+            TileData oldTileData = this.GetSystem<IDataSystem>().GetTileData(targetCell.TileID);
+            if (tileData == null)
+            {
+                Debug.LogError($"[GA_修改地块] 地块数据不存在: {TileId}");
+                return Observable.Return<GAResult>(GAResult.Empty);
+            }
+            Debug.Log($"[GA_修改地块] 修改地块: {targetCell.position} 旧地块：{oldTileData.Name} 新地块：{tileData.Name}");
+            this.GetSystem<IBoardSystem>().SetCellTile(targetCell.position, TileId);
+            return Observable.Return(GAResult.Empty);
+        }
+        public override IAnimTask GetAnimTask(){return null;}
     }
 }
