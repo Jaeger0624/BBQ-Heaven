@@ -44,6 +44,9 @@ TagManager:
   - name: BBQ
     uniqueID: 3271255317
     locked: 0
+  - name: "\u5E38\u9A7B\u9762\u677F"
+    uniqueID: 892157629
+    locked: 0
   - name: Selection
     uniqueID: 4198010011
     locked: 0
