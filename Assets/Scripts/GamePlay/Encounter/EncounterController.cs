@@ -38,11 +38,11 @@ public class EncounterController : MonoBehaviour, IController, ICanSendEvent
         nameText.text = evt.activeEncounter.encounterData.Name;
         descriptionText.text = evt.activeEncounter.encounterData.Description;
 
-        this.SendEvent(new UIPanelEvent(UIPanelType.EncounterPanel, UIPanelAction.Show));
+        this.SendEvent(new UIPanelEvent(UIPanelType.遭遇界面, UIPanelAction.Show));
 
         // 3s（unscaledTime）后
         Observable.Timer(TimeSpan.FromSeconds(3), Scheduler.MainThreadIgnoreTimeScale).Subscribe(_ => {
-            this.SendEvent(new UIPanelEvent(UIPanelType.EncounterPanel, UIPanelAction.Hide));
+            this.SendEvent(new UIPanelEvent(UIPanelType.遭遇界面, UIPanelAction.Hide));
         });
     }
 

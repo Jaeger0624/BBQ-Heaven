@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class PausePanel : MonoBehaviour, IController
+public class PausePanel : MonoBehaviour, IController, ICanSendEvent
 {
     [SerializeField] private Button continueButton;
     [SerializeField] private Button exitButton;
@@ -35,7 +35,7 @@ public class PausePanel : MonoBehaviour, IController
 
     void Start()
     {
-        Hide();
+        this.SendEvent(new UIPanelEvent(UIPanelType.暂停界面, UIPanelAction.Hide));
     }
 
     void OnEnable()
@@ -46,17 +46,7 @@ public class PausePanel : MonoBehaviour, IController
     public void OnContinueButtonClick()
     {
         // Debug.Log("【PausePanel】继续游戏");
-        Hide();
-    }
-    public void Show(){
-        canvasGroup.alpha = 1;
-        canvasGroup.blocksRaycasts = true;
-        canvasGroup.interactable = true;
-    }
-    public void Hide(){
-        canvasGroup.alpha = 0;
-        canvasGroup.blocksRaycasts = false;
-        canvasGroup.interactable = false;
+        this.SendEvent(new UIPanelEvent(UIPanelType.暂停界面, UIPanelAction.Hide));
     }
     public void OnExitButtonClick()
     {

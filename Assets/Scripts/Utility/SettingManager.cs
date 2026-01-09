@@ -25,33 +25,6 @@ public class SettingManager : MonoBehaviour, IController,ICanSendEvent{
         }
         _instance = this;
         DontDestroyOnLoad(this.gameObject);
-        
-        // 配置DOTween使用smoothDeltaTime，这在低帧率下能提供更平滑的动画
-        // 这是解决低帧率下动画问题的关键
-        DOTween.useSmoothDeltaTime = true;
-        Debug.Log("【SettingManager】启用DOTween useSmoothDeltaTime，提升低帧率下的动画平滑度");
-        
-        // 设置目标帧率
-        // 注意：帧率越高，动画越正常；帧率越低，动画越容易出现问题
-        // 建议：不限制帧率（设置为0），或者使用较高的帧率（120+）
-        if (_devSettings != null && _devSettings.targetFrameRate > 0)
-        {
-            Application.targetFrameRate = _devSettings.targetFrameRate;
-            Debug.Log($"【SettingManager】设置目标帧率: {Application.targetFrameRate} FPS");
-            
-            // 如果帧率设置较低（< 60），给出警告
-            if (_devSettings.targetFrameRate < 60)
-            {
-                Debug.LogWarning($"【SettingManager】警告：目标帧率 {_devSettings.targetFrameRate} FPS 较低，可能导致动画问题。建议设置为60+或0（不限制）");
-            }
-        }
-        else
-        {
-            // 如果没有配置或设置为0，不限制帧率（让帧率自然运行）
-            // 这样可以获得最佳的动画效果
-            Application.targetFrameRate = 0; // 0表示不限制帧率
-            Debug.Log("【SettingManager】不限制帧率，让帧率自然运行（推荐，可获得最佳动画效果）");
-        }
 
         // 获取Settings
         _devSettings = Resources.Load<DevSettings>("SO/DevSettings");
@@ -85,7 +58,8 @@ public class SettingManager : MonoBehaviour, IController,ICanSendEvent{
 
     void Update()
     {
-        #if UNITY_EDITOR
+        
+        // #if UNITY_EDITOR
 
 
         if (DevSettings.UseAnimTimeScale){
@@ -104,7 +78,7 @@ public class SettingManager : MonoBehaviour, IController,ICanSendEvent{
             }
         }
 
-        #endif
+        // #endif
     }
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
     /// <summary>

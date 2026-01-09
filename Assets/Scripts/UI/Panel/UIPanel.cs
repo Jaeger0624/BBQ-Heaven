@@ -1,9 +1,15 @@
 using System;
+using DG.Tweening;
 using QFramework;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class UIPanel : MonoBehaviour, IController{
+public interface IUIPanel{
+    void Show();
+    void Hide();
+}
+
+public class UIPanel : MonoBehaviour, IController, IUIPanel{
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private UIPanelType currentPanelType;
     public UnityEvent onShow;
@@ -38,7 +44,7 @@ public class UIPanel : MonoBehaviour, IController{
         onShow.Invoke();
 
         if (canvasGroup == null) return;
-        canvasGroup.alpha = 1;
+        canvasGroup.DOFade(1, 0.3f).SetEase(Ease.OutSine).SetUpdate(true);
         canvasGroup.blocksRaycasts = true;
         canvasGroup.interactable = true;
     }
@@ -48,9 +54,9 @@ public class UIPanel : MonoBehaviour, IController{
         onHide.Invoke();
 
         if (canvasGroup == null) return;
-        canvasGroup.alpha = 0;
         canvasGroup.blocksRaycasts = false;
         canvasGroup.interactable = false;
+        canvasGroup.DOFade(0, 0.3f).SetEase(Ease.OutSine).SetUpdate(true);
     }
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
 }

@@ -38,7 +38,7 @@ public class DialogueSystem : AbstractSystem, IDialogueSystem{
         return Observable.Create<Unit>(observer =>
         {
             // 1. 序列开始：打开面板
-            this.SendEvent(new UIPanelEvent(UIPanelType.DialogPanel, UIPanelAction.Show));
+            this.SendEvent(new UIPanelEvent(UIPanelType.对话界面, UIPanelAction.Show));
 
             // 2. 核心逻辑：将 List 转化为串行流
             return dialogues.ToObservable() // 1. 将 List<Dialogue> 转为流
@@ -50,7 +50,7 @@ public class DialogueSystem : AbstractSystem, IDialogueSystem{
                     () => 
                     {
                         // 3. 序列结束：所有对话都播完了 -> 关闭面板
-                        this.SendEvent(new UIPanelEvent(UIPanelType.DialogPanel, UIPanelAction.Hide));
+                        this.SendEvent(new UIPanelEvent(UIPanelType.对话界面, UIPanelAction.Hide));
                         observer.OnNext(Unit.Default);
                         observer.OnCompleted();
                     }

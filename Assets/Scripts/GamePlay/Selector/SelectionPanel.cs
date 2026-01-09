@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Versioning;
 using cfg;
 using DG.Tweening;
 using QFramework;
 using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,13 +14,12 @@ public enum SelectionPanelType{
     Event,
     Choices,
 }
-
 public class SelectionPanel : MonoBehaviour, IController
 {
     public SelectionPanelType selectionPanelType;
     [Header("UI Components")]
     [SerializeField] private TextMeshProUGUI titleText;
-    [SerializeField] private UIPanel Panel;
+    private IUIPanel Panel;
     [SerializeField] private Transform selectionContainer;
     [SerializeField] private GameObject choicePrefab;
     // 刷新次数
@@ -29,7 +30,8 @@ public class SelectionPanel : MonoBehaviour, IController
     private ISelectionRequest currentRequest = null;
     void Start()
     {
-
+        Panel = GetComponent<IUIPanel>();
+        if (Panel == null) {Debug.LogError("SelectionPanel: Panel is not set"); return;}
         // 1. 绑定按钮点击事件
         refreshButton.OnClick.AddListener(OnRefreshButtonClick);
         refreshAmountText.text = $"刷新：{refreshAmount}";

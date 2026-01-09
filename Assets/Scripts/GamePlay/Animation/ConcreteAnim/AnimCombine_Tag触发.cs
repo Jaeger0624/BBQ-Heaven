@@ -76,7 +76,9 @@ public class AnimCombine_顾客Tag{
 
     public static IAnimTask Anim_Tag触发_满意度乘区文本(float multiplier, string name, Transform targetTransform){
         string output = $"{name}： {multiplier}X";
-        UnityEngine.Vector3 position = AnimUtility.GetTextSpawnPosition(targetTransform.position);
+        // UnityEngine.Vector3 position = AnimUtility.GetTextSpawnPosition(targetTransform.position);
+        UnityEngine.Vector3 position = UnityEngine.Vector3.zero;
+
         return new SpawnTextAnimationTask(output, 5f, Color.white, position);
     }
 

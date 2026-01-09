@@ -71,18 +71,18 @@ public class ProcessController : MonoBehaviour, IController, ICanSendEvent
 
     // 厨房视图
     private void ShowKitchenPanel(){
-        this.SendEvent(new UIPanelEvent(UIPanelType.KitchenPanel, UIPanelAction.Show));
+        this.SendEvent(new UIPanelEvent(UIPanelType.后厨界面, UIPanelAction.Show));
     }
     private void HideKitchenPanel(){
-        this.SendEvent(new UIPanelEvent(UIPanelType.KitchenPanel, UIPanelAction.Hide));
+        this.SendEvent(new UIPanelEvent(UIPanelType.后厨界面, UIPanelAction.Hide));
     }
 
     private void ShowCustomerPanel(){
 
-        this.SendEvent(new UIPanelEvent(UIPanelType.CustomerPanel, UIPanelAction.Show));
+        this.SendEvent(new UIPanelEvent(UIPanelType.顾客界面, UIPanelAction.Show));
     }
     private void HideCustomerPanel(){
-        this.SendEvent(new UIPanelEvent(UIPanelType.CustomerPanel, UIPanelAction.Hide));
+        this.SendEvent(new UIPanelEvent(UIPanelType.顾客界面, UIPanelAction.Hide));
     }
     
     

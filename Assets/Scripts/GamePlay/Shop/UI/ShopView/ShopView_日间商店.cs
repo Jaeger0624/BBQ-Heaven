@@ -43,6 +43,7 @@ public class ShopView_日间商店 : MonoBehaviour, IController
 
     public void UpdateView(Dictionary<ShopItemType, List<IShopItem>> shopItems){
         shopItemGenerator_吉祥物.Reset();
+        shopItemGenerator_食材.Reset();
         shopItems.ForEach(shopItemType => {
             switch (shopItemType.Key){
                 case ShopItemType.Food:
