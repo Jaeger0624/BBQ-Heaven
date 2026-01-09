@@ -29,21 +29,22 @@ public class SaveSystem : AbstractSystem, ISaveSystem{
     public void SaveSystemData(){
         byte[] bytes = SerializationUtility.SerializeValue(SystemData, DataFormat.Binary);
         File.WriteAllBytes(systemDataPath, bytes);
+        Debug.Log($"<color=green>【SaveSystem】系统数据已保存至: {systemDataPath}</color>");
     }
     public void LoadSystemData(){
         if (File.Exists(systemDataPath)){
             byte[] bytes = File.ReadAllBytes(systemDataPath);
             SystemData = SerializationUtility.DeserializeValue<SystemData>(bytes, DataFormat.Binary);
             if (SystemData == null){
-                Debug.LogError("系统数据文件解析失败！");
+                Debug.LogError("<color=red>【SaveSystem】系统数据文件解析失败！</color>");
                 return;
             }
             else{
-                Debug.Log("系统数据文件解析成功！");
+                Debug.Log("<color=green>【SaveSystem】系统数据文件解析成功！</color>");
             }
         }
         else{
-            Debug.Log("系统数据文件不存在！");
+            Debug.Log("<color=yellow>【SaveSystem】系统数据文件不存在！</color>");
             SystemData = new SystemData();
             byte[] bytes = SerializationUtility.SerializeValue(SystemData, DataFormat.Binary);
             File.WriteAllBytes(systemDataPath, bytes);
@@ -64,7 +65,7 @@ public class SaveSystem : AbstractSystem, ISaveSystem{
         
         File.WriteAllBytes(savePath, bytes);
         
-        Debug.Log($"游戏已保存至: {savePath}");
+        Debug.Log($"<color=green>【SaveSystem】游戏已保存至: {savePath}</color>");
     }
     public void LoadGame(GameArchive gameArchive){
         // Debug.Log("游戏读取成功！");

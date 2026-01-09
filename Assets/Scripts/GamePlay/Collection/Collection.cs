@@ -1,13 +1,17 @@
 
-public enum ItemType{
-    Food, // 食材
-    Stick, // 串签
-    Card, // 卡牌
-    Recipe, // 配方
-    Mascot, // 吉祥物
-    PlayerCharacter, // 玩家角色
-    NPC, // 非玩家角色
-    Encounter, // 遭遇
+using System.Collections.Generic;
+using QFramework;
+
+public enum CollectionType{
+    None = 0,
+    Food = 1, // 食材
+    Stick = 2,
+    Card = 3,
+    Recipe = 4,
+    Mascot = 5,
+    PlayerCharacter = 6,
+    NPC = 7,
+    Encounter = 8,
 }
 
 public enum CollectionState
@@ -21,10 +25,20 @@ public enum CollectionState
 public class CollectionStateChangeEvent : AbstractEvent{
     public string ItemID;
     public CollectionState State;
-    public ItemType ItemType;
-    public CollectionStateChangeEvent(string itemId, CollectionState state, ItemType itemType){
+    public CollectionType ItemType;
+    public CollectionStateChangeEvent(string itemId, CollectionState state, CollectionType itemType){
         this.ItemID = itemId;
         this.State = state;
         this.ItemType = itemType;
     }
+}
+
+public struct CollectionItemDefinition{
+    public string ID;
+    public bool DefaultUnlocked;
+}
+
+public interface ICollectionDataProvider{
+    CollectionType Type { get; }
+    List<CollectionItemDefinition> GetAllItems();
 }

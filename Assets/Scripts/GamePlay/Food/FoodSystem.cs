@@ -29,7 +29,7 @@ public interface IFoodSystem : ISystem, ISavable{
 /// <summary>
 /// 食材系统 - 系统层
 /// </summary>
-public class FoodSystem : AbstractSystem, IFoodSystem
+public partial class FoodSystem : AbstractSystem, IFoodSystem
 {
     private Dictionary<string, Food> foodRepositorys;  // 食材仓库字典
     public Dictionary<string, Food> FoodRepositorys() => foodRepositorys;

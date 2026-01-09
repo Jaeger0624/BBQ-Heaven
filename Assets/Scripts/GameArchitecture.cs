@@ -32,6 +32,8 @@ public class GameArchitecture : Architecture<GameArchitecture>
         Debug.Log("【GameArchitecture】初始化游戏系统");
         StringBuilder sb = new StringBuilder("系统初始化列表");
         // 注册系统
+        Interface.RegisterSystem<ISaveSystem>(new SaveSystem());  // 存档系统
+        sb.Append("\nSaveSystem - 存档系统");
         Interface.RegisterSystem<BlackboardSystem>(new BlackboardSystem());
         sb.Append("\nBlackboardSystem - 全局黑板系统");
         Interface.RegisterSystem<IDataSystem>(new DataSystem());
@@ -80,14 +82,14 @@ public class GameArchitecture : Architecture<GameArchitecture>
         sb.Append("\nSelectorSystem - 选择系统");
         Interface.RegisterSystem<IDialogueSystem>(new DialogueSystem());  // 对话系统
         sb.Append("\nDialogueSystem - 对话系统");
-        Interface.RegisterSystem<ISaveSystem>(new SaveSystem());  // 存档系统
-        sb.Append("\nSaveSystem - 存档系统");
         Interface.RegisterSystem<IEncounterSystem>(new EncounterSystem());  // 事件系统
         sb.Append("\nEncounterSystem - 事件系统");
         Interface.RegisterSystem<IBoardEntitySystem>(new BoardEntitySystem());  // 棋盘实体系统
         sb.Append("\nBoardEntitySystem - 棋盘实体系统");
         Interface.RegisterSystem<IMyEventSystem>(new MyEventSystem());  // 事件系统
         sb.Append("\nMyEventSystem - 事件系统");
+        Interface.RegisterSystem<ICollectionSystem>(new CollectionSystem());  // 图鉴系统
+        sb.Append("\nCollectionSystem - 图鉴系统");
         // Debug.Log(sb.ToString());
     }
 
