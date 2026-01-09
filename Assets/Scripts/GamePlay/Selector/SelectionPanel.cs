@@ -18,7 +18,7 @@ public class SelectionPanel : MonoBehaviour, IController
     public SelectionPanelType selectionPanelType;
     [Header("UI Components")]
     [SerializeField] private TextMeshProUGUI titleText;
-    [SerializeField] private CanvasGroup canvasGroup;
+    [SerializeField] private UIPanel Panel;
     [SerializeField] private Transform selectionContainer;
     [SerializeField] private GameObject choicePrefab;
     // 刷新次数
@@ -53,7 +53,7 @@ public class SelectionPanel : MonoBehaviour, IController
     private void RefreshSelection(){
         if (currentRequest == null) {Debug.LogError("当前没有选择请求"); return;}
         // 1. 重新生成选择请求
-        SelectRequest evt = currentRequest.Form();
+        SelectRequest evt = currentRequest.Create();
 
         // 2. 设置标题
         titleText.text = evt.Title;
@@ -90,7 +90,7 @@ public class SelectionPanel : MonoBehaviour, IController
         currentRequest = evt.SelectionRequest;
         Debug.Log("【SelectionPanel】当前请求：" + currentRequest.Title + "，类型：" + evt.SelectionPanelType);
         // 3. 生成选项
-        SelectRequest request = currentRequest.Form();
+        SelectRequest request = currentRequest.Create();
         titleText.text = request.Title;
         foreach (var choice in request.Choices)
         {
@@ -122,20 +122,11 @@ public class SelectionPanel : MonoBehaviour, IController
 
     [Button("隐藏")]
     private void Hide(bool instant = false){
-        if (instant){
-            canvasGroup.alpha = 0;
-        }
-        else{
-            canvasGroup.DOFade(0, 0.3f).SetEase(Ease.OutSine).SetUpdate(true);
-        }
-        canvasGroup.blocksRaycasts = false;
-        canvasGroup.interactable = false;
+        Panel.Hide();
     }
     [Button("显示")]
     private void Show(){
-        canvasGroup.DOFade(1, 0.3f).SetEase(Ease.OutSine).SetUpdate(true);
-        canvasGroup.blocksRaycasts = true;
-        canvasGroup.interactable = true;
+        Panel.Show();
     }
     public IArchitecture GetArchitecture()
     {

@@ -9,14 +9,14 @@ public interface ISelectionRequest : ICanGetSystem{
     string Title { get; }
     int Amount { get; set; }
     Action<string> OnSelect { get; set; }
-    SelectRequest Form();
+    SelectRequest Create();
 }
 public abstract class AbstractSelectionRequest : ISelectionRequest{
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
     public abstract string Title { get; }
     public abstract int Amount { get; set; }
     public abstract Action<string> OnSelect { get; set; }
-    public abstract SelectRequest Form();
+    public abstract SelectRequest Create();
 }
 
 public class SelectionRequest_随机卡牌 : AbstractSelectionRequest{
@@ -27,7 +27,7 @@ public class SelectionRequest_随机卡牌 : AbstractSelectionRequest{
         this.Amount = amount;
         this.OnSelect = onSelect;
     }
-    public override SelectRequest Form(){
+    public override SelectRequest Create(){
         Rng rng = this.GetSystem<IRngSystem>().GetSubRng<ICardSystem>();
         // 获取3张随机卡牌
         List<CardData> cardDatas = rng.PickMany<CardData>(this.GetSystem<IDataSystem>().GetAllCardData(), 3);
@@ -52,7 +52,7 @@ public class SelectionRequest_随机食材 : AbstractSelectionRequest{
         this.Amount = amount;
         this.OnSelect = onSelect;
     }
-    public override SelectRequest Form(){
+    public override SelectRequest Create(){
         Rng rng = this.GetSystem<IRngSystem>().GetSubRng<IFoodSystem>();
         // 获取随机食材
         List<FoodData> foodDatas = rng.PickMany<FoodData>(this.GetSystem<IDataSystem>().GetAllFoodData(), Amount);

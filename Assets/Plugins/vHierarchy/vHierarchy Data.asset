@@ -33,6 +33,8 @@ MonoBehaviour:
         - globalObjectIdString: GlobalObjectId_V1-2-37047d2fed1fddb4b9e36c3cad745512-1835885846-0
         - globalObjectIdString: GlobalObjectId_V1-2-37047d2fed1fddb4b9e36c3cad745512-100288787-0
         - globalObjectIdString: GlobalObjectId_V1-2-37047d2fed1fddb4b9e36c3cad745512-1073954695-0
+        - globalObjectIdString: GlobalObjectId_V1-2-37047d2fed1fddb4b9e36c3cad745512-566099105-0
+        - globalObjectIdString: GlobalObjectId_V1-2-37047d2fed1fddb4b9e36c3cad745512-384427155-0
         values:
         - colorIndex: 3
           iconNameOrGuid: 
@@ -88,6 +90,14 @@ MonoBehaviour:
           isColorRecursive: 0
         - colorIndex: 0
           iconNameOrGuid: BuildSettings.Metro
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 0
+          iconNameOrGuid: NetworkDiscovery Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 0
+          iconNameOrGuid: NetworkDiscovery Icon
           isIconRecursive: 0
           isColorRecursive: 0
     - goDatas_byGlobalId:

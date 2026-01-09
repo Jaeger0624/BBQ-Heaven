@@ -14,14 +14,12 @@ public class UIPanel : MonoBehaviour, IController{
         Hide();
         this.RegisterEvent<UIPanelEvent>(OnUIPanelEvent);
     }
-    void Start()
-    {
-    }
     void OnDestroy()
     {
         this.UnRegisterEvent<UIPanelEvent>(OnUIPanelEvent);
     }
     private void OnUIPanelEvent(UIPanelEvent e){
+        if (e.panelType == UIPanelType.无) {Debug.LogError("UIPanelEvent 永远不该触发“无”面板事件"); return;}
         if (e.panelType == currentPanelType){
             if (e.action == UIPanelAction.Show){
                 Show();
