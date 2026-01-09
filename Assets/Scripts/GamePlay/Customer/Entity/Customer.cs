@@ -26,12 +26,14 @@ public class Customer : ICanGetSystem, ICanRegisterEvent, ICanSendEvent{
     public CustomerState state = CustomerState.Waiting;
     // 是否即将离开
     public bool isAboutToLeave = false;
-    public Customer(string name, int patienceMax){
+    // 顾客的声望值
+    public int reputation = 2;
+    public Customer(string name, int patienceMax, int reputation){
         this.guid = Guid.NewGuid().ToString();
         this.name = name;
         this.PatienceMax = new ReactiveProperty<int>(patienceMax);
         this.PatienceNow = new ReactiveProperty<int>(0);
-
+        this.reputation = reputation;
         // 设置一下喜好
         this.preferences = Preference.CreateRandomPreference();
 

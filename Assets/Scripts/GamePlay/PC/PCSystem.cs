@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using cfg;
 using QFramework;
+using UniRx;
 using UnityEngine;
 
 /// <summary>
@@ -8,7 +9,9 @@ using UnityEngine;
 /// 用于处理玩家角色（Player Character）相关的逻辑
 /// </summary>
 public interface IPCSystem : ISystem, ISavable{
-    int Level { get; }
+    ReactiveProperty<int> Level { get; }
+    ReactiveProperty<int> Reputation { get; }
+    ReactiveProperty<int> NextLevelReputation { get; }
     PlayerCharacter ChoosePC(string id);
     void InitPC(PlayerCharacter playerCharacter);
     // 增加口碑
@@ -18,13 +21,11 @@ public interface IPCSystem : ISystem, ISavable{
 
 public class PCSystem : AbstractSystem, IPCSystem
 {
-    public int Level { get; private set; } = 1;
-    private int reputation = 0;
+    public ReactiveProperty<int> Level { get; private set; } = new ReactiveProperty<int>(1);
+    public ReactiveProperty<int> Reputation { get; private set; } = new ReactiveProperty<int>(0);
+    public ReactiveProperty<int> NextLevelReputation { get; private set; } = new ReactiveProperty<int>(10);
     private PlayerCharacter currentPC;
-    public void AddReputation(int amount)
-    {
-        reputation += amount;
-    }
+
     protected override void OnInit()
     {
     }
@@ -35,11 +36,52 @@ public class PCSystem : AbstractSystem, IPCSystem
     public void Save(GameArchive archive)
     {
         archive.playerInfoData.playerCharacter = currentPC;
+        archive.playerInfoData.reputation = Reputation.Value;
+        archive.playerInfoData.nextLevelReputation = NextLevelReputation.Value;
+        archive.playerInfoData.level = Level.Value;
     }
     public void Load(GameArchive archive)
     {
         LoadPC(archive.playerInfoData.playerCharacter);
     }
+    #region 声望部分
+    public void AddReputation(int amount)
+    {
+        int newReputation = Reputation.Value + amount;
+        Reputation.Value = newReputation;
+        Debug.Log($"增加声望: {amount}, 当前声望: {newReputation}");
+
+        while (Reputation.Value >= NextLevelReputation.Value){
+            Upgrade();
+        }
+        while (Reputation.Value < 0){
+            if (Level.Value > 1){
+                Downgrade();
+            }
+            else{
+                Reputation.Value = 0;
+                Debug.Log($"声望不能为负数，已重置为0");
+                break;
+            }
+        }
+
+        this.SendEvent(new ReputationChangedEvent(amount));
+    }
+    
+    private void Upgrade(){
+        Level.Value++;
+        Reputation.Value = Reputation.Value - NextLevelReputation.Value;
+        NextLevelReputation.Value = Level.Value * 2 + 8;
+        Debug.Log($"升级到等级: {Level.Value}, 下一级声望: {NextLevelReputation.Value}");
+    } 
+    private void Downgrade(){
+        Level.Value--;
+        Reputation.Value = Reputation.Value + NextLevelReputation.Value;
+        NextLevelReputation.Value = Level.Value * 2 + 8;
+        Debug.Log($"降级到等级: {Level.Value}, 下一级声望: {NextLevelReputation.Value}");
+    }
+    #endregion
+    #region 角色部分
     public PlayerCharacter ChoosePC(string id)
     {
         PCData data = this.GetSystem<IDataSystem>().GetPCData(id);
@@ -114,4 +156,6 @@ public class PCSystem : AbstractSystem, IPCSystem
         currentPC = null;
 
     }
+
+    #endregion
 }

@@ -28,14 +28,19 @@ public class AddNewFoodToRepositoryEvent : AbstractEvent{
     }
 }
 
+/// <summary>
+/// 删除食材仓库事件
+/// </summary>
 public class DeleteFoodFromRepositoryEvent : AbstractEvent{
-    public readonly string id;
-    public DeleteFoodFromRepositoryEvent(string id){
-        this.id = id;
+    public readonly string guid;
+    public DeleteFoodFromRepositoryEvent(string guid){
+        this.guid = guid;
     }
 }
 
-
+/// <summary>
+/// 更新食材仓库数量事件
+/// </summary>
 public class UpdateFoodRepositoryAmountEvent : AbstractEvent{
     public readonly Dictionary<string, int> foodRepositoryAmounts;
     public UpdateFoodRepositoryAmountEvent(Dictionary<string, int> foodRepositoryAmounts){

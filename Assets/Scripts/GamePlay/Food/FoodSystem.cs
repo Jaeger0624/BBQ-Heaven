@@ -12,6 +12,7 @@ public interface IFoodSystem : ISystem, ISavable{
     // 获取食材仓库
     Dictionary<string, Food> FoodInRepositorys();
     Dictionary<string, Food> FoodRepositorys();
+    void DeleteFoodFromRepository(Food food);
     // 创建食材实例
     FoodInstance CreateFoodInstance(Vector2Int position, Food food);
     void RemoveFoodInstance(string guid);
@@ -172,5 +173,13 @@ public class FoodSystem : AbstractSystem, IFoodSystem
     }
     public ReactiveProperty<int> GetCurrentSupplyCount() => foodSupplyer.supplyChance;
 
-
+    public void DeleteFoodFromRepository(Food food)
+    {
+        if (food == null) {Debug.LogError($"【FoodSystem】删除食材仓库失败: food 为空"); return;}
+        if (!foodRepositorys.ContainsKey(food.guid)) {Debug.LogError($"【FoodSystem】删除食材仓库失败: {food.guid} - {food.foodData.Name} 不存在"); return;}
+        Debug.Log($"【FoodSystem】删除食材仓库: {food.guid} - {food.foodData.Name}");
+        foodRepositorys.Remove(food.guid);
+        this.SendEvent(new DeleteFoodFromRepositoryEvent(food.guid));
+        this.SendEvent(new UpdateFoodRepositoryAmountEvent(GetFoodRepositoryAmounts()));
+    }
 }

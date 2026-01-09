@@ -96,6 +96,8 @@ public class DealSystem : AbstractSystem, IDealSystem
 		// 结算落账（现金）
 		this.GetSystem<IScoreSystem>().ChangeScore(result.price);
 
+		// 增加顾客的声望值
+		this.GetSystem<IPCSystem>().AddReputation(customer.reputation);
 
 		// 关闭满意度条
 		this.GetSystem<IAnimationSystem>().Append(new SequenceAnimTask(new List<IAnimTask>{

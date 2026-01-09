@@ -8,9 +8,6 @@ using UnityEngine.UI;
 /// 显示玩家构筑的面板
 /// </summary>
 public class BuildPanel : MonoBehaviour, IController{
-    [SerializeField] private CanvasGroup canvasGroup;
-    [SerializeField] private Button showButton;
-    [SerializeField] private Button hideButton;
     [SerializeField] private Transform 食材容器;
     [SerializeField] private Transform 吉祥物容器;
     [SerializeField] private Transform 配方容器;
@@ -25,34 +22,13 @@ public class BuildPanel : MonoBehaviour, IController{
 
     void Start()
     {
-        showButton.onClick.AddListener(Show);
-        hideButton.onClick.AddListener(Hide);
+    }
 
-        Hide();
-    }
-    void OnDestroy()
-    {
-        showButton.onClick.RemoveListener(Show);
-        hideButton.onClick.RemoveListener(Hide);
-    }
-    public void Show()
-    {
+    public void Show(){
+        ClearAllDisplayViews();
         InitFoodDisplayViews();
         InitMascotDisplayViews();
         InitRecipeDisplayViews();
-
-        canvasGroup.alpha = 1;
-        canvasGroup.blocksRaycasts = true;
-        canvasGroup.interactable = true;
-    }
-
-    public void Hide()
-    {
-        canvasGroup.alpha = 0;
-        canvasGroup.blocksRaycasts = false;
-        canvasGroup.interactable = false;
-
-        ClearAllDisplayViews();
     }
 
     private void InitFoodDisplayViews()

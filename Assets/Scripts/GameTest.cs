@@ -89,7 +89,7 @@ public class GameTest : MonoBehaviour, IController, ICanSendEvent{
             "顾客测试",
             "烤串和食材测试",
             "时间测试",
-            "商店测试",
+            "PC信息测试",
             "种子测试",
             "GA测试",
             "卡牌测试"
@@ -121,7 +121,7 @@ public class GameTest : MonoBehaviour, IController, ICanSendEvent{
                 TimeTest();
                 break;
             case 5:
-                ShopTest();
+                PCInfoTest();
                 break;
             case 6:
                 SeedTest();
@@ -289,9 +289,13 @@ public class GameTest : MonoBehaviour, IController, ICanSendEvent{
         GUILayout.Label($"目标时间: {targetTime.hour:D2}:{targetTime.minute:D2}");
     }
 
-    private void ShopTest(){
-        if (GUILayout.Button("生成每日商品")){
-            this.GetSystem<IShopSystem>().GenerateDailyShopItems();
+    private void PCInfoTest(){
+
+        if (GUILayout.Button("增加1点声望")){
+            this.GetSystem<IPCSystem>().AddReputation(1);
+        }
+        if (GUILayout.Button("减少1点声望")){
+            this.GetSystem<IPCSystem>().AddReputation(-1);
         }
         if (GUILayout.Button("添加100金币")){
             this.GetSystem<IEconomySystem>().AddCoin(100);
@@ -300,6 +304,9 @@ public class GameTest : MonoBehaviour, IController, ICanSendEvent{
             this.GetSystem<IEconomySystem>().CostCoin(100);
         }
         GUILayout.Label($"金币: {this.GetSystem<IEconomySystem>().coin.Value}");
+        GUILayout.Label($"声望: {this.GetSystem<IPCSystem>().Reputation.Value}");
+        GUILayout.Label($"等级: {this.GetSystem<IPCSystem>().Level.Value}");
+        GUILayout.Label($"下一级声望: {this.GetSystem<IPCSystem>().NextLevelReputation.Value}");
     }
 # endregion
     private Rng rng = new Rng(0);

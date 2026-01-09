@@ -32,29 +32,10 @@ public class CustomerFactory_默认影响权重 : ICustomerFactory{
         // 生成一个随机耐心阈值
         int patienceMax = 30 + 5 * random;
 
-        Customer customer = new 
-        Customer(name, patienceMax);
-
-        //TODO: 配置标签
-        return customer;
-    }
-}
-
-public class CustomerFactory_默认顾客 : ICustomerFactory
-{
-    public Customer GenerateCustomer()
-    {
-        // 生成一个随机名字
-        List<string> customerNames = new List<string>(){
-            "明","华","玉","杰","强","伟","超","浩","洋","涛"
-        };
-        List<string> customerSurnames = new List<string>(){
-            "王","李","张","刘","陈","杨","赵","黄","周","吴"
-        };
-        Rng rng = GameArchitecture.Interface.GetSystem<IRngSystem>().GetSubRng<ICustomerSystem>();
+        int reputation = 2;
         
-        string name = rng.PickOne(customerSurnames) + rng.PickOne(customerNames);
-        Customer customer = new Customer(name, 3);
+        Customer customer = new Customer(name, patienceMax, reputation);
+
         return customer;
     }
 }

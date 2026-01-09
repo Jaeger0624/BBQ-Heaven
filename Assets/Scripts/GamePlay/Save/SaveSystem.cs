@@ -5,18 +5,49 @@ using Sirenix.Serialization;
 using UnityEngine;
 
 public interface ISaveSystem : ISystem{
+    SystemData SystemData { get; }
     void SaveGame();
+    void SaveSystemData();
     void LoadGame(GameArchive gameArchive);
+    void LoadSystemData();
     GameArchive GetGameArchive();
 }
 public class SaveSystem : AbstractSystem, ISaveSystem{
     // 存到Persistent文件夹下
     private string savePath => "Assets/Persistent/save.json";
+    private string systemDataPath => "Assets/Persistent/systemData.json";
+    public SystemData SystemData { get; private set; }
     protected override void OnInit()
     {
+        LoadSystemData();
     }
     protected override void OnDeinit()
     {
+        SaveSystemData();
+    }
+
+    public void SaveSystemData(){
+        byte[] bytes = SerializationUtility.SerializeValue(SystemData, DataFormat.Binary);
+        File.WriteAllBytes(systemDataPath, bytes);
+    }
+    public void LoadSystemData(){
+        if (File.Exists(systemDataPath)){
+            byte[] bytes = File.ReadAllBytes(systemDataPath);
+            SystemData = SerializationUtility.DeserializeValue<SystemData>(bytes, DataFormat.Binary);
+            if (SystemData == null){
+                Debug.LogError("系统数据文件解析失败！");
+                return;
+            }
+            else{
+                Debug.Log("系统数据文件解析成功！");
+            }
+        }
+        else{
+            Debug.Log("系统数据文件不存在！");
+            SystemData = new SystemData();
+            byte[] bytes = SerializationUtility.SerializeValue(SystemData, DataFormat.Binary);
+            File.WriteAllBytes(systemDataPath, bytes);
+        }
     }
     public void SaveGame(){
         // Debug.Log("Save Game");
