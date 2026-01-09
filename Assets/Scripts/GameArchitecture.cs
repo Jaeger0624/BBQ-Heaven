@@ -86,6 +86,8 @@ public class GameArchitecture : Architecture<GameArchitecture>
         sb.Append("\nEncounterSystem - 事件系统");
         Interface.RegisterSystem<IBoardEntitySystem>(new BoardEntitySystem());  // 棋盘实体系统
         sb.Append("\nBoardEntitySystem - 棋盘实体系统");
+        Interface.RegisterSystem<IMyEventSystem>(new MyEventSystem());  // 事件系统
+        sb.Append("\nMyEventSystem - 事件系统");
         // Debug.Log(sb.ToString());
     }
 

@@ -10,8 +10,10 @@ using UnityEngine;
 /// 遭遇系统
 /// </summary>
 public interface IEncounterSystem : ISystem{
+    // 持续型遭遇
     void StartEncounter(string id);
     void EndEncounter(string id);
+    // 瞬间型遭遇
     IObservable<string> TriggerInstantEncounter(string id, List<object> param);
     List<ActiveEncounter> ActiveEncounters { get; }
 }

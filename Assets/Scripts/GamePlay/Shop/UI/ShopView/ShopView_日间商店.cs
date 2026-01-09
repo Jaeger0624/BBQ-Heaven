@@ -13,6 +13,8 @@ public class ShopView_日间商店 : MonoBehaviour, IController
 {
     [LabelText("吉祥物商品生成器")]
     public ShopItemGenerator shopItemGenerator_吉祥物;
+    [LabelText("食材补充商品生成器")]
+    public ShopItemGenerator shopItemGenerator_食材;
 
 
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
@@ -44,6 +46,7 @@ public class ShopView_日间商店 : MonoBehaviour, IController
         shopItems.ForEach(shopItemType => {
             switch (shopItemType.Key){
                 case ShopItemType.Food:
+                    shopItemGenerator_食材.GenerateItem(shopItemType.Value);
                     break;
                 case ShopItemType.Mascot:
                     shopItemGenerator_吉祥物.GenerateItem(shopItemType.Value);

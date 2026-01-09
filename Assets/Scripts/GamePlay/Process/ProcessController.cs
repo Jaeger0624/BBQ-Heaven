@@ -28,15 +28,15 @@ public class ProcessController : MonoBehaviour, IController, ICanSendEvent
     }
     [Button("关闭主游戏界面")]
     public void HideMainGamePlay(){
-        mainGamePlayUI.alpha = 0;
-        mainGamePlayUI.blocksRaycasts = false;
-        mainGamePlayUI.interactable = false;
+        // mainGamePlayUI.alpha = 0;
+        // mainGamePlayUI.blocksRaycasts = false;
+        // mainGamePlayUI.interactable = false;
     }
     [Button("打开主游戏界面")]
     public void ShowMainGamePlay(){
-        mainGamePlayUI.alpha = 1;
-        mainGamePlayUI.blocksRaycasts = true;
-        mainGamePlayUI.interactable = true;
+        // mainGamePlayUI.alpha = 1;
+        // mainGamePlayUI.blocksRaycasts = true;
+        // mainGamePlayUI.interactable = true;
     }
     private void OnShowMainGame(ShowMainGamePlayEvent evt){
         ShowMainGamePlay();

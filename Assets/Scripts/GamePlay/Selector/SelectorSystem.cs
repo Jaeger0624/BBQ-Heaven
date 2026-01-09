@@ -9,8 +9,8 @@ using UnityEngine;
 public interface ISelectorSystem : ISystem
 {
     IObservable<BoardCell> SelectCell(List<BoardCell> validCells);
-    void RequestSelection(ISelectionRequest selectionRequest);
-}
+    void RequestSelection(ISelectionRequest selectionRequest, int refreshAmount = 0, SelectionPanelType selectionPanelType = SelectionPanelType.Choices);
+    }
 public class SelectorSystem : AbstractSystem, ISelectorSystem
 {
 
@@ -56,9 +56,9 @@ public class SelectorSystem : AbstractSystem, ISelectorSystem
         });
     }
 
-    public void RequestSelection(ISelectionRequest selectionRequest)
+    public void RequestSelection(ISelectionRequest selectionRequest, int refreshAmount, SelectionPanelType selectionPanelType)
     {
-        RequestSelectionEvent evt = selectionRequest.Form();
-        this.SendEvent(evt);
+        Debug.Log($"【SelectorSystem】请求选择: {selectionRequest.Title}");
+        this.SendEvent(new CreateSelectionEvent(selectionRequest, refreshAmount, selectionPanelType));
     }
 }

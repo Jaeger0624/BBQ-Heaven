@@ -49,6 +49,7 @@ public class ShopSystem : AbstractSystem, IShopSystem{
         // 1. 构建ShopTasks
         List<ShopTask> shopTasks = BuildShopTasks();
         Dictionary<ShopItemType, List<IShopItem>> shopItemAmounts = BuildShopItems(shopTasks, new Random_纯随机());
+        
         // Debug.Log($"生成每日商品: {ShopItemAmountsToString(shopItemAmounts)}");
         this.SendEvent(new CreateShopEvent_日间商店(shopItemAmounts));
     }

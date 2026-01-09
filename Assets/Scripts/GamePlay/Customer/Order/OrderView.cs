@@ -1,3 +1,4 @@
+using System.Linq;
 using TMPro;
 using UniRx;
 using UnityEngine;
@@ -9,6 +10,7 @@ public class OrderView : MonoBehaviour
     [SerializeField] private Image BackgroundImage;
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI patienceText;
+    public TextMeshProUGUI customerTagsText;
 
     public void Bind(Customer customer){
         this.customer = customer;
@@ -25,10 +27,14 @@ public class OrderView : MonoBehaviour
         nameText.text = customer.name;
 
         UpdatePatience();
+        UpdateCustomerTags();
     }
-    
 
 
+    private void UpdateCustomerTags(){
+        string tags = string.Join(", ", customer.customerTags.Select(x => x.name));
+        customerTagsText.text = $"<color=yellow>Tag：</color>{tags}";
+    }
     private void UpdatePatience(){
         patienceText.text = $"{customer.PatienceNow.Value}/{customer.PatienceMax.Value}";
         patienceText.color = customer.PatienceNow.Value >= customer.PatienceMax.Value ? Color.red : Color.white;

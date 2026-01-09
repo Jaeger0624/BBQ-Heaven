@@ -8,6 +8,7 @@ public class UIPanel : MonoBehaviour, IController{
     [SerializeField] private UIPanelType currentPanelType;
     public UnityEvent onShow;
     public UnityEvent onHide;
+    [SerializeField] private bool isVisible = true;
     void Awake()
     {
         Hide();
@@ -34,6 +35,8 @@ public class UIPanel : MonoBehaviour, IController{
         }
     }
     public void Show(){
+        if (isVisible) return;
+        isVisible = true;    
         onShow.Invoke();
 
         if (canvasGroup == null) return;
@@ -42,6 +45,8 @@ public class UIPanel : MonoBehaviour, IController{
         canvasGroup.interactable = true;
     }
     public void Hide(){
+        if (!isVisible) return;
+        isVisible = false;
         onHide.Invoke();
 
         if (canvasGroup == null) return;
