@@ -15,8 +15,9 @@ public enum ButtonAnim
     Scale,
 }
 
+
 [RequireComponent(typeof(RectTransform))]
-public class ButtonUI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, IController, ICanSendEvent
+public class ButtonUI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, IController, ICanSendEvent, IButton
 {
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
     [SerializeField] private TextMeshProUGUI buttonText;
@@ -64,5 +65,15 @@ public class ButtonUI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
     public void SetText(string text){
         if (buttonText == null) return;
         buttonText.text = text;
+    }
+
+    public void AddListener(Action action)
+    {
+        OnClick.AddListener(new UnityAction(action));
+    }
+
+    public void RemoveListener(Action action)
+    {
+        OnClick.RemoveListener(new UnityAction(action));
     }
 }

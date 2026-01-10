@@ -4,6 +4,7 @@ using UnityEngine;
 
 public interface ICollectionSystem : ISystem{
     // 查询API
+    Dictionary<string, CollectionState> GetItemStates(CollectionType itemType);
     CollectionState GetItemState(string itemId, CollectionType itemType);
     bool IsUnlocked(string itemId, CollectionType itemType);
     bool IsDiscovered(string itemId, CollectionType itemType);
@@ -53,6 +54,10 @@ public class CollectionSystem : AbstractSystem, ICollectionSystem{
         }
 
         if (isDirty) SaveSystem.SaveSystemData();
+    }
+    public Dictionary<string, CollectionState> GetItemStates(CollectionType itemType)
+    {
+        return SystemData.GetCollectionContainer(itemType);
     }
     public CollectionState GetItemState(string itemId, CollectionType itemType)
     {

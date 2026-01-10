@@ -1,7 +1,10 @@
 
+using System;
 using System.Collections.Generic;
 using QFramework;
-
+using Sirenix.OdinInspector;
+[Serializable]
+[ShowInInspector]
 public enum CollectionType{
     None = 0,
     Food = 1, // 食材

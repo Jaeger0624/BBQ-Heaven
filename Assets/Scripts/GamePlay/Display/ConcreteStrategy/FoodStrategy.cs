@@ -2,6 +2,15 @@ using System;
 using System.Collections.Generic;
 using QFramework;
 using UnityEngine;
+public class CollectionFoodStrategy : ItemInteractStrategyBase<FoodUIContext, DisplayFoodView>
+{
+    public override void OnBind(DisplayFoodView itemView, FoodUIContext data)
+    {
+    }
+    public override void OnClick(FoodUIContext data, DisplayFoodView itemView)
+    {
+    }
+}
 public class DeleteFoodStrategy : ItemInteractStrategyBase<FoodUIContext, DisplayFoodView>{
     private Action _onPicked; // 选中后的回调;
     public DeleteFoodStrategy(Action onPicked){
@@ -16,7 +25,6 @@ public class DeleteFoodStrategy : ItemInteractStrategyBase<FoodUIContext, Displa
     public override void OnBind(DisplayFoodView itemView, FoodUIContext data){
     }
 }
-
 
 public class MultiDeleteFoodStrategy : ItemInteractStrategyBase<FoodUIContext, DisplayFoodView>{
     private SelectionContext<FoodUIContext> _context;

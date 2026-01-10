@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using QFramework;
 using UnityEngine;
 
@@ -50,17 +51,11 @@ public class GameState_开始新游戏 : AbstractGameState
         this.GetSystem<IRecipeSystem>().RegisterAllRecipes();
 
         // 4. 添加初始食材
-        List<FoodPack> foodPacks = new List<FoodPack>
-        {
-            new FoodPack("apple", 20),
-            new FoodPack("beer", 20),
-            new FoodPack("chicken", 20),
-            new FoodPack("shrimp", 20),
-            new FoodPack("cherry", 20),
-        };
+
+        // 随机选取4个食材包，并添加到食材仓库
+        Rng foodRng = this.GetSystem<IRngSystem>().GetSubRng<IFoodSystem>();
+        List<FoodPack> foodPacks = foodRng.PickMany<FoodPack>(this.GetSystem<IDataSystem>().GetAllFoodData().Select(foodData => new FoodPack(foodData.ID, 10)).ToList(), 4);
         this.GetSystem<IFoodSystem>().AddFoodToRepository(foodPacks);
-
-
 
         Debug.Log("【GameSystem】新游戏初始化完成");
     }

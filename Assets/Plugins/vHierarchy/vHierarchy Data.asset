@@ -42,6 +42,12 @@ MonoBehaviour:
         - globalObjectIdString: GlobalObjectId_V1-2-37047d2fed1fddb4b9e36c3cad745512-1848215218-0
         - globalObjectIdString: GlobalObjectId_V1-2-37047d2fed1fddb4b9e36c3cad745512-1778576290-0
         - globalObjectIdString: GlobalObjectId_V1-2-37047d2fed1fddb4b9e36c3cad745512-833036635-0
+        - globalObjectIdString: GlobalObjectId_V1-2-37047d2fed1fddb4b9e36c3cad745512-676510322-0
+        - globalObjectIdString: GlobalObjectId_V1-2-37047d2fed1fddb4b9e36c3cad745512-1498567906-0
+        - globalObjectIdString: GlobalObjectId_V1-2-37047d2fed1fddb4b9e36c3cad745512-859068650-0
+        - globalObjectIdString: GlobalObjectId_V1-2-37047d2fed1fddb4b9e36c3cad745512-303647887-0
+        - globalObjectIdString: GlobalObjectId_V1-2-37047d2fed1fddb4b9e36c3cad745512-1317106411-0
+        - globalObjectIdString: GlobalObjectId_V1-2-37047d2fed1fddb4b9e36c3cad745512-1584009643-0
         values:
         - colorIndex: 3
           iconNameOrGuid: 
@@ -133,6 +139,30 @@ MonoBehaviour:
           isColorRecursive: 0
         - colorIndex: 0
           iconNameOrGuid: BuildSettings.Metro On
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 0
+          iconNameOrGuid: Button Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 0
+          iconNameOrGuid: Button Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 0
+          iconNameOrGuid: Button Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 0
+          iconNameOrGuid: Button Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 0
+          iconNameOrGuid: Button Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 0
+          iconNameOrGuid: Button Icon
           isIconRecursive: 0
           isColorRecursive: 0
     - goDatas_byGlobalId:

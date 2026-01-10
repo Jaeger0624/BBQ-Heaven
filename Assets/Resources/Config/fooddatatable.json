@@ -156,10 +156,10 @@
     "rank": 1
   },
   {
-    "ID": "chicken",
-    "name": "鸡肉",
-    "description": "一只鸡！",
-    "type": 4,
+    "ID": "cookie",
+    "name": "曲奇饼干",
+    "description": "曲奇饼干",
+    "type": 16,
     "tag": 1,
     "rarity": 1,
     "taste": 2,

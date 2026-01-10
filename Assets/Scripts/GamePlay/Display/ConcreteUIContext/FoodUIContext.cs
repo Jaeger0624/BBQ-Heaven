@@ -10,7 +10,7 @@ public class FoodUIContext
     public Food RuntimeFood { get; private set; }
     
     // 状态标识
-    public bool IsUnlocked { get; private set; } // 图鉴用：是否解锁
+    public CollectionState State { get; private set; } // 图鉴用：是否解锁
     public bool IsOwned => RuntimeFood != null;  // 仓库用：是否拥有
     public int Count { get; private set; }       // 数量展示
 
@@ -21,16 +21,16 @@ public class FoodUIContext
     {
         RuntimeFood = food;
         ConfigData = food.foodData; // 假设 Food 里引用了 data
-        IsUnlocked = true;
+        State = CollectionState.Discovered;
         Count = 1; // 假设 Food 有 Count 字段
     }
 
     // 场景 B: 图鉴 (通过 FoodData 构建)
-    public FoodUIContext(FoodData data, bool isUnlocked)
+    public FoodUIContext(FoodData data, CollectionState state)
     {
         RuntimeFood = null;
         ConfigData = data;
-        IsUnlocked = isUnlocked;
+        State = state;
         Count = 0;
     }
 }
