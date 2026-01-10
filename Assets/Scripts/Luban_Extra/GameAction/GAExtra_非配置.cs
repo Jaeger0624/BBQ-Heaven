@@ -103,7 +103,7 @@ namespace cfg{
             var rng = this.GetSystem<IRngSystem>().GetSubRng<IBBQSystem>();
             if (rng.NextFloat() < foodInstance.baseCritRate){
                 multiplier = foodInstance.baseCritMultiplier;
-                Debug.Log($"【GA_添加单个食材基础值】食材实例{foodInstance.name}暴击，倍率：{multiplier}");
+                Debug.Log($"【GA_添加单个食材基础值】食材实例{foodInstance.name}暴击，倍率：{multiplier}\n原值: {foodBaseRarity}|{foodBaseTaste} -> 新值: {foodBaseRarity * multiplier}|{foodBaseTaste * multiplier}");
             }
 
 

@@ -56,13 +56,7 @@ public class BBQSystem : AbstractSystem, IBBQSystem
 
         this.GetSystem<IStickSystem>().UseCurrentStick(stick);  // 会同时取消选中烤串
         
-        // 0.检测时间是否足够
-        int timePoint = this.GetSystem<ITimeSystem>().GetCostTime(foodInstances, stick);
-        if (timePoint > this.GetSystem<ITimeSystem>().TargetTime.GetTotalTimePoint() - this.GetSystem<ITimeSystem>().CurrentTime.GetTotalTimePoint()){
-            Debug.Log("【BBQSystem】时间不足，无法完成烧烤");
-            this.SendEvent(new ProcessMoveNextEvent());
-            return;
-        }
+
 
         BBQ bbq = new BBQ(stick, foodInstances);    // 创建烧烤实例
         
@@ -78,7 +72,8 @@ public class BBQSystem : AbstractSystem, IBBQSystem
 
         BBQProcessContext context = new BBQProcessContext(currentBBQ, new List<FoodInstance>());
 
-
+        // 0.检测时间是否足够
+        int timePoint = this.GetSystem<ITimeSystem>().GetCostTime(foodInstances, stick);
         this.GetSystem<ITimeSystem>().PushTimePoint(timePoint);
         Debug.Log($"【BBQSystem】制作烧烤耗时：{timePoint}");
 

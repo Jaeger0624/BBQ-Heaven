@@ -13,25 +13,10 @@ namespace cfg
 { 
     public enum Rank
     {
-        /// <summary>
-        /// 无
-        /// </summary>
         默认 = 0,
-        /// <summary>
-        /// 常见
-        /// </summary>
         普通 = 1,
-        /// <summary>
-        /// 不赖
-        /// </summary>
         稀有 = 2,
-        /// <summary>
-        /// 稀世
-        /// </summary>
         史诗 = 3,
-        /// <summary>
-        /// 传奇
-        /// </summary>
         传说 = 4,
     }
 

@@ -66,14 +66,14 @@ public class TimeSystem_默认 : AbstractSystem, ITimeSystem
         // 0. 若在已经结束时，再尝试推动时间点，则强制推进流程
         //TODO: 改成限制操作，高亮打烊按钮
 
-        if (isTimeUp){
-            // 可能需要延迟事件
-            // 例如要等待最后一个顾客走后，再推进流程
-            Debug.Log("【TimeSystem】时间到达目标时间，推进流程");
-            this.SendEvent(new ProcessMoveNextEvent());
-            this.isTimeUp = false;
-            return;
-        }
+        // if (isTimeUp){
+        //     // 可能需要延迟事件
+        //     // 例如要等待最后一个顾客走后，再推进流程
+        //     Debug.Log("【TimeSystem】时间到达目标时间，推进流程");
+        //     this.SendEvent(new ProcessMoveNextEvent());
+        //     this.isTimeUp = false;
+        //     return;
+        // }
 
 
         // 1. 推动当前时间
@@ -85,10 +85,6 @@ public class TimeSystem_默认 : AbstractSystem, ITimeSystem
 
         // 4. 检查时间是否到达目标时间
         isTimeUp = currentTime.GetTotalTimePoint() >= targetTime.GetTotalTimePoint();
-        if (isTimeUp){
-            Debug.Log("【TimeSystem】时间已经到达目标时间，无法再推动时间点");
-            return;
-        }
     }
     public void SetNextTimeInfo(TimeInfo currentTime, TimeInfo targetTime)
     {

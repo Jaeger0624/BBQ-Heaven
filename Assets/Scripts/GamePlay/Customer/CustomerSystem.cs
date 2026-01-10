@@ -9,6 +9,7 @@ using UnityEngine;
 /// </summary>
 public interface ICustomerSystem : ISystem, ICanSendQuery{
     #region field
+    List<Customer> OrderingCustomers { get; }
     CustomerSatisfaction Satisfaction { get; set; }
     CustomerLookMaker CustomerLookMaker { get; set; }
     #endregion
@@ -253,12 +254,13 @@ public class CustomerSystem_新 : AbstractCustomerSystem
 public abstract class AbstractCustomerSystem : AbstractSystem, ICustomerSystem
 {
     private int maxOrderAmount = 3; // 最大同时点餐顾客数量
+    public List<Customer> OrderingCustomers => OrderingCustomers;
     public CustomerSatisfaction Satisfaction { get; set; }
     public CustomerLookMaker CustomerLookMaker { get; set; } = new CustomerLookMaker();
     /// <summary> 等待顾客队列，用于处理排队和填补空缺 </summary>
     protected Queue<Customer> waitingCustomers = new Queue<Customer>();
     /// <summary> 当日顾客实例字典，用于存储顾客实例 </summary>
-    protected List<Customer> OrderingCustomers = new List<Customer>();
+    protected List<Customer> orderingCustomers = new List<Customer>();
     /// <summary> 已离开的顾客，用于存储已离开的顾客实例 </summary>
     protected List<Customer> LeavedCustomers = new List<Customer>();
 
