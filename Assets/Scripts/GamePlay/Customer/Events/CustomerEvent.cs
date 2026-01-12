@@ -36,4 +36,21 @@ public class TagExecuteEvent : AbstractEvent{
 		this.results = results;
 	}
 }
+
+
+// 选择当前顾客事件（由Order触发）
+public class OrderClickedEvent : AbstractEvent{
+    public Customer customer;
+    public OrderClickedEvent(Customer customer){
+        this.customer = customer;
+    }
+}
+
+// 由CustomerController_UI触发
+public class CurrentCustomerUpdateEvent : AbstractEvent{
+    public Customer customer;
+    public CurrentCustomerUpdateEvent(Customer customer){
+        this.customer = customer;
+    }
+}
 #endregion

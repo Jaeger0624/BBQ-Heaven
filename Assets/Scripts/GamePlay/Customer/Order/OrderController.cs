@@ -9,10 +9,10 @@ public class OrderController : MonoBehaviour, IController, ICanSendEvent
     public Transform orderContainer;
     public GameObject orderViewPrefab;
     private Dictionary<string, OrderView> orderViews = new Dictionary<string, OrderView>();
-
     void OnEnable(){
         this.RegisterEvent<AddCustomerEvent>(OnAddCustomerEvent).UnRegisterWhenDisabled(this);
         this.RegisterEvent<RemoveCustomerEvent>(OnRemoveCustomerEvent).UnRegisterWhenDisabled(this);
+        this.RegisterEvent<CurrentCustomerUpdateEvent>(OnCurrentCustomerUpdate).UnRegisterWhenDisabled(this);
     }
     private void OnAddCustomerEvent(AddCustomerEvent e){
         e.customers.ForEach(customer => {
@@ -23,6 +23,19 @@ public class OrderController : MonoBehaviour, IController, ICanSendEvent
         e.customers.ForEach(customer => {
             RemoveOrderView(customer);
         });
+    }
+    private void OnCurrentCustomerUpdate(CurrentCustomerUpdateEvent e){
+        foreach (var orderView in orderViews.Values)
+        {
+            if (orderView.customer == e.customer)
+            {
+                orderView.SetViewSelected(true);
+            }
+            else
+            {
+                orderView.SetViewSelected(false);
+            }
+        }
     }
     public void CreateOrderView(Customer customer){
         OrderView orderView = Instantiate(orderViewPrefab, orderContainer, false).GetComponent<OrderView>();

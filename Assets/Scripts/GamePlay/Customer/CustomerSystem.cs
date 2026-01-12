@@ -36,8 +36,6 @@ public class CustomerSystem_新 : AbstractCustomerSystem
 {
     // 每分钟来一个顾客的可能性（不能大于等于1）
     private float naturalArriveChance => SettingManager.GetSetting<GameplaySettings>().每分钟来一个顾客的可能性;
-    // 保留两位小数
-    private float customerPer5Minutes => Mathf.Round((naturalArriveChance * 5) * 100) / 100;
     private ICustomerFactory customerFactory;
     private Rng rng => this.GetSystem<IRngSystem>().GetSubRng<ICustomerSystem>();
     protected override void OnStartNewDay(StartNewDayEvent evt)
@@ -71,7 +69,7 @@ public class CustomerSystem_新 : AbstractCustomerSystem
         while (waitingCustomers.Count > 0){
             Customer customer = waitingCustomers.Dequeue();
             customer.SetState(CustomerState.Leaved);
-            LeavedCustomers.Add(customer);
+            leavedCustomers.Add(customer);
         }
 
         // 3. 移除所有正在点餐的顾客
@@ -84,7 +82,7 @@ public class CustomerSystem_新 : AbstractCustomerSystem
         this.SendEvent(new RemoveCustomerEvent(customers));
         
         // 5. 移除所有已离开的顾客
-        LeavedCustomers.Clear();
+        leavedCustomers.Clear();
 
 
     }
@@ -191,7 +189,7 @@ public class CustomerSystem_新 : AbstractCustomerSystem
             // 1. 移除顾客
             OrderingCustomers.Remove(customer);
             // 2. 添加到已离开的顾客列表
-            LeavedCustomers.Add(customer);
+            leavedCustomers.Add(customer);
             // 3. 设置顾客状态
             customer.SetState(CustomerState.Leaved);
         });
@@ -212,7 +210,7 @@ public class CustomerSystem_新 : AbstractCustomerSystem
 
     private void LeaveOnDayEnd(Customer customer){
         OrderingCustomers.Remove(customer);
-        LeavedCustomers.Add(customer);
+        leavedCustomers.Add(customer);
         customer.SetState(CustomerState.Leaved);
     }
 
@@ -254,7 +252,7 @@ public class CustomerSystem_新 : AbstractCustomerSystem
 public abstract class AbstractCustomerSystem : AbstractSystem, ICustomerSystem
 {
     private int maxOrderAmount = 3; // 最大同时点餐顾客数量
-    public List<Customer> OrderingCustomers => OrderingCustomers;
+    public List<Customer> OrderingCustomers => orderingCustomers;
     public CustomerSatisfaction Satisfaction { get; set; }
     public CustomerLookMaker CustomerLookMaker { get; set; } = new CustomerLookMaker();
     /// <summary> 等待顾客队列，用于处理排队和填补空缺 </summary>
@@ -262,7 +260,7 @@ public abstract class AbstractCustomerSystem : AbstractSystem, ICustomerSystem
     /// <summary> 当日顾客实例字典，用于存储顾客实例 </summary>
     protected List<Customer> orderingCustomers = new List<Customer>();
     /// <summary> 已离开的顾客，用于存储已离开的顾客实例 </summary>
-    protected List<Customer> LeavedCustomers = new List<Customer>();
+    protected List<Customer> leavedCustomers = new List<Customer>();
 
     /// <summary> 预定的顾客，用于供外部处理预定顾客，并保留顾客和到达时间
     /// float 用来表示大致的进程时间（比如预定顾客的到达时间）
@@ -300,7 +298,7 @@ public abstract class AbstractCustomerSystem : AbstractSystem, ICustomerSystem
             case CustomerState.Waiting:
                 return waitingCustomers.Count;
             case CustomerState.Leaved:
-                return LeavedCustomers.Count;
+                return leavedCustomers.Count;
             default:
                 Debug.LogWarning("获取顾客数量时，传入的顾客状态不合法");
                 return 0;

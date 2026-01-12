@@ -26602,8 +26602,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   customerAnimQueue: 0
-  customerMiniViewPrefab: {fileID: 3640060844979487110, guid: b477a06dbebc4394199fb4a41c2daf31, type: 3}
-  customerMiniViewContainer: {fileID: 642734254}
   customerView: {fileID: 298104226}
   waitingCustomerText: {fileID: 996107186}
   showFeedback: {fileID: 1818964769}
@@ -28643,7 +28641,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1672986230254023067, guid: 4b0b33e978bcdcd4c95339400b48f0d0, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 344.07
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1888688214262151321, guid: 4b0b33e978bcdcd4c95339400b48f0d0, type: 3}
       propertyPath: m_Pivot.x

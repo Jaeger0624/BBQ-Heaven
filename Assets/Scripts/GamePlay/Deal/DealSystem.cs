@@ -35,7 +35,24 @@ public class DealSystem : AbstractSystem, IDealSystem
     protected override void OnInit()
 	{
 		scoreMultipliers = new Dictionary<string, float>();
+		this.RegisterEvent<TimeUpEvent>(OnTimeUpEvent);
+		this.RegisterEvent<EndDayEvent>(OnEndDayEvent);
 	}
+	protected override void OnDeinit()
+	{
+		this.UnRegisterEvent<TimeUpEvent>(OnTimeUpEvent);
+		this.UnRegisterEvent<EndDayEvent>(OnEndDayEvent);
+	}
+	private void OnTimeUpEvent(TimeUpEvent evt)
+	{
+		AddScoreMultiplier("疲劳", 0.5f);
+	}
+	private void OnEndDayEvent(EndDayEvent evt)
+	{
+		if (!evt.StageMeet(EventStage.System)) return;
+		// 清除所有得分乘区
+		ClearScoreMultipliers();
+	}	
 	public void AddScoreMultiplier(string name, float multiplier)
 	{
 		if (!scoreMultipliers.ContainsKey(name)){
@@ -53,6 +70,11 @@ public class DealSystem : AbstractSystem, IDealSystem
 			Debug.LogError($"【DealSystem】尝试移除不存在的得分乘区: {name}");
 		}
 	}
+	private void ClearScoreMultipliers()
+	{
+		scoreMultipliers.Clear();
+	}
+
 	private void ResetSatisfaction(){	
         // 暴露给GA的满意度计算
         CustomerSatisfaction currentSatisfaction = this.GetSystem<ICustomerSystem>().Satisfaction;

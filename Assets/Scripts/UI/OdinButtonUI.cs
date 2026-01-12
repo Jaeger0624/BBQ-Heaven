@@ -4,28 +4,28 @@ using DG.Tweening;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 public interface IButton{
     public void AddListener(Action action);
     public void RemoveListener(Action action);
 }
-public class OdinButtonUI : SerializedMonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IButton{
-    [OdinSerialize]
-    public Action OnEnter;
-    [OdinSerialize, ShowIf("isCustom")]
-    public Action OnExit;
-    [OdinSerialize, ShowIf("isCustom")]
-    public Action OnClick;
+public class OdinButtonUI : SerializedMonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IButton{
+    [ShowIf("isCustom")]
+    public UnityEvent OnEnter;
+    [ShowIf("isCustom")]
+    public UnityEvent OnExit;
+    public UnityEvent OnClick;
     [SerializeField] private bool isCustom = false;
     [SerializeField] private ButtonAnim anim = ButtonAnim.Scale;
 
     public void AddListener(Action action)
     {
-        OnClick += action;
+        OnClick.AddListener(new UnityAction(action));
     }
     public void RemoveListener(Action action)
     {
-        OnClick -= action;
+        OnClick.RemoveListener(new UnityAction(action));
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -52,5 +52,10 @@ public class OdinButtonUI : SerializedMonoBehaviour, IPointerEnterHandler, IPoin
         {
             transform.DOScale(1f, 0.12f).SetEase(Ease.OutSine).SetUpdate(true);
         }
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        OnClick?.Invoke();
     }
 }

@@ -9,7 +9,7 @@ using System.Linq;
 using TMPro;
 using MoreMountains.Feedbacks;
 
-public class CustomerController_UI : MonoBehaviour, IController
+public class CustomerController_UI : MonoBehaviour, IController, ICanSendEvent
 {
     public AnimQueue customerAnimQueue = AnimQueue.Default; // 顾客动画队列(先设置为默认队列)
     ICustomerSystem customerSystem => this.GetSystem<ICustomerSystem>();
@@ -31,16 +31,18 @@ public class CustomerController_UI : MonoBehaviour, IController
         this.RegisterEvent<RemoveCustomerEvent>(OnRemoveCustomer);
         // 结束结算
         this.RegisterEvent<退出日结算_Event>(OnExitDaySettleEvent);
+        this.RegisterEvent<OrderClickedEvent>(OnChooseCustomer);
     }
     void OnDisable(){
         this.UnRegisterEvent<AddCustomerEvent>(OnAddCustomer);
         this.UnRegisterEvent<RemoveCustomerEvent>(OnRemoveCustomer);
         this.UnRegisterEvent<退出日结算_Event>(OnExitDaySettleEvent);
+        this.UnRegisterEvent<OrderClickedEvent>(OnChooseCustomer);
     }
-    private void OnExitDaySettleEvent(退出日结算_Event e){
-        ClearView();
-    }
-
+    private void OnExitDaySettleEvent(退出日结算_Event e) => ClearView();
+    
+    private void OnChooseCustomer(OrderClickedEvent e) => ChooseCurrentCustomer(e.customer);
+    
     void Update()
     {
         UpdateWaitingCustomerText();
@@ -71,20 +73,7 @@ public class CustomerController_UI : MonoBehaviour, IController
             ChooseCurrentCustomer(customer);
         }
     }
-
-
-    private IAnimTask RemoveCustomerAnim(Transform transform){
-        // 缩放动画（不使用TimeScale）
-        SequenceAnimTask sequenceAnimTask = new SequenceAnimTask(new List<IAnimTask>{
-            new ActionAnimTask(UpdateView),
-            new TweenAnimTask(transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.OutSine).SetUpdate(true)),
-            new ActionAnimTask(() => {
-                GameObject.Destroy(transform.gameObject);
-            }),
-            new DelayAnimTask(0.15f, true)
-        });
-        return sequenceAnimTask;
-    }
+    // 选择当前顾客
     private void ChooseCurrentCustomer(Customer customer){
         if (customer == null){
             customerView.Bind(null);
@@ -97,15 +86,17 @@ public class CustomerController_UI : MonoBehaviour, IController
         }
         // Debug.Log("设置当前顾客: " + customer.name);
         customerView.Bind(customer);
+
+        this.SendEvent(new CurrentCustomerUpdateEvent(customer));
     }
+
+    // 更新等待顾客文本
     private void UpdateWaitingCustomerText(){
         int waitingCustomerCount = customerSystem.GetAmount(CustomerState.Waiting);
         waitingCustomerText.text = $"Waiting: {waitingCustomerCount}";
     }
 
     private void ClearView() => customerView.Bind(null);
-    private void UpdateView() => customerView.UpdateVisual();
-
     private void OnChangePanel(ChangePanelEvent evt){
         if (evt.newPanel == ProcessPanel.Customer){
             Show();

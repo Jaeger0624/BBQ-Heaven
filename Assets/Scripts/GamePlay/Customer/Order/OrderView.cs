@@ -1,17 +1,19 @@
 using System.Linq;
+using cfg;
+using QFramework;
 using TMPro;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class OrderView : MonoBehaviour
+public class OrderView : MonoBehaviour, ICanSendEvent
 {
-    private Customer customer;
+    public Customer customer{get; private set;}
     [SerializeField] private Image BackgroundImage;
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI patienceText;
     public TextMeshProUGUI customerTagsText;
-
+    private bool isSelected = false;
     public void Bind(Customer customer){
         this.customer = customer;
 
@@ -38,5 +40,21 @@ public class OrderView : MonoBehaviour
     private void UpdatePatience(){
         patienceText.text = $"{customer.PatienceNow.Value}/{customer.PatienceMax.Value}";
         patienceText.color = customer.PatienceNow.Value >= customer.PatienceMax.Value ? Color.red : Color.white;
+    }
+
+    public void ChooseCurrent(){
+        this.SendEvent(new OrderClickedEvent(customer));
+    }
+
+    public IArchitecture GetArchitecture()
+    {
+        return GameArchitecture.Interface;
+    }
+    public void ChooseCurrentButtonClick(CustomerTagType tagType){
+        this.SendEvent(new OrderClickedEvent(customer));
+    }
+    public void SetViewSelected(bool isSelected){
+        this.isSelected = isSelected;
+        BackgroundImage.color = isSelected ? Color.green : Color.white;
     }
 }
