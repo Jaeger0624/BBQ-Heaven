@@ -21,7 +21,7 @@ public partial class FoodInstance : BoardEntity, IAnimPlayer{
     public int taste;
     public float baseCritRate = 0.1f; // 基础暴击率
     public float baseCritMultiplier = 1.5f; // 基础暴击倍率
-
+    public int foodSize = 1;
 
     /// <summary>实例状态，主要决定动画和View的显示</summary>
     public readonly ReactiveProperty<FoodInstanceViewStatus> status = new ReactiveProperty<FoodInstanceViewStatus>(new FoodInstanceViewStatus(false));

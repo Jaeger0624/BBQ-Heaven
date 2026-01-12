@@ -11,6 +11,7 @@ public class Stick : ICanGetSystem{
     public string name => stickData.Name;
     public StickData stickData;
     public IStickStrategy strategy;
+    public int maxFoodCount = 6;  // 最大食材数
     public int extraTimeCost = 0;
     public Stick(StickData stickData){
         this.guid = Guid.NewGuid().ToString();

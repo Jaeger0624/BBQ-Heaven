@@ -9,6 +9,7 @@ public interface IFoodSystem : ISystem, ISavable{
     FoodInstance GetFoodInstance(string guid);
     FoodInstance GetFoodInstance(Vector2Int position);
     Dictionary<string, FoodInstance> GetFoodInstances();
+    Dictionary<string, FoodInstance> GetFoodInstancesByState(FoodInstanceState state);
     // 获取食材仓库
     Dictionary<string, Food> FoodInRepositorys();
     Dictionary<string, Food> FoodRepositorys();
@@ -96,6 +97,15 @@ public partial class FoodSystem : AbstractSystem, IFoodSystem
         }
         return foodInstancesCopy;
     }
+    public Dictionary<string, FoodInstance> GetFoodInstancesByState(FoodInstanceState state){
+        Dictionary<string, FoodInstance> foodInstancesCopy = new Dictionary<string, FoodInstance>();
+        foreach (var foodInstance in foodPile.FoodInstances){
+            if (foodInstance.Value.state == state){
+                foodInstancesCopy.Add(foodInstance.Key, foodInstance.Value);
+            }
+        }
+        return foodInstancesCopy;
+    }
 
     public FoodInstance GetFoodInstance(string guid){
         return foodPile.GetFoodInstance(guid);
@@ -111,16 +121,20 @@ public partial class FoodSystem : AbstractSystem, IFoodSystem
     /// </summary>
     /// <param name="guid"></param>
     public void RemoveFoodInstance(string guid) => foodPile.RemoveFoodInstance(guid);
+    
+    // 放上烤串
     // 只是将食材实例的position设置为(-1, -1)，不真正移除
     public void PutFoodInstanceToStick(string guid)
     {
         // 获取食材实例
         FoodInstance foodInstance = foodPile.GetFoodInstance(guid);
-        if (foodInstance == null) return;
+        if (foodInstance == null) {Debug.LogError($"【FoodSystem】放上烤串失败: {guid} 不存在"); return;}
         // 从棋盘上移除
         this.GetSystem<IBoardSystem>().SetCellInstance(foodInstance.position, null);
         // 清除食材实例的position
         foodInstance.position = new Vector2Int(-1, -1);
+        // 发送事件，通知视图更新
+        this.SendEvent(new FoodRemoveFromBoardEvent(guid));
     }
     // 添加食材进构筑
     public void AddFoodToRepository(List<FoodPack> foodPacks, bool isTemporary = false)

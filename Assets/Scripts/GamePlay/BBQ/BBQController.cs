@@ -32,7 +32,7 @@ public class BBQController : MonoBehaviour, IController, ICanSendEvent
             if (this.GetSystem<BlackboardSystem>().hoveredCell == null) return;
             Stick selectedStick = this.GetSystem<IStickSystem>().selectedStick;
             BoardCell hoveredCell = this.GetSystem<BlackboardSystem>().hoveredCell;
-            List<FoodInstance> foodInstances = selectedStick.strategy.GetFood(hoveredCell.position);
+            List<FoodInstance> foodInstances = selectedStick.strategy.GetFood(hoveredCell.position, selectedStick);
             if (foodInstances.Count == 0){
                 Debug.Log("没有食材可烧烤");
                 return;

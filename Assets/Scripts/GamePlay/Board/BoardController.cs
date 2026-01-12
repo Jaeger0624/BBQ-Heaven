@@ -20,7 +20,8 @@ public class BoardController : MonoBehaviour, IController, ICanSendEvent
     void Update()
     {
         if (this.GetSystem<ICardSystem>().State != CardSystemState.正常) return;
-        if (stickSystem.selectedStick == null) {boardViewUGUI.UnhighlightAll(); return;}
+        Stick selectedStick = stickSystem.selectedStick;
+        if (selectedStick == null) {boardViewUGUI.UnhighlightAll(); return;}
 
         Vector2 screenPos = Input.mousePosition;
         if (TryGetGridIndex(screenPos, out Vector2Int gridIndex)){
@@ -31,18 +32,18 @@ public class BoardController : MonoBehaviour, IController, ICanSendEvent
                 IStickStrategy.IsHorizontal = !IStickStrategy.IsHorizontal;
             }
 
-            IStickStrategy updateStrategy = this.GetSystem<IStickSystem>().selectedStick.strategy;
-            List<BoardCell> highlightedCells = updateStrategy.GetRange(newHoveredCell.position);
+            IStickStrategy updateStrategy = selectedStick.strategy;
+            List<BoardCell> highlightedCells = updateStrategy.GetRange(newHoveredCell.position, selectedStick);
 
 
             if (Input.GetMouseButtonDown(1)){
-                UpdateView(newHoveredCell.position, highlightedCells);
+                UpdateView(newHoveredCell.position, highlightedCells, selectedStick);
             }
             else if (hoveredCell != newHoveredCell && newHoveredCell != null){
 
                 if (!highlightedCells.SequenceEqual(this.highlightedCells)){
                     hoveredCell = newHoveredCell;
-                    UpdateView(hoveredCell.position, highlightedCells);
+                    UpdateView(hoveredCell.position, highlightedCells, selectedStick);
                 }
             }
         }
@@ -61,19 +62,17 @@ public class BoardController : MonoBehaviour, IController, ICanSendEvent
         this.SendEvent(new TimePreviewEvent(0));
         this.SendEvent(new ResetRecipePreviewViewsEvent());
     }
-    public void UpdateView(Vector2Int hoveredCellPos, List<BoardCell> highlightedCells){
+    public void UpdateView(Vector2Int hoveredCellPos, List<BoardCell> highlightedCells, Stick selectedStick){
         // 如果未选中烤串，则不更新视图
-        if (this.GetSystem<IStickSystem>().selectedStick == null){
+        if (selectedStick == null){
             // Debug.Log("未选中烤串");
             SendClearEvents();
             return;
         }
         //TODO: 暂时写死，后续需要优化
-        IStickStrategy updateStrategy = this.GetSystem<IStickSystem>().selectedStick.strategy;
 
         // 1. 计算时间消耗
-        List<FoodInstance> foodInstances = updateStrategy.GetFood(hoveredCellPos);
-        Stick selectedStick = this.GetSystem<IStickSystem>().selectedStick;
+        List<FoodInstance> foodInstances = selectedStick.strategy.GetFood(hoveredCellPos, selectedStick);
         int amount = this.GetSystem<ITimeSystem>().GetCostTime(foodInstances, selectedStick);
 
         // 2. 更新高亮单元格

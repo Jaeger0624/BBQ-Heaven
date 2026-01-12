@@ -2,9 +2,11 @@
 #region 事件
 
 using System.Collections.Generic;
+using cfg;
 using QFramework;
 using UnityEngine;
 
+// 创建食材
 public class CreateFoodInstanceEvent : AbstractEvent{
     public FoodInstance foodInstance;
     public CreateFoodInstanceEvent(FoodInstance foodInstance){
@@ -12,6 +14,7 @@ public class CreateFoodInstanceEvent : AbstractEvent{
     }
 }
 
+// 移除食材
 public class RemoveFoodInstanceEvent : AbstractEvent{
     public FoodInstance foodInstance;
     public RemoveFoodInstanceEvent(FoodInstance foodInstance){
@@ -19,6 +22,15 @@ public class RemoveFoodInstanceEvent : AbstractEvent{
     }
 }
 
+// 从棋盘上移除食材（放上烤串/移除）
+public class FoodRemoveFromBoardEvent : AbstractEvent{
+    public readonly string guid;
+    public FoodRemoveFromBoardEvent(string guid){
+        this.guid = guid;
+    }
+}
+
+// 
 public class AddNewFoodToRepositoryEvent : AbstractEvent{
     public readonly string foodId;
     public readonly int amount;

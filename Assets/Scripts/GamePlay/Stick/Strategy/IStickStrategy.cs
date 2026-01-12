@@ -6,8 +6,8 @@ using UnityEngine;
 
 // 只负责提供逻辑，视图和交互由StickController负责
 public interface IStickStrategy : ICanGetSystem{
-    List<BoardCell> GetRange(Vector2Int cellPosition);
-    List<FoodInstance> GetFood(Vector2Int hoveredCellPos);
+    List<BoardCell> GetRange(Vector2Int cellPosition, Stick stick);
+    List<FoodInstance> GetFood(Vector2Int hoveredCellPos, Stick stick);
 
     static bool IsHorizontal { get; set; } = false;
 }
@@ -22,7 +22,7 @@ public class StickStrategy_默认 : IStickStrategy
         return GameArchitecture.Interface;
     }
 
-    public List<BoardCell> GetRange(Vector2Int cellPosition)
+    public List<BoardCell> GetRange(Vector2Int cellPosition, Stick stick)
     {
         // 如果是horizontal，则返回所有同一排的cell
         if (IStickStrategy.IsHorizontal)
@@ -35,23 +35,48 @@ public class StickStrategy_默认 : IStickStrategy
         }
     }
 
-    public List<FoodInstance> GetFood(Vector2Int hoveredCellPos)
+    public List<FoodInstance> GetFood(Vector2Int hoveredCellPos, Stick stick)
     {
         List<FoodInstance> foodInstances = new List<FoodInstance>();
         if (IStickStrategy.IsHorizontal)
         {
             bool isLeft = hoveredCellPos.x <= this.GetSystem<IBoardSystem>().GetGrid().width/2;
             int arg = isLeft ? 1 : -1;
-            foodInstances = this.GetSystem<IFoodSystem>().GetFoodInstances().Values.ToList()
-            .Where(x => x.position.y == hoveredCellPos.y)
-            .OrderBy(x => x.position.x * arg).ToList();
+            // 选取所有同y的食材，按x排序
+            List<FoodInstance> temp = this.GetSystem<IFoodSystem>()
+                .GetFoodInstances().Values
+                .ToList()
+                .Where(x => x.position.y == hoveredCellPos.y)
+                .OrderBy(x => x.position.x * arg)
+                .ToList();
+            int sizeSum = 0;
+            foreach (var foodInstance in temp){
+                sizeSum += foodInstance.foodSize;
+                if (sizeSum > stick.maxFoodCount){
+                    sizeSum -= foodInstance.foodSize;
+                    continue;
+                }
+                foodInstances.Add(foodInstance);
+            }
         }
         else{
             bool isBottom = hoveredCellPos.y <= this.GetSystem<IBoardSystem>().GetGrid().height/2;
             int arg = isBottom ? 1 : -1;
-            foodInstances = this.GetSystem<IFoodSystem>().GetFoodInstances().Values.ToList()
-            .Where(x => x.position.x == hoveredCellPos.x)
-            .OrderBy(x => x.position.y * arg).ToList();
+            List<FoodInstance> temp = this.GetSystem<IFoodSystem>()
+                .GetFoodInstances().Values
+                .ToList()
+                .Where(x => x.position.x == hoveredCellPos.x)
+                .OrderBy(x => x.position.y * arg)
+                .ToList();
+            int sizeSum = 0;
+            foreach (var foodInstance in temp){
+                sizeSum += foodInstance.foodSize;
+                if (sizeSum > stick.maxFoodCount){
+                    sizeSum -= foodInstance.foodSize;
+                    continue;
+                }
+                foodInstances.Add(foodInstance);
+            }
         }
         return foodInstances;
     }

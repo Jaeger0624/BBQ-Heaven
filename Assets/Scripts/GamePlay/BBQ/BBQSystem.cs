@@ -56,8 +56,6 @@ public class BBQSystem : AbstractSystem, IBBQSystem
 
         this.GetSystem<IStickSystem>().UseCurrentStick(stick);  // 会同时取消选中烤串
         
-
-
         BBQ bbq = new BBQ(stick, foodInstances);    // 创建烧烤实例
         
         SetCurrentBBQ(bbq);  // 设置当前烧烤实例

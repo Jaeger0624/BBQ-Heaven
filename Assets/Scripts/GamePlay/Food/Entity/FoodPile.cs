@@ -99,10 +99,4 @@ public class FoodPile : ICanGetSystem, ICanSendEvent{
         }
         return foodInstance;
     }
-
-
-    // // 加载FoodPile数据
-    // public FoodInstance LoadFoodInstance(FoodInstanceData foodInstanceData){
-    //     return CreateFoodInstance(foodInstanceData.food, foodInstanceData.position);
-    // }
 }
