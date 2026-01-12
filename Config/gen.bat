@@ -7,7 +7,7 @@ dotnet %LUBAN_DLL% ^
     -d json ^
     -c cs-simple-json ^
     --conf %CONF_ROOT%\luban.conf ^
-    -xoutputCodeDir=..\Assets\Scripts\Luban ^
+    -xoutputCodeDir=..\Assets\Luban ^
     -x outputDataDir=..\Assets\Resources\Config
 
 pause

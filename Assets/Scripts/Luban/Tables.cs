@@ -15,6 +15,7 @@ namespace cfg
 public partial class Tables
 {
     public FoodDataTable FoodDataTable {get; }
+    public EntityDataTable EntityDataTable {get; }
     public StickDataTable StickDataTable {get; }
     public CustomerTagDataTable CustomerTagDataTable {get; }
     public RecipeDataTable RecipeDataTable {get; }
@@ -31,6 +32,7 @@ public partial class Tables
     public Tables(System.Func<string, JSONNode> loader)
     {
         FoodDataTable = new FoodDataTable(loader("fooddatatable"));
+        EntityDataTable = new EntityDataTable(loader("entitydatatable"));
         StickDataTable = new StickDataTable(loader("stickdatatable"));
         CustomerTagDataTable = new CustomerTagDataTable(loader("customertagdatatable"));
         RecipeDataTable = new RecipeDataTable(loader("recipedatatable"));
@@ -49,6 +51,7 @@ public partial class Tables
     private void ResolveRef()
     {
         FoodDataTable.ResolveRef(this);
+        EntityDataTable.ResolveRef(this);
         StickDataTable.ResolveRef(this);
         CustomerTagDataTable.ResolveRef(this);
         RecipeDataTable.ResolveRef(this);
