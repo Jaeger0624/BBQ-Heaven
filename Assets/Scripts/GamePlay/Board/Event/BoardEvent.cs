@@ -60,3 +60,11 @@ public class UpdateCellTileEvent : AbstractEvent{
         this.tileID = tileID;
     }
 }
+
+
+public class CreateEntityEvent : AbstractEvent{
+    public BoardEntity entity;
+    public CreateEntityEvent(BoardEntity entity){
+        this.entity = entity;
+    }
+}

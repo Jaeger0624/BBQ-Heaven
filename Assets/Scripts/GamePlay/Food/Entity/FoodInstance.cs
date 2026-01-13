@@ -4,6 +4,7 @@ using System.Linq;
 using cfg;
 using QFramework;
 using UniRx;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -12,6 +13,7 @@ using UnityEngine;
 public partial class FoodInstance : BoardEntity, IAnimPlayer{  
     public override BoardEntityType type => BoardEntityType.食材;
     public override string name => food.name;
+    public override object data => food.foodData;
     public Food food;
     /// <summary>实例状态，主要用于程序逻辑判断</summary>
     public FoodInstanceState state {get; private set;} = FoodInstanceState.无;
@@ -68,6 +70,24 @@ public partial class FoodInstance : BoardEntity, IAnimPlayer{
             this.GetSystem<IGASystem>().RemoveSE(this, se);
         }
     }
+
+    public override List<TooltipInfo> GetTooltipInfos()
+    {
+        List<TooltipInfo> tooltipInfos = new List<TooltipInfo>();
+        Color rarityColor = SettingManager.Instance.DevSettings.AddRarityTextColor;
+        Color tasteColor = SettingManager.Instance.DevSettings.AddTasteTextColor;
+        TooltipInfo tooltipInfo = new TooltipInfo(
+            $"<size=36>{food.foodData.Name}  "+
+                $"<color=#{rarityColor.ToHexString()}>{rarity}</color> " + 
+                $"<color=#{tasteColor.ToHexString()}>{taste}</color></size>" + 
+                $"\n<size=24>{state.ToString()}</size>" +
+                $"\n<size=24>{food.foodData.EffectDescription}</size>" +
+                $"\n<size=20><color=grey>{food.foodData.Description}</color></size>");
+        tooltipInfos.Add(tooltipInfo);
+        return tooltipInfos;
+    }
+
+    public override Sprite GetSprite() => Resources.Load<Sprite>("Sprites/" + food.foodData.Sprite);
 }
 
 

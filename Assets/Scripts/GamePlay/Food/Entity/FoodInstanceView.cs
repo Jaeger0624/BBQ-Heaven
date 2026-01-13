@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-public enum PreviewState_FoodInstanceView{
+public enum PreviewState_EntityView{
     Normal,
     Selected,
     Active,
@@ -18,7 +18,7 @@ public class FoodInstanceView : MonoBehaviour, IShowTooltip, IController, IPoint
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
     public FoodInstance foodInstance;
     [ReadOnly]
-    public PreviewState_FoodInstanceView previewState = PreviewState_FoodInstanceView.Normal;
+    public PreviewState_EntityView previewState = PreviewState_EntityView.Normal;
     [SerializeField] private Image foodImage;
     [SerializeField] private ParticleSystem buffedParticle;
     public UnityEvent OnPointerEnterEvent;
@@ -36,28 +36,13 @@ public class FoodInstanceView : MonoBehaviour, IShowTooltip, IController, IPoint
         ResetScale();
     }
 
-    public List<TooltipInfo> GetTooltipInfo()
-    {
-        List<TooltipInfo> tooltipInfos = new List<TooltipInfo>();
-        Color rarityColor = SettingManager.Instance.DevSettings.AddRarityTextColor;
-        Color tasteColor = SettingManager.Instance.DevSettings.AddTasteTextColor;
-        TooltipInfo tooltipInfo = new TooltipInfo(
-            $"<size=36>{foodInstance.food.foodData.Name}  "+
-                $"<color=#{rarityColor.ToHexString()}>{foodInstance.rarity}</color> " + 
-                $"<color=#{tasteColor.ToHexString()}>{foodInstance.taste}</color></size>" + 
-                $"\n<size=24>{foodInstance.state.ToString()}</size>" +
-                $"\n<size=24>{foodInstance.food.foodData.EffectDescription}</size>" +
-                $"\n<size=20><color=grey>{foodInstance.food.foodData.Description}</color></size>");
-        tooltipInfos.Add(tooltipInfo);
-        return tooltipInfos;
-    }
+    public List<TooltipInfo> GetTooltipInfo() => foodInstance.GetTooltipInfos();
 
     void UpdateVisual()
     {
         if (foodImage == null) return;
         if (foodInstance == null) return;
-        Sprite sprite = Resources.Load<Sprite>("Sprites/" + foodInstance.food.foodData.Sprite);
-
+        Sprite sprite = foodInstance.GetSprite();
 
         if (sprite == null){
             Debug.LogError($"食材资源不存在: {foodInstance.food.foodData.Sprite}");
@@ -73,15 +58,15 @@ public class FoodInstanceView : MonoBehaviour, IShowTooltip, IController, IPoint
         }
     }
 
-    public void SetPreviewState(PreviewState_FoodInstanceView previewState){
+    public void SetPreviewState(PreviewState_EntityView previewState){
         switch (previewState){
             // 正常状态
-            case PreviewState_FoodInstanceView.Normal:
+            case PreviewState_EntityView.Normal:
                 foodImage.color = Color.white;
                 break;
-            case PreviewState_FoodInstanceView.Selected:
+            case PreviewState_EntityView.Selected:
                 break;
-            case PreviewState_FoodInstanceView.Active:
+            case PreviewState_EntityView.Active:
                 foodImage.color = Color.green;
                 break;
         }

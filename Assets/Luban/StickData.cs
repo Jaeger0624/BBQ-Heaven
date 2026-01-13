@@ -24,6 +24,7 @@ public sealed partial class StickData : Luban.BeanBase
         { if(!_buf["name"].IsString) { throw new SerializationException(); }  Name = _buf["name"]; }
         { if(!_buf["description"].IsString) { throw new SerializationException(); }  Description = _buf["description"]; }
         { if(!_buf["strategy"].IsNumber) { throw new SerializationException(); }  Strategy = (StickStrategy)_buf["strategy"].AsInt; }
+        { if(!_buf["maxFoodCount"].IsNumber) { throw new SerializationException(); }  MaxFoodCount = _buf["maxFoodCount"]; }
         { if(!_buf["sprite"].IsString) { throw new SerializationException(); }  Sprite = _buf["sprite"]; }
     }
 
@@ -48,6 +49,7 @@ public sealed partial class StickData : Luban.BeanBase
     /// 串签策略
     /// </summary>
     public readonly StickStrategy Strategy;
+    public readonly int MaxFoodCount;
     /// <summary>
     /// 串签图
     /// </summary>
@@ -67,6 +69,7 @@ public sealed partial class StickData : Luban.BeanBase
         + "name:" + Name + ","
         + "description:" + Description + ","
         + "strategy:" + Strategy + ","
+        + "maxFoodCount:" + MaxFoodCount + ","
         + "sprite:" + Sprite + ","
         + "}";
     }

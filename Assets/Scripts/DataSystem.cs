@@ -48,6 +48,10 @@ public interface IDataSystem : ISystem{
     // 获取选项配置
     OptionData GetOptionData(string id);
     List<OptionData> GetAllOptionData();
+
+    // 获取棋盘实体配置
+    EntityData GetBoardEntityData(string id);
+    List<EntityData> GetAllBoardEntityData();
 }
 public class DataSystem : AbstractSystem, IDataSystem{
 
@@ -157,5 +161,15 @@ public class DataSystem : AbstractSystem, IDataSystem{
     public List<OptionData> GetAllOptionData()
     {
         return tables.OptionDataTable.DataList;
+    }
+
+    public EntityData GetBoardEntityData(string id)
+    {
+        return tables.EntityDataTable.Get(id);
+    }
+
+    public List<EntityData> GetAllBoardEntityData()
+    {
+        return tables.EntityDataTable.DataList;
     }
 }

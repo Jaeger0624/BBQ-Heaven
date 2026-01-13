@@ -21,10 +21,10 @@ public class PreviewManager : MonoBehaviour,IController, ICanGetSystem, ICanSend
         foreach (FoodInstance foodInstance in foodInstances.Values){
             bool check = GASystem.CheckFoodPreview(foodInstance, FoodGAType.放上烤串前) || GASystem.CheckFoodPreview(foodInstance, FoodGAType.被选中时);
             if (check){
-                foodInstance.foodInstanceView.SetPreviewState(PreviewState_FoodInstanceView.Active);
+                foodInstance.foodInstanceView.SetPreviewState(PreviewState_EntityView.Active);
             }
             else{
-                foodInstance.foodInstanceView.SetPreviewState(PreviewState_FoodInstanceView.Normal);
+                foodInstance.foodInstanceView.SetPreviewState(PreviewState_EntityView.Normal);
             }
         }
     }

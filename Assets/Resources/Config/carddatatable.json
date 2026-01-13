@@ -176,5 +176,27 @@
         }
       }
     ]
+  },
+  {
+    "ID": "7",
+    "name": "创建实体",
+    "description": "创建",
+    "cost": 0,
+    "target": 5,
+    "CGAs": [
+      {
+        "type": 0,
+        "action": {
+          "ID": "1",
+          "conditions": [],
+          "actions": [
+            {
+              "$type": "GA_创建实体",
+              "entityID": "1"
+            }
+          ]
+        }
+      }
+    ]
   }
 ]

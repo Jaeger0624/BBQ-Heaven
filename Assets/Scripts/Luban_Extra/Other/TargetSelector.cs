@@ -29,6 +29,11 @@ public class TargetSelector{
             List<Vector2Int> positions = cells.Select(x => x.position).ToList();
             GameArchitecture.Interface.GetSystem<IBoardSystem>().HighlightCells(positions);
         }
+        else if (targetType == CardTargetType.空格子){
+            List<BoardCell> cells = GameArchitecture.Interface.GetSystem<IBoardSystem>().GetEmptyCells();
+            List<Vector2Int> positions = cells.Select(x => x.position).ToList();
+            GameArchitecture.Interface.GetSystem<IBoardSystem>().HighlightCells(positions);
+        }
         else{
             Debug.LogError("【Highlighter】不支持的目标类型: {targetType}");
         }
@@ -68,6 +73,17 @@ public class TargetSelector{
             return new List<object>{target};
         }
         else if (targetType == CardTargetType.任意格子){
+            CellViewUI targetCellView = targetObject.GetComponentInParent<CellViewUI>();
+            if (targetCellView == null){
+                return null;
+            }
+            BoardCell targetCell = targetCellView.cell;
+            if (targetCell == null){
+                return null;
+            }
+            return new List<object>{targetCell};
+        }
+        else if (targetType == CardTargetType.空格子){
             CellViewUI targetCellView = targetObject.GetComponentInParent<CellViewUI>();
             if (targetCellView == null){
                 return null;

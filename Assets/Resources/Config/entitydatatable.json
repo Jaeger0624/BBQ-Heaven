@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "ID": "1",
+    "name": "石壁",
+    "description": "这是一堵石壁",
+    "sprite": "Stein",
+    "effectDescription": "没啥效果，就是比较坚硬",
+    "CGAs": [],
+    "SEs": []
+  }
+]

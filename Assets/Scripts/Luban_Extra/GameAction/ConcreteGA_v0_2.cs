@@ -258,4 +258,29 @@ namespace cfg{
         }
         public override IAnimTask GetAnimTask(){return null;}
     }
+
+
+    public partial class GA_创建实体 : GameAction
+    {
+        public GA_创建实体(string entityId)
+        {
+            this.EntityID = entityId;
+        }
+        public override GameAction Clone() => new GA_创建实体(EntityID);
+        public override IObservable<GAResult> ExecuteAsync(object sender, List<object> param){
+            BoardCell targetCell = param.FirstOrDefault(x => x is BoardCell) as BoardCell;
+            if (targetCell == null)
+            {
+                Debug.LogError($"[GA_创建实体] 没有目标地块: {sender}");
+                return Observable.Return<GAResult>(GAResult.Empty);
+            }
+            Debug.Log($"[GA_创建实体] 创建实体: {EntityID} 到地块: {targetCell.position}");
+            this.GetSystem<IBoardEntitySystem>().CreateEntity(EntityID, targetCell.position);
+            return Observable.Return<GAResult>(GAResult.Empty);
+        }
+        public override void Execute(object sender, List<object> param){
+            Debug.LogError($"[GA_创建实体] 创建实体: {EntityID}，目前没做同步逻辑");
+        }
+        public override IAnimTask GetAnimTask(){return null;}
+    }
 }

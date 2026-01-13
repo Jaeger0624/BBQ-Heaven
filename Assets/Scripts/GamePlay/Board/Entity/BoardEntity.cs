@@ -1,13 +1,17 @@
 using System;
+using System.Collections.Generic;
+using cfg;
 using QFramework;
 using UnityEngine;
 public enum BoardEntityType{
     食材,
     非食材,
 }
-public abstract class BoardEntity : ICanGetSystem{
+// 负责处理运动、图像、显示等
+public abstract class BoardEntity : ICanGetSystem, ITooltipData{
     public string guid { get; private set; }
     public abstract string name { get; }
+    public abstract object data { get;}
     public Vector2Int position;
     public abstract BoardEntityType type { get; }
     public Vector2Int lastMoveDirection = Vector2Int.zero;
@@ -22,4 +26,9 @@ public abstract class BoardEntity : ICanGetSystem{
         }
     }
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
+    public abstract List<TooltipInfo> GetTooltipInfos();
+
+
+    // Helper methods
+    public abstract Sprite GetSprite();
 }
