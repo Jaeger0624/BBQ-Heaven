@@ -35,9 +35,7 @@ public class EntityView : MonoBehaviour, IController,IShowTooltip, IPointerEnter
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-
         OnPointerEnterEvent.Invoke();
-        
     }
 
     public List<TooltipInfo> GetTooltipInfo()

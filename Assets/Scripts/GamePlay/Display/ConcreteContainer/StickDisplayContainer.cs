@@ -31,25 +31,3 @@ public class StickDisplayContainer : MonoBehaviour, IController, IDisplayContain
     public GameObject GetGameObject() => gameObject;
 }
 
-public class DisplayStickView : MonoBehaviour, ICanGetSystem, IDisplayItemView<Stick>{
-    public Stick stick;
-    public void Init(Stick stick){
-        this.stick = stick;
-    }
-    public IArchitecture GetArchitecture() => GameArchitecture.Interface;
-
-    public void Bind(Stick data)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void SetInteraction(Action<Stick> onClick)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void SetSelectedState(bool isSelected)
-    {
-        throw new NotImplementedException();
-    }
-}
