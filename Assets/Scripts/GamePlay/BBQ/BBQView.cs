@@ -47,8 +47,8 @@ public class BBQView : MonoBehaviour,IBeginDragHandler, IDragHandler, IEndDragHa
         tasteText.text = bbq.totalTaste.Value.ToString();
 
         foreach (var foodInstance in bbq.foodInstances){
-            FoodInstanceView view = foodInstance.foodInstanceView;
-            view.transform.rotation = Quaternion.identity;
+            IEntityView view = foodInstance.foodInstanceView;
+            view.GO().transform.rotation = Quaternion.identity;
         }
     }
     private void CreateSlotTransforms(int slotCount){

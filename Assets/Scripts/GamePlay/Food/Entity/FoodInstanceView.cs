@@ -12,25 +12,27 @@ public enum PreviewState_EntityView{
     Normal,
     Selected,
     Active,
-    ActiveAndSelected,
 }
-public class FoodInstanceView : MonoBehaviour, IShowTooltip, IController, IPointerEnterHandler{
+
+public class FoodInstanceView : MonoBehaviour, IController, IPointerEnterHandler, IEntityView{
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
-    public FoodInstance foodInstance;
+    public BoardEntity Entity => foodInstance;
+    private FoodInstance foodInstance;
     [ReadOnly]
-    public PreviewState_EntityView previewState = PreviewState_EntityView.Normal;
     [SerializeField] private Image foodImage;
     [SerializeField] private ParticleSystem buffedParticle;
     public UnityEvent OnPointerEnterEvent;
     private bool canShowPointerEnterAnim => foodInstance.state == FoodInstanceState.棋盘上;
-    public void Bind(FoodInstance foodInstance){
+
+    public void Bind(BoardEntity entity){
+        if (entity is not FoodInstance foodInstance) {Debug.LogError("FoodInstanceView 只能绑定 FoodInstance");return;}
         this.foodInstance = foodInstance;
         //TODO: 技术债，数据层最好不要持有视图层，但快速开发期，先这样处理
         this.foodInstance.foodInstanceView = this;
         // 观察者
-        foodInstance.status.Subscribe(status => {
-            UpdateVisual();
-        }).AddTo(this);
+        // foodInstance.status.Subscribe(status => {
+        //     UpdateVisual();
+        // }).AddTo(this);
 
         UpdateVisual();
         ResetScale();
@@ -49,15 +51,7 @@ public class FoodInstanceView : MonoBehaviour, IShowTooltip, IController, IPoint
             return;
         }
         foodImage.sprite = sprite;
-
-        if (foodInstance.status.Value.isBuffed){
-            buffedParticle.gameObject.SetActive(true);
-        }
-        else{
-            buffedParticle.gameObject.SetActive(false);
-        }
     }
-
     public void SetPreviewState(PreviewState_EntityView previewState){
         switch (previewState){
             // 正常状态
@@ -81,6 +75,6 @@ public class FoodInstanceView : MonoBehaviour, IShowTooltip, IController, IPoint
             OnPointerEnterEvent.Invoke();
         }
     }
-
+    public GameObject GO() => gameObject;
 }
 

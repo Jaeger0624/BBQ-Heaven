@@ -43,34 +43,41 @@ public class TargetSelector{
     public static List<object> GetParam(CardTargetType targetType, GameObject targetObject){
         if (targetType == CardTargetType.无) return new List<object>();
         else if (targetType == CardTargetType.食材){
-            FoodInstanceView targetView = targetObject.GetComponent<FoodInstanceView>();
+            IEntityView targetView = targetObject.GetComponent<IEntityView>();
             if (targetView == null){
                 return null;
             }
-            FoodInstance target = targetView.foodInstance;
-            return new List<object>{target};
+            if (targetView.Entity is not FoodInstance foodInstance){
+                Debug.LogError($"【TargetSelector】目标不是食材: {targetView.Entity.name}");
+                return null;
+            }
+            return new List<object>{foodInstance};
         }
         else if (targetType == CardTargetType.周围有空位的食材){
-            FoodInstanceView targetView = targetObject.GetComponent<FoodInstanceView>();
+            IEntityView targetView = targetObject.GetComponent<IEntityView>();
             if (targetView == null){
                 return null;
             }
-            FoodInstance target = targetView.foodInstance;
-            if (target.GetSurroundingEmptyCellsCount() == 0){
+            if (targetView.Entity is not FoodInstance foodInstance){
+                Debug.LogError($"【TargetSelector】目标不是食材: {targetView.Entity.name}");
                 return null;
             }
-            return new List<object>{target};
+            if (foodInstance.GetSurroundingEmptyCellsCount() == 0){
+                return null;
+            }
+            return new List<object>{foodInstance};
         }
         else if (targetType == CardTargetType.周围有食材的食材){
-            FoodInstanceView targetView = targetObject.GetComponent<FoodInstanceView>();
-            if (targetView == null){
+            IEntityView targetView = targetObject.GetComponent<IEntityView>();
+            if (targetView == null) return null;
+            
+            if (targetView.Entity is not FoodInstance foodInstance){
+                Debug.LogError($"【TargetSelector】目标不是食材: {targetView.Entity.name}");
                 return null;
             }
-            FoodInstance target = targetView.foodInstance;
-            if (target.GetSurroundingFoodInstances().Count == 0){
-                return null;
-            }
-            return new List<object>{target};
+            if (foodInstance.GetSurroundingFoodInstances().Count == 0) return null;
+            
+            return new List<object>{foodInstance};
         }
         else if (targetType == CardTargetType.任意格子){
             CellViewUI targetCellView = targetObject.GetComponentInParent<CellViewUI>();

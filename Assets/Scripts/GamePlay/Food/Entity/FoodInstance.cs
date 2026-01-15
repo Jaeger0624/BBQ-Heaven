@@ -25,9 +25,7 @@ public partial class FoodInstance : BoardEntity, IAnimPlayer{
     public float baseCritMultiplier = 1.5f; // 基础暴击倍率
     public int foodSize = 1;
 
-    /// <summary>实例状态，主要决定动画和View的显示</summary>
-    public readonly ReactiveProperty<FoodInstanceViewStatus> status = new ReactiveProperty<FoodInstanceViewStatus>(new FoodInstanceViewStatus(false));
-    public FoodInstanceView foodInstanceView;
+    public IEntityView foodInstanceView;
     // Runtime部分：不保存
     public List<SustainEffect> sustainEffects = new List<SustainEffect>();
     public Action OnViewStatusChanged;
@@ -88,17 +86,4 @@ public partial class FoodInstance : BoardEntity, IAnimPlayer{
     }
 
     public override Sprite GetSprite() => Resources.Load<Sprite>("Sprites/" + food.foodData.Sprite);
-}
-
-
-/// <summary>
-/// 食材实例状态，主要决定动画和View的显示
-/// </summary>
-[Serializable]
-public class FoodInstanceViewStatus
-{
-    public readonly bool isBuffed = false;
-    public FoodInstanceViewStatus(bool isBuffed){
-        this.isBuffed = isBuffed;
-    }
 }
