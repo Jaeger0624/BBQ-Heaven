@@ -6,23 +6,30 @@ using UnityEngine;
 /// <summary>
 /// 食材系统 - 控制器层
 /// </summary>
-public class FoodController : MonoBehaviour, IController
+public class EntityViewController : MonoBehaviour, IController
 {
     private IFoodSystem foodSystem => this.GetSystem<IFoodSystem>();
     private FoodAnimController foodAnimController;
-    [SerializeField] private GameObject foodInstanceViewPrefab;
+    [SerializeField] private GameObject EntityViewPrefab;
+    [SerializeField] private GameObject FoodInstanceViewPrefab;
     [SerializeField] private Transform supplyStartPoint;
     // 需要通过BoardView定位食材实例视图
     [SerializeField] private BoardViewUGUI boardView;
-    private Dictionary<string, IEntityView> foodInstanceViews = new Dictionary<string, IEntityView>();
+    private Dictionary<string, IEntityView> entityViews = new Dictionary<string, IEntityView>();
     void Awake()
     {
         foodAnimController = gameObject.GetComponent<FoodAnimController>() ?? gameObject.AddComponent<FoodAnimController>();
     }
     void OnEnable()
     {
+        // 1. 生成食材
         this.RegisterEvent<CreateFoodInstanceEvent>(OnCreateFoodInstanceEvent).UnRegisterWhenDisabled(this);
         this.RegisterEvent<RemoveFoodInstanceEvent>(OnRemoveFoodInstanceEvent).UnRegisterWhenDisabled(this);
+
+        // 2. 生成非食材
+        this.RegisterEvent<CreateEntityEvent>(OnCreateEntityEvent).UnRegisterWhenDisabled(this);
+
+        // 3. 实体移动事件
         this.RegisterEvent<MoveEntityEvent>(OnMoveEntityEvent).UnRegisterWhenDisabled(this);
         this.RegisterEvent<PlaceEntityEvent>(OnPlaceEntityEvent).UnRegisterWhenDisabled(this);
         this.RegisterEvent<SwapEntityEvent>(OnSwapEntityEvent).UnRegisterWhenDisabled(this);
@@ -41,21 +48,48 @@ public class FoodController : MonoBehaviour, IController
         }
     }
 
-
     // 创建新食材实例事件
     void OnCreateFoodInstanceEvent(CreateFoodInstanceEvent e)
     {
-        
         // 1. 获取食材实例
         FoodInstance foodInstance = e.foodInstance;
         // 2. 生成食材实例视图
-        IEntityView foodInstanceView = GenerateFoodInstanceView(foodInstance);
-        foodInstanceView.GO().SetActive(false);
+        ControlView(foodInstance);
+    }
+    void OnCreateEntityEvent(CreateEntityEvent e)
+    {
+        // 1. 获取食材实例
+        BoardEntity entity = e.entity;
+        Debug.Log($"【EntityViewController】创建实体: {entity.name}");
+        // 2. 生成食材实例视图
+        ControlView(entity);
+    }
+
+    
+    // 生成食材实例视图
+    private IEntityView GenerateEntityView(BoardEntity entity){
+        GameObject prefab = entity is FoodInstance ? FoodInstanceViewPrefab : EntityViewPrefab;
+        IEntityView entityView = Instantiate(prefab, transform).GetComponent<IEntityView>();
+        entityView.Bind(entity);
+        return entityView;
+    }
+
+    public IArchitecture GetArchitecture() => 
+        GameArchitecture.Interface;
+    
+    public IEntityView GetEntityView(string guid) => 
+        entityViews.TryGetValue(guid, out IEntityView entityView) ? entityView : null;
+
+
+    #region 具体动画
+    private void ControlView(BoardEntity entity){
+        IEntityView entityView = GenerateEntityView(entity);
+        entityView.GO().SetActive(false);
         // 3. 设置父物体
-        Transform cellTransform = boardView.GetCellTransform(foodInstance.position);
-        float scale = foodInstanceView.GO().transform.localScale.x;
-        foodInstanceView.GO().transform.SetParent(cellTransform,true);
-        foodInstanceView.GO().transform.localScale = new Vector3(scale, scale, 1);
+        Transform cellTransform = boardView.GetCellTransform(entity.position);
+        float scale = entityView.GO().transform.localScale.x;
+        entityView.GO().transform.SetParent(cellTransform,true);
+        entityView.GO().transform.localScale = new Vector3(scale, scale, 1);
 
         Vector3 relativeEnd = new Vector3(0, 0, -1f);
         Vector3 relativeStart = new Vector3(0, SettingManager.Instance.AnimSettings.foodInstanceCreateDistance, 0);
@@ -64,32 +98,33 @@ public class FoodController : MonoBehaviour, IController
         var attachedAnimTasks = new List<IAnimTask>
         {
             new ActionAnimTask(() => {
-                if (foodInstanceView == null) return;
-                foodInstanceView.GO().SetActive(true);
+                if (entityView == null) return;
+                entityView.GO().SetActive(true);
             }),
-            new RelativeMoveAnimationTask(foodInstanceView.GO().transform, 0.3f, cellTransform, relativeEnd, relativeStart)   
+            new RelativeMoveAnimationTask(entityView.GO().transform, 0.3f, cellTransform, relativeEnd, relativeStart)   
         };
         float delay = SettingManager.Instance.AnimSettings.foodInstanceMoveAnimDelay;
         IAnimTask anim = new AttatchedAnimTask(new DelayAnimTask(delay), attachedAnimTasks);
         // Debug.Log($"【FoodController】将食材实例视图移动到棋盘格子: {cellTransform.position}");
-        this.GetSystem<IAnimationSystem>().Append(anim);
+        this.GetSystem<IAnimationSystem>().DirectlyPlay(anim);
 
-        foodInstanceViews.Add(foodInstance.guid, foodInstanceView);
+        entityViews.Add(entity.guid, entityView);
+
     }
     void OnRemoveFoodInstanceEvent(RemoveFoodInstanceEvent e)
     {
-        if (!foodInstanceViews.TryGetValue(e.foodInstance.guid, out IEntityView foodInstanceView)) return;
+        if (!entityViews.TryGetValue(e.foodInstance.guid, out IEntityView foodInstanceView)) return;
 
         //TODO: 播放消失动画
         this.GetSystem<IAnimationSystem>().Append(new ActionAnimTask(() => {
-            foodInstanceViews.Remove(e.foodInstance.guid);
+            entityViews.Remove(e.foodInstance.guid);
             Destroy(foodInstanceView.GO());
         }));
         this.GetSystem<IAnimationSystem>().Play();
     }
     void OnMoveEntityEvent(MoveEntityEvent e)
     {
-        if (!foodInstanceViews.TryGetValue(e.entity.guid, out IEntityView foodInstanceView)) return;
+        if (!entityViews.TryGetValue(e.entity.guid, out IEntityView foodInstanceView)) return;
 
         Vector3 originPos = foodInstanceView.GO().transform.position;
         // 1. 获取食材实例视图的父物体
@@ -114,7 +149,7 @@ public class FoodController : MonoBehaviour, IController
     }
     void OnPlaceEntityEvent(PlaceEntityEvent e)
     {
-        if (!foodInstanceViews.TryGetValue(e.entity.guid, out IEntityView foodInstanceView)) return;
+        if (!entityViews.TryGetValue(e.entity.guid, out IEntityView foodInstanceView)) return;
 
         Transform cellTransform = boardView.GetCellTransform(e.newPos);
         float scale = foodInstanceView.GO().transform.localScale.x;
@@ -137,8 +172,8 @@ public class FoodController : MonoBehaviour, IController
     }
     void OnSwapEntityEvent(SwapEntityEvent e)
     {
-        if (!foodInstanceViews.TryGetValue(e.entity1.guid, out IEntityView foodInstanceView1)) return;
-        if (!foodInstanceViews.TryGetValue(e.entity2.guid, out IEntityView foodInstanceView2)) return;
+        if (!entityViews.TryGetValue(e.entity1.guid, out IEntityView foodInstanceView1)) return;
+        if (!entityViews.TryGetValue(e.entity2.guid, out IEntityView foodInstanceView2)) return;
 
         Vector3 originPos1 = foodInstanceView1.GO().transform.position;
         Vector3 originPos2 = foodInstanceView2.GO().transform.position;
@@ -169,17 +204,6 @@ public class FoodController : MonoBehaviour, IController
         this.GetSystem<IAnimationSystem>().DirectlyPlay(anim);
     }
 
-    
-    // 生成食材实例视图
-    private IEntityView GenerateFoodInstanceView(FoodInstance foodInstance){
-        IEntityView foodInstanceView = Instantiate(foodInstanceViewPrefab, transform).GetComponent<IEntityView>();
-        foodInstanceView.Bind(foodInstance);
-        return foodInstanceView;
-    }
 
-    public IArchitecture GetArchitecture() => 
-        GameArchitecture.Interface;
-    
-    public IEntityView GetFoodInstanceView(string guid) => 
-        foodInstanceViews.TryGetValue(guid, out IEntityView foodInstanceView) ? foodInstanceView : null;
+    #endregion
 }

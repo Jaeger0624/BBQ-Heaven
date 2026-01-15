@@ -4430,7 +4430,7 @@ MonoBehaviour:
   m_ChildAlignment: 4
   m_StartCorner: 2
   m_StartAxis: 1
-  m_CellSize: {x: 93, y: 93}
+  m_CellSize: {x: 100, y: 100}
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 1
   m_ConstraintCount: 8
@@ -22118,7 +22118,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fddff530fcbb22a429211e3ad55791e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  foodInstanceViewPrefab: {fileID: 7318560754695737606, guid: 8e135b073a4d5494483447459d66a4d2, type: 3}
+  EntityViewPrefab: {fileID: 7318560754695737606, guid: 8234b6886b3f89440921f295417125f0, type: 3}
+  FoodInstanceViewPrefab: {fileID: 7318560754695737606, guid: 8e135b073a4d5494483447459d66a4d2, type: 3}
   supplyStartPoint: {fileID: 830528035}
   boardView: {fileID: 1173862512}
 --- !u!1 &1690574004
@@ -28755,7 +28756,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1672986230254023067, guid: 4b0b33e978bcdcd4c95339400b48f0d0, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 344.07
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1888688214262151321, guid: 4b0b33e978bcdcd4c95339400b48f0d0, type: 3}
       propertyPath: m_Pivot.x

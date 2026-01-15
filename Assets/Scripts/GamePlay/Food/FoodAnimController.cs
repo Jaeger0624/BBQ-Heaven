@@ -7,10 +7,10 @@ public class FoodAnimController : MonoBehaviour, IController
 {
     private IAudioService audioService => SettingManager.Instance.audioService;
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
-    private FoodController foodController;
+    private EntityViewController foodController;
     void Awake()
     {
-        foodController = gameObject.GetComponent<FoodController>();
+        foodController = gameObject.GetComponent<EntityViewController>();
     }
     void OnEnable()
     {
@@ -26,7 +26,7 @@ public class FoodAnimController : MonoBehaviour, IController
     /// <param name="e"></param>
     void OnFoodInstanceViewAnim(FoodInstanceViewAnimEvent e)
     {
-        IEntityView foodInstanceView = foodController.GetFoodInstanceView(e.guid);
+        IEntityView foodInstanceView = foodController.GetEntityView(e.guid);
         if (foodInstanceView == null) return;
         
         var scaleTween = new ScaleAnimationTask(foodInstanceView.GO().transform, 1.6f,0.15f);
@@ -41,7 +41,7 @@ public class FoodAnimController : MonoBehaviour, IController
     /// <param name="e"></param>
     void OnFoodInstanceAddBaseValueAnim(FoodInstanceAddBaseValueEvent e)
     {
-        IEntityView foodInstanceView = foodController.GetFoodInstanceView(e.guid);
+        IEntityView foodInstanceView = foodController.GetEntityView(e.guid);
         if (foodInstanceView == null) return;
 
         // FoodInstanceView 添加基础值动画
@@ -71,7 +71,7 @@ public class FoodAnimController : MonoBehaviour, IController
     /// <param name="e"></param>
     void OnFoodInstanceExecuteAction(FoodInstanceExecuteActionEvent e)
     {
-        IEntityView foodInstanceView = foodController.GetFoodInstanceView(e.guid);
+        IEntityView foodInstanceView = foodController.GetEntityView(e.guid);
         if (foodInstanceView == null) return;
         
         // var scaleTween = new ElasticScaleAnimTask(foodInstanceView.transform, 0.7f, 1.7f);

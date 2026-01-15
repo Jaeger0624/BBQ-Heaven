@@ -42,6 +42,7 @@ public abstract partial class GameAction : Luban.BeanBase
             case "GA_滑行": return new GA_滑行(_buf);
             case "GA_修改地块": return new GA_修改地块(_buf);
             case "GA_创建实体": return new GA_创建实体(_buf);
+            case "GA_获得声望": return new GA_获得声望(_buf);
             default: throw new SerializationException();
         }
     }

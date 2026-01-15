@@ -450,7 +450,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7563721099695147475
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5364,7 +5364,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fae98eb5349bd94c9e63250163fe223, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  previewState: 0
   foodImage: {fileID: 1622636793023656365}
   buffedParticle: {fileID: 32020880913366012}
   OnPointerEnterEvent:

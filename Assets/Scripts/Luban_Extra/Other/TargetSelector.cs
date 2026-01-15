@@ -99,6 +99,9 @@ public class TargetSelector{
             if (targetCell == null){
                 return null;
             }
+            if (!targetCell.IsEmpty()){
+                return null;
+            }
             return new List<object>{targetCell};
         }
         else{

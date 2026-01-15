@@ -112,7 +112,7 @@ namespace cfg{
             observer.OnCompleted();
         }
         public override void Execute(object sender, List<object> param){}
-        public override IAnimTask GetAnimTask(){return null;}
+        public override IAnimTask GetAnimTask(){return new EmptyAnimTask();}
     }
 
     public partial class GA_方向位移 : GameAction
@@ -224,7 +224,7 @@ namespace cfg{
 
             this.GetSystem<IBoardEntitySystem>().Mover.DirectionalMove(entity, entity.lastMoveDirection, steps);
         }
-        public override IAnimTask GetAnimTask(){return null;}
+        public override IAnimTask GetAnimTask(){return new EmptyAnimTask();}
     }
 
 
@@ -281,6 +281,22 @@ namespace cfg{
         public override void Execute(object sender, List<object> param){
             Debug.LogError($"[GA_创建实体] 创建实体: {EntityID}，目前没做同步逻辑");
         }
-        public override IAnimTask GetAnimTask(){return null;}
+        public override IAnimTask GetAnimTask(){return new EmptyAnimTask();}
     }
+
+
+    public partial class GA_获得声望 : GameAction
+    {
+        public GA_获得声望(DynamicValue value)
+        {
+            this.Value = value;
+        }
+        public override GameAction Clone() => new GA_获得声望(Value);
+        public override void Execute(object sender, List<object> param){
+            int value = Value.GetValue(sender, param);
+            this.GetSystem<IPCSystem>().AddReputation(value);
+        }
+        public override IAnimTask GetAnimTask(){return new EmptyAnimTask();}
+    }
+
 }

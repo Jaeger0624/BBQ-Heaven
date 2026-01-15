@@ -16,9 +16,10 @@ public static class Extension{
         List<FoodInstance> surroundingFoodInstances = new List<FoodInstance>();
         foreach (BoardCell surroundingCell in boardSystem.GetAdjacentCells(foodInstance.position)){
             if (surroundingCell.instanceGuid == null) continue;
-            FoodInstance surroundingFoodInstance = foodSystem.GetFoodInstances()[surroundingCell.instanceGuid];
-            if (surroundingFoodInstance == null) continue;
-            surroundingFoodInstances.Add(surroundingFoodInstance);
+            BoardEntity surroundingEntity = GameArchitecture.Interface.GetSystem<IBoardEntitySystem>().GetEntity(surroundingCell.instanceGuid);
+            if (surroundingEntity.type == BoardEntityType.食材){
+                surroundingFoodInstances.Add(surroundingEntity as FoodInstance);
+            }
         }
         return surroundingFoodInstances;
     }
