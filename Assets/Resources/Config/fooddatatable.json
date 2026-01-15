@@ -320,5 +320,45 @@
     ],
     "SEs": [],
     "rank": 2
+  },
+  {
+    "ID": "orio",
+    "name": "奥利奥",
+    "description": "夹心饼干",
+    "type": 16,
+    "tag": 0,
+    "rarity": 5,
+    "taste": 5,
+    "sprite": "Bread",
+    "effectDescription": "",
+    "CGAs": [
+      {
+        "type": 2,
+        "action": {
+          "ID": "1",
+          "conditions": [
+            {
+              "$type": "Condition_位于首尾",
+              "type": 0
+            }
+          ],
+          "actions": [
+            {
+              "$type": "GA_直接修改当前烧烤值",
+              "rarityValue": {
+                "$type": "DV_值",
+                "number": 5
+              },
+              "tasteValue": {
+                "$type": "DV_值",
+                "number": 5
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "SEs": [],
+    "rank": 1
   }
 ]

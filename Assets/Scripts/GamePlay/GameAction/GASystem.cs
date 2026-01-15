@@ -257,21 +257,10 @@ public class GASystem : AbstractSystem, IGASystem{
 
 }
 
-/// <summary>
-/// 连锁反应上下文
-/// </summary>
-public class LinkedActionContext{
-    // 连锁反应队列
-    public readonly Queue<IHaveAnim> gameActions = new Queue<IHaveAnim>();
-    public void AddAnimAction(IHaveAnim haveAnim) => gameActions.Enqueue(haveAnim);
-}
-
 // 拥有动画的任务（如GA、CGA，执行的是动作效果）
 public interface IHaveAnim{
     IAnimTask GetAnimTask();
 }
-
-
 public class TriggerGAEvent : AbstractEvent{
     public string triggerName;
     public TriggerGAEvent(string triggerName){

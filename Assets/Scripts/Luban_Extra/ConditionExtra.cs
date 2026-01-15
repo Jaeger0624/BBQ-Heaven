@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using cfg;
 using QFramework;
 using UnityEngine;
@@ -75,5 +76,41 @@ public partial class Condition_食材周围空位
         return new EmptyAnimTask();
     }
 
+}
+
+
+public partial class Condition_位于首尾
+{
+    public override bool Evaluate(object sender, List<object> param)
+    {
+        if (!(sender is FoodInstance foodInstance)) {Debug.LogError($"【Condition_位于首尾】该条件只能由FoodInstance触发");return false;}
+        if (foodInstance.state != FoodInstanceState.烤串上){
+            Debug.LogError($"【Condition_位于首尾】食材不在烤串上: {foodInstance.name}, 当前状态：{foodInstance.state}");
+            return false;
+        }
+        BBQProcessContext context = param?.FirstOrDefault() as BBQProcessContext;
+        if (context == null) {Debug.LogError("上下文为空");return false;}
+        List<FoodInstance> foodInstances = context.targetBBQ.foodInstances;
+        if (!foodInstances.Contains(foodInstance)) {Debug.LogError($"【Condition_位于首尾】食材不在当前烧烤中: {foodInstance.name}");return false;}
+        int index = foodInstances.IndexOf(foodInstance);
+
+        if (Type == 0){
+            return index == 0;
+        }
+        else if (Type == 1){
+            return index == foodInstances.Count - 1;
+        }
+        else if (Type == 2){
+            return index == 0 || index == foodInstances.Count - 1;
+        }
+        else{
+            Debug.LogError($"【Condition_位于首尾】类型错误: {Type}");
+            return false;
+        }
+    }
+    public override IAnimTask GetAnimTask()
+    {
+        return new EmptyAnimTask();
+    }
 }
 }

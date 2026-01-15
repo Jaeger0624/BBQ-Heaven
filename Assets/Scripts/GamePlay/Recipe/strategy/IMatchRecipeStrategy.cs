@@ -18,7 +18,7 @@ public class MatchRecipeStrategy_默认 : IMatchRecipeStrategy
 {
     public List<RecipeResult> Match(BBQ bbq, List<Recipe> recipes)
     {
-        BBQProcessContext context = new BBQProcessContext(bbq, new List<FoodInstance>());
+        BBQProcessContext context = new BBQProcessContext(bbq);
         List<RecipeResult> matchedRecipePreviews = new List<RecipeResult>();
         foreach (var recipe in recipes)
         {

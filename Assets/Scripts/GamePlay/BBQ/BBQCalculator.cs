@@ -29,6 +29,14 @@ public class BBQCalculator_食材基础值逐个加 : AbstractBBQCalculator{
         while (foodQueue.Count > 0){
             ExecuteSingleFoodInstance(foodQueue, context);
         }
+        // 执行串后效果
+        foreach (var foodInstance in bbq.foodInstances){
+            if (foodInstance.food.foodGAs.ContainsKey(FoodGAType.烤串构建后)){
+                foreach (var cga in foodInstance.food.foodGAs[FoodGAType.烤串构建后]){
+                    this.GetSystem<IGASystem>().ApplyCGA(foodInstance, cga, new List<object>{context});
+                }
+            }
+        }
         // 执行串效果的计算
         ExecuteStickStrategy();
         this.GetSystem<IAnimationSystem>().Play();
@@ -52,8 +60,6 @@ public class BBQCalculator_食材基础值逐个加 : AbstractBBQCalculator{
             // 3. 设置食材实例状态为在烤串上
             foodInstance.SetState(FoodInstanceState.烤串上);
         });
-
-
 
         // 执行食材实例的GA并执行
         this.GetSystem<IGASystem>().ApplyGA(foodInstance, new GA_添加单个食材基础值(foodInstance), new List<object>{context});

@@ -68,7 +68,7 @@ public class BBQSystem : AbstractSystem, IBBQSystem
         });
 
 
-        BBQProcessContext context = new BBQProcessContext(currentBBQ, new List<FoodInstance>());
+        BBQProcessContext context = new BBQProcessContext(currentBBQ);
 
         // 0.检测时间是否足够
         int timePoint = this.GetSystem<ITimeSystem>().GetCostTime(foodInstances, stick);
@@ -91,7 +91,6 @@ public class BBQSystem : AbstractSystem, IBBQSystem
         });
 
         // 计算并得出当前烧烤实例的最终结果
-
         this.GetSystem<IGASystem>().SendAction(bbq, () => {
             CalculateCurrentBBQ(context);
         });

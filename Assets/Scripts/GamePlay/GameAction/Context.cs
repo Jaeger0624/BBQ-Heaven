@@ -19,10 +19,9 @@ public class DealContext{
 
 public class BBQProcessContext{
     public readonly BBQ targetBBQ;
-    public readonly List<FoodInstance> sourceFoodInstances;
-    public BBQProcessContext(BBQ targetBBQ, List<FoodInstance> sourceFoodInstances){
+
+    public BBQProcessContext(BBQ targetBBQ){
         this.targetBBQ = targetBBQ;
-        this.sourceFoodInstances = sourceFoodInstances;
     }
 }
 
@@ -44,7 +43,7 @@ public class ContextUtility{
         BBQ currentBBQ = GameArchitecture.Interface.GetSystem<IBBQSystem>().GetCurrentBBQ();
 
         if (currentBBQ != null){
-            contexts.Add(new BBQProcessContext(currentBBQ, new List<FoodInstance>()));
+            contexts.Add(new BBQProcessContext(currentBBQ));
         }
         return contexts;
     }
