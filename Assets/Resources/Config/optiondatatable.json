@@ -4,38 +4,39 @@
     "name": "默认",
     "description": "",
     "effectDescription": "",
-    "action": {
-      "ID": "",
-      "conditions": [],
-      "actions": []
-    }
+    "actions": []
   },
   {
     "ID": "砍价_接受",
     "name": "接受砍价",
     "description": "砍就砍吧！",
     "effectDescription": "客人可能会带他的好朋友一起来",
-    "action": {
-      "ID": "1",
-      "conditions": [],
-      "actions": [
-        {
-          "$type": "GA_创建临时乘区",
-          "Name": "砍价",
-          "value": 0.8
-        }
-      ]
-    }
+    "actions": [
+      {
+        "ID": "1",
+        "conditions": [],
+        "actions": [
+          {
+            "$type": "GA_创建临时乘区",
+            "Name": "砍价",
+            "value": 0.8
+          },
+          {
+            "$type": "GA_获得声望",
+            "value": {
+              "$type": "DV_值",
+              "number": 2
+            }
+          }
+        ]
+      }
+    ]
   },
   {
     "ID": "砍价_不接受",
     "name": "不接受！",
     "description": "怎么可以！",
     "effectDescription": "客人可能会愤然离去",
-    "action": {
-      "ID": "",
-      "conditions": [],
-      "actions": []
-    }
+    "actions": []
   }
 ]

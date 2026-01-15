@@ -21,7 +21,7 @@ public sealed partial class OptionData : Luban.BeanBase
         { if(!_buf["name"].IsString) { throw new SerializationException(); }  Name = _buf["name"]; }
         { if(!_buf["description"].IsString) { throw new SerializationException(); }  Description = _buf["description"]; }
         { if(!_buf["effectDescription"].IsString) { throw new SerializationException(); }  EffectDescription = _buf["effectDescription"]; }
-        { if(!_buf["action"].IsObject) { throw new SerializationException(); }  Action = global::cfg.CGA.DeserializeCGA(_buf["action"]);  }
+        { var __json0 = _buf["actions"]; if(!__json0.IsArray) { throw new SerializationException(); } Actions = new System.Collections.Generic.List<CGA>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { CGA __v0;  { if(!__e0.IsObject) { throw new SerializationException(); }  __v0 = global::cfg.CGA.DeserializeCGA(__e0);  }  Actions.Add(__v0); }   }
     }
 
     public static OptionData DeserializeOptionData(JSONNode _buf)
@@ -33,14 +33,14 @@ public sealed partial class OptionData : Luban.BeanBase
     public readonly string Name;
     public readonly string Description;
     public readonly string EffectDescription;
-    public readonly CGA Action;
+    public readonly System.Collections.Generic.List<CGA> Actions;
    
     public const int __ID__ = -928414241;
     public override int GetTypeId() => __ID__;
 
     public  void ResolveRef(Tables tables)
     {
-        Action?.ResolveRef(tables);
+        foreach (var _e in Actions) { _e?.ResolveRef(tables); }
     }
 
     public override string ToString()
@@ -50,7 +50,7 @@ public sealed partial class OptionData : Luban.BeanBase
         + "name:" + Name + ","
         + "description:" + Description + ","
         + "effectDescription:" + EffectDescription + ","
-        + "action:" + Action + ","
+        + "actions:" + Luban.StringUtil.CollectionToString(Actions) + ","
         + "}";
     }
 }

@@ -155,8 +155,10 @@ public class EncounterSystem : AbstractSystem, IEncounterSystem
     private void HandleOption(OptionData optionData)
     {
         Debug.Log($"【EncounterSystem】选择选项: {optionData.Name}");
-        CGA cga = new CGA(optionData.Action);
-        this.GetSystem<IGASystem>().ApplyCGA(this, cga, currentParams);
+        foreach (var cgaData in optionData.Actions){
+            CGA cga = new CGA(cgaData);
+            this.GetSystem<IGASystem>().ApplyCGA(this, cga, currentParams);
+        }
 
         if (_currentEncounterSubject != null)
         {
