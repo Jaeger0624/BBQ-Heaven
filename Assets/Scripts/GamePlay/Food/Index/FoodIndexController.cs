@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using cfg;
+using DG.Tweening;
 using QFramework;
 using UnityEngine;
 
@@ -9,15 +10,17 @@ public class FoodIndexController : MonoBehaviour, IController
     [SerializeField] private GameObject foodIndexerPrefab;
     private Dictionary<FoodType, FoodIndexer> foodIndexers = new Dictionary<FoodType, FoodIndexer>();
     private Dictionary<FoodType, int> Counts = new Dictionary<FoodType, int>();
+    private List<FoodInstance> triggeredFoodInstances = new List<FoodInstance>();
     void Start()
     {
-        this.RegisterEvent<CreateFoodInstanceEvent>(OnCreateFoodInstance);
-        this.RegisterEvent<FoodRemoveFromBoardEvent>(OnFoodRemoveFromBoard);
-    }
-    void OnDestroy()
-    {
-        this.UnRegisterEvent<CreateFoodInstanceEvent>(OnCreateFoodInstance);
-        this.UnRegisterEvent<FoodRemoveFromBoardEvent>(OnFoodRemoveFromBoard);
+        // 注册事件
+        // 1. 监听食材创建事件
+        this.RegisterEvent<CreateFoodInstanceEvent>(OnCreateFoodInstance).UnRegisterWhenGameObjectDestroyed(this);
+        this.RegisterEvent<FoodRemoveFromBoardEvent>(OnFoodRemoveFromBoard).UnRegisterWhenGameObjectDestroyed(this);
+
+        // 2. 监听Indexer触发事件
+        this.RegisterEvent<TriggerFoodIndexEvent>(TriggerIndexer).UnRegisterWhenGameObjectDestroyed(this);
+        this.RegisterEvent<ResetFoodIndexEvent>(ResetIndexer).UnRegisterWhenGameObjectDestroyed(this);
     }
     private void OnCreateFoodInstance(CreateFoodInstanceEvent e)
     {
@@ -76,5 +79,17 @@ public class FoodIndexController : MonoBehaviour, IController
     public IArchitecture GetArchitecture()
     {
         return GameArchitecture.Interface;
+    }
+    private void TriggerIndexer(TriggerFoodIndexEvent e){
+        triggeredFoodInstances.AddRange(e.foodIndexer.GetFoodInstances());
+        foreach (var foodInstance in triggeredFoodInstances){
+            foodInstance.foodInstanceView.GO().transform.DOScale(1.2f, 0.2f).SetEase(Ease.OutBack).SetUpdate(true);
+        }
+    }
+    private void ResetIndexer(ResetFoodIndexEvent e){
+        foreach (var foodInstance in triggeredFoodInstances){
+            foodInstance.foodInstanceView.GO().transform.DOScale(1f, 0.2f).SetEase(Ease.OutBack).SetUpdate(true);
+        }
+        triggeredFoodInstances.Clear();
     }
 }
