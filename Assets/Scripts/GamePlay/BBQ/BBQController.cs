@@ -14,7 +14,6 @@ public class BBQController : MonoBehaviour, IController, ICanSendEvent
         this.RegisterEvent<MoveBBQToRepositoryEvent>(OnMoveBBQToRepository);
         this.RegisterEvent<RemoveBBQFromRepositoryEvent>(OnRemoveBBQFromRepository);
     }
-
     void OnDisable()
     {
         this.UnRegisterEvent<MoveBBQToRepositoryEvent>(OnMoveBBQToRepository);
@@ -24,7 +23,6 @@ public class BBQController : MonoBehaviour, IController, ICanSendEvent
     {
         DetectBBQ();
     }
-
     // 检测烧烤交互
     private void DetectBBQ()
     {
@@ -45,8 +43,6 @@ public class BBQController : MonoBehaviour, IController, ICanSendEvent
             this.SendEvent(new ResetRecipePreviewViewsEvent());
         }
     }
-
-
     private void OnMoveBBQToRepository(MoveBBQToRepositoryEvent e){
         // 1. 创建个插槽
         RectTransform slotTransform = new GameObject("Slot").AddComponent<RectTransform>();

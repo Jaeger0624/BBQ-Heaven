@@ -11,6 +11,7 @@ public class BBQView : MonoBehaviour,IBeginDragHandler, IDragHandler, IEndDragHa
 {
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
     [SerializeField] public Transform foodParent;
+    [SerializeField] private GameObject slotPrefab;
     [SerializeField] private Image stickImage;
     [SerializeField] private TextMeshProUGUI rarityText;
     [SerializeField] private TextMeshProUGUI tasteText;
@@ -25,7 +26,7 @@ public class BBQView : MonoBehaviour,IBeginDragHandler, IDragHandler, IEndDragHa
         this.bbq = bbq;
 
         // 2. 创建插槽位置列表
-        CreateSlotTransforms(bbq.foodInstances.Count);
+        CreateSlotTransforms(bbq.stick.maxFoodCount);
 
         // 3. 更新视觉
         if (!IsBuilding){   
@@ -54,10 +55,9 @@ public class BBQView : MonoBehaviour,IBeginDragHandler, IDragHandler, IEndDragHa
     private void CreateSlotTransforms(int slotCount){
         Reset();
         for (int i = 0; i < slotCount; i++){
-            RectTransform slotObject = new GameObject($"Slot_{i}").AddComponent<RectTransform>();
-            slotObject.SetParent(foodParent);
-            slotObject.localScale = Vector3.one;
-            slotObject.localPosition = new Vector3(0, 0, -0.1f);
+            RectTransform slotObject = Instantiate(slotPrefab, foodParent).GetComponent<RectTransform>();
+            slotObject.gameObject.SetActive(true);
+            slotObject.anchoredPosition = Vector2.zero;
             slotTransforms.Add(slotObject);
         }
     }
@@ -73,7 +73,7 @@ public class BBQView : MonoBehaviour,IBeginDragHandler, IDragHandler, IEndDragHa
     }
 
     public Transform GetSlotTransform(int slotIndex){
-        return slotTransforms[slotTransforms.Count - 1 - slotIndex].transform;
+        return slotTransforms[slotIndex].transform;
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -98,7 +98,6 @@ public class BBQView : MonoBehaviour,IBeginDragHandler, IDragHandler, IEndDragHa
             this.SendEvent(new TimePreviewEvent(0));
         }
     }
-
     // 结束拖拽时，判断是否拖拽到了顾客身上，如果是的话，调用DealSystem的ExecuteDeal方法
     public void OnEndDrag(PointerEventData eventData)
     {
@@ -111,6 +110,4 @@ public class BBQView : MonoBehaviour,IBeginDragHandler, IDragHandler, IEndDragHa
             transform.DOLocalMove(Vector3.zero, 0.3f).SetEase(Ease.OutBack).SetUpdate(true);
         }
     }
-
-
 }
