@@ -8,8 +8,15 @@ using UnityEngine;
 public interface IStickStrategy : ICanGetSystem{
     List<BoardCell> GetRange(Vector2Int cellPosition, Stick stick);
     List<FoodInstance> GetFood(Vector2Int hoveredCellPos, Stick stick);
-
-    static bool IsHorizontal { get; set; } = false;
+    static int directionValue{
+        get{
+            return direction % 4;
+        }
+        set{
+            direction = value % 4;
+        }
+    }
+    private static int direction = 0;
 }
 
 public class StickStrategy_默认 : IStickStrategy
@@ -25,7 +32,7 @@ public class StickStrategy_默认 : IStickStrategy
     public List<BoardCell> GetRange(Vector2Int cellPosition, Stick stick)
     {
         // 如果是horizontal，则返回所有同一排的cell
-        if (IStickStrategy.IsHorizontal)
+        if (IStickStrategy.directionValue == 1 || IStickStrategy.directionValue == 3)
         {
             return this.GetArchitecture().GetSystem<IBoardSystem>().GetGrid().GetAllCells().Where(x => x.position.y == cellPosition.y).ToList();
         }
@@ -38,10 +45,11 @@ public class StickStrategy_默认 : IStickStrategy
     public List<FoodInstance> GetFood(Vector2Int hoveredCellPos, Stick stick)
     {
         List<FoodInstance> foodInstances = new List<FoodInstance>();
-        if (IStickStrategy.IsHorizontal)
+        // 方向：0向上，1向右，2向下，3向左
+        // 横向
+        if (IStickStrategy.directionValue == 1 || IStickStrategy.directionValue == 3)
         {
-            bool isLeft = hoveredCellPos.x <= this.GetSystem<IBoardSystem>().GetGrid().width/2;
-            int arg = isLeft ? 1 : -1;
+            int arg = IStickStrategy.directionValue == 1 ? 1 : -1;
             // 选取所有同y的食材，按x排序
             List<FoodInstance> temp = this.GetSystem<IFoodSystem>()
                 .GetFoodInstances().Values
@@ -60,8 +68,7 @@ public class StickStrategy_默认 : IStickStrategy
             }
         }
         else{
-            bool isBottom = hoveredCellPos.y <= this.GetSystem<IBoardSystem>().GetGrid().height/2;
-            int arg = isBottom ? 1 : -1;
+            int arg = IStickStrategy.directionValue == 0 ? 1 : -1;
             List<FoodInstance> temp = this.GetSystem<IFoodSystem>()
                 .GetFoodInstances().Values
                 .ToList()

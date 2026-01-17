@@ -7,7 +7,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class FoodIndexer : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ICanSendEvent
+public class FoodIndexer : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ICanSendEvent, IFoodIndexer
 {
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
     private FoodType foodType;

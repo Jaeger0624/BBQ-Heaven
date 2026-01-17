@@ -37,29 +37,8 @@ public class GameTest : MonoBehaviour, IController, ICanSendEvent{
         this.GetSystem<IAnimationSystem>().Play(AnimQueue.Default);
     }
 
-    private void ShowFoodRepository()
-    {
-        IFoodSystem foodSystem = this.GetSystem<IFoodSystem>();
-        Dictionary<string, Food> foodRepositorys = foodSystem.FoodInRepositorys();
-        Dictionary<string, int> nameToQuantityDict = foodRepositorys.ToList().GroupBy(x => x.Value.name).ToDictionary(x => x.Key, x => x.Count());
-        Debug.Log("-------------食材仓库-------------");
-        foreach (var food in nameToQuantityDict)
-        {
-            Debug.Log($"【GameTest】食材仓库: {food.Key} - {food.Value}");
-        }
-        foreach (var food in foodSystem.GetFoodRepositoryAmounts())
-        {
-            Debug.Log($"【GameTest】食材仓库: {food.Key} - {food.Value}");
-        }
-        Debug.Log("-------------食材仓库-------------");
-    }
-
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            ShowFoodRepository();
-        }
 
         if (Input.GetKeyDown(KeyCode.M)){
             audioService.Play("Score 2", 0.5f, 0.1f);

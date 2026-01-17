@@ -53,6 +53,7 @@ MonoBehaviour:
         - globalObjectIdString: GlobalObjectId_V1-2-37047d2fed1fddb4b9e36c3cad745512-444112220-0
         - globalObjectIdString: GlobalObjectId_V1-2-37047d2fed1fddb4b9e36c3cad745512-1173862508-0
         - globalObjectIdString: GlobalObjectId_V1-2-37047d2fed1fddb4b9e36c3cad745512-1816212039-0
+        - globalObjectIdString: GlobalObjectId_V1-2-37047d2fed1fddb4b9e36c3cad745512-1326792162-0
         values:
         - colorIndex: 3
           iconNameOrGuid: 
@@ -188,6 +189,10 @@ MonoBehaviour:
           isColorRecursive: 0
         - colorIndex: 0
           iconNameOrGuid: CollabChangesConflict Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 0
+          iconNameOrGuid: Button Icon
           isIconRecursive: 0
           isColorRecursive: 0
     - goDatas_byGlobalId:

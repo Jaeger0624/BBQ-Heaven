@@ -23,15 +23,16 @@ public class IndexRule_TopK : IndexRuleBase{
     }
     public override List<FoodInstance> GetFoodInstances(){
         List<FoodInstance> foodInstances = this.GetSystem<IFoodSystem>().GetFoodInstancesByState(FoodInstanceState.棋盘上).Values.ToList();
-        foodInstances.Sort((a, b) => {
+        foodInstances.Sort((x, y) => {
             if (property == FoodProperty.Rarity){
-                return a.rarity.CompareTo(b.rarity);
+                return y.rarity.CompareTo(x.rarity);
             }
             else{
-                return a.taste.CompareTo(b.taste);
+                return y.taste.CompareTo(x.taste);
             }
         });
-        return foodInstances.Take(k).ToList();
+        int value = foodInstances[k-1].rarity;
+        return foodInstances.Where(x => x.rarity >= value).ToList();
     }
 }
 public class IndexRule_Rank : IndexRuleBase{

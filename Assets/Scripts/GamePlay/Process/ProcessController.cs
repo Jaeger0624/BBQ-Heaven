@@ -21,10 +21,18 @@ public class ProcessController : MonoBehaviour, IController, ICanSendEvent
 
         this.RegisterEvent<ChangePanelEvent>(OnChangePanel).UnRegisterWhenGameObjectDestroyed(this.gameObject);
     }
+    
     void OnEnable()
     {
         this.RegisterEvent<ShowMainGamePlayEvent>(OnShowMainGame).UnRegisterWhenDisabled(this.gameObject);
         this.RegisterEvent<HideMainGamePlayEvent>(OnHideMainGame).UnRegisterWhenDisabled(this.gameObject);
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space)){
+            OnChangePanelButtonClick();
+        }
     }
     [Button("关闭主游戏界面")]
     public void HideMainGamePlay(){

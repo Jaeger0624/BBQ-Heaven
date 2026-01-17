@@ -19,9 +19,16 @@ public class BoardController : MonoBehaviour, IController, ICanSendEvent
     }
     void Update()
     {
-        if (this.GetSystem<ICardSystem>().State != CardSystemState.正常) return;
+        if (this.GetSystem<ICardSystem>().State != CardSystemState.正常) {
+            boardViewUGUI.ChangeArrowVisible(false);
+            return;
+        }
         Stick selectedStick = stickSystem.selectedStick;
-        if (selectedStick == null) {boardViewUGUI.UnhighlightAll(); return;}
+        if (selectedStick == null) {
+            boardViewUGUI.UnhighlightAll();
+            boardViewUGUI.ChangeArrowVisible(false);
+            return;
+        }
 
         Vector2 screenPos = Input.mousePosition;
         if (TryGetGridIndex(screenPos, out Vector2Int gridIndex)){
@@ -29,12 +36,16 @@ public class BoardController : MonoBehaviour, IController, ICanSendEvent
             BoardCell newHoveredCell = boardViewUGUI.boardCellDict[gridIndex].cell;
 
             if (Input.GetMouseButtonDown(1)){
-                IStickStrategy.IsHorizontal = !IStickStrategy.IsHorizontal;
+                IStickStrategy.directionValue += 1;
             }
 
+            // 1. 高亮范围
             IStickStrategy updateStrategy = selectedStick.strategy;
             List<BoardCell> highlightedCells = updateStrategy.GetRange(newHoveredCell.position, selectedStick);
 
+            // 2. 修改方向箭头
+            ShowDirectionArrow(IStickStrategy.directionValue, newHoveredCell.position);
+            boardViewUGUI.ChangeArrowVisible(true);
 
             if (Input.GetMouseButtonDown(1)){
                 UpdateView(newHoveredCell.position, highlightedCells, selectedStick);
@@ -146,6 +157,7 @@ public class BoardController : MonoBehaviour, IController, ICanSendEvent
         gridIndex = new Vector2Int(indexX, indexY);
         return true;
     }
+    private void ShowDirectionArrow(int directionValue, Vector2Int hoveredCellPos) => boardViewUGUI.UpdateDirectionArrow(directionValue, hoveredCellPos);
     public IArchitecture GetArchitecture()
     {
         return GameArchitecture.Interface;

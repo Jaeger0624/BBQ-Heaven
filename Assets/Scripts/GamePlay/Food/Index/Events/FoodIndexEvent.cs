@@ -1,8 +1,12 @@
+using System.Collections.Generic;
 using QFramework;
 
+public interface IFoodIndexer{
+    List<FoodInstance> GetFoodInstances();
+}
 public class TriggerFoodIndexEvent : AbstractEvent{
-    public FoodIndexer foodIndexer;
-    public TriggerFoodIndexEvent(FoodIndexer foodIndexer){
+    public IFoodIndexer foodIndexer;
+    public TriggerFoodIndexEvent(IFoodIndexer foodIndexer){
         this.foodIndexer = foodIndexer;
     }
 }
