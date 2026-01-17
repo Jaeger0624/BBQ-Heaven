@@ -21,9 +21,11 @@ public interface IPCSystem : ISystem, ISavable{
 
 public class PCSystem : AbstractSystem, IPCSystem
 {
+    // 角色声誉与等级
     public ReactiveProperty<int> Level { get; private set; } = new ReactiveProperty<int>(1);
     public ReactiveProperty<int> Reputation { get; private set; } = new ReactiveProperty<int>(0);
     public ReactiveProperty<int> NextLevelReputation { get; private set; } = new ReactiveProperty<int>(10);
+    // 角色信息
     private PlayerCharacter currentPC;
 
     protected override void OnInit()

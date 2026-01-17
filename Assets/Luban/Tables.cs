@@ -28,6 +28,7 @@ public partial class Tables
     public TileDataTable TileDataTable {get; }
     public InstantEncounterDataTable InstantEncounterDataTable {get; }
     public OptionDataTable OptionDataTable {get; }
+    public BuffDataTable BuffDataTable {get; }
 
     public Tables(System.Func<string, JSONNode> loader)
     {
@@ -45,6 +46,7 @@ public partial class Tables
         TileDataTable = new TileDataTable(loader("tiledatatable"));
         InstantEncounterDataTable = new InstantEncounterDataTable(loader("instantencounterdatatable"));
         OptionDataTable = new OptionDataTable(loader("optiondatatable"));
+        BuffDataTable = new BuffDataTable(loader("buffdatatable"));
         ResolveRef();
     }
     
@@ -64,6 +66,7 @@ public partial class Tables
         TileDataTable.ResolveRef(this);
         InstantEncounterDataTable.ResolveRef(this);
         OptionDataTable.ResolveRef(this);
+        BuffDataTable.ResolveRef(this);
     }
 }
 

@@ -90,6 +90,8 @@ public class GameArchitecture : Architecture<GameArchitecture>
         sb.Append("\nMyEventSystem - 事件系统");
         Interface.RegisterSystem<ICollectionSystem>(new CollectionSystem());  // 图鉴系统
         sb.Append("\nCollectionSystem - 图鉴系统");
+        Interface.RegisterSystem<IBuffSystem>(new BuffSystem());  // Buff系统
+        sb.Append("\nBuffSystem - Buff系统");
         // Debug.Log(sb.ToString());
     }
 

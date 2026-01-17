@@ -1,0 +1,9 @@
+[
+  {
+    "ID": "softness",
+    "name": "丝滑",
+    "description": "纵享丝滑~",
+    "costEvent": 0,
+    "isStackable": true
+  }
+]

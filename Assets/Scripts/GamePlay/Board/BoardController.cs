@@ -63,6 +63,7 @@ public class BoardController : MonoBehaviour, IController, ICanSendEvent
             highlightedCells.Clear();
             SendClearEvents();
             hoveredCell = null;
+            boardViewUGUI.ChangeArrowVisible(false);
         }
 
         this.GetSystem<BlackboardSystem>().hoveredCell = hoveredCell;

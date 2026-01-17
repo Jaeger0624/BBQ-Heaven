@@ -299,4 +299,36 @@ namespace cfg{
         public override IAnimTask GetAnimTask(){return new EmptyAnimTask();}
     }
 
+
+    #region Buff相关
+    public partial class GA_获得Buff : GameAction
+    {
+        public GA_获得Buff(string buffID, DynamicValue value)
+        {
+            this.BuffID = buffID;
+            this.Value = value;
+        }
+        public override GameAction Clone() => new GA_获得Buff(BuffID, Value);
+        public override void Execute(object sender, List<object> param){
+            int value = Value.GetValue(sender, param);
+            this.GetSystem<IBuffSystem>().AddBuff(BuffID, value);
+        }
+        public override IAnimTask GetAnimTask(){return new EmptyAnimTask();}
+    }
+
+    public partial class GA_减少Buff : GameAction
+    {
+        public GA_减少Buff(string buffID, DynamicValue value)
+        {
+            this.BuffID = buffID;
+            this.Value = value;
+            }
+        public override GameAction Clone() => new GA_减少Buff(BuffID, Value);
+        public override void Execute(object sender, List<object> param){
+            int value = Value.GetValue(sender, param);
+            this.GetSystem<IBuffSystem>().RemoveBuff(BuffID, value);
+        }
+        public override IAnimTask GetAnimTask(){return new EmptyAnimTask();}
+    }
+    #endregion
 }

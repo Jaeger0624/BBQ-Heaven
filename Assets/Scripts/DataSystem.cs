@@ -52,6 +52,10 @@ public interface IDataSystem : ISystem{
     // 获取棋盘实体配置
     EntityData GetBoardEntityData(string id);
     List<EntityData> GetAllBoardEntityData();
+
+    // 获取buff配置
+    BuffData GetBuffData(string id, bool byName = false);
+    List<BuffData> GetAllBuffData();
 }
 public class DataSystem : AbstractSystem, IDataSystem{
 
@@ -171,5 +175,18 @@ public class DataSystem : AbstractSystem, IDataSystem{
     public List<EntityData> GetAllBoardEntityData()
     {
         return tables.EntityDataTable.DataList;
+    }
+    public BuffData GetBuffData(string id, bool byName = false)
+    {
+        if (byName){
+            return tables.BuffDataTable.DataList.FirstOrDefault(item => item.Name == id);
+        }
+        else{
+            return tables.BuffDataTable.Get(id);
+        }
+    }
+    public List<BuffData> GetAllBuffData()
+    {
+        return tables.BuffDataTable.DataList;
     }
 }

@@ -267,7 +267,7 @@ public class GameTest : MonoBehaviour, IController, ICanSendEvent{
         GUILayout.Label($"当前时间: {currentTime.hour:D2}:{currentTime.minute:D2}");
         GUILayout.Label($"目标时间: {targetTime.hour:D2}:{targetTime.minute:D2}");
     }
-
+    private string buffId = "softness";
     private void PCInfoTest(){
 
         if (GUILayout.Button("增加1点声望")){
@@ -286,6 +286,24 @@ public class GameTest : MonoBehaviour, IController, ICanSendEvent{
         GUILayout.Label($"声望: {this.GetSystem<IPCSystem>().Reputation.Value}");
         GUILayout.Label($"等级: {this.GetSystem<IPCSystem>().Level.Value}");
         GUILayout.Label($"下一级声望: {this.GetSystem<IPCSystem>().NextLevelReputation.Value}");
+
+
+
+        GUILayout.Space(10);
+        buffId = GUILayout.TextField(buffId, GUILayout.Width(100));
+        if (GUILayout.Button("添加Buff")){
+            this.GetSystem<IBuffSystem>().AddBuff(buffId, 1);
+        }
+        if (GUILayout.Button("移除Buff")){
+            this.GetSystem<IBuffSystem>().RemoveBuff(buffId, 1);
+        }
+        GUILayout.Label("=== Buff测试 ===");
+        StringBuilder sb = new StringBuilder();
+        foreach (var buff in this.GetSystem<IBuffSystem>().GetBuffs()){
+            sb.Append($"{buff.Value.name} - {buff.Value.GetStackNumber()}\n");
+        }
+        GUILayout.Label(sb.ToString());
+
     }
 # endregion
     private Rng rng = new Rng(0);
