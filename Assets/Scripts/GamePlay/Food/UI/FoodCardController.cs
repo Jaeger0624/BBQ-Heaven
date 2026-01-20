@@ -15,6 +15,7 @@ public class FoodCardController : MonoBehaviour, IController, ICanSendEvent{
     {
         this.RegisterEvent<FoodCardPileUpdateEvent>(OnFoodCardPileUpdate);
         this.RegisterEvent<DrawFoodCardEvent>(OnDrawFoodCardEvent);
+
     }
 
     private void OnDestroy() 
@@ -52,15 +53,22 @@ public class FoodCardController : MonoBehaviour, IController, ICanSendEvent{
             // 1. 绑定数据
             foodCardView.Bind(new FoodUIContext(foodCard));
 
-            // 一个向上出现后缩放消失的动画
-            // 创建一个动作动画，将foodCardView setActive(true) 并执行一个动作动画，然后执行一个缩放动画，然后执行一个销毁动画
+
+            // 2. 执行动画
+            // 随机发射方向
+            float randomAngle = UnityEngine.Random.Range(-10, 10);
+            foodCardView.transform.localRotation = Quaternion.Euler(0, 0, randomAngle);
+
             seq.AppendCallback(() => {
                 foodCardView.gameObject.SetActive(true);
             });
-            seq.Append(foodCardView.transform.DOLocalMoveY(100, foodCardAnimDuration).SetEase(Ease.OutSine)).SetUpdate(true);
-            seq.Join(foodCardView.transform.DOScale(0, foodCardAnimDuration).SetEase(Ease.InBack).SetUpdate(true).OnComplete(() => {
-                Destroy(foodCardView.gameObject);
-            }));
+            Vector2 localMove = (Vector2.up * 100).Rotate(randomAngle);
+            seq.Append(foodCardView.transform.DOLocalMove(localMove, foodCardAnimDuration).SetEase(Ease.OutSine)).UnScaledKill(foodCardView.gameObject);
+            seq.Join(foodCardView.transform.DOScale(0, foodCardAnimDuration).SetEase(Ease.InBack).UnScaledKill(foodCardView.gameObject).OnComplete(() => {
+                if (this != null && gameObject != null) {
+                    Destroy(foodCardView.gameObject);
+                }
+            })).UnScaledKill(foodCardView.gameObject);
         }
         seq.Play();
     }

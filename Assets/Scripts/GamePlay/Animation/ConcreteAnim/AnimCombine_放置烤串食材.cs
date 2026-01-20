@@ -7,6 +7,7 @@ public partial class AnimCombine_放置烤串食材{
         Transform slotTransform = bbqView.GetSlotTransform(index);
         IAnimTask animTask_SetParent = new ActionAnimTask(() => {
             if(view == null) return;
+            view.ResetTransform();
             view.GO().transform.SetParent(slotTransform, true);
         });
         Transform transform = view.GO().transform;

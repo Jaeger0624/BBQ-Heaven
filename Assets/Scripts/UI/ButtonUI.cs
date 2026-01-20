@@ -44,7 +44,10 @@ public class ButtonUI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
         // 轻微放大
         if (anim == ButtonAnim.Scale)
         {
-            transform.DOScale(1.1f, 0.12f).SetEase(Ease.OutSine).SetUpdate(true);
+            transform.DOScale(1.1f, 0.12f)
+                .SetEase(Ease.OutSine)
+                .SetUpdate(true)
+                .SetLink(this.gameObject);
         }
     }
 
@@ -58,7 +61,10 @@ public class ButtonUI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
         }
         if (anim == ButtonAnim.Scale)
         {
-            transform.DOScale(1f, 0.12f).SetEase(Ease.OutSine).SetUpdate(true);
+            transform.DOScale(1f, 0.12f)
+                .SetEase(Ease.OutSine)
+                .SetUpdate(true)
+                .SetLink(this.gameObject);
         }
     }
 

@@ -91,12 +91,7 @@ public class BBQView : MonoBehaviour,IBeginDragHandler, IDragHandler, IEndDragHa
 
 
         CustomerView customerView = eventData.RaycastGetUI<CustomerView>();
-        if (customerView != null){
-            this.SendEvent(new TimePreviewEvent(SettingManager.Instance.GameplaySettings.soldBBQTime_默认));
-        }
-        else{
-            this.SendEvent(new TimePreviewEvent(0));
-        }
+
     }
     // 结束拖拽时，判断是否拖拽到了顾客身上，如果是的话，调用DealSystem的ExecuteDeal方法
     public void OnEndDrag(PointerEventData eventData)

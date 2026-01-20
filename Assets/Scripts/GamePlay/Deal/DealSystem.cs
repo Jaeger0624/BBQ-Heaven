@@ -142,9 +142,9 @@ public class DealSystem : AbstractSystem, IDealSystem
 		// 顾客离开（服务完成）
 		this.GetSystem<ICustomerSystem>().LeaveCustomer(new List<Customer>{customer});
 
-		// 耗时
-		int timePoint = SettingManager.GetSetting<GameplaySettings>().soldBBQTime_默认;
-		this.GetSystem<ITimeSystem>().PushTimePoint(timePoint);
+		// // 耗时
+		// int timePoint = SettingManager.GetSetting<GameplaySettings>().soldBBQTime_默认;
+		// this.GetSystem<ITimeSystem>().PushTimePoint(timePoint);
 
 		// 归还烤串
 		Stick stick = bbq.stick;

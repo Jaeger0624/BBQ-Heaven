@@ -54,6 +54,8 @@ MonoBehaviour:
         - globalObjectIdString: GlobalObjectId_V1-2-37047d2fed1fddb4b9e36c3cad745512-1173862508-0
         - globalObjectIdString: GlobalObjectId_V1-2-37047d2fed1fddb4b9e36c3cad745512-1816212039-0
         - globalObjectIdString: GlobalObjectId_V1-2-37047d2fed1fddb4b9e36c3cad745512-1326792162-0
+        - globalObjectIdString: GlobalObjectId_V1-2-37047d2fed1fddb4b9e36c3cad745512-801172804-0
+        - globalObjectIdString: GlobalObjectId_V1-2-37047d2fed1fddb4b9e36c3cad745512-854102650-0
         values:
         - colorIndex: 3
           iconNameOrGuid: 
@@ -193,6 +195,14 @@ MonoBehaviour:
           isColorRecursive: 0
         - colorIndex: 0
           iconNameOrGuid: Button Icon
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 3
+          iconNameOrGuid: 
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 3
+          iconNameOrGuid: 
           isIconRecursive: 0
           isColorRecursive: 0
     - goDatas_byGlobalId:

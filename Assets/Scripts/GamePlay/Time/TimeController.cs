@@ -22,6 +22,8 @@ public class TimeController : SerializedMonoBehaviour, IController
     private ISliderUI sliderUI;
     [SerializeField] private TextMeshProUGUI timeText;
 
+    private int currentTotalTimePoint = 0;
+
     void OnEnable()
     {
         // 1. 注册时间Tick事件 -> 更新进度条
@@ -35,18 +37,27 @@ public class TimeController : SerializedMonoBehaviour, IController
         int orginTotalTimePoint = this.GetSystem<ITimeSystem>().CurrentTime.GetOriginalTimeInfo().GetTotalTimePoint();
         int totalTimePoint = this.GetSystem<ITimeSystem>().CurrentTime.GetTotalTimePoint() - orginTotalTimePoint;
         int targetTimePoint = this.GetSystem<ITimeSystem>().TargetTime.GetTotalTimePoint() - orginTotalTimePoint;
-        timeText.text = $"{totalTimePoint}/{targetTimePoint}";
+        timeText.text = $"<color=white>{totalTimePoint}</color>/{targetTimePoint}";
         
+        currentTotalTimePoint = totalTimePoint;
     }
     private void UpdateTimeTextPreview(TimePreviewEvent evt){
-        if (evt.timeCost == 0) UpdateTimeText();
         int originTotalTimePoint = this.GetSystem<ITimeSystem>().CurrentTime.GetOriginalTimeInfo().GetTotalTimePoint();
         int totalTimePoint = evt.currentTime.GetTotalTimePoint() - originTotalTimePoint;
         int targetTimePoint = this.GetSystem<ITimeSystem>().TargetTime.GetTotalTimePoint() - originTotalTimePoint;
-        timeText.text = $"<color=yellow>{totalTimePoint}</color>/{targetTimePoint}";
+
+        if (totalTimePoint == currentTotalTimePoint){
+            UpdateTimeText();
+        }
+        else{
+            timeText.text = $"<color=yellow>{totalTimePoint}</color>/{targetTimePoint}";
+        }
     }
     private void OnStartNewDayEvent(StartNewDayEvent evt){
         ResetProcessBar();
+
+        UpdateTimeText();
+        currentTotalTimePoint = 0;
     }
     private void OnTimePreviewEvent(TimePreviewEvent evt){
         if (sliderUI == null) return;
@@ -93,6 +104,14 @@ public class TimePreviewEvent : AbstractEvent, ICanGetSystem{
 
 
     public TimePreviewEvent(int timeCost){
+        if (this.GetSystem<ITimeSystem>() == null){
+            Debug.LogError("TimeSystem is null");
+            return;
+        }
+        if (this.GetSystem<ITimeSystem>().CurrentTime == null || this.GetSystem<ITimeSystem>().TargetTime == null){
+            Debug.LogError("TimeInfo is null");
+            return;
+        }
         TimeInfo currentTime = this.GetSystem<ITimeSystem>().CurrentTime.Clone(timeCost);
         TimeInfo targetTime = this.GetSystem<ITimeSystem>().TargetTime.Clone(0);
         this.currentTime = currentTime;

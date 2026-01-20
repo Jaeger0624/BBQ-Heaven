@@ -9,6 +9,7 @@ public interface IEntityView : IShowTooltip{
     BoardEntity Entity { get; }
     void Bind(BoardEntity entity);
     void ResetScale();
+    void ResetTransform();
     void SetPreviewState(PreviewState_EntityView previewState);
     GameObject GO();
 }
@@ -37,6 +38,10 @@ public class EntityView : MonoBehaviour, IController, IEntityView, IPointerEnter
     }
     public void ResetScale(){
         transform.localScale = Vector3.one;
+    }
+    public void ResetTransform(){
+        transform.localScale = Vector3.one;
+        transform.localRotation = Quaternion.Euler(0, 0, 0);
     }
     public void SetPreviewState(PreviewState_EntityView previewState){
         switch (previewState){

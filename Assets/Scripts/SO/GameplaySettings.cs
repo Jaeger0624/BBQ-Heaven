@@ -6,7 +6,6 @@ using UnityEngine;
 public class GameplaySettings : ScriptableObject{
     public int supplyFoodTime_默认 = 1;
     public int makeBBQTime_默认 = 1;
-    public int soldBBQTime_默认 = 1;
     public int 烤串额外时间成本_默认 = 1;
     [LabelText("时间系统")]
     public Vector2Int targetTime_默认 = new Vector2Int(0, 22);

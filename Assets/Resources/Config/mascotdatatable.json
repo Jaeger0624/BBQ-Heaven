@@ -51,5 +51,47 @@
         ]
       }
     ]
+  },
+  {
+    "ID": "3",
+    "name": "牌佬",
+    "description": "抽牌不断",
+    "stackable": true,
+    "rank": 1,
+    "mainSE": [
+      {
+        "$type": "SE_监听事件",
+        "evt": 4,
+        "actions": [
+          {
+            "ID": "1",
+            "conditions": [],
+            "actions": [
+              {
+                "$type": "GA_为食材加属性",
+                "rarity": {
+                  "$type": "DV_值",
+                  "number": 1
+                },
+                "taste": {
+                  "$type": "DV_值",
+                  "number": 1
+                },
+                "info": {
+                  "strategy": 0,
+                  "value": {
+                    "$type": "DV_值",
+                    "number": 1
+                  },
+                  "types": [
+                    1
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
   }
 ]

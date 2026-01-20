@@ -24,12 +24,27 @@ public class FoodInstanceView : MonoBehaviour, IController, IPointerEnterHandler
     public UnityEvent OnPointerEnterEvent;
     private bool canShowPointerEnterAnim => foodInstance.state == FoodInstanceState.棋盘上;
 
+    private void Start() {
+        RandomizeTransform();
+    }
+    private void RandomizeTransform(){
+        // 随机决定朝向（左或者右，水平翻转）
+        bool isHorizontalFlip = Random.Range(0, 2) == 0;
+
+        foodImage.transform.localScale = new Vector3(Random.Range(0.95f, 1.05f), Random.Range(0.95f, 1.05f), 1);
+        // 正态分布随机角度，范围-6到6        
+        foodImage.transform.localRotation = Quaternion.Euler(0, 0, Distribution.BoxMullerNormal(0, 5));
+
+    }
+    public void ResetTransform(){
+        foodImage.transform.localScale = new Vector3(1,1,1);
+        foodImage.transform.localRotation = Quaternion.Euler(0, 0, 0);
+    }
     public void Bind(BoardEntity entity){
         if (entity is not FoodInstance foodInstance) {Debug.LogError("FoodInstanceView 只能绑定 FoodInstance");return;}
         this.foodInstance = foodInstance;
         //TODO: 技术债，数据层最好不要持有视图层，但快速开发期，先这样处理
         this.foodInstance.foodInstanceView = this;
-
 
         UpdateVisual();
         ResetScale();
@@ -63,7 +78,7 @@ public class FoodInstanceView : MonoBehaviour, IController, IPointerEnterHandler
         }
     }
     public void ResetScale(){
-        transform.localScale = new Vector3(1,1,1);
+        transform.localScale = Vector3.one;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -73,5 +88,10 @@ public class FoodInstanceView : MonoBehaviour, IController, IPointerEnterHandler
         }
     }
     public GameObject GO() => gameObject;
+
+
+
+
+
 }
 

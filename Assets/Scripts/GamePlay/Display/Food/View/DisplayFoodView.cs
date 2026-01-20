@@ -4,6 +4,7 @@ using QFramework;
 using UnityEngine.UI;
 using TMPro;
 using cfg;
+using DG.Tweening;
 
 public class DisplayFoodView : MonoBehaviour, IDisplayItemView<FoodUIContext>{
     private FoodUIContext _context;
@@ -68,5 +69,9 @@ public class DisplayFoodView : MonoBehaviour, IDisplayItemView<FoodUIContext>{
         }else{
             foodImage.color = Color.white;
         }
+    }
+    private void OnDestroy()
+    {
+        DOTween.Kill(this);
     }
 }
