@@ -39,7 +39,7 @@ public class EntityViewController : MonoBehaviour, IController
     {
         if (Input.GetKeyDown(KeyCode.F)){
             // 打印食材仓库信息
-            Dictionary<string, Food> foodRepositorys = foodSystem.FoodRepositorys();
+            Dictionary<string, FoodCard> foodRepositorys = foodSystem.FoodRepositorys();
             StringBuilder sb = new StringBuilder();
             foreach (var food in foodRepositorys){
                 sb.AppendLine($"食材仓库信息: {food.Key} - {food.Value.foodData.Name} - {food.Value.foodData.ID}");

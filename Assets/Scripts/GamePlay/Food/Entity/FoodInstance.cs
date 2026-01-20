@@ -14,27 +14,28 @@ public partial class FoodInstance : BoardEntity, IAnimPlayer{
     public override BoardEntityType type => BoardEntityType.食材;
     public override string name => food.name;
     public override object data => food.foodData;
-    public Food food;
+    public FoodCard food;
     /// <summary>实例状态，主要用于程序逻辑判断</summary>
     public FoodInstanceState state {get; private set;} = FoodInstanceState.无;
 
-    // 示例数据
+    // 实例数据
+    public int timeCost;
     public int rarity;
     public int taste;
     public float baseCritRate = 0.1f; // 基础暴击率
     public float baseCritMultiplier = 1.5f; // 基础暴击倍率
     public int foodSize = 1;
-
     public IEntityView foodInstanceView;
     // Runtime部分：不保存
     public List<SustainEffect> sustainEffects = new List<SustainEffect>();
     public Action OnViewStatusChanged;
-    public FoodInstance(Food food, Vector2Int position) : base(){
+    public FoodInstance(FoodCard food, Vector2Int position) : base(){
         this.food = food;
         this.position = position;
         //TODO: 可能之后会增加初始化逻辑，比如CGA等，先这样处理
         this.rarity = (int)food.foodData.Rarity;
         this.taste = (int)food.foodData.Taste;
+        this.timeCost = food.foodData.TimeCost;
         List<CGA> cgas = new List<CGA>();
         // 每一个CGA都深拷贝一份
         foreach (var cga in food.foodGAs.Values.SelectMany(x => x)){

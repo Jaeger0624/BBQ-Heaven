@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using QFramework;
 using DG.Tweening;
 
+// 时间进度条UI
 public class TimeSliderUI : MonoBehaviour, IController, ISliderUI
 {
     [SerializeField] private Slider valueSlider;

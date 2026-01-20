@@ -23,6 +23,7 @@ public class CardController : MonoBehaviour, IController
         this.RegisterEvent<RemoveCardViewEvent>(OnRemoveCardViewEvent);
         this.RegisterEvent<CombineBBQEvent>(OnCombineBBQEvent);
         this.RegisterEvent<FinishCombineBBQEvent_动画>(OnFinishCombineBBQEvent_动画);
+        this.RegisterEvent<StartNewDayEvent>(OnStartNewDayEvent);
     }
     void OnDisable()
     {
@@ -30,6 +31,7 @@ public class CardController : MonoBehaviour, IController
         this.UnRegisterEvent<RemoveCardViewEvent>(OnRemoveCardViewEvent);
         this.UnRegisterEvent<CombineBBQEvent>(OnCombineBBQEvent);
         this.UnRegisterEvent<FinishCombineBBQEvent_动画>(OnFinishCombineBBQEvent_动画);
+        this.UnRegisterEvent<StartNewDayEvent>(OnStartNewDayEvent);
     }
     void Update()
     {
@@ -74,5 +76,10 @@ public class CardController : MonoBehaviour, IController
     private void UseCard(Card card){
         // 1. 传给卡牌系统使用（后续处理等卡牌系统反应）
         this.GetSystem<ICardSystem>().UseCard(card, new List<object>());
+    }
+    private void OnStartNewDayEvent(StartNewDayEvent e)
+    {
+        if (!e.StageMeet(EventStage.After)) return;
+        Show();
     }
 }

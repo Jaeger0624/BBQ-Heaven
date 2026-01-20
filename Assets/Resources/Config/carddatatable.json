@@ -76,7 +76,7 @@
               "$type": "GA_补充食材",
               "value": {
                 "$type": "DV_值",
-                "number": 1
+                "number": 3
               }
             }
           ]

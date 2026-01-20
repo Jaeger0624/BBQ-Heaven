@@ -32,7 +32,7 @@ public class RandomSystem : AbstractSystem, IRandomSystem
 [System.Serializable]
 public class PlayerBuildContext : ICanGetSystem{
     public List<Mascot> mascots => this.GetSystem<MascotSystem>().Mascots.Values.ToList();
-    public List<Food> foodRepositorys => this.GetSystem<FoodSystem>().FoodRepositorys().Values.ToList();
+    public List<FoodCard> foodRepositorys => this.GetSystem<FoodSystem>().FoodRepositorys().Values.ToList();
     public List<Stick> sticks => this.GetSystem<IStickSystem>().StickRepositorys();
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
 }

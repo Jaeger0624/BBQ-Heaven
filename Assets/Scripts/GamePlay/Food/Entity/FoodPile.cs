@@ -4,99 +4,80 @@ using System.Linq;
 using cfg;
 using QFramework;
 using UnityEngine;
+using UnityEngine.Rendering;
 [Serializable]
 public class FoodPile : ICanGetSystem, ICanSendEvent{
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
     /// <summary>
     /// 当前食材仓库
     /// </summary>
-    public List<Food> FoodSet = new List<Food>();
-    public List<Food> DrawFoodPile;
-    public Dictionary<string, FoodInstance> FoodInstances;
-    public FoodPile(List<Food> foodInventory){
+    public List<FoodCard> FoodSet = new List<FoodCard>();
+    public List<FoodCard> DrawFoodPile = new List<FoodCard>();
+    public bool JustRefreshed { get; private set; } = false;
+    public FoodPile(List<FoodCard> foodInventory){
         FoodSet = foodInventory.ToList();
-        DrawFoodPile = new List<Food>();
-        FoodInstances = new Dictionary<string, FoodInstance>();
+        DrawFoodPile = new List<FoodCard>();
+    }
+    public void RefreshFoodPile(){
+        // 1. 补充抽牌堆
+        DrawFoodPile = FoodSet.ToList();
+        JustRefreshed = true;
+
+        // 2. 消耗时间
+        this.GetSystem<ITimeSystem>().PushTimePoint(this.GetSystem<IFoodSystem>().RefreshFoodCost);
+
+        this.SendEvent(new FoodCardPileUpdateEvent());
     }
     public void LoadFoodPile(FoodPile foodPile){
         // 1. 设置FoodSet
         FoodSet = foodPile.FoodSet.ToList();
-        
-        // 2. 创建新的FoodInstances
-        foreach (var foodInstance in foodPile.FoodInstances){
-            CreateFoodInstance(foodInstance.Value.food, foodInstance.Value.position);
-        }
+        this.SendEvent(new FoodCardPileUpdateEvent());
     }
     public void Init(){
         DrawFoodPile = FoodSet.ToList();
-        FoodInstances = new Dictionary<string, FoodInstance>();
+        JustRefreshed = true;
+        this.SendEvent(new FoodCardPileUpdateEvent());
     }
-    public void AddFoodToSet(Food food, bool alsoToDrawPile){
+    public void AddFoodToSet(FoodCard food, bool alsoToDrawPile){
         FoodSet.Add(food);
         if (alsoToDrawPile){
             DrawFoodPile.Add(food);
         }
+        this.SendEvent(new FoodCardPileUpdateEvent());
     }
-    public FoodInstance CreateFoodInstance(Food food, Vector2Int position){
-        // 1. 创建食材实例
-        FoodInstance foodInstance = new FoodInstance(food, position);
-        // 2. 设置食材实例状态
-        foodInstance.SetState(FoodInstanceState.棋盘上);
-        // 3. 设置位置
-        this.GetSystem<IBoardSystem>().SetCellInstance(position, foodInstance.guid);
-        // 4. 添加到食材实例列表
-        FoodInstances.Add(foodInstance.guid, foodInstance);
-        // 5. 注册到棋盘实体系统
-        this.GetSystem<IBoardEntitySystem>().RegisterEntity(foodInstance, position);
-
-        this.SendEvent(new CreateFoodInstanceEvent(foodInstance));
-        Dictionary<string, int> foodRepositoryAmounts = this.GetSystem<IFoodSystem>().GetFoodRepositoryAmounts();
-        this.SendEvent(new UpdateFoodRepositoryAmountEvent(foodRepositoryAmounts));
-        
-        if (DrawFoodPile.Contains(food)){
-            DrawFoodPile.Remove(food);
+    public List<FoodCard> DrawFoodCard(int count){
+        JustRefreshed = false;
+        List<FoodCard> foodCards = new List<FoodCard>();
+        if (DrawFoodPile.Count < count){
+            foodCards.AddRange(DrawFoodPile);
+            DrawFoodPile.Clear();
         }
         else{
-            Debug.LogError($"【FoodPile】创建食材实例失败: {food.name} 不在抽牌堆中");
-            return null;
+            Rng rng = this.GetSystem<IRngSystem>().GetSubRng<IFoodSystem>();
+            // 抽出后要删除对应的食物卡牌
+            foodCards = rng.PickMany<FoodCard>(DrawFoodPile, count).ToList();
+            DrawFoodPile.RemoveAll(foodCard => foodCards.Contains(foodCard));
         }
-        return foodInstance;
+        this.SendEvent(new FoodCardPileUpdateEvent());
+        this.SendEvent(new DrawFoodCardEvent(foodCards));
+        return foodCards;
     }
 
-    public void RemoveFoodInstance(string guid){
-        if (!FoodInstances.TryGetValue(guid, out FoodInstance foodInstance)){
-            Debug.LogError($"【FoodPile】移除食材实例失败: {guid} 不存在");
-            return;
-        }
-        if (foodInstance.position != new Vector2Int(-1, -1) || foodInstance.state == FoodInstanceState.棋盘上){
-            // 从棋盘上移除
-            this.GetSystem<IBoardSystem>().SetCellInstance(foodInstance.position, null);
-        }
-        // 从棋盘实体系统中移除
-        this.GetSystem<IBoardEntitySystem>().UnregisterEntity(foodInstance);
-
-        // 发送移除食材实例事件
-        this.SendEvent(new RemoveFoodInstanceEvent(foodInstance));
-
-        FoodInstances.Remove(guid);
-        if (DrawFoodPile.Contains(foodInstance.food)){
-            DrawFoodPile.Remove(foodInstance.food);
-        }
+    public void Reset(List<FoodCard> foodCards){
+        FoodSet = foodCards.ToList();
+        DrawFoodPile = new List<FoodCard>();
+        JustRefreshed = false;
     }
+}
 
-    public FoodInstance GetFoodInstance(string guid){
-        if (!FoodInstances.TryGetValue(guid, out FoodInstance foodInstance)){
-            Debug.LogError($"【FoodPile】获取食材实例失败: {guid} 不存在");
-            return null;
-        }
-        return foodInstance;
-    }
-    public FoodInstance GetFoodInstance(Vector2Int position){
-        FoodInstance foodInstance = FoodInstances.Values.FirstOrDefault(x => x.position == position);
-        if (foodInstance == null){
-            Debug.LogError($"【FoodPile】获取食材实例失败: {position} 不存在");
-            return null;
-        }
-        return foodInstance;
+public class FoodCardPileUpdateEvent : AbstractEvent{
+
+}
+
+
+public class DrawFoodCardEvent : AbstractEvent{
+    public List<FoodCard> foodCards;
+    public DrawFoodCardEvent(List<FoodCard> foodCards){
+        this.foodCards = foodCards;
     }
 }

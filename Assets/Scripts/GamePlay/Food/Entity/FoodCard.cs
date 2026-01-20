@@ -11,7 +11,7 @@ using UnityEngine;
 /// 食材仓库类
 /// </summary>
 [Serializable]
-public class Food : ICanGetSystem{
+public class FoodCard : ICanGetSystem{
     [OdinSerialize]
     public string guid { get; private set; }
     public string name => foodData.Name;
@@ -22,13 +22,15 @@ public class Food : ICanGetSystem{
     public FoodType foodType;
     [OdinSerialize]
     public FoodTag foodTag;
-
     // 不序列化
     public FoodData foodData => this.GetSystem<IDataSystem>().GetFoodData(foodDataId);
     [NonSerialized]
     public Dictionary<FoodGAType, List<CGA>> foodGAs;
     public List<SustainEffect> sustainEffects => foodData.SEs;
-    public Food(FoodData foodData, bool isTemporary = false){
+    public int MaxSlots {get; private set;} = 2; // 默认最大槽位为2
+    public List<FoodCardEnhancement> Enhancements {get; private set;} = new List<FoodCardEnhancement>();
+
+    public FoodCard(FoodData foodData, bool isTemporary = false){
         this.guid = Guid.NewGuid().ToString();
         this.isTemporary = isTemporary;
         this.foodDataId = foodData.ID;
@@ -44,6 +46,45 @@ public class Food : ICanGetSystem{
             foodGAs[cga.Type].Add(new CGA(cga.Action));
         }
     }
+
+    public bool AddEnhancement(FoodCardEnhancement enhancement){
+        if (Enhancements.Count >= MaxSlots) return false;
+        Enhancements.Add(enhancement);
+        return true;
+    }
+
+    public bool RemoveEnhancement(FoodCardEnhancement enhancement){
+        if (!Enhancements.Contains(enhancement)) return false;
+        Enhancements.Remove(enhancement);
+        return true;
+    }
+
+    public List<FoodInstance> SpawnInstances()
+    {
+        List<FoodInstance> result = new List<FoodInstance>();
+
+        // 1. 计算生成数量（应用强化效果）
+        int spawnCount = 2;  // 初始生成数量
+        foreach (var buff in Enhancements)
+        {
+            spawnCount = buff.ModifySpawnCount(spawnCount);
+        }
+
+        // 2. 循环生成
+        for (int i = 0; i < spawnCount; i++)
+        {
+            FoodInstance foodInstance = new FoodInstance(this, new Vector2Int(-1, -1));
+
+            // 应用实例级强化
+            foreach (var buff in Enhancements)
+            {
+                buff.OnInstanceCreated(foodInstance);
+            }
+            result.Add(foodInstance);
+        }
+        return result;
+    }
+
     [OnDeserialized]
     void OnDeserialized(StreamingContext context){
         // 深拷贝foodGAs

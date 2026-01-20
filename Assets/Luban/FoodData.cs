@@ -32,6 +32,7 @@ public sealed partial class FoodData : Luban.BeanBase
         { var __json0 = _buf["CGAs"]; if(!__json0.IsArray) { throw new SerializationException(); } CGAs = new System.Collections.Generic.List<FoodCGA>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { FoodCGA __v0;  { if(!__e0.IsObject) { throw new SerializationException(); }  __v0 = global::cfg.FoodCGA.DeserializeFoodCGA(__e0);  }  CGAs.Add(__v0); }   }
         { var __json0 = _buf["SEs"]; if(!__json0.IsArray) { throw new SerializationException(); } SEs = new System.Collections.Generic.List<SustainEffect>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { SustainEffect __v0;  { if(!__e0.IsObject) { throw new SerializationException(); }  __v0 = global::cfg.SustainEffect.DeserializeSustainEffect(__e0);  }  SEs.Add(__v0); }   }
         { if(!_buf["rank"].IsNumber) { throw new SerializationException(); }  Rank = (Rank)_buf["rank"].AsInt; }
+        { if(!_buf["timeCost"].IsNumber) { throw new SerializationException(); }  TimeCost = _buf["timeCost"]; }
     }
 
     public static FoodData DeserializeFoodData(JSONNode _buf)
@@ -87,6 +88,10 @@ public sealed partial class FoodData : Luban.BeanBase
     /// 稀有度
     /// </summary>
     public readonly Rank Rank;
+    /// <summary>
+    /// 时间消耗
+    /// </summary>
+    public readonly int TimeCost;
    
     public const int __ID__ = 443643208;
     public override int GetTypeId() => __ID__;
@@ -112,6 +117,7 @@ public sealed partial class FoodData : Luban.BeanBase
         + "CGAs:" + Luban.StringUtil.CollectionToString(CGAs) + ","
         + "SEs:" + Luban.StringUtil.CollectionToString(SEs) + ","
         + "rank:" + Rank + ","
+        + "timeCost:" + TimeCost + ","
         + "}";
     }
 }

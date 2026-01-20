@@ -58,7 +58,7 @@ public class SatisCreater_具体食材 : AbstractSatisCreater
     {
         Customer customer = context.Customer;
         BBQ bbq = context.BBQ;
-        List<Food> Foods = bbq.foodInstances.Select(x => x.food).ToList();
+        List<FoodCard> Foods = bbq.foodInstances.Select(x => x.food).ToList();
         if (customer.preferences == null || customer.preferences.foodIds == null || customer.preferences.foodIds.Count == 0){
             hasUsed = false;
             return 1f;

@@ -14,7 +14,7 @@ public class PlayerInfoData{
     [OdinSerialize]
     public List<Mascot> mascots;
     [OdinSerialize]
-    public Dictionary<string, Food> foodRepositorys;
+    public Dictionary<string, FoodCard> foodRepositorys;
     [OdinSerialize]
     public Dictionary<string, Stick> stickRepositorys;
     [OdinSerialize]

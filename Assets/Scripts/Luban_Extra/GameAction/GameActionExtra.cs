@@ -243,10 +243,9 @@ public partial class GA_创建满意度乘区 : GameAction
             int value = Value.GetValue(sender, param) * Multiplier;
             if (value <= 0) return;
 
-            FoodSupplyer supplyer = FoodSupplyer.SingleSupplyer(value);
-            List<FoodInstance> newInstances = this.GetSystem<IFoodSystem>().SupplyFood(supplyer, false);
+            (List<FoodCard> cards, List<FoodInstance> instances) = this.GetSystem<IFoodSystem>().DrawFoodCard(value);
 
-            Debug.Log($"【GA_补充食材】: 补充了{newInstances.Count}个食材");
+            Debug.Log($"【GA_补充食材】: 抽取了{cards.Count}张食材卡牌，创建了{instances.Count}个食材实例");
         }
 
         public override IAnimTask GetAnimTask()

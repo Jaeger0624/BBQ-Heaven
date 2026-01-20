@@ -5,6 +5,9 @@ using DG.Tweening;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using System.Runtime.CompilerServices;
+using TMPro;
+
+// 进度条接口
 public interface ISliderUI
 {
     void SetPreview(float value);
@@ -17,6 +20,7 @@ public class TimeController : SerializedMonoBehaviour, IController
     // [SerializeField] private VividProcessBar processBar;
     [OdinSerialize, ShowInInspector]
     private ISliderUI sliderUI;
+    [SerializeField] private TextMeshProUGUI timeText;
 
     void OnEnable()
     {
@@ -26,9 +30,20 @@ public class TimeController : SerializedMonoBehaviour, IController
         // 2. 注册开始新一天事件 -> 重置进度条
         this.RegisterEvent<StartNewDayEvent>(OnStartNewDayEvent).UnRegisterWhenDisabled(this.gameObject);
     }
-    void Update()
+    private void UpdateTimeText()
     {
+        int orginTotalTimePoint = this.GetSystem<ITimeSystem>().CurrentTime.GetOriginalTimeInfo().GetTotalTimePoint();
+        int totalTimePoint = this.GetSystem<ITimeSystem>().CurrentTime.GetTotalTimePoint() - orginTotalTimePoint;
+        int targetTimePoint = this.GetSystem<ITimeSystem>().TargetTime.GetTotalTimePoint() - orginTotalTimePoint;
+        timeText.text = $"{totalTimePoint}/{targetTimePoint}";
         
+    }
+    private void UpdateTimeTextPreview(TimePreviewEvent evt){
+        if (evt.timeCost == 0) UpdateTimeText();
+        int originTotalTimePoint = this.GetSystem<ITimeSystem>().CurrentTime.GetOriginalTimeInfo().GetTotalTimePoint();
+        int totalTimePoint = evt.currentTime.GetTotalTimePoint() - originTotalTimePoint;
+        int targetTimePoint = this.GetSystem<ITimeSystem>().TargetTime.GetTotalTimePoint() - originTotalTimePoint;
+        timeText.text = $"<color=yellow>{totalTimePoint}</color>/{targetTimePoint}";
     }
     private void OnStartNewDayEvent(StartNewDayEvent evt){
         ResetProcessBar();
@@ -39,12 +54,16 @@ public class TimeController : SerializedMonoBehaviour, IController
         float process = CalculateProcess(evt.currentTime, evt.targetTime);
         sliderUI.SetPreview(process);
         // Debug.Log($"【TimeController】时间预览：{process}");
+
+        UpdateTimeTextPreview(evt);
     }
     private void OnTimeTickEvent(TimeTickEvent evt){
         if (sliderUI == null) return;
         // 计算进度
         float process = CalculateProcess(evt.currentTime, evt.targetTime);
         sliderUI.SetValue(process);
+
+        UpdateTimeText();
     }
 
     private void ResetProcessBar(){
@@ -65,9 +84,11 @@ public class TimeController : SerializedMonoBehaviour, IController
 public class TimePreviewEvent : AbstractEvent, ICanGetSystem{
     public TimeInfo currentTime;
     public TimeInfo targetTime;
-    public TimePreviewEvent(TimeInfo currentTime, TimeInfo targetTime){
+    public int timeCost;
+    public TimePreviewEvent(TimeInfo currentTime, TimeInfo targetTime, int timeCost){
         this.currentTime = currentTime;
         this.targetTime = targetTime;
+        this.timeCost = timeCost;
     }
 
 
@@ -76,6 +97,7 @@ public class TimePreviewEvent : AbstractEvent, ICanGetSystem{
         TimeInfo targetTime = this.GetSystem<ITimeSystem>().TargetTime.Clone(0);
         this.currentTime = currentTime;
         this.targetTime = targetTime;
+        this.timeCost = timeCost;
     }
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
 }
