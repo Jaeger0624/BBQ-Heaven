@@ -35,7 +35,7 @@ public class RecipeController : MonoBehaviour, IController, ICanSendEvent
             animTasks.Add(new DelayAnimTask(time, true));
         }
         animTasks.Add(new ActionAnimTask(() => this.SendEvent(new TriggerGAEvent("配方演出动画结束"))));
-        animTasks.Add(new DelayAnimTask(1f));
+        animTasks.Add(new DelayAnimTask(0.2f, true));
 
 
 

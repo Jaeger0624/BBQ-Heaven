@@ -65,11 +65,16 @@ public partial class GA_直接修改当前烧烤值 : GameAction
     {
         // 读取上下文
         BBQProcessContext context = param?.FirstOrDefault() as BBQProcessContext;
+
+
+        BBQ currentBBQ = null;
         if (context == null){
-            Debug.LogError("上下文为空");
-            return;
+            Debug.LogWarning("上下文为空，使用当前烧烤");
+            currentBBQ = this.GetSystem<IBBQSystem>().GetCurrentBBQ();
         }
-        BBQ currentBBQ = context.targetBBQ;
+        else{
+            currentBBQ = context.targetBBQ;
+        }
         if (currentBBQ == null) {Debug.LogError("当前烧烤为空"); return;}
 
 

@@ -28,7 +28,7 @@
     "ID": "2",
     "name": "移动",
     "description": "移动！",
-    "cost": 0,
+    "cost": 1,
     "target": 2,
     "CGAs": [
       {
@@ -63,7 +63,7 @@
     "ID": "3",
     "name": "补充",
     "description": "补充",
-    "cost": 0,
+    "cost": 1,
     "target": 0,
     "CGAs": [
       {
@@ -88,7 +88,7 @@
     "ID": "4",
     "name": "交换",
     "description": "交换",
-    "cost": 0,
+    "cost": 1,
     "target": 3,
     "CGAs": [
       {
@@ -123,7 +123,7 @@
     "ID": "5",
     "name": "左移",
     "description": "",
-    "cost": 0,
+    "cost": 1,
     "target": 1,
     "CGAs": [
       {
@@ -159,7 +159,7 @@
     "ID": "6",
     "name": "创造地形",
     "description": "",
-    "cost": 0,
+    "cost": 1,
     "target": 4,
     "CGAs": [
       {
@@ -181,7 +181,7 @@
     "ID": "7",
     "name": "创建实体",
     "description": "创建",
-    "cost": 0,
+    "cost": 1,
     "target": 5,
     "CGAs": [
       {
@@ -193,6 +193,31 @@
             {
               "$type": "GA_创建实体",
               "entityID": "1"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "ID": "8",
+    "name": "抽牌",
+    "description": "抽牌",
+    "cost": 2,
+    "target": 0,
+    "CGAs": [
+      {
+        "type": 0,
+        "action": {
+          "ID": "1",
+          "conditions": [],
+          "actions": [
+            {
+              "$type": "GA_抽牌",
+              "value": {
+                "$type": "DV_值",
+                "number": 2
+              }
             }
           ]
         }

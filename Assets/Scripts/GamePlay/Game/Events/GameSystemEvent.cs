@@ -1,9 +1,10 @@
 
 
 #region 事件
+using System.Collections.Generic;
 using QFramework;
 
-public class StartNewDayEvent : AbstractEvent{
+public class StartNewDayEvent : AbstractEvent, IMascotEvent{
     public int month;
     public int day;
     public EventStage stage;
@@ -13,6 +14,7 @@ public class StartNewDayEvent : AbstractEvent{
         this.stage = stage;
     }
     public bool StageMeet(EventStage stage) => this.stage == stage;
+    public List<object> parameters => new List<object>{};
 }
 
 

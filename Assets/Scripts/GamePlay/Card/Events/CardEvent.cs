@@ -30,10 +30,11 @@ public class DrawMultiCardsEvent : AbstractEvent{
     }
 }
 
-public class DrawSingleCardEvent : AbstractEvent{
+public class DrawSingleCardEvent : AbstractEvent, IMascotEvent{
     public Card card;
     public DrawSingleCardEvent(Card card){
         this.card = card;
     }
+    public List<object> parameters => new List<object>{};
 }
 #endregion

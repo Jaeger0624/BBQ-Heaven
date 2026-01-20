@@ -93,5 +93,69 @@
         ]
       }
     ]
+  },
+  {
+    "ID": "4",
+    "name": "美味",
+    "description": "",
+    "stackable": true,
+    "rank": 1,
+    "mainSE": [
+      {
+        "$type": "SE_监听事件",
+        "evt": 5,
+        "actions": [
+          {
+            "ID": "1",
+            "conditions": [],
+            "actions": [
+              {
+                "$type": "GA_直接修改当前烧烤值",
+                "rarityValue": {
+                  "$type": "DV_值",
+                  "number": 0
+                },
+                "tasteValue": {
+                  "$type": "DV_值",
+                  "number": 40
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "ID": "5",
+    "name": "珍稀",
+    "description": "",
+    "stackable": true,
+    "rank": 1,
+    "mainSE": [
+      {
+        "$type": "SE_监听事件",
+        "evt": 5,
+        "actions": [
+          {
+            "ID": "1",
+            "conditions": [],
+            "actions": [
+              {
+                "$type": "GA_直接修改当前烧烤值",
+                "rarityValue": {
+                  "$type": "DV_值",
+                  "number": 8
+                },
+                "tasteValue": {
+                  "$type": "DV_值",
+                  "number": 0
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
   }
 ]

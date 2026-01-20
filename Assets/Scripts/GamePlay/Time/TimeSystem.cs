@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using QFramework;
 using UnityEngine;
 
@@ -88,7 +89,8 @@ public class TimeSystem_默认 : AbstractSystem, ITimeSystem
 
     public int GetCostTime(List<FoodInstance> foodInstances, Stick stick)
     {
-        return foodInstances.Count + stick.extraTimeCost + SettingManager.Instance.GameplaySettings.makeBBQTime_默认;
+        int foodCost = foodInstances.Sum(x => x.timeCost);
+        return foodCost + stick.extraTimeCost + SettingManager.Instance.GameplaySettings.makeBBQTime_默认;
     }
 }
 

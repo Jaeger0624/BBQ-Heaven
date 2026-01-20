@@ -24758,7 +24758,7 @@ GameObject:
   - component: {fileID: 1673879725}
   - component: {fileID: 1673879724}
   m_Layer: 0
-  m_Name: Text (TMP)
+  m_Name: "\u6D4B\u8BD5\u540D\u79F0"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -24780,7 +24780,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 126.76, y: -2.9}
+  m_AnchoredPosition: {x: 126.76, y: -2.8999996}
   m_SizeDelta: {x: 114.82, y: 50}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1673879724
@@ -25948,7 +25948,7 @@ GameObject:
   - component: {fileID: 1762051356}
   - component: {fileID: 1762051357}
   m_Layer: 0
-  m_Name: "\u5361\u724C\u751F\u6210"
+  m_Name: "\u6D4B\u8BD5\u7A97\u53E3"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25975,7 +25975,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 16.699951, y: -698.86}
+  m_AnchoredPosition: {x: 1634, y: -936}
   m_SizeDelta: {x: 250, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1762051357
@@ -25990,10 +25990,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 627ef5382d6252a4f94e1a857ab5bfb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testTypeText: {fileID: 0}
+  testTypeText: {fileID: 1673879724}
   inputField: {fileID: 1707044795}
   ButtonID: {fileID: 876817197}
   ButtonName: {fileID: 1765237043}
+  ButtonTestType: {fileID: 1433436660}
   testType: 0
 --- !u!1 &1765237039
 GameObject:
@@ -26262,7 +26263,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 735, y: -460}
+  m_AnchoredPosition: {x: 586.76, y: -460}
   m_SizeDelta: {x: 336.1, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1780453658
@@ -28975,7 +28976,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u540D\u5B57"
+  m_text: "\u5207\u6362\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7681d901e890abe4da04605974ef52a9, type: 2}
   m_sharedMaterial: {fileID: -5388128687643915153, guid: 7681d901e890abe4da04605974ef52a9, type: 2}

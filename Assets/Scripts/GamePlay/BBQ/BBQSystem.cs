@@ -112,26 +112,37 @@ public class BBQSystem : AbstractSystem, IBBQSystem
         });
 
         this.GetSystem<IGASystem>().SendAction(context.targetBBQ, () => {
+
+
             // 4. 检测配方触发情况
             this.GetSystem<IRecipeSystem>().MatchRecipe(new List<object>{context});
+
+            this.SendEvent(new AfterCalculateBBQEvent(context.targetBBQ, context));
         });
 
+        // 1. 设置一层锁
         this.GetSystem<IGASystem>().SetTrigger(context.targetBBQ);
-
 
         this.GetSystem<IGASystem>().SendAction(context.targetBBQ, () => {
             // 5. 将当前烧烤实例存储到烧烤仓库中
             AddBBQToRepository(new List<object>{context});
         });
 
+
         this.GetSystem<IGASystem>().SendAction(context.targetBBQ, () => {
             // 6. 发送完成烧烤事件
-            this.SendEvent(new FinishCombineBBQEvent(context.targetBBQ));
-            this.SendEvent(new FinishCombineBBQEvent_动画());
+            this.SendEvent(new FinishCombineBBQEvent(context.targetBBQ, context));
+
+            // 7. 等待0.3s
+            this.GetSystem<IAnimationSystem>().Append(new DelayAnimTask(0.3f, true));
+            
+            // 8. 播放完成烧烤动画
+            this.GetSystem<IAnimationSystem>().Append(new ActionAnimTask(() => {
+                this.SendEvent(new FinishCombineBBQEvent_动画());
+            }));
         });
 
-        // 7. 结束计算当前烧烤实例，重置当前烧烤实例
-        currentBBQ = null;
+
     }
     private void SetCurrentBBQ(BBQ bbq){
         if (bbq == null) return;

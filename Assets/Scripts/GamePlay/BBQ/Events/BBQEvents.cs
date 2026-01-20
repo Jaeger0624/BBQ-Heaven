@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using QFramework;
 
 public class AddBBQPropertyAnimEvent : AbstractEvent{
@@ -24,11 +25,24 @@ public class CombineBBQEvent : AbstractEvent{
         this.bbq = bbq;
     }
 }
-public class FinishCombineBBQEvent : AbstractEvent{
+
+public class AfterCalculateBBQEvent : AbstractEvent, IMascotEvent{
     public BBQ bbq;
-    public FinishCombineBBQEvent(BBQ bbq){
+    public BBQProcessContext context;
+    public AfterCalculateBBQEvent(BBQ bbq, BBQProcessContext context){
         this.bbq = bbq;
+        this.context = context;
     }
+    public List<object> parameters => new List<object>{context};
+}
+public class FinishCombineBBQEvent : AbstractEvent, IMascotEvent{
+    public BBQ bbq;
+    public BBQProcessContext context;
+    public FinishCombineBBQEvent(BBQ bbq, BBQProcessContext context){
+        this.bbq = bbq;
+        this.context = context;
+    }
+    public List<object> parameters => new List<object>{context};
 }
 
 public class FinishCombineBBQEvent_动画 : AbstractEvent{}

@@ -54,7 +54,6 @@ public class CardHandView : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         this.card = card;
         UpdateVisual();
     }
-
     private void UpdateVisual() 
     { 
         // 更新图片和文字
@@ -70,6 +69,27 @@ public class CardHandView : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
             Debug.LogError("Card is null");
             return;
         }
+
+        if (IsDragging){
+            // 按右键取消
+            if (Input.GetMouseButton(1)){
+                Debug.Log("按右键取消");
+                IsDragging = false;
+                HandVisualManager.Instance.IsDraggingAnyCard = false;
+                canvasGroup.blocksRaycasts = true;
+                IsHovered = false; 
+
+                // 1. 隐藏瞄准箭头
+                TargetingArrowManager.Instance.Hide();
+                // 2. 取消高亮
+                UnHighLight();
+                // 3. 取消时间预览
+                this.SendEvent(new TimePreviewEvent(0));
+                // 3. 刷新布局
+                HandVisualManager.Instance.RefreshLayout();
+            }
+        }
+
         // 1. 普通拖拽：完全由 OnDrag 控制位置，Update 不干涉 (return)
         if (IsDragging && !IsTargetingMode) return;
 
@@ -86,6 +106,8 @@ public class CardHandView : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         if (HandVisualManager.Instance.IsDraggingAnyCard) return;
         IsHovered = true;
         HandVisualManager.Instance.OnCardHoverEnter(this);
+
+        this.SendEvent(new TimePreviewEvent(card.cost));
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -93,6 +115,8 @@ public class CardHandView : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         if (HandVisualManager.Instance.IsDraggingAnyCard) return;
         IsHovered = false;
         HandVisualManager.Instance.OnCardHoverExit(this);
+
+        this.SendEvent(new TimePreviewEvent(0));
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -112,6 +136,8 @@ public class CardHandView : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (!IsDragging) return;
+
         if (IsTargetingMode)
         {
             // --- 瞄准模式逻辑 ---
@@ -158,6 +184,8 @@ public class CardHandView : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     public void OnPointerUp(PointerEventData eventData)
     {
+        if (!IsDragging) return;
+
         IsDragging = false;
         HandVisualManager.Instance.IsDraggingAnyCard = false;
         canvasGroup.blocksRaycasts = true;
@@ -197,9 +225,9 @@ public class CardHandView : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
 
     private void HighLight(CardTargetType targetType) => TargetSelector.Highlight(targetType);
+    private void UnHighLight() => this.GetSystem<IBoardSystem>().ClearHighlight();
 
     private List<object> GetParam(CardTargetType targetType, GameObject targetObject) => TargetSelector.GetParam(targetType, targetObject);
 
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
 }
-
