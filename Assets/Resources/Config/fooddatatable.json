@@ -360,5 +360,85 @@
     ],
     "SEs": [],
     "rank": 1
+  },
+  {
+    "ID": "chocolate",
+    "name": "巧克力",
+    "description": "德芙，纵享丝滑~",
+    "type": 16,
+    "tag": 0,
+    "rarity": 4,
+    "taste": 4,
+    "sprite": "Sushi",
+    "effectDescription": "添加到烤串上时，获得一层【丝滑】",
+    "CGAs": [
+      {
+        "type": 1,
+        "action": {
+          "ID": "1",
+          "conditions": [],
+          "actions": [
+            {
+              "$type": "GA_获得Buff",
+              "buffID": "softness",
+              "value": {
+                "$type": "DV_值",
+                "number": 1
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "SEs": [],
+    "rank": 2
+  },
+  {
+    "ID": "spicy_strip",
+    "name": "辣条",
+    "description": "",
+    "type": 16,
+    "tag": 0,
+    "rarity": 5,
+    "taste": 5,
+    "sprite": "PotatoRed",
+    "effectDescription": "",
+    "CGAs": [],
+    "SEs": [
+      {
+        "$type": "SE_监听事件",
+        "evt": 3,
+        "actions": [
+          {
+            "ID": "1",
+            "conditions": [],
+            "actions": [
+              {
+                "$type": "GA_为食材加属性",
+                "rarity": {
+                  "$type": "DV_值",
+                  "number": 2
+                },
+                "taste": {
+                  "$type": "DV_值",
+                  "number": 2
+                },
+                "info": {
+                  "strategy": 1,
+                  "value": {
+                    "$type": "DV_值",
+                    "number": -1
+                  },
+                  "types": [
+                    1
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "rank": 1
   }
 ]

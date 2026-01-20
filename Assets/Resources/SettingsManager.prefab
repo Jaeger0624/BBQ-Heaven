@@ -48,6 +48,7 @@ MonoBehaviour:
   _devSettings: {fileID: 11400000, guid: 8a8c3a45f656c0b4eb7fb7bffc13b4c6, type: 2}
   _animSettings: {fileID: 11400000, guid: 1b8ac734ca23aa143a0668f92da11c5a, type: 2}
   _gameplaySettings: {fileID: 11400000, guid: 6ab005535211c724b9d54248e5b75bab, type: 2}
+  _prefabSettings: {fileID: 11400000, guid: eb7df1ddd6a2ba5418ab90f6df589b05, type: 2}
   SatisfactionTextParent: {fileID: 5324351430562989847}
 --- !u!1 &4117943351024649558
 GameObject:
@@ -74,7 +75,7 @@ Transform:
   m_GameObject: {fileID: 4117943351024649558}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -13.23, y: 2.2799997, z: -5}
+  m_LocalPosition: {x: 0, y: 0, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

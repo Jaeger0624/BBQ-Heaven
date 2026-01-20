@@ -35,6 +35,7 @@ public class BoardController : MonoBehaviour, IController, ICanSendEvent
             // Debug.Log($"gridIndex: {gridIndex}");
             BoardCell newHoveredCell = boardViewUGUI.boardCellDict[gridIndex].cell;
 
+            // 如果鼠标右键点击，则增加方向值
             if (Input.GetMouseButtonDown(1)){
                 IStickStrategy.directionValue += 1;
             }
@@ -51,12 +52,12 @@ public class BoardController : MonoBehaviour, IController, ICanSendEvent
                 UpdateView(newHoveredCell.position, highlightedCells, selectedStick);
             }
             else if (hoveredCell != newHoveredCell && newHoveredCell != null){
-
+                hoveredCell = newHoveredCell;
                 if (!highlightedCells.SequenceEqual(this.highlightedCells)){
-                    hoveredCell = newHoveredCell;
                     UpdateView(hoveredCell.position, highlightedCells, selectedStick);
                 }
             }
+            hoveredCell = newHoveredCell;
         }
         else{
             boardViewUGUI.UnhighlightAll();
@@ -67,7 +68,6 @@ public class BoardController : MonoBehaviour, IController, ICanSendEvent
         }
 
         this.GetSystem<BlackboardSystem>().hoveredCell = hoveredCell;
-        
     }
     private void SendClearEvents(){
         this.SendEvent(new HideBBQPreviewEvent());

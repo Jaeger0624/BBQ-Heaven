@@ -19,7 +19,7 @@ public class FoodInstanceView : MonoBehaviour, IController, IPointerEnterHandler
     public BoardEntity Entity => foodInstance;
     private FoodInstance foodInstance;
     [ReadOnly]
-    [SerializeField] private Image foodImage;
+    [SerializeField] private Image  foodImage;
     [SerializeField] private ParticleSystem buffedParticle;
     public UnityEvent OnPointerEnterEvent;
     private bool canShowPointerEnterAnim => foodInstance.state == FoodInstanceState.棋盘上;
@@ -29,10 +29,7 @@ public class FoodInstanceView : MonoBehaviour, IController, IPointerEnterHandler
         this.foodInstance = foodInstance;
         //TODO: 技术债，数据层最好不要持有视图层，但快速开发期，先这样处理
         this.foodInstance.foodInstanceView = this;
-        // 观察者
-        // foodInstance.status.Subscribe(status => {
-        //     UpdateVisual();
-        // }).AddTo(this);
+
 
         UpdateVisual();
         ResetScale();

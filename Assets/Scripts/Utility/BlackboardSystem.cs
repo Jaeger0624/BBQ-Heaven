@@ -9,11 +9,6 @@ public class BlackboardSystem : AbstractSystem
     public BoardCell hoveredCell = null;
     public FoodInstance currentFoodInstance = null;
     private FoodInstance oldInstance = null;
-
-    // 2026.1.1:
-    // 添加一个全局上下文
-    public List<object> globalContext = new List<object>();
-
     
     #region TimeSystem 时间
     public int makeBBQTime = 4;
@@ -23,7 +18,6 @@ public class BlackboardSystem : AbstractSystem
     protected override void OnInit()
     {
     }
-
     public void OpenCurrentFoodInstance(FoodInstance foodInstance){
         if (currentFoodInstance != null){
             oldInstance = currentFoodInstance;

@@ -51,7 +51,6 @@ public class ExtraTool : IController{
                 }
                 break;
 
-
             case GetFoodInstanceStrategy.九宫格随机:
                 if (origin == null){
                     Debug.LogError("origin is null");
@@ -83,6 +82,8 @@ public class ExtraTool : IController{
                 foods = new List<FoodInstance>{food};
                 break;
         }
+
+        // 过滤掉不在类型列表中的食材实例
         if (!types.Contains(FoodInstanceState.棋盘上)) {
             foods.RemoveAll(x => x.state == FoodInstanceState.棋盘上);
         }
@@ -92,9 +93,11 @@ public class ExtraTool : IController{
         if (!types.Contains(FoodInstanceState.被选中)) {
             foods.RemoveAll(x => x.state == FoodInstanceState.被选中);
         }
-        // Debug.Log($"【ExtraTool】获取食材实例：{foods.Count}，策略：{strategy.ToString()}");
 
+        // 筛选数量
         if (foods.Count == 0) return new List<FoodInstance>();
+        // 如果数量为-1，则返回所有食材实例
+        if (amount == -1) return foods;
         if (foods.Count < amount) return foods;
         return rng.PickMany<FoodInstance>(foods, amount);
     }

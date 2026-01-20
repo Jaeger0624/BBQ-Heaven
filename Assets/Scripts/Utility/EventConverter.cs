@@ -23,6 +23,10 @@ public static class EventBinder{
                 return observer.RegisterEvent<FinishCombineBBQEvent>(evt => {
                     ApplyActions();
                 });
+            case cfg.EventType.抽牌后:
+                return observer.RegisterEvent<DrawSingleCardEvent>(evt => {
+                    ApplyActions();
+                });
             default:
                 Debug.LogError($"不支持的事件类型: {evt}");
                 return null;

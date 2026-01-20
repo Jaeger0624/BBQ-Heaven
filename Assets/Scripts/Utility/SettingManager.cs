@@ -39,7 +39,8 @@ public class SettingManager : MonoBehaviour, IController,ICanSendEvent{
     public AnimSettings AnimSettings => _animSettings;
     [SerializeField] private GameplaySettings _gameplaySettings;
     public GameplaySettings GameplaySettings => _gameplaySettings;
-
+    [SerializeField] private PrefabSettings _prefabSettings;
+    public PrefabSettings PrefabSettings => _prefabSettings;
     public static T GetSetting<T>() where T : ScriptableObject{
         if (typeof(T) == typeof(DevSettings)){
             return Instance.DevSettings as T;

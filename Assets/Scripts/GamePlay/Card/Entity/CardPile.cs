@@ -28,6 +28,7 @@ public class CardPile : ICanSendEvent, ICanGetSystem{
             if (card == null) break;
             cards.Add(card);
         }
+        this.SendEvent(new DrawMultiCardsEvent(cards));
         return cards;
     }
 
@@ -47,6 +48,7 @@ public class CardPile : ICanSendEvent, ICanGetSystem{
         drawPile.RemoveAt(0);
         handPile.Add(card);
         this.SendEvent(new CreateCardViewEvent(card));
+        this.SendEvent(new DrawSingleCardEvent(card));
         this.SendEvent(new PileUpdateEvent());
         return card;
     }

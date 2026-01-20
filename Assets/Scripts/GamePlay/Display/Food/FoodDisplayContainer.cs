@@ -16,13 +16,24 @@ public enum FoodContainerType{
 public interface IDisplayContainer{
     GameObject GetGameObject();
 }
+public enum FoodDisplayType{
+    Item,
+    Card
+}
 public class FoodDisplayContainer : MonoBehaviour, IController, IDisplayContainer{
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
     [SerializeField] private Transform foodContainer;
-    [SerializeField] private DisplayFoodView foodItemPrefab;
+    DisplayFoodView foodItemPrefab => SettingManager.Instance.PrefabSettings.foodItemPrefab;
+    DisplayFoodView foodCardItemPrefab => SettingManager.Instance.PrefabSettings.foodCardItemPrefab;
+    [SerializeField] private FoodDisplayType displayType;
     private DisplayItemGenerator<FoodUIContext, DisplayFoodView> _generator;
+    [LabelText("是否控制网格布局")]
+    [SerializeField] private bool controlGridLayout = false;
+    [ShowIf("controlGridLayout")]
     [SerializeField] private GridLayoutGroup gridLayoutGroup;
+    [ShowIf("controlGridLayout")]
     [SerializeField] private Vector2 cellSize = new Vector2(100, 100);
+    [ShowIf("controlGridLayout")]
     [SerializeField] private Vector2 cellSpacing = new Vector2(10, 10);
     void Start()
     {
@@ -30,14 +41,20 @@ public class FoodDisplayContainer : MonoBehaviour, IController, IDisplayContaine
     }
     void Update()
     {
-        if (gridLayoutGroup == null) return;
+        if (gridLayoutGroup == null || !controlGridLayout) return;
         gridLayoutGroup.cellSize = cellSize;
         gridLayoutGroup.spacing = cellSpacing;
     }
     private void Init(){
-        _generator = new DisplayItemGenerator<FoodUIContext, DisplayFoodView>(foodContainer, foodItemPrefab);
+        if (displayType == FoodDisplayType.Item){
+            _generator = new DisplayItemGenerator<FoodUIContext, DisplayFoodView>(foodContainer, foodItemPrefab);
+        }else if (displayType == FoodDisplayType.Card){
+            _generator = new DisplayItemGenerator<FoodUIContext, DisplayFoodView>(foodContainer, foodCardItemPrefab);
+        }
     }
-    public void RefreshUI(List<FoodUIContext> foodInstances, IItemInteractStrategy<FoodUIContext, DisplayFoodView> itemInteractStrategy){
+    public void RefreshUI(List<FoodUIContext> foodInstances,
+    IItemInteractStrategy<FoodUIContext, DisplayFoodView> itemInteractStrategy){
+        
         _generator.Generate(foodInstances, itemInteractStrategy);
     }
     public GameObject GetGameObject() => gameObject;

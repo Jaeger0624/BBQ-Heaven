@@ -8001,7 +8001,7 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 100, y: 100}
+  m_CellSize: {x: 100, y: 150}
   m_Spacing: {x: 85, y: 83}
   m_Constraint: 0
   m_ConstraintCount: 2
@@ -8032,7 +8032,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   foodContainer: {fileID: 718394758}
-  foodItemPrefab: {fileID: 1620924827716092986, guid: c2521567605479a4ca4e642066c23208, type: 3}
+  displayType: 1
+  controlGridLayout: 0
   gridLayoutGroup: {fileID: 718394759}
   cellSize: {x: 100, y: 100}
   cellSpacing: {x: 83, y: 83}
@@ -18920,54 +18921,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!1 &1562890033
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1562890035}
-  - component: {fileID: 1562890034}
-  m_Layer: 0
-  m_Name: SettingManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1562890034
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1562890033}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc5c01501edc9e346b2349b3f83c386a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _devSettings: {fileID: 0}
-  _animSettings: {fileID: 0}
-  _gameplaySettings: {fileID: 0}
-  SatisfactionTextParent: {fileID: 0}
---- !u!4 &1562890035
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1562890033}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1571999971
 GameObject:
   m_ObjectHideFlags: 0
@@ -27097,7 +27050,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   foodContainer: {fileID: 1981462681}
-  foodItemPrefab: {fileID: 1620924827716092986, guid: c2521567605479a4ca4e642066c23208, type: 3}
+  displayType: 0
+  controlGridLayout: 0
   gridLayoutGroup: {fileID: 0}
   cellSize: {x: 100, y: 100}
   cellSpacing: {x: 10, y: 10}
@@ -29982,14 +29936,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: SettingsManager
       objectReference: {fileID: 0}
-    - target: {fileID: 5324351430562989847, guid: 8ec6ebf79640c3e4eb16414c399f7f5b, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5324351430562989847, guid: 8ec6ebf79640c3e4eb16414c399f7f5b, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8346614420133243897, guid: 8ec6ebf79640c3e4eb16414c399f7f5b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.72
@@ -30414,4 +30360,3 @@ SceneRoots:
   - {fileID: 209150755}
   - {fileID: 2085973554}
   - {fileID: 4249535982877172377}
-  - {fileID: 1562890035}
