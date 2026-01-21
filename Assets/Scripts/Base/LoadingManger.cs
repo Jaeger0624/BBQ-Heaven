@@ -24,7 +24,7 @@ public class LoadingManger : MonoBehaviour
 
     public void LoadSceneAsync(string sceneName, Action onComplete)
     {
-        canvasGroup.DOFade(1, 0.7f);
+        canvasGroup.DOFade(1, 0.7f).SetLink(canvasGroup.gameObject);
         
         Observable.Timer(TimeSpan.FromSeconds(0.5f)).Subscribe(_ => {
             SceneManager.LoadSceneAsync(sceneName).completed += (operation) => {
@@ -33,7 +33,7 @@ public class LoadingManger : MonoBehaviour
         }).AddTo(this.gameObject);
 
         Observable.Timer(TimeSpan.FromSeconds(1.1f)).Subscribe(_ => {
-            canvasGroup.DOFade(0, 0.7f);
+            canvasGroup.DOFade(0, 0.7f).SetLink(canvasGroup.gameObject);
         }).AddTo(this.gameObject);
     }
 }

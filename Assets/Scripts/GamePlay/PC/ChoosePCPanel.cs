@@ -16,8 +16,7 @@ public class ChoosePCPanel : MonoBehaviour, IController{
     [SerializeField] private ChoosePCView choosePCViewPrefab;
     [SerializeField] private Transform choosePCViewsContainer;
     [Header("按钮")]
-    [SerializeField] private Button choosePCButton;
-    [SerializeField] private Button closeButton;
+    [SerializeField] private ButtonUI choosePCButtonUI;
     [Header("角色信息面板")]
     [SerializeField] private TextMeshProUGUI nameText;
     [SerializeField] private TextMeshProUGUI descriptionText;
@@ -35,8 +34,7 @@ public class ChoosePCPanel : MonoBehaviour, IController{
         canvasGroup = GetComponent<CanvasGroup>();
 
 
-        choosePCButton.onClick.AddListener(OnChoosePCButtonClick);
-        closeButton.onClick.AddListener(OnCloseButtonClick);
+        choosePCButtonUI.OnClick.AddListener(OnChoosePCButtonClick);
 
         foreach (var pcData in this.GetSystem<IDataSystem>().GetAllPCData())
         {

@@ -62,7 +62,7 @@ public class TagView : MonoBehaviour, IController, ICanSendEvent{
                 // 延迟后播放出现动画
                 Observable.Timer(TimeSpan.FromSeconds(0.4f)).Subscribe(_ => {
                     if(tagViewComponent != null) 
-                        tagViewComponent.transform.DOScale(1f, 0.3f).SetEase(Ease.OutBack);
+                        tagViewComponent.transform.DOScale(1f, 0.3f).SetEase(Ease.OutBack).SetLink(tagViewComponent.gameObject);
                 }).AddTo(this.gameObject);
             }
             else

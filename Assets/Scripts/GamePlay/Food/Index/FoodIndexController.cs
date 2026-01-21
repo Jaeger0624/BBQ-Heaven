@@ -83,12 +83,12 @@ public class FoodIndexController : MonoBehaviour, IController
     private void TriggerIndexer(TriggerFoodIndexEvent e){
         triggeredFoodInstances.AddRange(e.foodIndexer.GetFoodInstances());
         foreach (var foodInstance in triggeredFoodInstances){
-            foodInstance.foodInstanceView.GO().transform.DOScale(1.2f, 0.2f).SetEase(Ease.OutBack).SetUpdate(true);
+            foodInstance.foodInstanceView.GO().transform.DOScale(1.2f, 0.2f).SetEase(Ease.OutBack).SetUpdate(true).SetLink(foodInstance.foodInstanceView.GO());
         }
     }
     private void ResetIndexer(ResetFoodIndexEvent e){
         foreach (var foodInstance in triggeredFoodInstances){
-            foodInstance.foodInstanceView.GO().transform.DOScale(1f, 0.2f).SetEase(Ease.OutBack).SetUpdate(true);
+            foodInstance.foodInstanceView.GO().transform.DOScale(1f, 0.2f).SetEase(Ease.OutBack).SetUpdate(true).SetLink(foodInstance.foodInstanceView.GO());
         }
         triggeredFoodInstances.Clear();
     }

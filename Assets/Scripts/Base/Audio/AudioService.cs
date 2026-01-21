@@ -66,7 +66,7 @@ public class AudioService : IAudioService
         if (clip == null) return;
         _bgmSource.clip = clip;
         _bgmSource.Play();
-        _bgmSource.DOFade(1, fadeTime);
+        _bgmSource.DOFade(1, fadeTime).SetLink(_bgmSource.gameObject);
 
     }
 

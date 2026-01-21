@@ -75,8 +75,8 @@ public class ScaleAnimationTask : IAnimTask
         seq.SetUpdate(noTimeScale);
         
         // 添加两段动画
-        seq.Append(transform.DOScale(targetScale, duration));
-        seq.Append(transform.DOScale(originScale, duration));
+        seq.Append(transform.DOScale(targetScale, duration).SetLink(transform.gameObject));
+        seq.Append(transform.DOScale(originScale, duration).SetLink(transform.gameObject));
 
         // 包装成 Task (假设你使用了我上一轮回答中修复的 TweenAnimTask)
         return new TweenAnimTask(seq).Play();
@@ -103,8 +103,8 @@ public class ScaleAnimationTask : IAnimTask
             seq.SetUpdate(noTimeScale);
             
             // 这种微小的旋转动效，用 Sequence 连接比两个 Task 拼接要流畅得多，不会有帧间隙
-            seq.Append(transform.DOLocalRotate(new Vector3(0, 0, 10), duration));
-            seq.Append(transform.DOLocalRotate(new Vector3(0, 0, 0), duration));
+            seq.Append(transform.DOLocalRotate(new Vector3(0, 0, 10), duration).SetLink(transform.gameObject));
+            seq.Append(transform.DOLocalRotate(new Vector3(0, 0, 0), duration).SetLink(transform.gameObject));
 
             return new TweenAnimTask(seq).Play();
         }

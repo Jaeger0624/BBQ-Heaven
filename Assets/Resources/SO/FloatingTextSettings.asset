@@ -22,14 +22,16 @@ MonoBehaviour:
   PeakScale: 1.3
   EndScale: 1
   PunchDuration: 0.3
-  GatherDelay: 0.1
+  GatherDelay: 0
   FlightDuration: 0.5
   FlightMotionEase: 34
   FlightScaleEase: 3
-  CurveDeviation: 2
-  FlightScale: 0.5
+  CurveDeviation: 0.4
+  FlightScale: 0.6
   SpreadAngle: 40
-  ScatterDistance: 1.8
-  ScatterTime: 0.3
+  ScatterDistance: 2
+  ScatterTime: 0.6
+  ScatterEase: 12
+  ScatterEaseParameter: 25
   ScatterMultiplierMin: 2.3
   ScatterMultiplierMax: 3.2

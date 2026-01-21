@@ -37,6 +37,8 @@ public class FloatingTextSettings : ScriptableObject
     public float SpreadAngle = 90f;
     public float ScatterDistance = 1f;
     public float ScatterTime = 0.3f;
+    public Ease ScatterEase = Ease.OutSine;
+    public float ScatterEaseParameter = 1f;
     [LabelText("散射距离倍率最小值")]
     public float ScatterMultiplierMin = 0.8f;
     [LabelText("散射距离倍率最大值")]

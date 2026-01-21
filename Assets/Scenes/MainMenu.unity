@@ -151,6 +151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05cb6e3a8d64cf94c90d2fe38aafe8f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonText: {fileID: 0}
   OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -166,6 +167,13 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+  isCustom: 0
   anim: 1
 --- !u!114 &19853222
 MonoBehaviour:
@@ -510,6 +518,7 @@ GameObject:
   - component: {fileID: 117424459}
   - component: {fileID: 117424458}
   - component: {fileID: 117424460}
+  - component: {fileID: 117424461}
   m_Layer: 5
   m_Name: "\u5173\u95ED\u6309\u94AE"
   m_TagString: Untagged
@@ -583,41 +592,50 @@ MonoBehaviour:
   m_GameObject: {fileID: 117424456}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: 05cb6e3a8d64cf94c90d2fe38aafe8f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 3
-    m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 2
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 412035569, guid: b1cdd6c3d5244374a8f3fda83adf9b54, type: 3}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 117424458}
-  m_OnClick:
+  buttonText: {fileID: 0}
+  OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 117424461}
+        m_TargetAssemblyTypeName: UIPanelEventSender, Assembly-CSharp
+        m_MethodName: "\u53D1\u9001\u4E8B\u4EF6"
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnEnter:
     m_PersistentCalls:
       m_Calls: []
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+  isCustom: 0
+  anim: 1
+--- !u!114 &117424461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 117424456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c048d2ad5328b73419514260c28d2865, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panelEventParams:
+  - panelType: 6
+    action: 1
+  - panelType: 5
+    action: 0
 --- !u!1 &172611102
 GameObject:
   m_ObjectHideFlags: 0
@@ -629,7 +647,7 @@ GameObject:
   - component: {fileID: 172611103}
   - component: {fileID: 172611106}
   - component: {fileID: 172611105}
-  - component: {fileID: 172611104}
+  - component: {fileID: 172611107}
   m_Layer: 5
   m_Name: "\u9009\u4E2D\u6309\u94AE"
   m_TagString: Untagged
@@ -656,50 +674,6 @@ RectTransform:
   m_AnchoredPosition: {x: 667, y: -265}
   m_SizeDelta: {x: 120, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &172611104
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 172611102}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 3
-    m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 2
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 128152353, guid: b1cdd6c3d5244374a8f3fda83adf9b54, type: 3}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 172611105}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &172611105
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -738,6 +712,30 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 172611102}
   m_CullTransparentMesh: 1
+--- !u!114 &172611107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 172611102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05cb6e3a8d64cf94c90d2fe38aafe8f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonText: {fileID: 0}
+  OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+  isCustom: 0
+  anim: 1
 --- !u!1 &174716790
 GameObject:
   m_ObjectHideFlags: 0
@@ -1039,6 +1037,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05cb6e3a8d64cf94c90d2fe38aafe8f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonText: {fileID: 0}
   OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -1054,6 +1053,13 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+  isCustom: 0
   anim: 1
 --- !u!224 &250427649 stripped
 RectTransform:
@@ -1784,6 +1790,7 @@ MonoBehaviour:
   onHide:
     m_PersistentCalls:
       m_Calls: []
+  isVisible: 1
 --- !u!1 &604305771
 GameObject:
   m_ObjectHideFlags: 0
@@ -2013,9 +2020,9 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 671486080}
   m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
 --- !u!114 &671486083
 MonoBehaviour:
@@ -2164,6 +2171,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  isVisible: 0
 --- !u!1 &675369796
 GameObject:
   m_ObjectHideFlags: 0
@@ -2681,6 +2689,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05cb6e3a8d64cf94c90d2fe38aafe8f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonText: {fileID: 0}
   OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -2696,6 +2705,13 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+  isCustom: 0
   anim: 1
 --- !u!114 &923081046
 MonoBehaviour:
@@ -2748,10 +2764,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   panelEventParams:
-  - panelType: 0
+  - panelType: 6
     action: 0
-  - panelType: 0
-    action: 0
+  - panelType: 5
+    action: 1
 --- !u!1 &944864740
 GameObject:
   m_ObjectHideFlags: 0
@@ -2901,6 +2917,7 @@ MonoBehaviour:
   onHide:
     m_PersistentCalls:
       m_Calls: []
+  isVisible: 1
 --- !u!1 &994066291
 GameObject:
   m_ObjectHideFlags: 0
@@ -3262,6 +3279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05cb6e3a8d64cf94c90d2fe38aafe8f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonText: {fileID: 0}
   OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -3277,6 +3295,13 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+  isCustom: 0
   anim: 1
 --- !u!114 &1070148578
 MonoBehaviour:
@@ -3502,6 +3527,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05cb6e3a8d64cf94c90d2fe38aafe8f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonText: {fileID: 0}
   OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -3517,6 +3543,13 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+  isCustom: 0
   anim: 1
 --- !u!114 &1135052466
 MonoBehaviour:
@@ -3798,6 +3831,7 @@ GameObject:
   - component: {fileID: 1463048787}
   - component: {fileID: 1463048791}
   - component: {fileID: 1463048792}
+  - component: {fileID: 1463048793}
   m_Layer: 5
   m_Name: "\u9009\u89D2\u753B\u5E03"
   m_TagString: Untagged
@@ -3899,8 +3933,8 @@ CanvasGroup:
   m_GameObject: {fileID: 1463048785}
   m_Enabled: 1
   m_Alpha: 0
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
 --- !u!114 &1463048792
 MonoBehaviour:
@@ -3916,12 +3950,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   choosePCViewPrefab: {fileID: 6999678959595581115, guid: 4c01a2029178eba4bbf437ecba1f9fd3, type: 3}
   choosePCViewsContainer: {fileID: 174716791}
-  choosePCButton: {fileID: 172611104}
-  closeButton: {fileID: 117424460}
+  choosePCButtonUI: {fileID: 172611107}
   nameText: {fileID: 250427650}
   descriptionText: {fileID: 767701865}
   setSeedPanel: {fileID: 685980951}
-  canvasGroup: {fileID: 0}
+  canvasGroup: {fileID: 1463048791}
+--- !u!114 &1463048793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1463048785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be3fe415b71994f4b9f5676e301f7649, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvasGroup: {fileID: 1463048791}
+  currentPanelType: 6
+  onShow:
+    m_PersistentCalls:
+      m_Calls: []
+  onHide:
+    m_PersistentCalls:
+      m_Calls: []
+  isVisible: 0
 --- !u!1 &1633405109
 GameObject:
   m_ObjectHideFlags: 0
@@ -4330,6 +4384,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05cb6e3a8d64cf94c90d2fe38aafe8f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonText: {fileID: 0}
   OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -4345,6 +4400,13 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+  isCustom: 0
   anim: 1
 --- !u!114 &2079875835
 MonoBehaviour:

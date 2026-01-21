@@ -44,9 +44,11 @@ public class RecipePreviewView : MonoBehaviour{
         layoutElement.ignoreLayout = true;
         removeFeedback.Events.OnComplete.AsObservable().Subscribe(unit => {
             Observable.NextFrame().Subscribe(unit => {
-                Destroy(gameObject);
-            });
-        });
+                if (this != null && gameObject != null) {
+                    Destroy(gameObject);
+                }
+            }).AddTo(this);
+        }).AddTo(this);
 
         // 等待一帧后再播放动画
         Observable.NextFrame().Subscribe(unit => {

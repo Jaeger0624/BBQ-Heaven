@@ -19,11 +19,11 @@ public class FoodIndexerButton : SerializedMonoBehaviour, ICanSendEvent, IPointe
     {
         this.SendEvent(new TriggerFoodIndexEvent(this));
 
-        transform.DOScale(1.2f, 0.2f).SetEase(Ease.OutBack).SetUpdate(true);
+        transform.DOScale(1.2f, 0.2f).SetEase(Ease.OutBack).SetUpdate(true).SetLink(gameObject);
     }
     public void OnPointerExit(PointerEventData eventData)
     {
         this.SendEvent(new ResetFoodIndexEvent());
-        transform.DOScale(1f, 0.2f).SetEase(Ease.OutBack).SetUpdate(true);
+        transform.DOScale(1f, 0.2f).SetEase(Ease.OutBack).SetUpdate(true).SetLink(gameObject);
     }
 }

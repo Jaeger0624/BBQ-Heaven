@@ -161,11 +161,11 @@ public class CustomerSatisController : MonoBehaviour, IController{
     }
 
     private void ShakeBarParent(float duration){
-        barParent.DOScale(1.5f, duration).SetEase(Ease.OutSine).SetUpdate(true).OnComplete(() => {
-            barParent.DOScale(1f, duration).SetEase(Ease.OutSine).SetUpdate(true);
+        barParent.DOScale(1.5f, duration).SetEase(Ease.OutSine).UnScaledKill(barParent.gameObject).OnComplete(() => {
+            barParent.DOScale(1f, duration).SetEase(Ease.OutSine).UnScaledKill(barParent.gameObject);
         });
-        barParent.DOLocalRotate(new Vector3(0, 0, 10), duration).SetEase(Ease.OutSine).SetUpdate(true).OnComplete(() => {
-            barParent.DOLocalRotate(new Vector3(0, 0, 0), duration).SetEase(Ease.OutSine).SetUpdate(true);
+        barParent.DOLocalRotate(new Vector3(0, 0, 10), duration).SetEase(Ease.OutSine).UnScaledKill(barParent.gameObject).OnComplete(() => {
+            barParent.DOLocalRotate(new Vector3(0, 0, 0), duration).SetEase(Ease.OutSine).UnScaledKill(barParent.gameObject);
         });
     }
 
@@ -180,13 +180,13 @@ public class CustomerSatisController : MonoBehaviour, IController{
     }
 
     private void Show(){
-        canvasGroup.DOFade(1f, 0.3f).SetEase(Ease.OutSine).SetUpdate(true);
+        canvasGroup.DOFade(1f, 0.3f).SetEase(Ease.OutSine).UnScaledKill(canvasGroup.gameObject);
         canvasGroup.blocksRaycasts = true;
         canvasGroup.interactable = true;
     }
 
     private void Hide(){
-        canvasGroup.DOFade(0f, 0.3f).SetEase(Ease.OutSine).SetUpdate(true);
+        canvasGroup.DOFade(0f, 0.3f).SetEase(Ease.OutSine).UnScaledKill(canvasGroup.gameObject);
         canvasGroup.blocksRaycasts = false;
         canvasGroup.interactable = false;
     }

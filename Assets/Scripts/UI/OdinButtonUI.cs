@@ -37,7 +37,7 @@ public class OdinButtonUI : SerializedMonoBehaviour, IPointerEnterHandler, IPoin
         // 轻微放大
         if (anim == ButtonAnim.Scale)
         {
-            transform.DOScale(1.1f, 0.12f).SetEase(Ease.OutSine).SetUpdate(true);
+            transform.DOScale(1.1f, 0.12f).SetEase(Ease.OutSine).SetUpdate(true).SetLink(gameObject);
         }
     }
 
@@ -50,7 +50,7 @@ public class OdinButtonUI : SerializedMonoBehaviour, IPointerEnterHandler, IPoin
         }
         if (anim == ButtonAnim.Scale)
         {
-            transform.DOScale(1f, 0.12f).SetEase(Ease.OutSine).SetUpdate(true);
+            transform.DOScale(1f, 0.12f).SetEase(Ease.OutSine).SetUpdate(true).SetLink(gameObject);
         }
     }
 

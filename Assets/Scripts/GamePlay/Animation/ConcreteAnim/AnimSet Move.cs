@@ -39,7 +39,7 @@ public class RelativeMoveAnimationTask : IAnimTask
         if (transform == null) {Debug.LogError("【RelativeMoveAnimationTask】transform 为空"); return Observable.ReturnUnit();}
         Vector3 from = isFromRelativeStart ? targetTransform.position + relativeStart : transform.position;
         Vector3 to = targetTransform.position + relativeEnd;
-        var tween = transform.DOMove(to, duration).From(from).SetEase(ease).SetUpdate(useUnscaledTime);
+        var tween = transform.DOMove(to, duration).From(from).SetEase(ease).SetUpdate(useUnscaledTime).SetLink(transform.gameObject);
         return new TweenAnimTask(tween).Play().AsUnitObservable();
     }
 }
@@ -59,7 +59,7 @@ public class MoveAnimationTask : IAnimTask{
     public IObservable<Unit> Play()
     {
         if (transform == null) {Debug.LogError("【MoveAnimationTask】transform 为空"); return Observable.ReturnUnit();}
-        var tween = transform.DOMove(targetPosition, duration).From(originPosition);
+        var tween = transform.DOMove(targetPosition, duration).From(originPosition).SetLink(transform.gameObject);
         return new TweenAnimTask(tween).Play();
     }
 }

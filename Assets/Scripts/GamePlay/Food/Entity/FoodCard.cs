@@ -103,6 +103,10 @@ public class FoodCard : ICanGetSystem{
 
     [OnDeserialized]
     void OnDeserialized(StreamingContext context){
+        if (Enhancements == null){
+            Enhancements = new List<FoodCardEnhancement>();
+            Debug.LogError($"【FoodCard】{name} 强化效果栏为null");
+        }
         // 深拷贝foodGAs
         this.foodGAs = new Dictionary<FoodGAType, List<CGA>>();
         foreach (var cga in foodData.CGAs){

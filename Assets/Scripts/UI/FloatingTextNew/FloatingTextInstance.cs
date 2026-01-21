@@ -65,7 +65,7 @@ public class FloatingTextInstance : MonoBehaviour
         {
             case FloatingTextMode.Normal:
                 // 普通上飘
-                _seq.Join(_rectTransform.DOMoveY(_rectTransform.position.y + 100f, _duration).SetEase(Ease.OutQuad));
+                _seq.Join(_rectTransform.DOMoveY(_rectTransform.position.y + 100f, _duration).SetEase(Ease.OutQuad).SetLink(gameObject));
                 DoScalePunch(_seq); // Q弹
                 break;
 
@@ -90,7 +90,7 @@ public class FloatingTextInstance : MonoBehaviour
         else
         {
             // 淡出销毁
-            _seq.Insert(_duration * 0.8f, _canvasGroup.DOFade(0f, _duration * 0.2f));
+            _seq.Insert(_duration * 0.8f, _canvasGroup.DOFade(0f, _duration * 0.2f).SetLink(gameObject));
             _seq.OnComplete(() => _recycleCallback?.Invoke(this));
         }
     }
@@ -124,7 +124,7 @@ public class FloatingTextInstance : MonoBehaviour
 
         // 3. 快速移动到位 (比如 0.3秒)
         float scatterTime = _settings.ScatterTime;
-        seq.Join(_rectTransform.DOMove(endPos, scatterTime).SetEase(Ease.OutQuad));
+        seq.Join(_rectTransform.DOMove(endPos, scatterTime).SetEase(_settings.ScatterEase, _settings.ScatterEaseParameter).SetLink(gameObject));
         
         // 4. 配合缩放效果
         seq.Join(transform.DOScale(0.5f, 0f))
@@ -141,7 +141,7 @@ public class FloatingTextInstance : MonoBehaviour
         
         Vector3 endPos = _rectTransform.position + (dir * force) + (Vector3.down * _dropHeight);
         
-        seq.Join(_rectTransform.DOJump(endPos, _jumpPower, 1, _duration).SetEase(Ease.Linear));
+        seq.Join(_rectTransform.DOJump(endPos, _jumpPower, 1, _duration).SetEase(Ease.Linear).SetLink(gameObject));
         DoScalePunch(seq);
     }
 
@@ -154,7 +154,7 @@ public class FloatingTextInstance : MonoBehaviour
 
         Vector3[] path = new Vector3[] { mid, target };
 
-        transform.DOPath(path, _settings.FlightDuration, PathType.CatmullRom)
+        transform.DOPath(path, _settings.FlightDuration, PathType.CatmullRom).SetLink(gameObject)
             .SetEase(_settings.FlightMotionEase)
             .SetUpdate(_useUnscaledTime)
             .OnComplete(() => {
@@ -162,13 +162,13 @@ public class FloatingTextInstance : MonoBehaviour
                 _recycleCallback?.Invoke(this); 
             });
             
-        transform.DOScale(_settings.FlightScale, _settings.FlightDuration).SetUpdate(_useUnscaledTime).SetEase(_settings.FlightScaleEase); // 飞行变小
+        transform.DOScale(_settings.FlightScale, _settings.FlightDuration).SetUpdate(_useUnscaledTime).SetEase(_settings.FlightScaleEase).SetLink(gameObject); // 飞行变小
     }
 
     private void DoScalePunch(Sequence seq)
     {
-        seq.Insert(0, transform.DOScale(1.5f, 0.2f).SetEase(Ease.OutBack))
-           .Insert(0.2f, transform.DOScale(1f, 0.5f));
+        seq.Insert(0, transform.DOScale(1.5f, 0.2f).SetEase(Ease.OutBack).SetLink(gameObject))
+           .Insert(0.2f, transform.DOScale(1f, 0.5f).SetLink(gameObject));
     }
 
     private void OnDisable() => _seq?.Kill();

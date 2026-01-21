@@ -7,6 +7,6 @@ public class SwingAnim : MonoBehaviour
     [SerializeField] private float duration = 2f;
     void Start()
     {
-        transform.DOLocalMoveY(distance, duration).SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo).SetUpdate(true);
+        transform.DOLocalMoveY(distance, duration).SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo).UnScaledKill(gameObject);
     }
 }

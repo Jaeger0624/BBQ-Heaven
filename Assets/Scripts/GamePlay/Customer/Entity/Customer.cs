@@ -28,6 +28,7 @@ public class Customer : ICanGetSystem, ICanRegisterEvent, ICanSendEvent{
     public bool isAboutToLeave = false;
     // 顾客的声望值
     public int reputation = 2;
+    public List<CustomerRequirement> requirements;
     public Customer(string name, int patienceMax, int reputation){
         this.guid = Guid.NewGuid().ToString();
         this.name = name;
