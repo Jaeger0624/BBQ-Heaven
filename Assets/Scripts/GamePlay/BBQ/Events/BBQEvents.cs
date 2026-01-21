@@ -7,11 +7,13 @@ public class AddBBQPropertyAnimEvent : AbstractEvent{
     public int addRarity;
     public int addTaste;
     public string adderName;
-    public AddBBQPropertyAnimEvent(int totalRarity, int totalTaste, int addRarity, int addTaste, string adderName){
+    public bool isCritical;
+    public AddBBQPropertyAnimEvent(int totalRarity, int totalTaste, int addRarity, int addTaste, string adderName, bool isCritical){
         this.totalRarity = totalRarity;
         this.totalTaste = totalTaste;
         this.addRarity = addRarity;
         this.addTaste = addTaste;
+        this.isCritical = isCritical;
     }
 }
 

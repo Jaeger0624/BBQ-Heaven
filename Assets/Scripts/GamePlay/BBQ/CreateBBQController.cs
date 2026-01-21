@@ -63,6 +63,7 @@ public class CreateBBQController : MonoBehaviour, IController, ICanSendEvent
         // 2. 清空当前烧烤视图
         currentBBQView = null;
     }
+
 }
 
 public class PlaceFoodInstanceEvent : AbstractEvent{

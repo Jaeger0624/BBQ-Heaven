@@ -28,7 +28,8 @@ public class FoodCard : ICanGetSystem{
     public Dictionary<FoodGAType, List<CGA>> foodGAs;
     public List<SustainEffect> sustainEffects => foodData.SEs;
     public int MaxSlots {get; private set;} = 2; // 默认最大槽位为2
-    public List<FoodCardEnhancement> Enhancements {get; private set;} = new List<FoodCardEnhancement>();
+    [OdinSerialize]
+    public List<FoodCardEnhancement> Enhancements = new List<FoodCardEnhancement>();
 
     public FoodCard(FoodData foodData, bool isTemporary = false){
         this.guid = Guid.NewGuid().ToString();
@@ -63,23 +64,38 @@ public class FoodCard : ICanGetSystem{
     {
         List<FoodInstance> result = new List<FoodInstance>();
 
+        
         // 1. 计算生成数量（应用强化效果）
         int spawnCount = 2;  // 初始生成数量
-        foreach (var buff in Enhancements)
-        {
-            spawnCount = buff.ModifySpawnCount(spawnCount);
+
+        if (Enhancements != null){
+            foreach (var buff in Enhancements)
+            {
+                spawnCount = buff.ModifySpawnCount(spawnCount);
+            }
         }
+        else{
+            Debug.LogError($"【FoodCard】{name} 强化效果栏为null");
+            return result;
+        }
+
 
         // 2. 循环生成
         for (int i = 0; i < spawnCount; i++)
         {
             FoodInstance foodInstance = new FoodInstance(this, new Vector2Int(-1, -1));
 
+            if (Enhancements != null){
             // 应用实例级强化
-            foreach (var buff in Enhancements)
-            {
-                buff.OnInstanceCreated(foodInstance);
+                foreach (var buff in Enhancements)
+                {
+                    buff.OnInstanceCreated(foodInstance);
+                }
             }
+            else{
+                Debug.LogError($"【FoodCard】{name} 强化效果栏为null");
+            }
+
             result.Add(foodInstance);
         }
         return result;
@@ -95,6 +111,7 @@ public class FoodCard : ICanGetSystem{
             }
             foodGAs[cga.Type].Add(new CGA(cga.Action));
         }
+        
     }
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
 }

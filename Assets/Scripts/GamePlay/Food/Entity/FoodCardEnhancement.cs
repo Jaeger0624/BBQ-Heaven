@@ -1,9 +1,13 @@
 using System;
+using Sirenix.Serialization;
 
 [Serializable]
 public abstract class FoodCardEnhancement
 {
+    [OdinSerialize]
     public abstract string Name { get; }
+    
+    [OdinSerialize]
     public abstract string Description { get; }
 
     // 【卡牌级强化】影响生成的数量 (例如：双重)
@@ -13,6 +17,7 @@ public abstract class FoodCardEnhancement
     public virtual void OnInstanceCreated(FoodInstance instance) { }
 }
 
+[Serializable]
 public class DoubleSpawnEnhancement : FoodCardEnhancement
 {
     public override string Name => "双重";
@@ -20,6 +25,7 @@ public class DoubleSpawnEnhancement : FoodCardEnhancement
     public override int ModifySpawnCount(int currentCount) => currentCount + 1;
 }
 
+[Serializable]
 public class PreservedEnhancement : FoodCardEnhancement
 {
     public override string Name => "陈酿";

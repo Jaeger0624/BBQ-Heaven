@@ -49,6 +49,7 @@ MonoBehaviour:
   _animSettings: {fileID: 11400000, guid: 1b8ac734ca23aa143a0668f92da11c5a, type: 2}
   _gameplaySettings: {fileID: 11400000, guid: 6ab005535211c724b9d54248e5b75bab, type: 2}
   _prefabSettings: {fileID: 11400000, guid: eb7df1ddd6a2ba5418ab90f6df589b05, type: 2}
+  _floatingTextSettings: {fileID: 11400000, guid: 1649860ee12bf0244baf51010d466b8e, type: 2}
   SatisfactionTextParent: {fileID: 5324351430562989847}
 --- !u!1 &4117943351024649558
 GameObject:

@@ -123,10 +123,6 @@ public class BBQSystem : AbstractSystem, IBBQSystem
         // 1. 设置一层锁
         this.GetSystem<IGASystem>().SetTrigger(context.targetBBQ);
 
-        this.GetSystem<IGASystem>().SendAction(context.targetBBQ, () => {
-            // 5. 将当前烧烤实例存储到烧烤仓库中
-            AddBBQToRepository(new List<object>{context});
-        });
 
 
         this.GetSystem<IGASystem>().SendAction(context.targetBBQ, () => {
@@ -140,6 +136,11 @@ public class BBQSystem : AbstractSystem, IBBQSystem
             this.GetSystem<IAnimationSystem>().Append(new ActionAnimTask(() => {
                 this.SendEvent(new FinishCombineBBQEvent_动画());
             }));
+        });
+        
+        this.GetSystem<IGASystem>().SendAction(context.targetBBQ, () => {
+            // 5. 将当前烧烤实例存储到烧烤仓库中
+            AddBBQToRepository(new List<object>{context});
         });
 
 

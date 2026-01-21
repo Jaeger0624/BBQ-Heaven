@@ -70,9 +70,9 @@
     "type": 0,
     "tagCGAs": [
       {
-        "GADescription": "",
-        "CDDescription": "",
-        "type": 0,
+        "GADescription": "<size=50>1.5x</size>",
+        "CDDescription": "食材少于4个",
+        "type": 2,
         "cga": {
           "ID": "1",
           "conditions": [
@@ -98,9 +98,9 @@
         }
       },
       {
-        "GADescription": "",
-        "CDDescription": "",
-        "type": 0,
+        "GADescription": "<size=50>0.8x</size>",
+        "CDDescription": "食材多于7个",
+        "type": 1,
         "cga": {
           "ID": "2",
           "conditions": [
@@ -116,9 +116,22 @@
               }
             }
           ],
-          "actions": []
+          "actions": [
+            {
+              "$type": "GA_创建满意度乘区",
+              "Name": "大胃王",
+              "value": 0.8
+            }
+          ]
         }
       }
     ]
+  },
+  {
+    "ID": "3",
+    "name": "捣蛋鬼",
+    "description": "其他人很讨厌这家伙！",
+    "type": 0,
+    "tagCGAs": []
   }
 ]

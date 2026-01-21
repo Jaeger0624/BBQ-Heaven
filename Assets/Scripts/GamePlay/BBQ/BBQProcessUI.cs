@@ -20,14 +20,14 @@ public class BBQProcessUI : MonoBehaviour, IController
     void OnEnable()
     {
         this.RegisterEvent<CombineBBQEvent>(OnCombineBBQ);   
-        this.RegisterEvent<FinishCombineBBQEvent>(OnEndCalculateBBQ);
+        this.RegisterEvent<FinishCombineBBQEvent_动画>(OnEndCalculateBBQ);
         this.RegisterEvent<AddBBQToRepositoryEvent>(OnAddBBQToRepository);
         this.RegisterEvent<AddBBQPropertyAnimEvent>(OnAddBBQProperty);
     }
     void OnDisable()
     {
         this.UnRegisterEvent<CombineBBQEvent>(OnCombineBBQ);
-        this.UnRegisterEvent<FinishCombineBBQEvent>(OnEndCalculateBBQ);
+        this.UnRegisterEvent<FinishCombineBBQEvent_动画>(OnEndCalculateBBQ);
         this.UnRegisterEvent<AddBBQToRepositoryEvent>(OnAddBBQToRepository);
         this.UnRegisterEvent<AddBBQPropertyAnimEvent>(OnAddBBQProperty);
     }
@@ -45,8 +45,6 @@ public class BBQProcessUI : MonoBehaviour, IController
         // 设置可见性
         _rarityText.gameObject.SetActive(true);
         _tasteText.gameObject.SetActive(true);
-
-
     }
 
     private void OnAddBBQProperty(AddBBQPropertyAnimEvent evt)
@@ -56,31 +54,28 @@ public class BBQProcessUI : MonoBehaviour, IController
         addRarityText += evt.addRarity.ToString();
         addTasteText += evt.addTaste.ToString();
 
-        // Debug.Log($"【BBQProcessUI】{evt.adderName} OnAddBBQProperty: {evt.totalRarity} {evt.totalTaste} {evt.addRarity} {evt.addTaste}");
+        if (evt.isCritical){
+            addRarityText += "\n暴击！";
+            addTasteText += "\n暴击！";
+        }
 
-        List<IAnimTask> tasks = new List<IAnimTask>{
-            new TextChangeAnimTask(_rarityText, evt.totalRarity, 0.15f),
-            new TextChangeAnimTask(_tasteText, evt.totalTaste, 0.15f),
-            new PlaySFXAnimationTask("Score 3", 0.01f, 0.1f),
-        };
-        
         List<IAnimTask> sequenceTasks = new List<IAnimTask>();
-        if (evt.addRarity != 0) sequenceTasks.Add(new SpawnTextAnimationTask(addRarityText, 8,
-        SettingManager.Instance.DevSettings.AddRarityTextColor, _rarityAddTextParent.position));
-        if (evt.addTaste != 0) sequenceTasks.Add(new SpawnTextAnimationTask(addTasteText, 8,
-        SettingManager.Instance.DevSettings.AddTasteTextColor, _tasteAddTextParent.position));
+        if (evt.addRarity != 0){
+            OnGenerateFloatingText_珍稀度(addRarityText, () => {
+                this.GetSystem<IAnimationSystem>().DirectlyPlay(new TextChangeAnimTask(_rarityText, evt.totalRarity, 0.15f));
+            });
+        } 
+        if (evt.addTaste != 0){
+            OnGenerateFloatingText_美味度(addTasteText, () => {
+                this.GetSystem<IAnimationSystem>().DirectlyPlay(new TextChangeAnimTask(_tasteText, evt.totalTaste, 0.15f));
+            });
+        }
 
-        IAnimTask sequence = new SequenceAnimTask(new List<IAnimTask>{
-            new DelayAnimTask(0.15f),
-            new ParallelAnimTask(sequenceTasks),
-        });
-        tasks.Add(sequence);
-        IAnimTask final = new ParallelAnimTask(tasks);
-        this.GetSystem<IAnimationSystem>().DirectlyPlay(final);
+        this.GetSystem<IAnimationSystem>().DirectlyPlay(new PlaySFXAnimationTask("Score 3", 0.01f, 0.1f));
     }
 
     // 程序层面结束计算的事件
-    private void OnEndCalculateBBQ(FinishCombineBBQEvent evt)
+    private void OnEndCalculateBBQ(FinishCombineBBQEvent_动画 evt)
     {
     }
 
@@ -94,6 +89,16 @@ public class BBQProcessUI : MonoBehaviour, IController
     public IArchitecture GetArchitecture()
     {
         return GameArchitecture.Interface;
+    }
+    private void OnGenerateFloatingText_美味度(string content,System.Action onArrive = null){
+        Color color = SettingManager.Instance.DevSettings.AddTasteTextColor;
+        string text = content.ToSize(70f);
+        FloatingTextManager.Instance.GenerateFloatingText_美味度(text, _tasteAddTextParent, color, onArrive);
+    }
+    private void OnGenerateFloatingText_珍稀度(string content,System.Action onArrive = null){
+        Color color = SettingManager.Instance.DevSettings.AddRarityTextColor;
+        string text = content.ToSize(70f);
+        FloatingTextManager.Instance.GenerateFloatingText_珍稀度(text, _rarityAddTextParent, color, onArrive);
     }
 }
 

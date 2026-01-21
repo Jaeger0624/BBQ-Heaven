@@ -85,7 +85,7 @@ public partial class GA_直接修改当前烧烤值 : GameAction
         if (sender is IAnimPlayer animPlayer){
             senderAnimTask = AnimationConverter.Convert(animPlayer, "common");
         }
-        addBBQPropertyAnimEvent = new AddBBQPropertyAnimEvent(currentRarity, currentTaste, (int)RarityValue.GetValue(sender, param), (int)TasteValue.GetValue(sender, param ), $"");
+        addBBQPropertyAnimEvent = new AddBBQPropertyAnimEvent(currentRarity, currentTaste, (int)RarityValue.GetValue(sender, param), (int)TasteValue.GetValue(sender, param ), $"", false);
     }
     public override IAnimTask GetAnimTask()
     {

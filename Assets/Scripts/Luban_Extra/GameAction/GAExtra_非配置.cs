@@ -101,17 +101,23 @@ namespace cfg{
             // 4. 判断是否暴击
             float multiplier = 1f;
             var rng = this.GetSystem<IRngSystem>().GetSubRng<IBBQSystem>();
-            if (rng.NextFloat() < foodInstance.baseCritRate){
-                multiplier = foodInstance.baseCritMultiplier;
-                Debug.Log($"【GA_添加单个食材基础值】食材实例{foodInstance.name}暴击，倍率：{multiplier}\n原值: {foodBaseRarity}|{foodBaseTaste} -> 新值: {foodBaseRarity * multiplier}|{foodBaseTaste * multiplier}");
+
+            bool isCritical = rng.NextFloat() < foodInstance.baseCritRate;
+
+            multiplier = isCritical ? foodInstance.baseCritMultiplier : 1f;
+            // 向上取整
+            int newFoodBaseRarity = (int)Mathf.Ceil(foodBaseRarity * multiplier);
+            int newFoodBaseTaste = (int)Mathf.Ceil(foodBaseTaste * multiplier);
+
+            if (isCritical){
+                Debug.Log($"【GA_添加单个食材基础值】食材实例{foodInstance.name}暴击，倍率：{multiplier}\n原值: {foodBaseRarity}|{foodBaseTaste} -> 新值: {newFoodBaseRarity}({foodBaseRarity*multiplier})|{newFoodBaseTaste}({foodBaseTaste*multiplier})");
             }
 
-
-            currentBBQ.SetTotalRarity((int)(currentBBQ.totalRarity.Value + foodBaseRarity * multiplier));
-            currentBBQ.SetTotalTaste((int)(currentBBQ.totalTaste.Value + foodBaseTaste * multiplier));
+            currentBBQ.SetTotalRarity((int)(currentBBQ.totalRarity.Value + newFoodBaseRarity));
+            currentBBQ.SetTotalTaste((int)(currentBBQ.totalTaste.Value + newFoodBaseTaste));
 
             foodInstanceViewAnimEvent = new FoodInstanceViewAnimEvent(foodInstance.guid);
-            addBBQPropertyEvent = new AddBBQPropertyAnimEvent(currentBBQ.totalRarity.Value, currentBBQ.totalTaste.Value, foodBaseRarity, foodBaseTaste, $"{foodInstance.food.foodData.Name}");
+            addBBQPropertyEvent = new AddBBQPropertyAnimEvent(currentBBQ.totalRarity.Value, currentBBQ.totalTaste.Value, newFoodBaseRarity, newFoodBaseTaste, $"{foodInstance.food.foodData.Name}", isCritical);
             placeFoodInstanceEvent = new PlaceFoodInstanceEvent(foodInstance.foodInstanceView, currentBBQ.foodInstances.IndexOf(foodInstance));
         }
 
@@ -165,7 +171,7 @@ namespace cfg{
             currentBBQ.SetTotalRarity(currentBBQ.totalRarity.Value + raritySum);
             currentBBQ.SetTotalTaste(currentBBQ.totalTaste.Value + tasteSum);
 
-            addBBQPropertyEvent = new AddBBQPropertyAnimEvent(currentBBQ.totalRarity.Value, currentBBQ.totalTaste.Value, raritySum, tasteSum, $"所有食材基础值");
+            addBBQPropertyEvent = new AddBBQPropertyAnimEvent(currentBBQ.totalRarity.Value, currentBBQ.totalTaste.Value, raritySum, tasteSum, $"所有食材基础值", false);
         }
 
         public override IAnimTask GetAnimTask()
