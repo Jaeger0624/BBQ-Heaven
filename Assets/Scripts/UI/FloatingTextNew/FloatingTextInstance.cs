@@ -124,12 +124,12 @@ public class FloatingTextInstance : MonoBehaviour
 
         // 3. 快速移动到位 (比如 0.3秒)
         float scatterTime = _settings.ScatterTime;
-        seq.Join(_rectTransform.DOMove(endPos, scatterTime).SetEase(_settings.ScatterEase, _settings.ScatterEaseParameter).SetLink(gameObject));
+        seq.Join(_rectTransform.DOMove(endPos, scatterTime).SetEase(_settings.ScatterEase, _settings.ScatterAmplitude, _settings.ScatterPeriod).SetLink(gameObject));
         
-        // 4. 配合缩放效果
-        seq.Join(transform.DOScale(0.5f, 0f))
-           .Join(transform.DOScale(1.2f, 0.2f).SetEase(Ease.OutBack))
-           .Join(transform.DOScale(1.0f, scatterTime - 0.2f));
+        // // 4. 配合缩放效果
+        // seq.Join(transform.DOScale(0.5f, 0f))
+        //    .Join(transform.DOScale(1.2f, 0.2f).SetEase(Ease.OutBack))
+        //    .Join(transform.DOScale(1.0f, scatterTime - 0.2f));
     }
 
     // 逻辑：物理下坠 (旧逻辑，用于掉落物品)

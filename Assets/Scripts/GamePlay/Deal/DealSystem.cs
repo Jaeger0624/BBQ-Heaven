@@ -17,8 +17,6 @@ public interface IDealSystem : ISystem{
 	void ExecuteDeal(BBQ bbq, Customer customer);
 	// 仅计算不落账（用于预览）
 	DealResult PreviewDeal(DealContext context);
-    // 读取当前正在处理的交易（供 GA 等效果访问）
-    Deal GetCurrentDeal();
 
 	void AddScoreMultiplier(string name, float multiplier);
 	void RemoveScoreMultiplier(string name);
@@ -27,9 +25,8 @@ public interface IDealSystem : ISystem{
 
 public class DealSystem : AbstractSystem, IDealSystem
 {
-    private Deal currentDeal = null;
+
 	private IEarnMoneyStrategy earnMoneyStrategy = new EarnMoneyStrategy_原值();
-    public Deal GetCurrentDeal() => currentDeal;
 	private Dictionary<string, float> scoreMultipliers = new Dictionary<string, float>();
 
     protected override void OnInit()
@@ -84,8 +81,6 @@ public class DealSystem : AbstractSystem, IDealSystem
 	public async void ExecuteDeal(BBQ bbq, Customer customer)
     {
 		if (bbq == null || customer == null) return;
-		// 设置当前交易并派发开始事件
-		currentDeal = new Deal(bbq, customer);
 		this.SendEvent(new DealStartedEvent(bbq, customer));
 
 		// 开启满意度条
@@ -135,9 +130,6 @@ public class DealSystem : AbstractSystem, IDealSystem
 
 		// 交易完成事件（把结果发出去，让DealController自动处理成动画）
 		this.SendEvent(new DealCompletedEvent(result));
-
-		// 清理当前交易
-		currentDeal = null;
 
 		// 顾客离开（服务完成）
 		this.GetSystem<ICustomerSystem>().LeaveCustomer(new List<Customer>{customer});

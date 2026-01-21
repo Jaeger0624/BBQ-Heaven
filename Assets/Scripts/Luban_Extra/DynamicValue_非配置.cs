@@ -12,13 +12,13 @@ namespace cfg{
         }
         public override int GetValue(object target, List<object> param)
         {
-            Deal currentDeal = this.GetSystem<IDealSystem>().GetCurrentDeal();
-            if (currentDeal == null){
-                Debug.LogError("当前售卖中食材数量为空");
+            DealContext context = param?.FirstOrDefault() as DealContext;
+            if (context == null){
+                Debug.LogError("上下文为空");
                 return 0;
             }
-            if (foodType == FoodType.无) return currentDeal.bbq.foodInstances.Count;
-            return currentDeal.bbq.foodInstances.Count(x => x.food.foodType == foodType);
+            if (foodType == FoodType.无) return context.BBQ.foodInstances.Count;
+            return context.BBQ.foodInstances.Count(x => x.food.foodType == foodType);
         }
     }
 }

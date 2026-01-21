@@ -44,8 +44,7 @@ public class CustomerView : MonoBehaviour{
     {
         List<TooltipInfo> tooltipInfos = new List<TooltipInfo>
         {
-            new TooltipInfo($"<size=36>{currentCustomer.name}</size>"),
-            new TooltipInfo($"<size=24>{currentCustomer.preferences.ToString()}</size>"),
+            new TooltipInfo($"<size=36>{currentCustomer.name}</size>")
         };
         
 

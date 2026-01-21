@@ -9,7 +9,7 @@ using System.Linq;
 using TMPro;
 using MoreMountains.Feedbacks;
 
-public class CustomerController_UI : MonoBehaviour, IController, ICanSendEvent
+public class CustomerController : MonoBehaviour, IController, ICanSendEvent
 {
     public AnimQueue customerAnimQueue = AnimQueue.Default; // 顾客动画队列(先设置为默认队列)
     ICustomerSystem customerSystem => this.GetSystem<ICustomerSystem>();

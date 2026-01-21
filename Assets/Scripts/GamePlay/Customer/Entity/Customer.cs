@@ -14,8 +14,6 @@ public class Customer : ICanGetSystem, ICanRegisterEvent, ICanSendEvent{
     public readonly string guid;
     public string name { get; private set; } = "";
     public CustomerLook customerLook;
-    // 顾客喜好
-    public Preference preferences;
     // 顾客标签
     public List<ICustomerTag> customerTags;
     // 耐心阈值 
@@ -28,6 +26,9 @@ public class Customer : ICanGetSystem, ICanRegisterEvent, ICanSendEvent{
     public bool isAboutToLeave = false;
     // 顾客的声望值
     public int reputation = 2;
+
+    // 【新增：顾客需求】
+    // 顾客
     public List<CustomerRequirement> requirements;
     public Customer(string name, int patienceMax, int reputation){
         this.guid = Guid.NewGuid().ToString();
@@ -36,7 +37,6 @@ public class Customer : ICanGetSystem, ICanRegisterEvent, ICanSendEvent{
         this.PatienceNow = new ReactiveProperty<int>(0);
         this.reputation = reputation;
         // 设置一下喜好
-        this.preferences = Preference.CreateRandomPreference();
 
         // TODO: 测试版本的配置标签
         customerTags = new List<ICustomerTag>
@@ -54,10 +54,6 @@ public class Customer : ICanGetSystem, ICanRegisterEvent, ICanSendEvent{
     {
         return GameArchitecture.Interface;
     }
-
-    public string GetDescription(){
-        return $"【{name}】喜欢{preferences.foodTypes.FirstOrDefault().ToString()}食材";
-    }
 }
 
 public enum CustomerState{
@@ -73,31 +69,4 @@ public enum CustomerState{
     /// 已服务
     /// </summary>
     Leaved,
-}
-
-// 包装类，用于存储顾客满意度相关信息
-public class Preference{
-    public List<FoodType> foodTypes;
-    // 喜欢的食材ID列表
-    public List<string> foodIds; 
-    // 喜欢的配方ID列表
-    public List<string> recipeIds;
-    public Preference(List<FoodType> foodTypes, List<string> recipeIds, List<string> foodIds){
-        this.foodTypes = foodTypes;
-        this.recipeIds = recipeIds;
-        this.foodIds = foodIds;
-    }
-
-    public static Preference CreateRandomPreference(){
-        List<FoodType> foodTypes = new List<FoodType>();
-        List<FoodType> allFoodTypes = Enum.GetValues(typeof(FoodType)).Cast<FoodType>().ToList();
-
-        Rng rng = GameArchitecture.Interface.GetSystem<IRngSystem>().GetSubRng<ICustomerSystem>();
-        // 随机配备一个食材类型
-        foodTypes.AddRange(rng.PickMany(allFoodTypes, 1));
-
-        List<string> recipeIds = new List<string>();
-        List<string> foodIds = new List<string>();
-        return new Preference(foodTypes, recipeIds, foodIds);
-    }
 }
