@@ -56,7 +56,6 @@ public class SmartCatPaw : MonoBehaviour
 
     private void Update() 
     {
-        return;
         // 测试代码
         if (Input.GetMouseButtonDown(0)) PointAt(Input.mousePosition);
         if (Input.GetMouseButtonDown(1)) Hide();

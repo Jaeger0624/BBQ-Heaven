@@ -51,11 +51,11 @@ public class CardController : MonoBehaviour, IController
     private void OnUseCardHandViewEvent(CardViewUseEvent e) => UseCard(e.card);
     [Button]
     private void Show(){
-        transform.DOLocalMove(showPosition, 0.5f).SetUpdate(true).SetEase(Ease.OutBack);
+        (transform as RectTransform).DOAnchorPos(showPosition, 0.5f).SetUpdate(true).SetEase(Ease.OutBack);
     }
     [Button]
     private void Hide(){
-        transform.DOLocalMove(hidePosition, 0.5f).SetUpdate(true).SetEase(Ease.InBack);
+        (transform as RectTransform).DOAnchorPos(hidePosition, 0.5f).SetUpdate(true).SetEase(Ease.InBack);
     }
     private void CreateCard(Card card){
         if (card == null){

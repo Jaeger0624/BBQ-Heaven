@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class GameController : MonoBehaviour, IController, ICanSendEvent
 {
     public IGameSystem gameSystem => this.GetSystem<IGameSystem>();
-    [SerializeField] private Button EndDayButton;
+    [SerializeField] private ButtonUI EndDayButton;
     [SerializeField] private TextMeshProUGUI DayText;
 
     // 不论怎么样，都一定有个冷却时间，避免玩家疯狂点击按钮
@@ -18,11 +18,11 @@ public class GameController : MonoBehaviour, IController, ICanSendEvent
     
     void OnEnable()
     {
-        EndDayButton.onClick.AddListener(OnEndDayButtonClick);
+        EndDayButton.OnClick.AddListener(OnEndDayButtonClick);
     }
     void OnDisable()
     {
-        EndDayButton.onClick.RemoveListener(OnEndDayButtonClick);
+        EndDayButton.OnClick.RemoveListener(OnEndDayButtonClick);
     }
 
     void Update()
@@ -48,7 +48,7 @@ public class GameController : MonoBehaviour, IController, ICanSendEvent
     private void UpdateButtonInteractable()
     {
         // 不受TimeScale影响
-        EndDayButton.interactable = Time.time - lastEndDayButtonClickTime > endDayButtonCoolingTime;
+        EndDayButton.SetInteractable(Time.time - lastEndDayButtonClickTime > endDayButtonCoolingTime);
     }
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
 }

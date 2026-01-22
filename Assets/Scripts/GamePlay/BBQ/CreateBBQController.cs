@@ -34,11 +34,11 @@ public class CreateBBQController : MonoBehaviour, IController, ICanSendEvent
     // 创建一个DOTween动画，将烧烤视图从hidePosition移动到showPosition
     [Button]
     private void Show(){
-        transform.DOLocalMove(showPosition, 0.5f).SetUpdate(true).SetEase(Ease.OutBack).SetLink(gameObject);
+        (transform as RectTransform).DOAnchorPos(showPosition, 0.5f).SetUpdate(true).SetEase(Ease.OutBack).SetLink(gameObject);
     }
     [Button]
     private void Hide(){
-        transform.DOLocalMove(hidePosition, 0.5f).SetUpdate(true).SetEase(Ease.OutBack).SetLink(gameObject);
+        (transform as RectTransform).DOAnchorPos(hidePosition, 0.5f).SetUpdate(true).SetEase(Ease.OutBack).SetLink(gameObject);
     }
 
     private void OnCombineBBQEvent(CombineBBQEvent e){

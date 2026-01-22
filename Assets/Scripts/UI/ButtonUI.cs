@@ -29,12 +29,15 @@ public class ButtonUI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
     public bool isCustom = false;
     private bool isHovering = false;
     public ButtonAnim anim = ButtonAnim.Scale;
+    private bool isInteractable = true;
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (!isInteractable) return;
         OnClick?.Invoke();
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (!isInteractable) return;
         isHovering = true;
         if (isCustom)
         {
@@ -53,6 +56,7 @@ public class ButtonUI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        if (!isInteractable) return;
         isHovering = false;
         if (isCustom)
         {
@@ -81,5 +85,11 @@ public class ButtonUI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
     public void RemoveListener(Action action)
     {
         OnClick.RemoveListener(new UnityAction(action));
+    }
+
+
+    public void SetInteractable(bool interactable)
+    {
+        isInteractable = interactable;
     }
 }
