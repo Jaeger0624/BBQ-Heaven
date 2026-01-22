@@ -21,12 +21,12 @@ public class CustomerView : MonoBehaviour{
     public void UpdateVisual(){
         if (currentCustomer == null){
             nameText.text = "";
-            image.sprite = null;
+            image.gameObject.SetActive(false);
             return;
         }
 
         image.sprite = sprites[currentCustomer.customerLook.SpriteIndex];
-        
+        image.gameObject.SetActive(true);
         nameText.text = currentCustomer.name;
 
         UpdateDescription();

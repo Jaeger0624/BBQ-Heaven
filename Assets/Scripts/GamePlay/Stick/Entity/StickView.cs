@@ -1,3 +1,4 @@
+using System.IO;
 using QFramework;
 using TMPro;
 using UnityEngine;
@@ -14,6 +15,7 @@ public class StickView : MonoBehaviour, ICanGetSystem, ICanRegisterEvent, IPoint
     public void Init(Stick stick, Transform slot){
         this.stick = stick;
         this.slot = slot;
+        UpdateVisual();
     }
 
     void Start()
@@ -38,6 +40,17 @@ public class StickView : MonoBehaviour, ICanGetSystem, ICanRegisterEvent, IPoint
         }
         int baseTimeCost = SettingManager.Instance.GameplaySettings.makeBBQTime_默认;
         timeCostText.text = (stick.extraTimeCost + baseTimeCost).ToString();
+    }
+
+    private void UpdateVisual(){
+        
+        Sprite sprite = SettingManager.Instance.ArtSettings.StickSprites.GetSprite(stick.stickData.Sprite);
+        if (sprite == null){
+            Debug.LogError($"StickView: 获取烤串图标失败: {stick.stickData.Sprite}");
+        }
+        else{
+            image.sprite = sprite;
+        }
     }
 
     public void OnSelect(){

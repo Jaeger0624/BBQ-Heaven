@@ -15,6 +15,7 @@ public interface IDataSystem : ISystem{
     List<StickData> GetAllStickData();
     //获取顾客标签配置
     CustomerTagData GetCustomerTagData(string id);
+    List<CustomerTagData> GetAllCustomerTagData();
     //获取配方配置
     RecipeData GetRecipeData(string id);
     List<RecipeData> GetAllRecipeData();
@@ -56,6 +57,7 @@ public interface IDataSystem : ISystem{
     // 获取buff配置
     BuffData GetBuffData(string id, bool byName = false);
     List<BuffData> GetAllBuffData();
+
 }
 public class DataSystem : AbstractSystem, IDataSystem{
 
@@ -107,6 +109,10 @@ public class DataSystem : AbstractSystem, IDataSystem{
     }
     public List<CardData> GetAllCardData(){
         return tables.CardDataTable.DataList;
+    }
+    public List<CustomerTagData> GetAllCustomerTagData()
+    {
+        return tables.CustomerTagDataTable.DataList;
     }
     protected override void OnInit()
     {

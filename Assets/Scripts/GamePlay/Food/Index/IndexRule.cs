@@ -31,6 +31,9 @@ public class IndexRule_TopK : IndexRuleBase{
                 return y.taste.CompareTo(x.taste);
             }
         });
+        if (foodInstances.Count < k){
+            return foodInstances;
+        }
         int value = foodInstances[k-1].rarity;
         return foodInstances.Where(x => x.rarity >= value).ToList();
     }

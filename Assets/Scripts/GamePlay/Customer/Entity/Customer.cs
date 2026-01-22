@@ -39,11 +39,7 @@ public class Customer : ICanGetSystem, ICanRegisterEvent, ICanSendEvent{
         this.reputation = reputation;
         // 设置一下喜好
 
-        // TODO: 测试版本的配置标签
-        customerTags = new List<ICustomerTag>
-        {
-            CustomerTagFactory.CreateCustomerTag(this.GetSystem<IDataSystem>().GetCustomerTagData("1")),
-        };
+        GenerateCustomerTags();
 
         this.customerLook = this.GetSystem<ICustomerSystem>().CustomerLookMaker.GetCustomerLook(name, new GetCustomerLookStrategy_纯随机());
 
@@ -92,6 +88,17 @@ public class Customer : ICanGetSystem, ICanRegisterEvent, ICanSendEvent{
     public void RefreshRequirements(){
         RequirementBuilder builder = new RequirementBuilder();
         requirements = builder.GenerateGroup(this);
+    }
+
+    public void GenerateCustomerTags(){
+        customerTags = new List<ICustomerTag>();
+        Rng rng = this.GetSystem<IRngSystem>().GetSubRng<ICustomerSystem>();
+        List<CustomerTagData> tagDatas = this.GetSystem<IDataSystem>().GetAllCustomerTagData();
+
+        // 随机选取一定数量的标签
+        List<CustomerTagData> selectedTagDatas = rng.PickMany(tagDatas, 1);
+
+        customerTags.Add(CustomerTagFactory.CreateCustomerTag(selectedTagDatas[0]));
     }
 }
 

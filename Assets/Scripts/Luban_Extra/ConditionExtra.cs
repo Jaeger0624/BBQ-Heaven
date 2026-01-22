@@ -113,4 +113,20 @@ public partial class Condition_位于首尾
         return new EmptyAnimTask();
     }
 }
+
+public partial class Condition_当前顾客要求全满足
+{
+    public override bool Evaluate(object sender, List<object> param)
+    {
+        DealContext context = param?.FirstOrDefault() as DealContext;
+        if (context == null) {Debug.LogError("上下文为空");return false;}
+        ReviewResult reviewResult = context.Customer.Review(context);
+        // 检查要求是否全满足
+        return reviewResult.Records.All(x => x.IsMet);
+    }
+    public override IAnimTask GetAnimTask()
+    {
+        return new EmptyAnimTask();
+    }
+}
 }

@@ -12,7 +12,15 @@
     "name": "铁签",
     "description": "这是一根铁签",
     "strategy": 0,
-    "maxFoodCount": 6,
+    "maxFoodCount": 8,
+    "sprite": "BBQ_1"
+  },
+  {
+    "ID": "short",
+    "name": "短签",
+    "description": "这是一根短签",
+    "strategy": 0,
+    "maxFoodCount": 4,
     "sprite": "BBQ_1"
   }
 ]

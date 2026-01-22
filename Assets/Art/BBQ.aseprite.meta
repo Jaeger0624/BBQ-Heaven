@@ -71,7 +71,7 @@ ScriptedImporter:
     textureFormatSet: 0
     applyGammaDecoding: 0
   previousAsepriteImporterSettings:
-    fileImportMode: 1
+    fileImportMode: 0
     importHiddenLayers: 0
     layerImportMode: 1
     defaultPivotSpace: 0
@@ -84,7 +84,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   asepriteImporterSettings:
-    fileImportMode: 1
+    fileImportMode: 0
     importHiddenLayers: 0
     layerImportMode: 1
     defaultPivotSpace: 0
@@ -97,7 +97,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638978991251239522
+  platformSettingsDirtyTick: 639047160214201283
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -124,15 +124,15 @@ ScriptedImporter:
   animatedSpriteImportData:
   - name: BBQ
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
-    alignment: 0
-    border: {x: 2, y: 4, z: 2, w: 4}
+    pivot: {x: 1.590909, y: -0.045454547}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
     rect:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 6
+      width: 22
       height: 88
     spriteID: a8b8d8a48cd60e14b8d5553bd74b4530
     spriteBone: []
@@ -143,12 +143,54 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 4, y: 4}
-  spriteSheetImportData: []
+  spriteSheetImportData:
+  - name: BBQ_0
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 6
+      height: 88
+    spriteID: cd7031e75bf39c34f906f87fd5c73919
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 0, y: 0}
+  - name: BBQ_1
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 20
+      y: 4
+      width: 6
+      height: 88
+    spriteID: c456f45080cd14d489eb430e1d355304
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 0, y: 0}
   asepriteLayers:
   - layerIndex: 0
-    guid: -416750107
-    name: BBQ
-    layerFlags: 0
+    guid: -150339577
+    name: wood
+    layerFlags: 3
     layerType: 0
     blendMode: 0
     cells:
@@ -158,9 +200,27 @@ ScriptedImporter:
       cellRect:
         x: 13
         y: 4
-        width: 6
+        width: 22
         height: 88
-      spriteId: a8b8d8a48cd60e14b8d5553bd74b4530
+      spriteId: 5d237e84d74836348845212bccb1eac2
+    linkedCells: []
+    parentIndex: -1
+  - layerIndex: 0
+    guid: 1972874200
+    name: wood_1
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: BBQ
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 13
+        y: 4
+        width: 22
+        height: 88
+      spriteId: f7e9a22c20a40c446b5131824eba7574
     linkedCells: []
     parentIndex: -1
   platformSettings:

@@ -299,6 +299,20 @@ namespace cfg{
         public override IAnimTask GetAnimTask(){return new EmptyAnimTask();}
     }
 
+    public partial class GA_获得金币 : GameAction
+    {
+        public GA_获得金币(DynamicValue value)
+        {
+            this.Value = value;
+        }
+        public override GameAction Clone() => new GA_获得金币(Value);
+        public override void Execute(object sender, List<object> param){
+            int value = Value.GetValue(sender, param);
+            this.GetSystem<IEconomySystem>().AddCoin(value);
+        }
+        public override IAnimTask GetAnimTask(){return new EmptyAnimTask();}
+    }
+
 
     #region Buff相关
     public partial class GA_获得Buff : GameAction

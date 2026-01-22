@@ -35,6 +35,14 @@ public class BBQView : MonoBehaviour,IBeginDragHandler, IDragHandler, IEndDragHa
         else{
             rarityText.gameObject.SetActive(false);
             tasteText.gameObject.SetActive(false);
+
+            Sprite sprite = SettingManager.Instance.ArtSettings.StickSprites.GetSprite(bbq.stick.stickData.Sprite);
+            if (sprite == null){
+                Debug.LogError($"BBQView: 获取烤串图标失败: {bbq.stick.stickData.Sprite}");
+            }
+            else{
+                stickImage.sprite = sprite;
+            }
         }
     }
     public BBQ GetBBQ(){
@@ -46,6 +54,14 @@ public class BBQView : MonoBehaviour,IBeginDragHandler, IDragHandler, IEndDragHa
         tasteText.gameObject.SetActive(true);
         rarityText.text = bbq.totalRarity.Value.ToString();
         tasteText.text = bbq.totalTaste.Value.ToString();
+
+        Sprite sprite = SettingManager.Instance.ArtSettings.StickSprites.GetSprite(bbq.stick.stickData.Sprite);
+        if (sprite == null){
+            Debug.LogError($"BBQView: 获取烤串图标失败: {bbq.stick.stickData.Sprite}");
+        }
+        else{
+            stickImage.sprite = sprite;
+        }
 
         foreach (var foodInstance in bbq.foodInstances){
             IEntityView view = foodInstance.foodInstanceView;

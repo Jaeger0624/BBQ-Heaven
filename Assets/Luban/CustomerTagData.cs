@@ -23,6 +23,7 @@ public sealed partial class CustomerTagData : Luban.BeanBase
         { if(!_buf["ID"].IsString) { throw new SerializationException(); }  ID = _buf["ID"]; }
         { if(!_buf["name"].IsString) { throw new SerializationException(); }  Name = _buf["name"]; }
         { if(!_buf["description"].IsString) { throw new SerializationException(); }  Description = _buf["description"]; }
+        { if(!_buf["signedValue"].IsNumber) { throw new SerializationException(); }  SignedValue = _buf["signedValue"]; }
         { if(!_buf["type"].IsNumber) { throw new SerializationException(); }  Type = (CustomerTagType)_buf["type"].AsInt; }
         { var __json0 = _buf["tagCGAs"]; if(!__json0.IsArray) { throw new SerializationException(); } TagCGAs = new System.Collections.Generic.List<TagCGA>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { TagCGA __v0;  { if(!__e0.IsObject) { throw new SerializationException(); }  __v0 = global::cfg.TagCGA.DeserializeTagCGA(__e0);  }  TagCGAs.Add(__v0); }   }
     }
@@ -35,6 +36,7 @@ public sealed partial class CustomerTagData : Luban.BeanBase
     public readonly string ID;
     public readonly string Name;
     public readonly string Description;
+    public readonly int SignedValue;
     /// <summary>
     /// 顾客修改
     /// </summary>
@@ -55,6 +57,7 @@ public sealed partial class CustomerTagData : Luban.BeanBase
         + "ID:" + ID + ","
         + "name:" + Name + ","
         + "description:" + Description + ","
+        + "signedValue:" + SignedValue + ","
         + "type:" + Type + ","
         + "tagCGAs:" + Luban.StringUtil.CollectionToString(TagCGAs) + ","
         + "}";

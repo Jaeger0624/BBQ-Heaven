@@ -27,6 +27,7 @@ public abstract partial class Condition : Luban.BeanBase
             case "Condition_当前交易烧烤食材数量": return new Condition_当前交易烧烤食材数量(_buf);
             case "Condition_食材周围空位": return new Condition_食材周围空位(_buf);
             case "Condition_位于首尾": return new Condition_位于首尾(_buf);
+            case "Condition_当前顾客要求全满足": return new Condition_当前顾客要求全满足(_buf);
             default: throw new SerializationException();
         }
     }

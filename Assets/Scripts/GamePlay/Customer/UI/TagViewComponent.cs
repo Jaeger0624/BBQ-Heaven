@@ -19,9 +19,7 @@ public class TagViewComponent : MonoBehaviour, IController{
     public void Bind(TagCGA tagCGA){
         descriptionText.text = tagCGA.GADescription;
         conditionText.text = tagCGA.CDDescription;
-
         SetColor(tagCGA.Type);
-
         Show();
     }
     public void Show(){

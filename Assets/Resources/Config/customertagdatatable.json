@@ -3,6 +3,7 @@
     "ID": "1",
     "name": "小鸟胃",
     "description": "不能吃太多！",
+    "signedValue": 0,
     "type": 0,
     "tagCGAs": [
       {
@@ -67,6 +68,7 @@
     "ID": "2",
     "name": "大胃王",
     "description": "不能吃太少！",
+    "signedValue": 0,
     "type": 0,
     "tagCGAs": [
       {
@@ -128,10 +130,34 @@
     ]
   },
   {
-    "ID": "3",
-    "name": "捣蛋鬼",
-    "description": "其他人很讨厌这家伙！",
-    "type": 0,
-    "tagCGAs": []
+    "ID": "4",
+    "name": "慷慨",
+    "description": "如果你满足他的所有要求，他会给你金币",
+    "signedValue": 1,
+    "type": 1,
+    "tagCGAs": [
+      {
+        "GADescription": "<size=50>获得2金币</size>",
+        "CDDescription": "满足所有要求",
+        "type": 1,
+        "cga": {
+          "ID": "1",
+          "conditions": [
+            {
+              "$type": "Condition_当前顾客要求全满足"
+            }
+          ],
+          "actions": [
+            {
+              "$type": "GA_获得金币",
+              "value": {
+                "$type": "DV_值",
+                "number": 2
+              }
+            }
+          ]
+        }
+      }
+    ]
   }
 ]

@@ -1,7 +1,13 @@
 using UnityEngine;
 using DG.Tweening;
 using Sirenix.OdinInspector;
-
+using System;
+using System.Collections.Generic;
+[Serializable]
+public class ShakeInfo{
+    public float amplitude = 1f;
+    public Transform target;
+}
 public class CameraShaker : MonoBehaviour
 {
     public static CameraShaker Instance { get; private set; }
@@ -13,7 +19,7 @@ public class CameraShaker : MonoBehaviour
     [SerializeField] private float _defaultRandomness = 90f; // 随机性
 
     [Header("引用")]
-    public Transform TargetToShake; // 拖入你的 Main Camera，或者 Canvas 的 RectTransform
+    public List<ShakeInfo> TargetToShake; // 拖入你的 Main Camera，或者 Canvas 的 RectTransform
 
     private Tweener _shakeTweenerPos;
     private Tweener _shakeTweenerRot;
@@ -23,10 +29,10 @@ public class CameraShaker : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        if (TargetToShake == null) TargetToShake = transform;
+        if (TargetToShake == null) TargetToShake = new List<ShakeInfo>(){new ShakeInfo(){target = transform}};
         
-        _originalPos = TargetToShake.localPosition;
-        _originalRot = TargetToShake.localRotation;
+        _originalPos = TargetToShake[0].target.localPosition;
+        _originalRot = TargetToShake[0].target.localRotation;
     }
 
     void Update()
@@ -39,14 +45,21 @@ public class CameraShaker : MonoBehaviour
         }
     }
 
+    public void ShakeAll(float strength = -1f, float duration = -1f)
+    {
+        foreach (var shakeInfo in TargetToShake){
+            Shake(shakeInfo, strength, duration);
+        }
+    }
+
     /// <summary>
     /// 执行震动
     /// </summary>
     /// <param name="strength">强度：小震动0.5，大震动2-3</param>
     /// <param name="duration">时长：通常0.1-0.3秒</param>
-    public void Shake(float strength = -1f, float duration = -1f)
+    public void Shake(ShakeInfo shakeInfo, float strength = -1f, float duration = -1f)
     {
-        if (strength < 0) strength = _defaultStrength;
+        if (strength < 0) strength = shakeInfo.amplitude;
         if (duration < 0) duration = _defaultDuration;
 
         // 1. 杀掉旧动画，防止叠加导致飞出宇宙
@@ -54,28 +67,28 @@ public class CameraShaker : MonoBehaviour
         if (_shakeTweenerRot != null) _shakeTweenerRot.Kill(true);
 
         // 2. 归位 (双重保险)
-        TargetToShake.localPosition = _originalPos;
-        TargetToShake.localRotation = _originalRot;
+        shakeInfo.target.localPosition = _originalPos;
+        shakeInfo.target.localRotation = _originalRot;
 
         // 3. 位移震动 (只震动 X, Y 轴，锁定 Z 轴防止裁切问题)
         // Strength 参数传 Vector3 可以控制每个轴的力度
-        _shakeTweenerPos = TargetToShake.DOShakePosition(duration, new Vector3(strength, strength, 0), _defaultVibrato, _defaultRandomness, true)
+        _shakeTweenerPos = shakeInfo.target.DOShakePosition(duration, new Vector3(strength, strength, 0), _defaultVibrato, _defaultRandomness, true)
             .SetUpdate(true); // 忽略 TimeScale，游戏暂停也能震
 
         // 4. 旋转震动 (增加一点点旋转会让打击感翻倍，Z轴旋转)
         // 旋转强度通常要小一点，比如位移强度的 1/2
         float rotStrength = strength * 0.5f; 
-        _shakeTweenerRot = TargetToShake.DOShakeRotation(duration, new Vector3(0, 0, rotStrength), _defaultVibrato, _defaultRandomness, true)
+        _shakeTweenerRot = shakeInfo.target.DOShakeRotation(duration, new Vector3(0, 0, rotStrength), _defaultVibrato, _defaultRandomness, true)
             .SetUpdate(true);
 
-            Debug.Log("震动");
+            // Debug.Log("震动");
     }
     
     // 受到重击（预设的大震动）
     [Button("重击")]
-    public void HeavyShake() => Shake(3f, 0.4f);
+    public void HeavyShake() => ShakeAll(3f, 0.4f);
     
     // 轻微震动（UI交互反馈）
     [Button("轻微震动")]
-    public void LightShake() => Shake(0.5f, 0.1f);
+    public void LightShake() => ShakeAll(0.5f, 0.1f);
 }
