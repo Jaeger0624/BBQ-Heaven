@@ -16,7 +16,6 @@ public class DealResult{
     public readonly int taste;  // 美味度
     public readonly float rawPrice;  // 原始价格
     public int price;  // 价格
-    public readonly Dictionary<string, float> breakdown; // 可选：用于UI展示分项
 	public DealResult(BBQ bbq, Customer customer, float satisfaction, CustomerSatisfaction satisfactionSystem,Dictionary<string, float> otherMultipliers, int rarity, int taste, int price, float rawPrice){
 		this.bbq = bbq;
 		this.customer = customer;
@@ -27,7 +26,6 @@ public class DealResult{
 		this.taste = taste;
 		this.price = price;
 		this.rawPrice = rawPrice;
-		this.breakdown = new Dictionary<string, float>();
 	}
 
 	public string DealInfo(){

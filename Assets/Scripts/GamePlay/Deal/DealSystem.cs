@@ -15,9 +15,6 @@ using UniRx;
 public interface IDealSystem : ISystem{
     // 执行交易
 	void ExecuteDeal(BBQ bbq, Customer customer);
-	// 仅计算不落账（用于预览）
-	DealResult PreviewDeal(DealContext context);
-
 	void AddScoreMultiplier(string name, float multiplier);
 	void RemoveScoreMultiplier(string name);
 }
@@ -105,58 +102,24 @@ public class DealSystem : AbstractSystem, IDealSystem
 		}
 
 		// 进行满意度的处理计算
-		DealResult result = CalculateInternal(context, false);
+		DealResult result = GetResult(context);
 				
 		Debug.Log(result.DealInfo());
 
-		// 将得分转换
-		// 结算落账（现金）
-		this.GetSystem<IScoreSystem>().ChangeScore(result.price);
-
-		// 增加顾客的声望值
-		this.GetSystem<IPCSystem>().AddReputation(customer.reputation);
-
-		// 关闭满意度条
-		this.GetSystem<IAnimationSystem>().Append(new SequenceAnimTask(new List<IAnimTask>{
-			new DelayAnimTask(0.5f, true),
-			new ActionAnimTask(() => this.SendEvent(new HideStatisBarEvent())),
-		}));
-		
-		// 消耗资源：食材实例彻底移除
-		foreach (var food in bbq.foodInstances)
-		{
-			this.GetSystem<IFoodSystem>().RemoveFoodInstance(food.guid);
-		}
-
-		// 交易完成事件（把结果发出去，让DealController自动处理成动画）
-		this.SendEvent(new DealCompletedEvent(result));
-
-		// 顾客离开（服务完成）
-		this.GetSystem<ICustomerSystem>().LeaveCustomer(new List<Customer>{customer});
-
-		// // 耗时
-		// int timePoint = SettingManager.GetSetting<GameplaySettings>().soldBBQTime_默认;
-		// this.GetSystem<ITimeSystem>().PushTimePoint(timePoint);
-
-		// 归还烤串
-		Stick stick = bbq.stick;
-		stick.TryReturnStick();
+		AfterDeal(result, context);
     }
 
-	public DealResult PreviewDeal(DealContext context)
+	private DealResult GetResult(DealContext context)    
 	{
-		if (context == null) return null;
-		return CalculateInternal(context, true);
-	}
+		// 获得顾客评价
+		ReviewResult reviewResult = context.Customer.Review(context);
+		Debug.Log($"【DealSystem -- 顾客评价】\n{reviewResult.ReviewInfo()}");
 
-	private DealResult CalculateInternal(DealContext context, bool isPreview)    
-	{
-        
 		// 获取满意度（含顾客身上 Tag 的效果执行）
-		if (!isPreview) Debug.Log($"【DealSystem】开始计算满意度：顾客:{context.Customer.name}");
+		Debug.Log($"【DealSystem】开始计算满意度：顾客:{context.Customer.name}");
 
 		// 最终满意度总乘区
-		(float satisfaction, CustomerSatisfaction Satis) = GetSatisfaction(context, isPreview);
+		(float satisfaction, CustomerSatisfaction Satis) = GetSatisfaction(context);
 
 		// 定价：满意度乘区 × 珍稀度 × 美味度（耐心作为可选修正，不在基础公式中）
 		int rarity = context.BBQ.totalRarity.Value;
@@ -178,12 +141,9 @@ public class DealSystem : AbstractSystem, IDealSystem
 		foreach (var multiplier in otherMultipliers){
 			rawPrice *= multiplier.Value;
 		}
-
 		int roundedRawPrice = Mathf.RoundToInt(rawPrice);
-
 		// 计算价格
 		int money = earnMoneyStrategy.EarnMoney(roundedRawPrice);
-
 
 		DealResult result = new DealResult(context.BBQ, context.Customer, satisfaction, Satis, otherMultipliers, rarity, taste, money, rawPrice);
 
@@ -191,36 +151,23 @@ public class DealSystem : AbstractSystem, IDealSystem
 		return result;
 	}
 
-	public void SetEarnMoneyStrategy(IEarnMoneyStrategy earnMoneyStrategy){
-		this.earnMoneyStrategy = earnMoneyStrategy;
-	}
 
 
     //TODO: 此处安插公式计算顾客满意度
-    private (float satisfaction, CustomerSatisfaction satisfactionSystem) GetSatisfaction(
-        DealContext context,
-        bool isPreview)
-		{
+    private (float satisfaction, CustomerSatisfaction satisfactionSystem) GetSatisfaction(DealContext context)
+	{
 
-		List<ISatisCreater> satisCreaters = new List<ISatisCreater>(){};
-
-		// 1. 执行满意度（内会执行GA）
-		satisCreaters.ForEach(x => x.Calculate(context));
-
-		// 2. 添加动画任务（偏好）
-		satisCreaters.ForEach(x => this.GetSystem<IAnimationSystem>().Append(x.GetAnimTask()));
-		this.GetSystem<IAnimationSystem>().Play();
-
-		// 3. 显示标签视图
+		// 1. 检测是否有标签满足条件
 		bool hasAnyTagTriggered = context.Customer.customerTags.Any(tag => tag.Preview(context).Any(x => x));
 		if (hasAnyTagTriggered) this.GetSystem<IAnimationSystem>().Append(AnimCombine_顾客Tag.Anim_顾客Tag_显示标签视图());
 
+		// 2. 执行标签
 		context.Customer.customerTags.ForEach(tag => {
-			// 4. 内部顺序显示Tag结算与CGA效果
+			// 2.1 内部顺序显示Tag结算与CGA效果
 			tag.Execute(context);
 		});
 
-		// 5. 隐藏标签视图
+		// 2.2 隐藏标签视图
 		if (hasAnyTagTriggered){	
 			this.GetSystem<IAnimationSystem>().AddDelay(0.4f, true);
 			this.GetSystem<IAnimationSystem>().Append(AnimCombine_顾客Tag.Anim_顾客Tag_隐藏标签视图());
@@ -236,6 +183,38 @@ public class DealSystem : AbstractSystem, IDealSystem
 		this.GetSystem<ICustomerSystem>().Satisfaction = null;
         return (satisfaction, cur);
     }
+
+
+	private void AfterDeal(DealResult result, DealContext context){
+		// 将得分转换
+		// 结算落账（现金）
+		this.GetSystem<IScoreSystem>().ChangeScore(result.price);
+
+		// 增加顾客的声望值
+		this.GetSystem<IPCSystem>().AddReputation(context.Customer.reputation);
+
+		// 关闭满意度条
+		this.GetSystem<IAnimationSystem>().Append(new SequenceAnimTask(new List<IAnimTask>{
+			new DelayAnimTask(0.5f, true),
+			new ActionAnimTask(() => this.SendEvent(new HideStatisBarEvent())),
+		}));
+		
+		// 消耗资源：食材实例彻底移除
+		foreach (var food in context.BBQ.foodInstances)
+		{
+			this.GetSystem<IFoodSystem>().RemoveFoodInstance(food.guid);
+		}
+
+		// 交易完成事件（把结果发出去，让DealController自动处理成动画）
+		this.SendEvent(new DealCompletedEvent(result));
+
+		// 顾客离开（服务完成）
+		this.GetSystem<ICustomerSystem>().LeaveCustomer(new List<Customer>{context.Customer});
+
+		// 归还烤串
+		Stick stick = context.BBQ.stick;
+		stick.TryReturnStick();
+	}
 }
 
 #region 交易事件

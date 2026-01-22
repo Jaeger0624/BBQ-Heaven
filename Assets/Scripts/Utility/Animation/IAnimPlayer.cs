@@ -21,15 +21,10 @@ public partial class FoodInstance : IAnimPlayer, ICanSendEvent{
         }
         return animTask;
     }
-    public IArchitecture GetArchitecture()
-    {
-        return GameArchitecture.Interface;
-    }
 }
 
 public partial class PlayerCharacter : IAnimPlayer, ICanSendEvent{
     public IAnimTask GetAnimTask(string param){
-        IAnimTask animTask = null;
         switch (param){
             case "common":
                 // animTask = new ActionAnimTask(() => this.SendEvent(new PCExecuteActionEvent(this.ID)));
@@ -38,6 +33,5 @@ public partial class PlayerCharacter : IAnimPlayer, ICanSendEvent{
             default:
                 return new EmptyAnimTask();
         }
-        return animTask;
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using cfg;
 using QFramework;
@@ -13,6 +14,9 @@ public class OrderView : MonoBehaviour, ICanSendEvent
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI patienceText;
     public TextMeshProUGUI customerTagsText;
+    [SerializeField] private Transform requirementContainer;
+    [SerializeField] private RequirementView requirementViewPrefab;
+    private List<RequirementView> requirementViews = new List<RequirementView>();
     private bool isSelected = false;
     public void Bind(Customer customer){
         this.customer = customer;
@@ -23,6 +27,8 @@ public class OrderView : MonoBehaviour, ICanSendEvent
         }).AddTo(this);
 
         UpdateVisual();
+
+        GenerateRequirementViews();
     }
     public void UpdateVisual(){
         // 1. 设置名字
@@ -30,6 +36,18 @@ public class OrderView : MonoBehaviour, ICanSendEvent
 
         UpdatePatience();
         UpdateCustomerTags();
+    }
+
+    private void GenerateRequirementViews(){
+        requirementViews.Clear();
+        foreach (var requirement in customer.requirements.OrderBy(x => x.StarAmount)){
+            RequirementView requirementView = Instantiate(requirementViewPrefab, requirementContainer);
+            requirementView.Bind(requirement);
+            requirementViews.Add(requirementView);
+        }
+
+        // 刷新布局
+        LayoutRebuilder.ForceRebuildLayoutImmediate(requirementContainer.GetComponent<RectTransform>());
     }
 
 

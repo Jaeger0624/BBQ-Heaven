@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using cfg;
 using QFramework;
+using Sirenix.Serialization;
 using UniRx;
 using UnityEngine;
 
@@ -29,7 +30,7 @@ public class Customer : ICanGetSystem, ICanRegisterEvent, ICanSendEvent{
 
     // 【新增：顾客需求】
     // 顾客
-    public List<CustomerRequirement> requirements;
+    [OdinSerialize] public List<CustomerRequirement> requirements;
     public Customer(string name, int patienceMax, int reputation){
         this.guid = Guid.NewGuid().ToString();
         this.name = name;
@@ -45,6 +46,9 @@ public class Customer : ICanGetSystem, ICanRegisterEvent, ICanSendEvent{
         };
 
         this.customerLook = this.GetSystem<ICustomerSystem>().CustomerLookMaker.GetCustomerLook(name, new GetCustomerLookStrategy_纯随机());
+
+        // 生成要求
+        RefreshRequirements();
     }
 
     public void SetState(CustomerState state){
@@ -53,6 +57,41 @@ public class Customer : ICanGetSystem, ICanRegisterEvent, ICanSendEvent{
     public IArchitecture GetArchitecture()
     {
         return GameArchitecture.Interface;
+    }
+
+    public ReviewResult Review(DealContext context){
+        if (requirements == null || requirements.Count == 0){
+            Debug.LogError($"【Customer】{name} 要求为空，重新生成");
+            RefreshRequirements();
+        }
+
+        // 1. 初始化
+        ReviewResult reviewResult = new ReviewResult();
+        reviewResult.TotalStars = 0;
+        reviewResult.Records = new List<RequirementCheckRecord>();
+
+        // 2. 检查要求
+        foreach (var requirement in requirements){
+            bool isMet = requirement.IsMet(this, new List<object>{context});
+            reviewResult.Records.Add(new RequirementCheckRecord{
+                Description = requirement.Name,
+                StarValue = requirement.StarAmount,
+                IsMet = isMet
+            });
+            if (isMet){
+                reviewResult.TotalStars += requirement.StarAmount;
+            }
+        }
+
+        // 基础分? (可选，比如只要是个串就给1星)
+        // result.TotalStars += 1;
+
+        return reviewResult;
+    }
+
+    public void RefreshRequirements(){
+        RequirementBuilder builder = new RequirementBuilder();
+        requirements = builder.GenerateGroup(this);
     }
 }
 
