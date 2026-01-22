@@ -70,6 +70,7 @@ public class DisplayFoodView : MonoBehaviour, IDisplayItemView<FoodUIContext>{
         }
 
         if (enhancementParent!=null && enhancementViewPrefab!=null){
+            ClearEnhancementViews();
             GenerateEnhancementViews();
         }
     }
@@ -101,9 +102,9 @@ public class DisplayFoodView : MonoBehaviour, IDisplayItemView<FoodUIContext>{
             Debug.LogError("RuntimeFood is null");
             return;
         }
-        ClearEnhancementViews();
+        // ClearEnhancementViews();
         List<Image> enhancementViews = new List<Image>();
-        // 先创建等于最大槽数的强化槽
+
         for (int i = 0; i < _context.RuntimeFood.MaxSlots; i++){
             GameObject enhancementView = Instantiate(enhancementViewPrefab, enhancementParent);
             enhancementView.SetActive(true);
@@ -119,18 +120,25 @@ public class DisplayFoodView : MonoBehaviour, IDisplayItemView<FoodUIContext>{
         // 强制刷新布局
         LayoutRebuilder.ForceRebuildLayoutImmediate(enhancementParent as RectTransform);
 
+        int amount = _context.RuntimeFood.Enhancements.Count;
         // 绑定强化槽
-        for (int i = 0; i < _context.RuntimeFood.Enhancements.Count; i++){
-            enhancementViews[i].sprite = SettingManager.Instance.ArtSettings.EnhancementSprites.GetSprite($"食材强化图标_{_context.RuntimeFood.Enhancements[i].SpriteName}");
+        for (int i = 0; i < amount; i++){
+            if (i >= amount){
+                Debug.LogError($"强化槽数量不足，需要 {amount} 个，只有 {enhancementViews.Count} 个");
+                break;
+            }
+            enhancementViews[i].sprite = SettingManager.Instance.ArtSettings.EnhancementSprites.GetSprite($"食材强化图标_{_context.RuntimeFood.Enhancements[i].SpriteName}");   
+
+        }
+
+        for (int i = 0; i < enhancementViews.Count; i++){
+            enhancementViews[i].enabled = true;
         }
     }
 
     private void ClearEnhancementViews(){
         if (enhancementParent == null || enhancementViewPrefab == null) return;
         foreach (Transform child in enhancementParent){
-            if (child.gameObject == enhancementViewPrefab){
-                continue;
-            }
             Destroy(child.gameObject);
         }
         LayoutRebuilder.ForceRebuildLayoutImmediate(enhancementParent as RectTransform);

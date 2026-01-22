@@ -28,7 +28,9 @@ public class CameraShaker : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance != null) Destroy(this.gameObject);
         Instance = this;
+        DontDestroyOnLoad(this.gameObject);
         if (TargetToShake == null) TargetToShake = new List<ShakeInfo>(){new ShakeInfo(){target = transform}};
         
         _originalPos = TargetToShake[0].target.localPosition;

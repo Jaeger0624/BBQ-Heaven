@@ -34,6 +34,11 @@ public class ButtonUI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
     {
         if (!isInteractable) return;
         OnClick?.Invoke();
+
+        transform.DOScale(1f, 0.12f)
+            .SetEase(Ease.OutSine)
+            .SetUpdate(true)
+            .SetLink(this.gameObject);
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -94,12 +99,12 @@ public class ButtonUI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
     }
 
 
-    void OnDisable()
-    {
-        OnExit?.Invoke();
-        transform.DOScale(1f, 0.12f)
-            .SetEase(Ease.OutSine)
-            .SetUpdate(true)
-            .SetLink(this.gameObject);
-    }
+    // void OnDisable()
+    // {
+    //     OnExit?.Invoke();
+    //     transform.DOScale(1f, 0.12f)
+    //         .SetEase(Ease.OutSine)
+    //         .SetUpdate(true)
+    //         .SetLink(this.gameObject);
+    // }
 }
