@@ -18,6 +18,7 @@ public interface IFoodSystem : ISystem, ISavable{
     // 获取食材仓库
     Dictionary<string, FoodCard> FoodRepositorys();
     void AddFoodToRepository(List<FoodPack> foodPacks, bool isTemporary = false);
+    void AddFoodToRepository(List<FoodCard> foodCards, bool isTemporary = false);
     void DeleteFoodFromRepository(FoodCard food);
     // 创建食材实例
     FoodInstance CreateFoodInstance(Vector2Int position, FoodCard food);
@@ -230,18 +231,23 @@ public partial class FoodSystem : AbstractSystem, IFoodSystem
                 if (foodData == null) {Debug.LogError($"【FoodSystem】添加食材到仓库失败: {foodPack.foodId} 不存在"); continue;}
                 FoodCard food = new FoodCard(foodData, isTemporary);
                 foodRepositorys.Add(food.guid, food);
+
+                foreach (var enhancement in foodPack.enhancements){
+                    food.AddEnhancement(enhancement);
+                }
             }
         }
         // 发送更新事件，通知视图更新
         this.SendEvent(new UpdateFoodRepositoryAmountEvent(GetFoodRepositoryAmounts()));
     }
-    private void ExcecuteFoodInstancesOnBoard(List<FoodInstance> foodInstances){
-        foreach (var foodInstance in foodInstances){
-            if (!foodInstance.food.foodGAs.ContainsKey(FoodGAType.放上棋盘时)) continue;
-            foreach (var cga in foodInstance.food.foodGAs[FoodGAType.放上棋盘时]){
-                this.GetSystem<IGASystem>().ApplyCGA(foodInstance, cga, null);
-            }
+    public void AddFoodToRepository(List<FoodCard> foodCards, bool isTemporary = false)
+    {
+        foreach (var foodCard in foodCards){
+            if (foodCard == null) {Debug.LogError("AddFoodToRepository 的 foodCard 为空"); continue;}
+
+            foodRepositorys.Add(foodCard.guid, foodCard);
         }
+        this.SendEvent(new UpdateFoodRepositoryAmountEvent(GetFoodRepositoryAmounts()));
     }
     private void ClearAllFoodFromBoard(){
         List<string> foodInstanceGuids = new List<string>();

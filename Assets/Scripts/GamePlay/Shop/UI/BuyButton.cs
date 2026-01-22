@@ -4,7 +4,7 @@ using TMPro;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
-
+//TODO: 删除该类，已弃用
 /// <summary>
 /// 挂载在购买按钮上
 /// 负责处理购买按钮的逻辑

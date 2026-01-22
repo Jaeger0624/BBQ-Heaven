@@ -91,5 +91,11 @@ MonoBehaviour:
     - Button Icon
     enabled: 1
   - builtinIcons: []
+    customIcons:
+    - VerticalLayoutGroup Icon
+    - HorizontalLayoutGroup Icon
+    - LayoutElement Icon
+    enabled: 1
+  - builtinIcons: []
     customIcons: []
     enabled: 1

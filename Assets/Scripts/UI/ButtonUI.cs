@@ -92,4 +92,14 @@ public class ButtonUI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
     {
         isInteractable = interactable;
     }
+
+
+    void OnDisable()
+    {
+        OnExit?.Invoke();
+        transform.DOScale(1f, 0.12f)
+            .SetEase(Ease.OutSine)
+            .SetUpdate(true)
+            .SetLink(this.gameObject);
+    }
 }

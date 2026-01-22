@@ -60,7 +60,7 @@ public class SelectionRequest_随机食材 : AbstractSelectionRequest{
         Action<string> onSelect = (foodId) =>
         {
             Debug.Log("【SelectionRequest】选择食材：" + foodId);
-            this.GetSystem<IFoodSystem>().AddFoodToRepository(new List<FoodPack>(){new FoodPack(foodId, 1)});
+            this.GetSystem<IFoodSystem>().AddFoodToRepository(new List<FoodPack>(){new FoodPack(foodId, 1, new List<FoodCardEnhancement>())});
         };
         if (OnSelect != null){
             onSelect = OnSelect;

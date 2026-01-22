@@ -40,3 +40,29 @@ public class MultiDeleteFoodStrategy : ItemInteractStrategyBase<FoodUIContext, D
         itemView.SetSelectedState(isSelected);
     }
 }
+
+public class BuyFoodStrategy : ItemInteractStrategyBase<FoodUIContext, DisplayFoodView>{
+    public override void OnBind(DisplayFoodView itemView, FoodUIContext data){
+    }
+    public override void OnClick(FoodUIContext data, DisplayFoodView itemView){
+
+
+        if (data == null) {Debug.LogError("BuyFoodStrategy 的 data 为空"); return;}
+        if (data.RuntimeFood == null) {Debug.LogError("BuyFoodStrategy 的 data.RuntimeFood 为空"); return;}
+
+        // 若价格不够
+        if (this.GetSystem<IEconomySystem>().coin.Value < data.Price){
+            Debug.Log("金币不足，无法购买");
+            return;
+        }
+
+        // 1. 获得食材到仓库
+        this.GetSystem<IFoodSystem>().AddFoodToRepository(new List<FoodCard>(){data.RuntimeFood});
+
+        // 2. 扣除金币
+        this.GetSystem<IEconomySystem>().CostCoin(data.Price);
+
+        // 3. 隐藏自身
+        itemView.gameObject.SetActive(false);
+    }
+}

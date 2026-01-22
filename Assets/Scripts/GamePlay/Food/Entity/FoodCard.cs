@@ -122,8 +122,10 @@ public class FoodCard : ICanGetSystem{
 public class FoodPack{
     public string foodId;
     public int quantity;
-    public FoodPack(string foodId, int quantity){
+    public List<FoodCardEnhancement> enhancements;
+    public FoodPack(string foodId, int quantity, List<FoodCardEnhancement> enhancements){
         this.foodId = foodId;
         this.quantity = quantity;
+        this.enhancements = enhancements;
     }
 }

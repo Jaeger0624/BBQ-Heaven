@@ -19,6 +19,7 @@ public class DisplayFoodView : MonoBehaviour, IDisplayItemView<FoodUIContext>{
     [SerializeField] private TextMeshProUGUI foodCostText;
     [SerializeField] private TextMeshProUGUI foodRarityText;
     [SerializeField] private TextMeshProUGUI foodTasteText;
+    [SerializeField] private TextMeshProUGUI foodPriceText;
     [LabelText("强化父物体")]
     [SerializeField] private Transform enhancementParent;
     [LabelText("强化预制体")]
@@ -59,6 +60,14 @@ public class DisplayFoodView : MonoBehaviour, IDisplayItemView<FoodUIContext>{
                     break;
             }
         }
+        if (foodPriceText!=null){
+            if (context.Price != -1){
+                foodPriceText.text = $"{context.Price}<color=yellow>Q</color>";
+            }
+            else{
+                foodPriceText.text = "";
+            }
+        }
 
         if (enhancementParent!=null && enhancementViewPrefab!=null){
             GenerateEnhancementViews();
@@ -85,11 +94,14 @@ public class DisplayFoodView : MonoBehaviour, IDisplayItemView<FoodUIContext>{
         DOTween.Kill(this);
     }
 
+
+    #region 强化槽
     private void GenerateEnhancementViews(){
         if (_context.RuntimeFood == null){
             Debug.LogError("RuntimeFood is null");
             return;
         }
+        ClearEnhancementViews();
         List<Image> enhancementViews = new List<Image>();
         // 先创建等于最大槽数的强化槽
         for (int i = 0; i < _context.RuntimeFood.MaxSlots; i++){
@@ -103,7 +115,7 @@ public class DisplayFoodView : MonoBehaviour, IDisplayItemView<FoodUIContext>{
             }
             enhancementViews.Add(enhancementImage);
         }
-        Debug.Log($"创建了 {enhancementViews.Count} 个强化槽");
+        // Debug.Log($"创建了 {enhancementViews.Count} 个强化槽");
         // 强制刷新布局
         LayoutRebuilder.ForceRebuildLayoutImmediate(enhancementParent as RectTransform);
 
@@ -112,4 +124,16 @@ public class DisplayFoodView : MonoBehaviour, IDisplayItemView<FoodUIContext>{
             enhancementViews[i].sprite = SettingManager.Instance.ArtSettings.EnhancementSprites.GetSprite($"食材强化图标_{_context.RuntimeFood.Enhancements[i].SpriteName}");
         }
     }
+
+    private void ClearEnhancementViews(){
+        if (enhancementParent == null || enhancementViewPrefab == null) return;
+        foreach (Transform child in enhancementParent){
+            if (child.gameObject == enhancementViewPrefab){
+                continue;
+            }
+            Destroy(child.gameObject);
+        }
+        LayoutRebuilder.ForceRebuildLayoutImmediate(enhancementParent as RectTransform);
+    }
+    #endregion
 }

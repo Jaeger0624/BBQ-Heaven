@@ -35,6 +35,7 @@ public class FoodDisplayContainer : MonoBehaviour, IController, IDisplayContaine
     [SerializeField] private Vector2 cellSize = new Vector2(100, 100);
     [ShowIf("controlGridLayout")]
     [SerializeField] private Vector2 cellSpacing = new Vector2(10, 10);
+    private IDisplayTask<FoodUIContext, DisplayFoodView> _displayTask;
     void Start()
     {
         Init();
@@ -54,8 +55,17 @@ public class FoodDisplayContainer : MonoBehaviour, IController, IDisplayContaine
     }
     public void RefreshUI(List<FoodUIContext> foodInstances,
     IItemInteractStrategy<FoodUIContext, DisplayFoodView> itemInteractStrategy){
-        
         _generator.Generate(foodInstances, itemInteractStrategy);
+    }
+    public void RefreshUI(){
+        if (_displayTask == null) {Debug.LogError("DisplayTask 是空的，但尝试无参数刷新UI"); return;}
+        List<FoodUIContext> foodUIContexts = _displayTask.GetList().ToList();
+        RefreshUI(foodUIContexts, _displayTask.GetStrategy());
+    }
+    public void SetDisplayTask(IDisplayTask<FoodUIContext, DisplayFoodView> displayTask){
+        _displayTask = displayTask;
     }
     public GameObject GetGameObject() => gameObject;
 }
+
+

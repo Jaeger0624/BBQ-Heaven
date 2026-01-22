@@ -54,7 +54,11 @@ public class GameState_开始新游戏 : AbstractGameState
 
         // 随机选取4个食材包，并添加到食材仓库
         Rng foodRng = this.GetSystem<IRngSystem>().GetSubRng<IFoodSystem>();
-        List<FoodPack> foodPacks = foodRng.PickMany<FoodPack>(this.GetSystem<IDataSystem>().GetAllFoodData().Select(foodData => new FoodPack(foodData.ID, 10)).ToList(), 4);
+        List<FoodCardEnhancement> enhancements = new List<FoodCardEnhancement>
+        {
+            new Enhancement_双重()
+        };
+        List<FoodPack> foodPacks = foodRng.PickMany<FoodPack>(this.GetSystem<IDataSystem>().GetAllFoodData().Select(foodData => new FoodPack(foodData.ID, 10, enhancements)).ToList(), 4);
         this.GetSystem<IFoodSystem>().AddFoodToRepository(foodPacks);
 
         Debug.Log("【GameSystem】新游戏初始化完成");

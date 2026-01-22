@@ -58,5 +58,15 @@ public class UIPanel : MonoBehaviour, IController, IUIPanel{
         canvasGroup.interactable = false;
         canvasGroup.DOFade(0, 0.3f).SetEase(Ease.OutSine).SetUpdate(true);
     }
+    public void ForceHide(){
+        if(!isVisible) return;
+        isVisible = false;
+        onHide.Invoke();
+
+        if (canvasGroup == null) return;
+        canvasGroup.blocksRaycasts = false;
+        canvasGroup.interactable = false;
+        canvasGroup.alpha = 0;
+    }
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
 }

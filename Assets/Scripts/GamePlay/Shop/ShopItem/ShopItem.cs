@@ -57,7 +57,7 @@ public class FoodShopItem : AbstractShopItem{
         this.GetSystem<IEconomySystem>().CostCoin(price);
 
         // 2. 添加食材
-        this.GetSystem<IFoodSystem>().AddFoodToRepository(new List<FoodPack>(){new FoodPack(id, amount)});
+        this.GetSystem<IFoodSystem>().AddFoodToRepository(new List<FoodPack>(){new FoodPack(id, amount, new List<FoodCardEnhancement>())});
     }
 }
 public class MascotShopItem : AbstractShopItem{
