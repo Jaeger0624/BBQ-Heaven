@@ -54,6 +54,10 @@ public class CustomerController : MonoBehaviour, IController, ICanSendEvent
         }
     }
     private void OnRemoveCustomer(RemoveCustomerEvent e){
+        if (e.customers.Count == 0){
+            return;
+        }
+
         // 如果当前有顾客，并且即将离开的顾客在移除列表中，则选择下一个正在点餐的顾客
         if (customerView.currentCustomer != null && e.customers.Contains(customerView.currentCustomer)){
             Customer cus = customerSystem.OrderingCustomers.FirstOrDefault();
@@ -64,9 +68,6 @@ public class CustomerController : MonoBehaviour, IController, ICanSendEvent
                 ClearView();
             }
         }
-        // 播放移除动画
-
-
         // 尝试选择当前第一位顾客作为当前顾客
         Customer customer = customerSystem.OrderingCustomers.FirstOrDefault();
         if (customer != null){

@@ -14,6 +14,8 @@ public class GuidePanel : MonoBehaviour, IController // 继承你自己的基类
     // 单例方便调用，或者通过架构获取
     public static GuidePanel Instance { get; private set; }
 
+    [SerializeField] private float margin = 10f;
+
     private void Awake()
     {
         Instance = this;
@@ -38,8 +40,10 @@ public class GuidePanel : MonoBehaviour, IController // 继承你自己的基类
             out Vector2 localPos
         );
 
-        HollowRect.anchoredPosition = localPos;
-        HollowRect.sizeDelta = rectTransform.sizeDelta;
+        HollowRect.position = rectTransform.position;
+        // 切换pivot为中心
+        HollowRect.pivot = rectTransform.pivot;
+        HollowRect.sizeDelta = rectTransform.sizeDelta + new Vector2(margin * 2, margin * 2);
 
         // 2. 设置手指位置
         if(HandIcon != null)

@@ -194,6 +194,7 @@ public class CustomerSystem_新 : AbstractCustomerSystem
             customer.SetState(CustomerState.Leaved);
         });
 
+        
         // 4. 发送移除顾客事件，播放离开动画等
         this.SendEvent<RemoveCustomerEvent>(new RemoveCustomerEvent(customers));
 

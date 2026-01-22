@@ -7,7 +7,7 @@ using UnityEngine;
 public class Requirement_食材少于 : CustomerRequirement{
     public override string Name => "食材数量";
     public override RequirementConflictGroup ConflictGroup => RequirementConflictGroup.食材数量;
-    private int targetAmount;
+    public int targetAmount;
     protected override bool InternalCheckMet(Customer customer, List<object> context){
         DealContext dealContext = context?.FirstOrDefault() as DealContext;
         if (dealContext == null){ Debug.LogError("上下文为空"); return false;}

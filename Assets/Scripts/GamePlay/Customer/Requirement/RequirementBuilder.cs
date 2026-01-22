@@ -6,21 +6,25 @@ public class RequirementBuilder : ICanGetSystem{
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
 
     // 星数范围配置
-    private float minStarAmount = 11;
-    private float maxStarAmount = 13;
+    private float minStarAmount = 6;
+    private float maxStarAmount = 9;
     
     // 要求数量范围配置
-    private int minRequirementCount = 3;
-    private int maxRequirementCount = 4;
+    private int minRequirementCount = 2;
+    private int maxRequirementCount = 3;
     
     // 最大重试次数，避免死循环
     private int maxRetryCount = 100;
     private List<CustomerRequirement> requirementsTemplates = new List<CustomerRequirement>(){
         new Requirement_是否包含食材种类(),
+
         new Requirement_食材少于(),
         new Requirement_食材多于(),
         new Requirement_食材范围(),
+        
         new Requirement_具体食材站位(),
+
+        new Requirement_食材连续(),
     };
 
     /// <summary>

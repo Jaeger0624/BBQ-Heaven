@@ -21600,6 +21600,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 862625015}
+  - component: {fileID: 862625016}
   m_Layer: 0
   m_Name: CameraShaker
   m_TagString: Untagged
@@ -21622,6 +21623,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &862625016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 862625014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5148f0154bb8b6248905ab691cb7fe7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _defaultDuration: 0.2
+  _defaultStrength: 1
+  _defaultVibrato: 20
+  _defaultRandomness: 90
+  TargetToShake: {fileID: 1173862509}
 --- !u!1 &863695869
 GameObject:
   m_ObjectHideFlags: 0
@@ -21823,7 +21841,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 125
+    m_Left: 25
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
@@ -32384,6 +32402,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1309015940}
   - component: {fileID: 1309015941}
+  - component: {fileID: 1309015942}
   m_Layer: 0
   m_Name: "\u987E\u5BA2\u8BA2\u5355"
   m_TagString: Untagged
@@ -32410,7 +32429,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: -31, y: -25}
-  m_SizeDelta: {x: 278.37, y: 565}
+  m_SizeDelta: {x: 474.23, y: 572.36}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1309015941
 MonoBehaviour:
@@ -32426,6 +32445,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   orderContainer: {fileID: 877406411}
   orderViewPrefab: {fileID: 2984691981034894960, guid: 979c174cd8a167946bb30579182d5503, type: 3}
+--- !u!114 &1309015942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1309015939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69e99de2adbd9f74785b4aa7cf0d1bbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TargetID: "\u987E\u5BA2\u8BA2\u5355"
 --- !u!1 &1313225326
 GameObject:
   m_ObjectHideFlags: 0
@@ -42456,8 +42488,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 0e2f18af3c5c5f944acd1d72028d99e8, type: 3}
-  m_Type: 0
+  m_Sprite: {fileID: 326382781, guid: 63a7461e27039074e9ee2ad6fe530a16, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -42465,7 +42497,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 2
 --- !u!222 &1819194307
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -43066,6 +43098,7 @@ MonoBehaviour:
   HollowRect: {fileID: 105373568}
   HandIcon: {fileID: 1770119423}
   DialogueText: {fileID: 0}
+  margin: 10
 --- !u!1 &1861138751
 GameObject:
   m_ObjectHideFlags: 0

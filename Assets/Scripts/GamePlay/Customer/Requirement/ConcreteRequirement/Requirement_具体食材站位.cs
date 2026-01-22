@@ -125,4 +125,4 @@ public class Requirement_具体食材站位 : CustomerRequirement{
             return foodInstance.food.foodData.ID == Context.selectedFoodCard.foodData.ID;
         }
     }
-}   
+}
