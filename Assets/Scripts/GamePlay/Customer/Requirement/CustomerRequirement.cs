@@ -106,7 +106,7 @@ public class Requirement_是否包含食材种类 : CustomerRequirement{
         ContainType = rng.PickOne(Enum.GetValues(typeof(ContainType)).Cast<ContainType>().ToList());
         // 1~3个
         int typeAmount = rng.NextInt(1, 4);
-        foodTypes = rng.PickMany(Enum.GetValues(typeof(FoodType)).Cast<FoodType>().Where(x => x != FoodType.无).ToList(), typeAmount);
+        foodTypes = rng.PickMany(Enum.GetValues(typeof(FoodType)).Cast<FoodType>().Where(x => x != FoodType.无 && x != FoodType.肉类).ToList(), typeAmount);
 
         // 组合得到最终星数
         switch (ContainType){

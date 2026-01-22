@@ -92,6 +92,8 @@ public class GameArchitecture : Architecture<GameArchitecture>
         sb.Append("\nCollectionSystem - 图鉴系统");
         Interface.RegisterSystem<IBuffSystem>(new BuffSystem());  // Buff系统
         sb.Append("\nBuffSystem - Buff系统");
+        Interface.RegisterSystem<IGuideSystem>(new GuideSystem());  // 引导系统
+        sb.Append("\nGuideSystem - 引导系统");
         // Debug.Log(sb.ToString());
     }
 

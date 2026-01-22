@@ -42,6 +42,12 @@ public class TimeController : SerializedMonoBehaviour, IController
         currentTotalTimePoint = totalTimePoint;
     }
     private void UpdateTimeTextPreview(TimePreviewEvent evt){
+        if (evt.currentTime == null || evt.targetTime == null){
+            return;
+        }
+        if (this.GetSystem<ITimeSystem>().CurrentTime == null || this.GetSystem<ITimeSystem>().TargetTime == null){
+            return;
+        }
         int originTotalTimePoint = this.GetSystem<ITimeSystem>().CurrentTime.GetOriginalTimeInfo().GetTotalTimePoint();
         int totalTimePoint = evt.currentTime.GetTotalTimePoint() - originTotalTimePoint;
         int targetTimePoint = this.GetSystem<ITimeSystem>().TargetTime.GetTotalTimePoint() - originTotalTimePoint;
@@ -83,6 +89,9 @@ public class TimeController : SerializedMonoBehaviour, IController
         sliderUI.SetPreview(0f);
     }
     private float CalculateProcess(TimeInfo currentTime, TimeInfo targetTime){
+        if (currentTime == null || targetTime == null){
+            return 0f;
+        }
         int originCurrentTimePoint = currentTime.GetOriginalTimeInfo().GetTotalTimePoint();
         int currentTimePoint = currentTime.GetTotalTimePoint();
         int targetTimePoint = targetTime.GetOriginalTimeInfo().GetTotalTimePoint();
