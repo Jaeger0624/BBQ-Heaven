@@ -13,12 +13,14 @@ public class Stick : ICanGetSystem{
     public IStickStrategy strategy;
     public int maxFoodCount = 0;  // 最大食材数
     public int extraTimeCost = 0;
+    public int originalTimeCost = 0;
     public Stick(StickData stickData){
         this.guid = Guid.NewGuid().ToString();
         this.stickData = stickData;
         this.strategy = GetStrategy(stickData.Strategy);
         this.extraTimeCost = 0;
         this.maxFoodCount = stickData.MaxFoodCount;
+        this.originalTimeCost = stickData.OriginCost;
     }
 
     public static IStickStrategy GetStrategy(StickStrategy stickStrategy){

@@ -6,6 +6,7 @@ public abstract class FoodCardEnhancement
 {
     [OdinSerialize]
     public abstract string Name { get; }
+    public abstract string SpriteName { get; }
     
     [OdinSerialize]
     public abstract string Description { get; }
@@ -18,21 +19,36 @@ public abstract class FoodCardEnhancement
 }
 
 [Serializable]
-public class DoubleSpawnEnhancement : FoodCardEnhancement
+public class Enhancement_双重 : FoodCardEnhancement
 {
     public override string Name => "双重";
-    public override string Description => "生成时额外创建一个实例。";
+    public override string SpriteName => "双倍";
+    public override string Description => "额外放置一个食材";
     public override int ModifySpawnCount(int currentCount) => currentCount + 1;
 }
 
 [Serializable]
-public class PreservedEnhancement : FoodCardEnhancement
+public class Enhancement_多重 : FoodCardEnhancement
 {
-    public override string Name => "陈酿";
-    public override string Description => "美味度+2，但抽取后的放置冷却时间+1。";
+    public override string Name => "多重";
+    public override string SpriteName => "三倍";
+    public override string Description => "额外放置两个食材，食材时间成本+2。";
+    public override int ModifySpawnCount(int currentCount) => currentCount + 2;
     public override void OnInstanceCreated(FoodInstance instance) 
     {
-        instance.taste += 2;
-        instance.timeCost += 1;
+        instance.timeCost += 2;
+    }
+}
+
+public class Enhancement_省时 : FoodCardEnhancement
+{
+    public override string Name => "省时";
+    public override string SpriteName => "省时";
+    public override string Description => "食材时间成本-1。";
+    public override int ModifySpawnCount(int currentCount) => currentCount;
+    public override void OnInstanceCreated(FoodInstance instance) 
+    {
+        if (instance.timeCost <= 0) return;
+        instance.timeCost -= 1;
     }
 }

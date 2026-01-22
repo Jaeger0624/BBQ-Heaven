@@ -73,8 +73,8 @@
     "tagCGAs": [
       {
         "GADescription": "<size=50>1.5x</size>",
-        "CDDescription": "食材少于4个",
-        "type": 2,
+        "CDDescription": "食材多于7个",
+        "type": 1,
         "cga": {
           "ID": "1",
           "conditions": [
@@ -101,8 +101,8 @@
       },
       {
         "GADescription": "<size=50>0.8x</size>",
-        "CDDescription": "食材多于7个",
-        "type": 1,
+        "CDDescription": "食材少于4个",
+        "type": 2,
         "cga": {
           "ID": "2",
           "conditions": [

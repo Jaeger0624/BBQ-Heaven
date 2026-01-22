@@ -1,15 +1,32 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using cfg;
 using DG.Tweening;
 using QFramework;
+using Sirenix.OdinInspector;
 using UniRx;
 using UnityEngine;
+public class TagViewResult{
+    public List<TagViewInfo> tagViewInfos;
+    public TagViewResult(List<TagViewInfo> tagViewInfos){
+        this.tagViewInfos = tagViewInfos;
+    }
+}
+public class TagViewInfo{
+    public int index;
+    public string description;
+    public string effectDescription;
+    // 中立、正面、负面
+    public CustomerTagType type;
+    // 是否触发
+    public bool isTriggered;
+}
 
 public class TagView : MonoBehaviour, IController, ICanSendEvent{
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
     private CustomerTag currentCustomerTag;
-    private List<bool> currentResults;
+    private TagViewResult currentTagViewResult;
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private GameObject tagViewComponentPrefab;
     [SerializeField] private Transform componentParent;
@@ -31,12 +48,22 @@ public class TagView : MonoBehaviour, IController, ICanSendEvent{
         this.UnRegisterEvent<HideTagViewEvent>(OnHideTagViewEvent);
     }
     private void OnTagExecuteEvent(TagExecuteEvent e){
-        Bind(e.customerTag, e.results);
+        List<TagViewInfo> tagViewInfos = new List<TagViewInfo>();
+        for (int i = 0; i < e.results.Count; i++){
+            tagViewInfos.Add(new TagViewInfo{
+                index = i,
+                description = e.customerTag.tagCGAs[i].GADescription,
+                effectDescription = e.customerTag.tagCGAs[i].CDDescription,
+                type = e.customerTag.tagCGAs[i].Type,
+                isTriggered = e.results[i],
+            });
+        }
+        Bind(e.customerTag, new TagViewResult(tagViewInfos));
     }
 
-    public void Bind(CustomerTag customerTag, List<bool> results){
+    public void Bind(CustomerTag customerTag, TagViewResult tagViewResult){
         this.currentCustomerTag = customerTag;
-        this.currentResults = results;
+        this.currentTagViewResult = tagViewResult;
         UpdateVisual();
     }
 
@@ -97,7 +124,7 @@ public class TagView : MonoBehaviour, IController, ICanSendEvent{
 
     // 同步动画
     private void TriggerAnim(){
-        int index = currentResults.FindIndex(x => x == true);
+        int index = currentTagViewResult.tagViewInfos.FindIndex(x => x.isTriggered);
         if (index == -1){
             return;
         }
@@ -146,11 +173,34 @@ public class TagView : MonoBehaviour, IController, ICanSendEvent{
         }
         components.Clear();
     }
+    [Button("测试")]
     private void Test()
     {
         CustomerTagData customerTagData = this.GetSystem<IDataSystem>().GetCustomerTagData("1");
         CustomerTag customerTag = new CustomerTag(customerTagData);
-        Bind(customerTag, new List<bool>{true, false, false});
+        Bind(customerTag, new TagViewResult(new List<TagViewInfo>{
+            new TagViewInfo{
+                index = 0,
+                description = "测试",
+                effectDescription = "测试",
+                type = CustomerTagType.正面,
+                isTriggered = true,
+            },
+            new TagViewInfo{
+                index = 1,
+                description = "测试",
+                effectDescription = "测试",
+                type = CustomerTagType.负面,
+                isTriggered = false,
+            },
+            new TagViewInfo{
+                index = 2,
+                description = "测试",
+                effectDescription = "测试",
+                type = CustomerTagType.中立,
+                isTriggered = false,
+            },
+        }));
     }
     
 }

@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8a35ec14d61b5ef4782c9a01de586059, type: 3}
-  m_Name: "\u4E32\u7B7ESprites"
+  m_Name: "\u5F3A\u5316Sprites"
   m_EditorClassIdentifier: 
   sprites:
-  - {fileID: 203640107267755675, guid: 171daeee5f5241a428302b4bb18f394c, type: 3}
-  - {fileID: 8180493243458909906, guid: 171daeee5f5241a428302b4bb18f394c, type: 3}
-  - {fileID: -4429104061523172440, guid: 171daeee5f5241a428302b4bb18f394c, type: 3}
+  - {fileID: -2528839202701093746, guid: eb190c89bcb7c9b4b8148ae5e0f35ae9, type: 3}
+  - {fileID: 8497560245848688076, guid: eb190c89bcb7c9b4b8148ae5e0f35ae9, type: 3}
+  - {fileID: -6022890930985693257, guid: eb190c89bcb7c9b4b8148ae5e0f35ae9, type: 3}
+  - {fileID: -8604031141964964553, guid: eb190c89bcb7c9b4b8148ae5e0f35ae9, type: 3}

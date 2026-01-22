@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using TMPro;
 using cfg;
 using DG.Tweening;
+using Sirenix.OdinInspector;
+using System.Collections.Generic;
 
 public class DisplayFoodView : MonoBehaviour, IDisplayItemView<FoodUIContext>{
     private FoodUIContext _context;
@@ -17,6 +19,10 @@ public class DisplayFoodView : MonoBehaviour, IDisplayItemView<FoodUIContext>{
     [SerializeField] private TextMeshProUGUI foodCostText;
     [SerializeField] private TextMeshProUGUI foodRarityText;
     [SerializeField] private TextMeshProUGUI foodTasteText;
+    [LabelText("强化父物体")]
+    [SerializeField] private Transform enhancementParent;
+    [LabelText("强化预制体")]
+    [SerializeField] private GameObject enhancementViewPrefab;
     public void Bind(FoodUIContext context){
         _context = context;
         foodNameText.text = context.ConfigData.Name;
@@ -53,6 +59,10 @@ public class DisplayFoodView : MonoBehaviour, IDisplayItemView<FoodUIContext>{
                     break;
             }
         }
+
+        if (enhancementParent!=null && enhancementViewPrefab!=null){
+            GenerateEnhancementViews();
+        }
     }
     public void SetInteraction(Action<FoodUIContext> onClick)
     {
@@ -73,5 +83,33 @@ public class DisplayFoodView : MonoBehaviour, IDisplayItemView<FoodUIContext>{
     private void OnDestroy()
     {
         DOTween.Kill(this);
+    }
+
+    private void GenerateEnhancementViews(){
+        if (_context.RuntimeFood == null){
+            Debug.LogError("RuntimeFood is null");
+            return;
+        }
+        List<Image> enhancementViews = new List<Image>();
+        // 先创建等于最大槽数的强化槽
+        for (int i = 0; i < _context.RuntimeFood.MaxSlots; i++){
+            GameObject enhancementView = Instantiate(enhancementViewPrefab, enhancementParent);
+            enhancementView.SetActive(true);
+            Image enhancementImage = enhancementView.GetComponent<Image>();
+            enhancementImage.sprite = SettingManager.Instance.ArtSettings.EnhancementSprites.GetSprite($"食材强化图标_无");
+            if (enhancementImage == null){
+                Debug.LogError("EnhancementImage is null");
+                continue;
+            }
+            enhancementViews.Add(enhancementImage);
+        }
+        Debug.Log($"创建了 {enhancementViews.Count} 个强化槽");
+        // 强制刷新布局
+        LayoutRebuilder.ForceRebuildLayoutImmediate(enhancementParent as RectTransform);
+
+        // 绑定强化槽
+        for (int i = 0; i < _context.RuntimeFood.Enhancements.Count; i++){
+            enhancementViews[i].sprite = SettingManager.Instance.ArtSettings.EnhancementSprites.GetSprite($"食材强化图标_{_context.RuntimeFood.Enhancements[i].SpriteName}");
+        }
     }
 }

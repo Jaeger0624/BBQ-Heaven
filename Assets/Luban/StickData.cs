@@ -25,6 +25,8 @@ public sealed partial class StickData : Luban.BeanBase
         { if(!_buf["description"].IsString) { throw new SerializationException(); }  Description = _buf["description"]; }
         { if(!_buf["strategy"].IsNumber) { throw new SerializationException(); }  Strategy = (StickStrategy)_buf["strategy"].AsInt; }
         { if(!_buf["maxFoodCount"].IsNumber) { throw new SerializationException(); }  MaxFoodCount = _buf["maxFoodCount"]; }
+        { if(!_buf["effectDescription"].IsString) { throw new SerializationException(); }  EffectDescription = _buf["effectDescription"]; }
+        { if(!_buf["originCost"].IsNumber) { throw new SerializationException(); }  OriginCost = _buf["originCost"]; }
         { if(!_buf["sprite"].IsString) { throw new SerializationException(); }  Sprite = _buf["sprite"]; }
     }
 
@@ -50,6 +52,8 @@ public sealed partial class StickData : Luban.BeanBase
     /// </summary>
     public readonly StickStrategy Strategy;
     public readonly int MaxFoodCount;
+    public readonly string EffectDescription;
+    public readonly int OriginCost;
     /// <summary>
     /// 串签图
     /// </summary>
@@ -70,6 +74,8 @@ public sealed partial class StickData : Luban.BeanBase
         + "description:" + Description + ","
         + "strategy:" + Strategy + ","
         + "maxFoodCount:" + MaxFoodCount + ","
+        + "effectDescription:" + EffectDescription + ","
+        + "originCost:" + OriginCost + ","
         + "sprite:" + Sprite + ","
         + "}";
     }

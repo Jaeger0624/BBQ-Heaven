@@ -21,7 +21,6 @@ public class CustomerSatisController : MonoBehaviour, IController{
     void Start()
     {
         Hide();
-
         currentValue.Subscribe(value => {
             UpdateStatisBars(value);
         });
@@ -31,7 +30,6 @@ public class CustomerSatisController : MonoBehaviour, IController{
             return;
         }
     }
-
     void OnEnable()
     {
         // 1. 注册更新满意度事件

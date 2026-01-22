@@ -5,6 +5,8 @@
     "description": "这是一根木签",
     "strategy": 0,
     "maxFoodCount": 6,
+    "effectDescription": "",
+    "originCost": 3,
     "sprite": "BBQ_0"
   },
   {
@@ -13,6 +15,8 @@
     "description": "这是一根铁签",
     "strategy": 0,
     "maxFoodCount": 8,
+    "effectDescription": "",
+    "originCost": 5,
     "sprite": "BBQ_1"
   },
   {
@@ -21,6 +25,8 @@
     "description": "这是一根短签",
     "strategy": 0,
     "maxFoodCount": 4,
-    "sprite": "BBQ_1"
+    "effectDescription": "这根签的时间消耗不会增长",
+    "originCost": 2,
+    "sprite": "BBQ_2"
   }
 ]

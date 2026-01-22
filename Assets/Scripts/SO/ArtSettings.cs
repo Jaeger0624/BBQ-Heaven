@@ -5,4 +5,5 @@ using UnityEngine;
 public class ArtSettings : ScriptableObject
 {
     public SpriteReferenceSO StickSprites;
+    public SpriteReferenceSO EnhancementSprites;
 }

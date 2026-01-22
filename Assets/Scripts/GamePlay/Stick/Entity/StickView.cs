@@ -38,8 +38,7 @@ public class StickView : MonoBehaviour, ICanGetSystem, ICanRegisterEvent, IPoint
         }else{
             image.color = Color.white;
         }
-        int baseTimeCost = SettingManager.Instance.GameplaySettings.makeBBQTime_默认;
-        timeCostText.text = (stick.extraTimeCost + baseTimeCost).ToString();
+        timeCostText.text = (stick.extraTimeCost + stick.originalTimeCost).ToString();
     }
 
     private void UpdateVisual(){

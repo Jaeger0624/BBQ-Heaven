@@ -90,7 +90,8 @@ public class TimeSystem_默认 : AbstractSystem, ITimeSystem
     public int GetCostTime(List<FoodInstance> foodInstances, Stick stick)
     {
         int foodCost = foodInstances.Sum(x => x.timeCost);
-        return foodCost + stick.extraTimeCost + SettingManager.Instance.GameplaySettings.makeBBQTime_默认;
+        // 计算烤串额外时间成本：食材 + 烤串额外时间成本 + 烤串原始时间成本
+        return foodCost + stick.extraTimeCost + stick.originalTimeCost;
     }
 }
 

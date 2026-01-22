@@ -66,7 +66,7 @@ public class FoodCard : ICanGetSystem{
 
         
         // 1. 计算生成数量（应用强化效果）
-        int spawnCount = 2;  // 初始生成数量
+        int spawnCount = 1;  // 初始生成数量
 
         if (Enhancements != null){
             foreach (var buff in Enhancements)
@@ -78,7 +78,6 @@ public class FoodCard : ICanGetSystem{
             Debug.LogError($"【FoodCard】{name} 强化效果栏为null");
             return result;
         }
-
 
         // 2. 循环生成
         for (int i = 0; i < spawnCount; i++)
