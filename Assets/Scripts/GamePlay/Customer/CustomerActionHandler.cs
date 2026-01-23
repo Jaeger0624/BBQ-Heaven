@@ -32,13 +32,13 @@ public class CustomerActionHandler : ICanGetSystem, ICanSendEvent, ICanRegisterE
 
         // Debug.Log($"【CustomerActionHandler】触发顾客动作: {customerActionType}");
         List<IObservable<Unit>> actionsToRun = new List<IObservable<Unit>>();
+
         // 2. 遍历顾客，执行顾客动作
         foreach (var customer in customers){
             foreach (var tag in customer.customerTags){
                 List<CustomerCGA> customerCGAs = tag.CustomerActionCGAs.Where(x => x.Type == customerActionType).ToList();
                 foreach (var cga in customerCGAs){
-                    actionsToRun.Add(this.GetSystem<IGASystem>().ApplyCGAImmediate(customer, cga.Cga, parameters));
-                    // this.GetSystem<IGASystem>().ApplyCGA(customer, cga.Cga, parameters);
+                    actionsToRun.Add(this.GetSystem<IGASystem>().ApplyCGA(customer, cga.Cga, parameters));
                 }
             }
         }

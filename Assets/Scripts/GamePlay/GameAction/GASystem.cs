@@ -13,14 +13,15 @@ using UnityEngine;
 public interface IGASystem : ISystem{
     // 处理GA
     // param是用于让玩家在runtime时传递参数给GA（例如操作决定的参数）
-    void ApplyGA(object sender, GameAction gameAction, List<object> param);
+    IObservable<Unit> ApplyGA(object sender, GameAction gameAction, List<object> param, bool insertAtHead = false);
+    IObservable<Unit> ApplyCGA(object sender, CGA cga, List<object> param, bool insertAtHead = false);
+    IObservable<Unit> SetTrigger(object sender);
+    IObservable<Unit> SendAction(object sender, Action action);
+
     IObservable<Unit> ApplyGAImmediate(object sender, GameAction gameAction, List<object> param); 
     IObservable<Unit> ApplyCGAImmediate(object sender, CGA cga, List<object> param);
-    // 设置触发器，等待触发器触发后执行
-    void SetTrigger(object sender);
-    void SendAction(object sender, Action action);
-    // 处理CGA
-    void ApplyCGA(object sender, CGA cga, List<object> param);
+
+    
     // 处理SE
     void ApplySE(object sender, SustainEffect sustainEffect);
     void RemoveSE(object sender, SustainEffect sustainEffect);
@@ -38,9 +39,12 @@ public class GASystem : AbstractSystem, IGASystem{
         public object Data; // 存 GameAction 或 CGA 对象
         public object Sender;
         public List<object> Param;
+
+        // 【新增】用于通知GA执行完成
+        public AsyncSubject<Unit> CompletionSource;
     }
 
-    private Queue<GATask> _queue = new Queue<GATask>();
+    private LinkedList<GATask> _queue = new LinkedList<GATask>();
     private bool _isRunning = false; // 队列锁
 
     #endregion
@@ -52,54 +56,70 @@ public class GASystem : AbstractSystem, IGASystem{
     /// </summary>
     /// <param name="gameAction">游戏效果</param>
     /// <param name="sender">发送者</param>
-    public void ApplyGA(object sender, GameAction gameAction, List<object> param)
+    public IObservable<Unit> ApplyGA(object sender, GameAction gameAction, List<object> param, bool insertAtHead = false)
     {
-        EnqueueTask(new GATask 
+        return EnqueueTask(new GATask 
         { 
             IsCGA = false, 
             Data = gameAction, 
             Sender = sender, 
             Param = param 
-        });
+        }, insertAtHead);
     }
-    public void SendAction(object sender, Action action)
+    public IObservable<Unit> ApplyCGA(object sender, CGA cga, List<object> param, bool insertAtHead = false)
     {
-        GameAction gameAction = new GA_Action(action);
-        EnqueueTask(new GATask 
-        { 
-            IsCGA = false, 
-            Data = gameAction, 
-            Sender = sender, 
-            Param = null 
-        });
-    }
-    public void SetTrigger(object sender)
-    {
-        Debug.Log($"<color=yellow>【GA_WaitForEvent】开始等待触发...</color>");
-        GameAction gameAction = new GA_WaitForEvent();
-        EnqueueTask(new GATask 
-        { 
-            IsCGA = false, 
-            Data = gameAction, 
-            Sender = sender, 
-            Param = null 
-        });
-    }
-    public void ApplyCGA(object sender, CGA cga, List<object> param)
-    {
-        EnqueueTask(new GATask 
+        return EnqueueTask(new GATask 
         { 
             IsCGA = true, 
             Data = cga, 
             Sender = sender, 
             Param = param 
-        });
+        }, insertAtHead);
     }
 
-    private void EnqueueTask(GATask task)
+    public IObservable<Unit> SendAction(object sender, Action action)
     {
-        _queue.Enqueue(task);
+        GameAction gameAction = new GA_Action(action);
+        return EnqueueTask(new GATask 
+        { 
+            IsCGA = false, 
+            Data = gameAction, 
+            Sender = sender, 
+            Param = null 
+        }, false);
+    }
+    public IObservable<Unit> SetTrigger(object sender)
+    {
+        Debug.Log($"<color=yellow>【GA_WaitForEvent】开始等待触发...</color>");
+        GameAction gameAction = new GA_WaitForEvent();
+        return EnqueueTask(new GATask 
+        { 
+            IsCGA = false, 
+            Data = gameAction, 
+            Sender = sender, 
+            Param = null 
+        }, false);
+    }
+
+    private IObservable<Unit> EnqueueTask(GATask task, bool insertAtHead)
+    {
+        // 1. 创建完成源
+        task.CompletionSource = new AsyncSubject<Unit>();
+
+        // 2. 插入队列
+        if (insertAtHead)
+        {
+            _queue.AddFirst(task);
+        }
+        else
+        {
+            _queue.AddLast(task);
+        }
+
+        // 3. 尝试处理队列
         ProcessQueue();
+
+        return task.CompletionSource;
     }
 
     #endregion
@@ -110,7 +130,8 @@ public class GASystem : AbstractSystem, IGASystem{
         if (_isRunning || _queue.Count == 0) return;
 
         _isRunning = true;
-        var task = _queue.Dequeue();
+        var task = _queue.First.Value;
+        _queue.RemoveFirst();
 
         // 根据类型选择不同的执行流
         IObservable<Unit> executionStream;
@@ -132,11 +153,18 @@ public class GASystem : AbstractSystem, IGASystem{
             error => 
             {
                 Debug.LogError($"[GASystem] 执行出错: {error}");
+
+                // 出错也视为完成，避免Deadlock
+                task.CompletionSource.OnError(error);
                 _isRunning = false;
                 ProcessQueue(); 
             },
             () => 
             {
+                // 核心点：当前任务流跑完后，通知外部
+                task.CompletionSource.OnNext(Unit.Default);
+                task.CompletionSource.OnCompleted();
+
                 _isRunning = false;
                 ProcessQueue(); // 递归处理下一个
             }
