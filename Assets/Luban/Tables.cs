@@ -29,6 +29,7 @@ public partial class Tables
     public InstantEncounterDataTable InstantEncounterDataTable {get; }
     public OptionDataTable OptionDataTable {get; }
     public BuffDataTable BuffDataTable {get; }
+    public ReputationDataTable ReputationDataTable {get; }
 
     public Tables(System.Func<string, JSONNode> loader)
     {
@@ -47,6 +48,7 @@ public partial class Tables
         InstantEncounterDataTable = new InstantEncounterDataTable(loader("instantencounterdatatable"));
         OptionDataTable = new OptionDataTable(loader("optiondatatable"));
         BuffDataTable = new BuffDataTable(loader("buffdatatable"));
+        ReputationDataTable = new ReputationDataTable(loader("reputationdatatable"));
         ResolveRef();
     }
     
@@ -67,6 +69,7 @@ public partial class Tables
         InstantEncounterDataTable.ResolveRef(this);
         OptionDataTable.ResolveRef(this);
         BuffDataTable.ResolveRef(this);
+        ReputationDataTable.ResolveRef(this);
     }
 }
 

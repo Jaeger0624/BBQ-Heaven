@@ -155,7 +155,7 @@
                 "strategy": 2,
                 "value": {
                   "$type": "DV_值",
-                  "number": 2
+                  "number": 99
                 }
               }
             }
@@ -213,6 +213,39 @@
             {
               "$type": "GA_触发瞬时遭遇",
               "ID": "bargain"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "ID": "6",
+    "name": "开心果",
+    "description": "大家都很喜欢它",
+    "signedValue": 0,
+    "type": 0,
+    "tagCGAs": [],
+    "actionCGAs": [
+      {
+        "type": 1,
+        "cga": {
+          "ID": "1",
+          "conditions": [],
+          "actions": [
+            {
+              "$type": "GA_增加顾客等待值",
+              "value": {
+                "$type": "DV_值",
+                "number": -5
+              },
+              "info": {
+                "strategy": 2,
+                "value": {
+                  "$type": "DV_值",
+                  "number": 99
+                }
+              }
             }
           ]
         }

@@ -38,6 +38,7 @@ namespace cfg{
 
             // 抽取指定数量的顾客
             int amount = Value.GetValue(sender, param);
+            if (amount == -1) return customers;
             if (amount >= customers.Count) return customers;
             else return rng.PickMany(customers, amount);
         }

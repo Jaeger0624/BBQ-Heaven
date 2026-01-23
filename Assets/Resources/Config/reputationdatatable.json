@@ -1,0 +1,70 @@
+[
+  {
+    "ID": "1",
+    "name": "无人问津",
+    "rank": 1,
+    "description": "",
+    "effects": [
+      "收入+3",
+      "物品刷新率："
+    ],
+    "totalReputation": 0,
+    "actions": []
+  },
+  {
+    "ID": "2",
+    "name": "默默无闻",
+    "rank": 2,
+    "description": "",
+    "effects": [
+      "收入+2"
+    ],
+    "totalReputation": 0,
+    "actions": []
+  },
+  {
+    "ID": "3",
+    "name": "小有名气",
+    "rank": 3,
+    "description": "",
+    "effects": [],
+    "totalReputation": 0,
+    "actions": []
+  },
+  {
+    "ID": "4",
+    "name": "蒸蒸日上",
+    "rank": 4,
+    "description": "",
+    "effects": [],
+    "totalReputation": 0,
+    "actions": []
+  },
+  {
+    "ID": "5",
+    "name": "广受好评",
+    "rank": 5,
+    "description": "",
+    "effects": [],
+    "totalReputation": 0,
+    "actions": []
+  },
+  {
+    "ID": "6",
+    "name": "好评如潮",
+    "rank": 6,
+    "description": "",
+    "effects": [],
+    "totalReputation": 0,
+    "actions": []
+  },
+  {
+    "ID": "7",
+    "name": "串界权威",
+    "rank": 7,
+    "description": "",
+    "effects": [],
+    "totalReputation": 0,
+    "actions": []
+  }
+]

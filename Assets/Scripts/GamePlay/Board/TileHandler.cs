@@ -37,7 +37,7 @@ public class TileHandler : ICanGetSystem{
                 // Debug.Log($"【TileHandler】实体被放置: {context.boardEntity.name} 放置 {context.boardCell.position}");
                 break;
             case TileEffectType.实体移动进入:
-                Debug.Log($"【TileHandler】实体移动进入: {context.boardEntity.name} 进入 {context.boardCell.position}");
+                // Debug.Log($"【TileHandler】实体移动进入: {context.boardEntity.name} 进入 {context.boardCell.position}");
                 foreach (var cga in tileData.CGAs){
                     if (cga.Type == TileEffectType.实体移动进入){
                         this.GetSystem<IGASystem>().ApplyCGA(context.boardEntity, cga.Action, new List<object>{context});
@@ -45,7 +45,7 @@ public class TileHandler : ICanGetSystem{
                 }
                 break;
             case TileEffectType.实体移动离开:
-                Debug.Log($"【TileHandler】实体移动离开: {context.boardEntity.name} 离开 {context.boardCell.position}");
+                // Debug.Log($"【TileHandler】实体移动离开: {context.boardEntity.name} 离开 {context.boardCell.position}");
                 break;
         }
     }

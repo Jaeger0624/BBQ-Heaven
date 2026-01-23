@@ -1,74 +1,5 @@
 [
   {
-    "ID": "tomato",
-    "name": "番茄",
-    "description": "这是一颗番茄",
-    "type": 1,
-    "tag": 0,
-    "rarity": 1,
-    "taste": 5,
-    "sprite": "Tomato",
-    "effectDescription": "添加到烤串时，随机将周围一个食材",
-    "CGAs": [
-      {
-        "type": 1,
-        "action": {
-          "ID": "1",
-          "conditions": [],
-          "actions": [
-            {
-              "$type": "GA_添加食材到烤串",
-              "info": {
-                "strategy": 1,
-                "value": {
-                  "$type": "DV_值",
-                  "number": 1
-                },
-                "types": [
-                  1
-                ]
-              }
-            }
-          ]
-        }
-      },
-      {
-        "type": 0,
-        "action": {
-          "ID": "1",
-          "conditions": [],
-          "actions": [
-            {
-              "$type": "GA_为食材加属性",
-              "rarity": {
-                "$type": "DV_值",
-                "number": 1
-              },
-              "taste": {
-                "$type": "DV_值",
-                "number": 1
-              },
-              "info": {
-                "strategy": 1,
-                "value": {
-                  "$type": "DV_值",
-                  "number": 1
-                },
-                "types": [
-                  1,
-                  2
-                ]
-              }
-            }
-          ]
-        }
-      }
-    ],
-    "SEs": [],
-    "rank": 1,
-    "timeCost": 1
-  },
-  {
     "ID": "apple",
     "name": "苹果",
     "description": "这是一颗苹果",
@@ -286,15 +217,15 @@
     "timeCost": 1
   },
   {
-    "ID": "cherry",
-    "name": "樱桃",
-    "description": "成群结队的樱桃！",
+    "ID": "lemon",
+    "name": "柠檬",
+    "description": "挨在一起会发生化学反应！",
     "type": 2,
     "tag": 0,
-    "rarity": 4,
-    "taste": 4,
-    "sprite": "Cherry",
-    "effectDescription": "被选中时\\n每与另一个樱桃相邻，则烧烤属性+2/+2",
+    "rarity": 3,
+    "taste": 3,
+    "sprite": "Lemon",
+    "effectDescription": "被选中时\\n每与另一个柠檬相邻，则烧烤属性+2/+2",
     "CGAs": [
       {
         "type": 3,
@@ -306,7 +237,7 @@
               "$type": "GA_重复执行GA",
               "value": {
                 "$type": "DV_周围食材数",
-                "id": "cherry"
+                "id": "lemon"
               },
               "action": {
                 "$type": "GA_直接修改当前烧烤值",
@@ -518,6 +449,75 @@
                 },
                 "types": [
                   1
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "SEs": [],
+    "rank": 1,
+    "timeCost": 1
+  },
+  {
+    "ID": "tomato",
+    "name": "番茄",
+    "description": "这是一颗番茄",
+    "type": 1,
+    "tag": 0,
+    "rarity": 1,
+    "taste": 5,
+    "sprite": "Tomato",
+    "effectDescription": "添加到烤串时，随机将周围一个食材",
+    "CGAs": [
+      {
+        "type": 1,
+        "action": {
+          "ID": "1",
+          "conditions": [],
+          "actions": [
+            {
+              "$type": "GA_添加食材到烤串",
+              "info": {
+                "strategy": 1,
+                "value": {
+                  "$type": "DV_值",
+                  "number": 1
+                },
+                "types": [
+                  1
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": 0,
+        "action": {
+          "ID": "1",
+          "conditions": [],
+          "actions": [
+            {
+              "$type": "GA_为食材加属性",
+              "rarity": {
+                "$type": "DV_值",
+                "number": 1
+              },
+              "taste": {
+                "$type": "DV_值",
+                "number": 1
+              },
+              "info": {
+                "strategy": 1,
+                "value": {
+                  "$type": "DV_值",
+                  "number": 1
+                },
+                "types": [
+                  1,
+                  2
                 ]
               }
             }
