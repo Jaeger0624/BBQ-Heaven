@@ -150,20 +150,11 @@ namespace cfg{
                 }
                 finalDirection = directionContext.direction;
             }
+            
 
             // 2. 获取食材
-            FoodInstance origin = param.FirstOrDefault(x => x is FoodInstance) as FoodInstance;
-            if (origin == null)
-            {
-                origin = sender as FoodInstance;
-                Debug.LogWarning($"[GA_方向位移] 没有食材，使用发送者作为食材: {sender}");
-            }
-            List<FoodInstance> targets = Info.GetFoodInstances(origin, param);
-            if (targets == null || targets.Count == 0)
-            {
-                Debug.LogWarning($"[GA_方向位移] 没有目标食材");
-                return;
-            }
+            List<FoodInstance> targets = Info.GetFoodInstances(sender, param);
+
 
 
             // 3. 实际执行位移

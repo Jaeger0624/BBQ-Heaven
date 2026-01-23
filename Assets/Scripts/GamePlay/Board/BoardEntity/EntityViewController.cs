@@ -1,6 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
+using cfg;
+using DG.Tweening;
 using QFramework;
+using UniRx;
 using UnityEngine;
 
 /// <summary>
@@ -33,6 +37,10 @@ public class EntityViewController : MonoBehaviour, IController
         this.RegisterEvent<MoveEntityEvent>(OnMoveEntityEvent).UnRegisterWhenDisabled(this);
         this.RegisterEvent<PlaceEntityEvent>(OnPlaceEntityEvent).UnRegisterWhenDisabled(this);
         this.RegisterEvent<SwapEntityEvent>(OnSwapEntityEvent).UnRegisterWhenDisabled(this);
+
+
+        // 4. 碰撞事件
+        this.RegisterEvent<CollisionEntityEvent>(OnCollisionEntityEvent).UnRegisterWhenDisabled(this);
         
     }
     void Update()
@@ -204,6 +212,50 @@ public class EntityViewController : MonoBehaviour, IController
         this.GetSystem<IAnimationSystem>().DirectlyPlay(anim);
     }
 
+    void OnCollisionEntityEvent(CollisionEntityEvent e)
+    {
+        if (!entityViews.TryGetValue(e.initiator.guid, out IEntityView initiatorView)) return;
+        if (!entityViews.TryGetValue(e.receiver.guid, out IEntityView receiverView)) return;
+        Debug.Log($"【EntityViewController】碰撞动画: {e.initiator.name} 和 {e.receiver.name} 方向: {e.direction}");
+        Direction direction = e.direction.ToDirection();
+        float distance = 50f;
+        float delay = 0.1f;
+        switch (direction){
+            case Direction.上:
+                // 会回弹
+                initiatorView.GO().transform.DOLocalMove(new Vector3(0, distance, 0), 0.4f).SetLoops(2, LoopType.Yoyo).SetLink(initiatorView.GO());
+
+                // reciever等待0.1秒后移动
+                Observable.Timer(TimeSpan.FromSeconds(delay), Scheduler.MainThread).Subscribe(_ => {
+                    receiverView.GO().transform.DOLocalMove(new Vector3(0, distance, 0), 0.4f).SetLoops(2, LoopType.Yoyo).SetLink(receiverView.GO());
+                }).AddTo(this);
+                break;
+            case Direction.下:
+                initiatorView.GO().transform.DOLocalMove(new Vector3(0, -distance, 0), 0.4f).SetLoops(2, LoopType.Yoyo).SetLink(initiatorView.GO());
+                // reciever等待0.1秒后移动
+                Observable.Timer(TimeSpan.FromSeconds(delay), Scheduler.MainThread).Subscribe(_ => {
+                    receiverView.GO().transform.DOLocalMove(new Vector3(0, -distance, 0), 0.4f).SetLoops(2, LoopType.Yoyo).SetLink(receiverView.GO());
+                }).AddTo(this);
+                break;
+            case Direction.左:
+                initiatorView.GO().transform.DOLocalMove(new Vector3(-distance, 0, 0), 0.4f).SetLoops(2, LoopType.Yoyo).SetLink(initiatorView.GO());
+                // reciever等待0.1秒后移动
+                Observable.Timer(TimeSpan.FromSeconds(delay), Scheduler.MainThread).Subscribe(_ => {
+                    receiverView.GO().transform.DOLocalMove(new Vector3(-distance, 0, 0), 0.4f).SetLoops(2, LoopType.Yoyo).SetLink(receiverView.GO());
+                }).AddTo(this);
+                break;
+            case Direction.右:
+                initiatorView.GO().transform.DOLocalMove(new Vector3(distance, 0, 0), 0.4f).SetLoops(2, LoopType.Yoyo).SetLink(initiatorView.GO());
+                // reciever等待0.1秒后移动
+                Observable.Timer(TimeSpan.FromSeconds(delay), Scheduler.MainThread).Subscribe(_ => {
+                    receiverView.GO().transform.DOLocalMove(new Vector3(distance, 0, 0), 0.4f).SetLoops(2, LoopType.Yoyo).SetLink(receiverView.GO());
+                }).AddTo(this);
+                break;
+            default:
+                Debug.LogError($"【EntityViewController】碰撞方向不支持: {direction}");
+                break;
+        }
+    }
 
     #endregion
 }

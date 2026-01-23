@@ -9,9 +9,10 @@ namespace cfg{
             this.Value = value;
             this.Types = types;
         }
-        public List<FoodInstance> GetFoodInstances(FoodInstance origin, List<object> param){
+        public List<FoodInstance> GetFoodInstances(object sender, List<object> param){
+
             
-            return ExtraTool.GetFoodInstances(Types, Strategy, Value.GetValue(origin, param), origin, param);
+            return ExtraTool.GetFoodInstances(Types, Strategy, Value.GetValue(sender, param), sender, param);
         }
     }
 }
