@@ -55,7 +55,6 @@ public class GameSystem : AbstractSystem, IGameSystem
         // TODO: 月度初始化（主题、目标等）
         Debug.Log($"【GameSystem】开始新月份:{currentMonth}月");
     }
-
     public void StartDay(){
         currentDay++;
         currentDayTime = 0;
@@ -67,11 +66,6 @@ public class GameSystem : AbstractSystem, IGameSystem
 
         // 一天开始 - 系统初始化
         this.SendEvent(new StartNewDayEvent(currentMonth, currentDay, EventStage.System));
-
-        // 处理预定顾客补充（若有）
-        // TODO: 这应该是Bug，这个在StartNewDayEvent中处理了
-        // var preSchedules = this.GetSystem<ICustomerSystem>().GetPreScheduledCustomers();
-        // this.GetSystem<ICustomerSystem>().CreateCustomer(preSchedules.Select(info => info.Item1).ToList());
 
         // 一天开始 - 系统初始化后
         this.SendEvent(new StartNewDayEvent(currentMonth, currentDay, EventStage.After));

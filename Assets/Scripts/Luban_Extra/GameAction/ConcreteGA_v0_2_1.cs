@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using QFramework;
+using UniRx;
 using UnityEngine;
 
 namespace cfg{
@@ -17,6 +19,7 @@ namespace cfg{
 
         public override void Execute(object sender, List<object> param)
         {
+            Debug.Log($"【GA_增加顾客等待值】执行: {Value.GetValue(sender, param)}");
             List<Customer> customers = Info.GetCustomers(sender, param);
             if (customers == null || customers.Count == 0){
                 Debug.LogError("【GA_增加顾客等待值】没有顾客");

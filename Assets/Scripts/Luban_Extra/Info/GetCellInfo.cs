@@ -116,6 +116,14 @@ namespace cfg{
                 }
                 return foodCells;
             }
+            else if (Strategy == GetCellStrategy.自己){
+                ICellPosition cellPos = sender as ICellPosition;
+                if (cellPos == null){
+                    Debug.LogError($"GetCellInfo: 自己没有坐标");
+                    return null;
+                }
+                return new List<BoardCell>{this.GetSystem<IBoardSystem>().GetCell(cellPos.GetCellPosition())};
+            }
             else{
                 Debug.LogError($"GetCellInfo: 不支持的策略: {Strategy}");
                 return null;

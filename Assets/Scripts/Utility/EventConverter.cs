@@ -12,13 +12,17 @@ public static class EventBinder{
         switch (evt)
         {
             case cfg.EventType.每日开始系统前:
+                Debug.Log($"【EventBinder】注册每日开始系统前事件");
                 return observer.RegisterEvent<StartNewDayEvent>(evt => {
+                    // 若不是在系统前阶段，则不执行
                     if (!evt.StageMeet(EventStage.Before)) return;
                     parameters.AddRange(evt.parameters);
                     ApplyActions(parameters);
                 });
             case cfg.EventType.每日开始系统后:
+                Debug.Log($"【EventBinder】注册每日开始系统后事件");
                 return observer.RegisterEvent<StartNewDayEvent>(evt => {
+                    // 若不是在系统后阶段，则不执行
                     if (!evt.StageMeet(EventStage.After)) return;
                     parameters.AddRange(evt.parameters);
                     ApplyActions(parameters);

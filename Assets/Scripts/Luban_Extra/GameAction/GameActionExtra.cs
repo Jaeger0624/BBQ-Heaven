@@ -38,6 +38,7 @@ public abstract partial class GameAction : ICanGetSystem, IHaveAnim, ICanSendEve
             }
             catch (Exception ex)
             {
+                Debug.LogError($"【GameAction】执行出错: {this.GetType().Name} {ex}");
                 observer.OnError(ex);
             }
             return Disposable.Empty;

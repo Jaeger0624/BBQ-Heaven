@@ -153,6 +153,18 @@ public class GameTest : MonoBehaviour, IController, ICanSendEvent{
             Debug.Log($"添加一个预定顾客: {customer.name} 到达时间: {arriveTime}");
             this.GetSystem<ICustomerSystem>().PreScheduleCustomer(new ScheduleInfo(customer, arriveTime));
         }
+        if (GUILayout.Button("刷新顾客")){
+
+            // 让当前顾客离开
+            List<Customer> customers = this.GetSystem<ICustomerSystem>().OrderingCustomers.ToList();
+            this.GetSystem<ICustomerSystem>().LeaveCustomer(customers);
+            CustomerFactory_默认影响权重 customerFactory = new CustomerFactory_默认影响权重();
+            List<Customer> customersToCreate = new List<Customer>();
+            for (int i = 0; i < 3; i++){
+                customersToCreate.Add(customerFactory.GenerateCustomer());
+            }
+            this.GetSystem<ICustomerSystem>().CreateCustomer(customersToCreate);
+        }
     }
 
     private void StickAndFoodTest(){

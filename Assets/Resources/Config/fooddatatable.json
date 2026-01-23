@@ -449,5 +449,37 @@
     ],
     "rank": 1,
     "timeCost": 1
+  },
+  {
+    "ID": "cherry_bomb",
+    "name": "樱桃炸弹",
+    "description": "脾气不太好",
+    "type": 2,
+    "tag": 0,
+    "rarity": 2,
+    "taste": 4,
+    "sprite": "Cherry",
+    "effectDescription": "被串取时\\n将周围实体弹开1格",
+    "CGAs": [
+      {
+        "type": 1,
+        "action": {
+          "ID": "1",
+          "conditions": [],
+          "actions": [
+            {
+              "$type": "GA_定点爆破",
+              "info": {
+                "strategy": 3,
+                "isRandom": false
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "SEs": [],
+    "rank": 2,
+    "timeCost": 1
   }
 ]

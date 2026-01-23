@@ -145,9 +145,11 @@ public class GASystem : AbstractSystem, IGASystem{
     // --- 核心逻辑块 A：执行单个 GA ---
     // 流程：GA.ExecuteAsync -> 拿到结果 -> AnimationSystem.Play -> 结束
     private IObservable<Unit> ExecuteSingleGAStream(object sender, GameAction ga, List<object> param) => ApplyGAImmediate(sender, ga, param);
+
+    // 修改前：直接调用，导致同步逻辑在构建流时立即执行
+    
     public IObservable<Unit> ApplyGAImmediate(object sender, GameAction ga, List<object> param)
     {
-        // 复用之前的逻辑：执行异步逻辑 -> 播放动画 -> 等待结束
         return ga.ExecuteAsync(sender, param)
             .SelectMany(result => 
             {
@@ -158,6 +160,8 @@ public class GASystem : AbstractSystem, IGASystem{
                 return Observable.ReturnUnit();
             });
     }
+    
+
     public IObservable<Unit> ApplyCGAImmediate(object sender, CGA cga, List<object> param)
     {
         // 直接调用内部的执行流构建方法，不经过 EnqueueTask 和 ProcessQueue

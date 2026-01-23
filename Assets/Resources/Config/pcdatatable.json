@@ -7,22 +7,6 @@
     "SEs": [
       {
         "$type": "SE_监听事件",
-        "evt": 1,
-        "actions": [
-          {
-            "ID": "1",
-            "conditions": [],
-            "actions": [
-              {
-                "$type": "GA_测试文字",
-                "text": "嘎——！"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "$type": "SE_监听事件",
         "evt": 3,
         "actions": [
           {
@@ -40,6 +24,22 @@
                     1
                   ]
                 }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "$type": "SE_监听事件",
+        "evt": 1,
+        "actions": [
+          {
+            "ID": "1",
+            "conditions": [],
+            "actions": [
+              {
+                "$type": "GA_测试文字",
+                "text": "嘎——！"
               }
             ]
           }
