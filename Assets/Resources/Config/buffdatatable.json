@@ -2,6 +2,7 @@
   {
     "ID": "softness",
     "name": "丝滑",
+    "effectDescription": "使用一张卡牌后，消耗1点丝滑，抽一张卡牌",
     "description": "纵享丝滑~",
     "costEvent": 0,
     "isStackable": true

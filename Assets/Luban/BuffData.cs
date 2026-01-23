@@ -19,6 +19,7 @@ public sealed partial class BuffData : Luban.BeanBase
     {
         { if(!_buf["ID"].IsString) { throw new SerializationException(); }  ID = _buf["ID"]; }
         { if(!_buf["name"].IsString) { throw new SerializationException(); }  Name = _buf["name"]; }
+        { if(!_buf["effectDescription"].IsString) { throw new SerializationException(); }  EffectDescription = _buf["effectDescription"]; }
         { if(!_buf["description"].IsString) { throw new SerializationException(); }  Description = _buf["description"]; }
         { if(!_buf["costEvent"].IsNumber) { throw new SerializationException(); }  CostEvent = (EventType)_buf["costEvent"].AsInt; }
         { if(!_buf["isStackable"].IsBoolean) { throw new SerializationException(); }  IsStackable = _buf["isStackable"]; }
@@ -31,6 +32,7 @@ public sealed partial class BuffData : Luban.BeanBase
 
     public readonly string ID;
     public readonly string Name;
+    public readonly string EffectDescription;
     public readonly string Description;
     public readonly EventType CostEvent;
     public readonly bool IsStackable;
@@ -47,6 +49,7 @@ public sealed partial class BuffData : Luban.BeanBase
         return "{ "
         + "ID:" + ID + ","
         + "name:" + Name + ","
+        + "effectDescription:" + EffectDescription + ","
         + "description:" + Description + ","
         + "costEvent:" + CostEvent + ","
         + "isStackable:" + IsStackable + ","

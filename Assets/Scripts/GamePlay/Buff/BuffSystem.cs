@@ -17,23 +17,43 @@ public interface IBuffSystem : ISystem, ISavable{
 
 public class BuffSystem : AbstractSystem, IBuffSystem{
     private Dictionary<string, Buff> buffs = new Dictionary<string, Buff>();
+    private List<BuffHandler> activeHandlers = new List<BuffHandler>();
+
+    private List<BuffHandler> handlerList = new List<BuffHandler>(){
+        new BuffHandler_丝滑(),
+    };
     protected override void OnInit()
     {
+        // 重置当前Buff列表
         buffs = new Dictionary<string, Buff>();
+
+        // 注册所有BuffHandler
+        foreach (BuffHandler handler in handlerList){
+            Debug.Log($"注册BuffHandler: {handler.GetType().Name}");
+            RegisterBuffHandler(handler);
+        }
     }
     protected override void OnDeinit()
     {
+        // 清除当前Buff列表
         buffs.Clear();
+
+        // 注销所有BuffHandler
+        List<BuffHandler> tempHandlers = new List<BuffHandler>(activeHandlers);
+        foreach (BuffHandler handler in tempHandlers){
+            UnregisterBuffHandler(handler);
+        }
+        activeHandlers.Clear();
     }
     #region 存档
     public void Save(GameArchive archive)
     {
-        // archive.buffs = buffs;
+
     }
 
     public void Load(GameArchive archive)
     {
-        // buffs = archive.buffs;
+
     }
     #endregion
     public Dictionary<string, Buff> GetBuffs() => buffs;
@@ -83,4 +103,13 @@ public class BuffSystem : AbstractSystem, IBuffSystem{
     public void UpdateBuff(string buffID, int stackNumber){
     }
 
+
+    private void RegisterBuffHandler(BuffHandler buffHandler){
+        activeHandlers.Add(buffHandler);
+        buffHandler.Register();
+    }
+    private void UnregisterBuffHandler(BuffHandler buffHandler){
+        activeHandlers.Remove(buffHandler);
+        buffHandler.Unregister();
+    }
 }

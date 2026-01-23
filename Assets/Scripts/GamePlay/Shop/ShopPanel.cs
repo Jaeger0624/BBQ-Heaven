@@ -30,15 +30,11 @@ public class ShopPanel : MonoBehaviour, IController, ICanSendEvent{
     {
         if (shopInitContext == null) {Debug.LogError("ShopPanel 的 shopInitContext 为空"); return;}
         this.shopInitContext = shopInitContext;
-
         // 1. 加载商店信息
         shopTypeText.text = shopInitContext.shopName;
         shopDescriptionText.text = shopInitContext.shopDescription;
-
         // 2. 生成商店商品
         GenerateShopItems();
-
-
         // 3. 绑定按钮
         BindButtons();
     }

@@ -1,9 +1,12 @@
 using System;
+using Sirenix.OdinInspector;
 
 [Serializable]
 public class TextInfo{
     public string text;
+    [ShowIf("needResize")]
     public float size;
+    
     public bool needResize;
     public TextInfo(string text){
         this.text = text;

@@ -141,6 +141,8 @@ public class CardSystem : AbstractSystem, ICardSystem
     {
         if (cardPile == null) {Debug.LogError("CardPile not initialized"); return;}
         cardPile.UseCard(card, param);
+
+        this.SendEvent(new UseCardEvent(card));
     }
     public void RefreshHandCards()
     {

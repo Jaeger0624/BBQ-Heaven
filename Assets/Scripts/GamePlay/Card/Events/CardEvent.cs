@@ -16,12 +16,21 @@ public class RemoveCardViewEvent : AbstractEvent{
         this.card = card;
     }
 }
+/// <summary> 卡牌使用事件（视图） </summary>
 public class CardViewUseEvent : AbstractEvent{
     public Card card;
     public CardViewUseEvent(Card card){
         this.card = card;
     }
 }
+/// <summary> 卡牌使用事件（逻辑） </summary>
+public class UseCardEvent : AbstractEvent{
+    public Card card;
+    public UseCardEvent(Card card){
+        this.card = card;
+    }
+}
+
 
 public class DrawMultiCardsEvent : AbstractEvent{
     public List<Card> cards;

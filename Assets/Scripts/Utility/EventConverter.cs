@@ -13,13 +13,13 @@ public static class EventBinder{
         {
             case cfg.EventType.每日开始系统前:
                 return observer.RegisterEvent<StartNewDayEvent>(evt => {
-                    if (evt.StageMeet(EventStage.Before))
+                    if (!evt.StageMeet(EventStage.Before)) return;
                     parameters.AddRange(evt.parameters);
                     ApplyActions(parameters);
                 });
             case cfg.EventType.每日开始系统后:
                 return observer.RegisterEvent<StartNewDayEvent>(evt => {
-                    if (evt.StageMeet(EventStage.After))
+                    if (!evt.StageMeet(EventStage.After)) return;
                     parameters.AddRange(evt.parameters);
                     ApplyActions(parameters);
                 });
@@ -36,6 +36,11 @@ public static class EventBinder{
             case cfg.EventType.串串构建时:
                 return observer.RegisterEvent<AfterCalculateBBQEvent>(evt => {
                     parameters.AddRange(evt.parameters);
+                    ApplyActions(parameters);
+                });
+            case cfg.EventType.使用卡牌:
+                return observer.RegisterEvent<UseCardEvent>(evt => {
+                    parameters.Add(evt.card);
                     ApplyActions(parameters);
                 });
             default:

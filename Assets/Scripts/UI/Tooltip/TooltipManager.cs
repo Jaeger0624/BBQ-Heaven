@@ -31,7 +31,7 @@ public class TooltipManager : MonoBehaviour
             return;
         }
         if (isShowing){
-            Debug.Log("ShowTooltip: isShowing is true");
+            Debug.LogError("ShowTooltip: isShowing is true");
             return;
         }
         isShowing = true;
@@ -68,8 +68,5 @@ public class TooltipManager : MonoBehaviour
         }
 
         Show(tooltipInfos);
-    }
-
-
-    
+    }    
 }

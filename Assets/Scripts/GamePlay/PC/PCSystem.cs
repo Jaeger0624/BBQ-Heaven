@@ -141,7 +141,7 @@ public class PCSystem : AbstractSystem, IPCSystem
         // 1. 注册被动技能：
         foreach (var se in currentPC.data.SEs)
         {
-            Debug.Log($"注册角色被动技能: {se.GetType().Name}");
+            DebugSE(se, true);
             this.GetSystem<IGASystem>().ApplySE(currentPC, se);
         }
     }
@@ -151,12 +151,40 @@ public class PCSystem : AbstractSystem, IPCSystem
         // 1. 注销所有被动技能
         foreach (var se in currentPC.data.SEs)
         {
-            Debug.Log($"注销角色被动技能: {se.GetType().Name}");
+            DebugSE(se, false);
             this.GetSystem<IGASystem>().RemoveSE(currentPC, se);
         }
         Debug.Log($"注销玩家角色{currentPC.data.Name}");
         currentPC = null;
+    }
 
+    private void DebugSE(SustainEffect se, bool isAdd){
+        if (se is SE_监听事件 se_监听事件)
+        {
+            if (isAdd)
+            {
+                Debug.Log($"注册角色被动技能: {se.GetType().Name} - {se_监听事件.Evt}");
+            }
+            else
+            {
+                Debug.Log($"注销角色被动技能: {se.GetType().Name} - {se_监听事件.Evt}");
+            }
+        }
+        else if (se is SE_基于线性GA se_基于线性GA)
+        {
+            if (isAdd)
+            {
+                Debug.Log($"注册角色被动技能: {se.GetType().Name} - {se_基于线性GA.OnAddAction.Count} 个GA");
+            }
+            else
+            {
+                Debug.Log($"注销角色被动技能: {se.GetType().Name} - {se_基于线性GA.OnAddAction.Count} 个GA");
+            }
+        }
+        else
+        {
+            Debug.LogError($"注册角色被动技能: {se.GetType().Name} - {se.guid} 不是 SE_监听事件或 SE_基于线性GA");
+        }
     }
 
     #endregion
