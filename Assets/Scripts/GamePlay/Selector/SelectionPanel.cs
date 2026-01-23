@@ -25,6 +25,7 @@ public class SelectionPanel : MonoBehaviour, IController
     // 刷新次数
     [SerializeField] private TextMeshProUGUI refreshAmountText;
     [SerializeField] private ButtonUI refreshButton;
+    [SerializeField] private RectTransform buttonParent;
     private int refreshAmount = 0;
     private List<SelectionView> selectionViews = new List<SelectionView>();
     private ISelectionRequest currentRequest = null;
@@ -86,7 +87,17 @@ public class SelectionPanel : MonoBehaviour, IController
         // 1. 重置选择与刷新次数
         ResetSelection();
         refreshAmount = evt.RefreshAmount;
-        refreshAmountText.text = $"刷新：{refreshAmount}";
+
+        if (refreshAmount == 0)
+        {
+            refreshButton.gameObject.SetActive(false);
+            refreshAmountText.text = "";
+        }
+        else
+        {
+            refreshButton.gameObject.SetActive(true);
+            refreshAmountText.text = $"刷新：{refreshAmount}";
+        }
 
         // 2. 设置当前请求
         currentRequest = evt.SelectionRequest;

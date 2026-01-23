@@ -64,11 +64,13 @@ public class OrderController : MonoBehaviour, IController, ICanSendEvent
         });
     }
     private void OnHighlightCustomersEvent(HighlightCustomersEvent e){
+        // Debug.Log($"OnHighlightCustomersEvent: {e.customers.Count}");
         e.customers.ForEach(customer => {
             orderViews[customer.guid].Highlight();
         });
     }
     private void OnUnhighlightCustomersEvent(UnhighlightCustomersEvent e){
+        // Debug.Log($"OnUnhighlightCustomersEvent: {orderViews.Count}");
         orderViews.Values.ToList().ForEach(orderView => {
             orderView.Unhighlight();
         });

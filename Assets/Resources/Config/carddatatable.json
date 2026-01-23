@@ -282,7 +282,45 @@
         "action": {
           "ID": "1",
           "conditions": [],
-          "actions": []
+          "actions": [
+            {
+              "$type": "GA_使顾客离开",
+              "info": {
+                "strategy": 0,
+                "value": {
+                  "$type": "DV_值",
+                  "number": 1
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "ID": "12",
+    "name": "方向移动",
+    "description": "选择一个食材，使其向一个方向移动",
+    "cost": 2,
+    "target": 1,
+    "CGAs": [
+      {
+        "type": 0,
+        "action": {
+          "ID": "1",
+          "conditions": [],
+          "actions": [
+            {
+              "$type": "GA_效果选择",
+              "options": [
+                "Card_移动_向上",
+                "Card_移动_向下",
+                "Card_移动_向左",
+                "Card_移动_向右"
+              ]
+            }
+          ]
         }
       }
     ]

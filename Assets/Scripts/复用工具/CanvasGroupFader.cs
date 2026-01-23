@@ -14,7 +14,7 @@ public class CanvasGroupFader : MonoBehaviour
     public void FadeIn(float duration = 0.3f){
         canvasGroup.blocksRaycasts = true;
         canvasGroup.interactable = true;
-        canvasGroup.alpha = 1;
+        // canvasGroup.alpha = 1;
         canvasGroup.DOFade(1, duration).SetEase(Ease.OutSine).SetUpdate(true);
 
     }
@@ -22,7 +22,7 @@ public class CanvasGroupFader : MonoBehaviour
         canvasGroup.DOFade(0, duration).SetEase(Ease.OutSine).SetUpdate(true);
         canvasGroup.blocksRaycasts = false;
         canvasGroup.interactable = false;
-        canvasGroup.alpha = 0;
+        // canvasGroup.alpha = 0;
     }
 
     public void ChangeVisible(){

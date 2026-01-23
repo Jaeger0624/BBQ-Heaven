@@ -108,10 +108,11 @@ public class TargetSelector{
             return new List<object>{targetCell};
         }
         else if (targetType == CardTargetType.任意顾客){
-            OrderView targetOrderView = targetObject.GetComponent<OrderView>();
+            OrderView targetOrderView = targetObject.GetComponentInParent<OrderView>();
             if (targetOrderView == null){
                 return null;
             }
+            Debug.Log($"GetParam: 任意顾客");
             return new List<object>{targetOrderView.customer};
         }
         else{

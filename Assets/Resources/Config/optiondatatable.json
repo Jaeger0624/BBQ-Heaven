@@ -38,5 +38,133 @@
     "description": "怎么可以！",
     "effectDescription": "客人可能会愤然离去",
     "actions": []
+  },
+  {
+    "ID": "Card_移动_向上",
+    "name": "向上",
+    "description": "",
+    "effectDescription": "使食材向上移动1格",
+    "actions": [
+      {
+        "ID": "1",
+        "conditions": [],
+        "actions": [
+          {
+            "$type": "GA_方向位移",
+            "info": {
+              "strategy": 4,
+              "value": {
+                "$type": "DV_值",
+                "number": 1
+              },
+              "types": [
+                1
+              ]
+            },
+            "dir": 1,
+            "value": {
+              "$type": "DV_值",
+              "number": 1
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "ID": "Card_移动_向下",
+    "name": "向下",
+    "description": "",
+    "effectDescription": "使食材向下移动1格",
+    "actions": [
+      {
+        "ID": "1",
+        "conditions": [],
+        "actions": [
+          {
+            "$type": "GA_方向位移",
+            "info": {
+              "strategy": 4,
+              "value": {
+                "$type": "DV_值",
+                "number": 1
+              },
+              "types": [
+                1
+              ]
+            },
+            "dir": 2,
+            "value": {
+              "$type": "DV_值",
+              "number": 1
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "ID": "Card_移动_向左",
+    "name": "向左",
+    "description": "",
+    "effectDescription": "使食材向左移动1格",
+    "actions": [
+      {
+        "ID": "1",
+        "conditions": [],
+        "actions": [
+          {
+            "$type": "GA_方向位移",
+            "info": {
+              "strategy": 4,
+              "value": {
+                "$type": "DV_值",
+                "number": 1
+              },
+              "types": [
+                1
+              ]
+            },
+            "dir": 3,
+            "value": {
+              "$type": "DV_值",
+              "number": 1
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "ID": "Card_移动_向右",
+    "name": "向右",
+    "description": "",
+    "effectDescription": "使食材向右移动1格",
+    "actions": [
+      {
+        "ID": "1",
+        "conditions": [],
+        "actions": [
+          {
+            "$type": "GA_方向位移",
+            "info": {
+              "strategy": 4,
+              "value": {
+                "$type": "DV_值",
+                "number": 1
+              },
+              "types": [
+                1
+              ]
+            },
+            "dir": 4,
+            "value": {
+              "$type": "DV_值",
+              "number": 1
+            }
+          }
+        ]
+      }
+    ]
   }
 ]

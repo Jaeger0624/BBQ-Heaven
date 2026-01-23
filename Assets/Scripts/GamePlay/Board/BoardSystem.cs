@@ -130,6 +130,7 @@ public class BoardSystem : AbstractSystem, IBoardSystem
         this.SendEvent(new HighlightCellsEvent(positions));
     }
     public void ClearHighlight(){
+        // Debug.Log($"ClearHighlight");
         this.SendEvent(new ClearAllBoardsHighlight());
     }
 

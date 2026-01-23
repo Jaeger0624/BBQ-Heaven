@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using cfg;
+using QFramework;
 using UnityEngine;
 
 namespace cfg{
@@ -29,6 +31,16 @@ namespace cfg{
                 return new Vector2Int(-1, 0);
             case Direction.右:
                 return new Vector2Int(1, 0);
+            case Direction.随机:
+                List<Vector2Int> directions = new List<Vector2Int>{
+                    new Vector2Int(0, 1),
+                    new Vector2Int(0, -1),
+                    new Vector2Int(-1, 0),
+                    new Vector2Int(1, 0),
+                };
+                Rng rng = GameArchitecture.Interface.GetSystem<IRngSystem>().GetSubRng<IBoardSystem>();
+                return rng.PickOne(directions);
+
             default:
                 Debug.LogError("【ToVector2Int】方向不能为无");
                 return Vector2Int.zero;

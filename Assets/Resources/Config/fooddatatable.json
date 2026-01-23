@@ -481,5 +481,51 @@
     "SEs": [],
     "rank": 2,
     "timeCost": 1
+  },
+  {
+    "ID": "QQ_suger",
+    "name": "QQ糖",
+    "description": "QQ弹弹~",
+    "type": 16,
+    "tag": 0,
+    "rarity": 2,
+    "taste": 5,
+    "sprite": "Jam",
+    "effectDescription": "被撞击时，珍稀度+2",
+    "CGAs": [
+      {
+        "type": 5,
+        "action": {
+          "ID": "1",
+          "conditions": [],
+          "actions": [
+            {
+              "$type": "GA_为食材加属性",
+              "rarity": {
+                "$type": "DV_值",
+                "number": 2
+              },
+              "taste": {
+                "$type": "DV_值",
+                "number": 0
+              },
+              "info": {
+                "strategy": 3,
+                "value": {
+                  "$type": "DV_值",
+                  "number": 1
+                },
+                "types": [
+                  1
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "SEs": [],
+    "rank": 1,
+    "timeCost": 1
   }
 ]

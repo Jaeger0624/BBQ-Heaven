@@ -68,3 +68,32 @@ public class SelectionRequest_随机食材 : AbstractSelectionRequest{
         return new SelectRequest(foodDatas.Select(x => x.ID).ToList(), Title, SelectionType.Food, onSelect);
     }
 }
+
+public class SelectionRequest_效果选项 : AbstractSelectionRequest{
+    public override string Title => "选择一个效果";
+    public override int Amount { get; set; } = 1;
+    private List<OptionData> Options;
+    public override Action<string> OnSelect { get; set; } = null;
+    private object Sender;
+    private List<object> Param;
+    public SelectionRequest_效果选项(List<OptionData> options, object sender, List<object> param){
+        this.Options = options;
+        this.OnSelect = OnSelection;
+        this.Sender = sender;
+        this.Param = param;
+    }
+    public override SelectRequest Create(){
+        return new SelectRequest(Options.Select(x => x.ID).ToList(), Title, SelectionType.Choices, OnSelect);
+    }
+
+    private void OnSelection(string optionID){
+        OptionData optionData = Options.FirstOrDefault(x => x.ID == optionID);
+        if (optionData == null){
+            Debug.LogError("【SelectionRequest】选择的效果不存在：" + optionID);
+            return;
+        }
+        foreach (var cga in optionData.Actions){
+            this.GetSystem<IGASystem>().ApplyCGA(Sender, new CGA(cga), Param);
+        }
+    }
+}

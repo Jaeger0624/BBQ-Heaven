@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using QFramework;
 using UniRx;
 using UnityEngine;
@@ -85,5 +86,52 @@ namespace cfg{
             }
         }
         public override IAnimTask GetAnimTask() => new EmptyAnimTask();
+    }
+
+
+    public partial class GA_使顾客离开 : GameAction
+    {
+        public GA_使顾客离开(GetCustomerInfo info)
+        {
+            this.Info = info;
+        }
+        public override GameAction Clone()
+        {
+            return new GA_使顾客离开(Info);
+        }
+
+        public override void Execute(object sender, List<object> param)
+        {
+            List<Customer> customers = Info.GetCustomers(sender, param);
+            if (customers == null || customers.Count == 0){
+                Debug.LogError("【GA_使顾客离开】没有顾客");
+                return;
+            }
+            this.GetSystem<ICustomerSystem>().LeaveCustomer(customers);
+        }
+
+        public override IAnimTask GetAnimTask()
+        {
+            return new EmptyAnimTask();
+        }
+    }
+
+
+    public partial class GA_效果选择 : GameAction
+    {
+        public GA_效果选择(List<string> effectIDs)
+        {
+            this.Options = effectIDs;
+        }
+        public override GameAction Clone() => new GA_效果选择(Options);
+        public override void Execute(object sender, List<object> param)
+        {
+            List<OptionData> options = Options.Select(x => this.GetSystem<IDataSystem>().GetOptionData(x)).ToList();
+            this.GetSystem<ISelectorSystem>().RequestSelection(new SelectionRequest_效果选项(options, sender, param), 0, SelectionPanelType.Choices);
+        }
+        public override IAnimTask GetAnimTask()
+        {
+            return new EmptyAnimTask();
+        }
     }
 }

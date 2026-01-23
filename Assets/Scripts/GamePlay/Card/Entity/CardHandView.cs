@@ -201,6 +201,7 @@ public class CardHandView : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
             // 1. 如果目标为空，则刷新布局
             if (targetObject == null){
                 this.GetSystem<ICardSystem>().State = CardSystemState.正常;
+                UnHighLight();
                 goto End;
             }
 
@@ -209,9 +210,12 @@ public class CardHandView : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
             // 2. 如果参数为空，则刷新布局
             if (param == null){
                 this.GetSystem<ICardSystem>().State = CardSystemState.正常;
+                UnHighLight();
                 goto End;
             }
 
+            // 3. 成功使用卡牌，也清除高亮
+            UnHighLight();
             this.GetSystem<ICardSystem>().UseCard(card, param);
         }
         else{
@@ -230,7 +234,6 @@ public class CardHandView : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         // 1. 清除棋盘高光
         this.GetSystem<IBoardSystem>().ClearHighlight();
 
-        
         // 2. 清除顾客高光
         this.SendEvent(new UnhighlightCustomersEvent());
     }

@@ -50,6 +50,8 @@ public abstract partial class GameAction : Luban.BeanBase
             case "GA_触发遭遇": return new GA_触发遭遇(_buf);
             case "GA_触发瞬时遭遇": return new GA_触发瞬时遭遇(_buf);
             case "GA_定点爆破": return new GA_定点爆破(_buf);
+            case "GA_使顾客离开": return new GA_使顾客离开(_buf);
+            case "GA_效果选择": return new GA_效果选择(_buf);
             default: throw new SerializationException();
         }
     }

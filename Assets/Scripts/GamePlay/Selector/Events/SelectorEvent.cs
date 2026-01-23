@@ -27,5 +27,6 @@ public class CreateSelectionEvent : AbstractEvent{
     public CreateSelectionEvent(ISelectionRequest selectionRequest, int refreshAmount, SelectionPanelType selectionPanelType){
         SelectionRequest = selectionRequest;
         RefreshAmount = refreshAmount;
+        SelectionPanelType = selectionPanelType;
     }
 }

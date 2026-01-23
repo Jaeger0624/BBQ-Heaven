@@ -46,6 +46,17 @@ public class SelectionView : MonoBehaviour, IController
                 effectDescriptionText.text = foodData.EffectDescription;
                 Image.sprite = Resources.Load<Sprite>("Sprites/" + foodData.Sprite);
                 break;
+            case SelectionType.Choices:
+                OptionData optionData = this.GetSystem<IDataSystem>().GetOptionData(Id);
+                if (optionData == null){
+                    Debug.LogError("选项数据不存在：" + Id);
+                    return;
+                }
+                nameText.text = optionData.Name;
+                descriptionText.text = "";
+                effectDescriptionText.text = optionData.EffectDescription;
+                // Image.sprite = Resources.Load<Sprite>("Sprites/" + optionData.Sprite);
+                break;
             default:
                 Debug.LogError("不支持的选择类型：" + selectionType);
                 break;
