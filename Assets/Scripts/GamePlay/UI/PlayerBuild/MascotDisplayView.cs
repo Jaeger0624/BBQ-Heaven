@@ -7,8 +7,10 @@ using UnityEngine.UI;
 public class MascotDisplayView : MonoBehaviour, IShowTooltip
 {
     [SerializeField] private TooltipParent tooltipParent;
-    [SerializeField] private Image foodImage;
-    [SerializeField] private TextMeshProUGUI amountText;
+    [SerializeField] private Image MascotDisplayImage;
+    [SerializeField] private TextMeshProUGUI MascotNameText;
+    [SerializeField] private TextMeshProUGUI MascotStackNumberText;
+    [SerializeField] private TextMeshProUGUI MascotPriceText;
     public TooltipParent parent => tooltipParent ?? null;
     private Mascot mascot;
     
@@ -28,10 +30,17 @@ public class MascotDisplayView : MonoBehaviour, IShowTooltip
         //     return;
         // }
         // foodImage.sprite = sprite;
-        amountText.text = mascot.StackNumber == 1 ? "" : mascot.StackNumber.ToString();
+        if (MascotNameText != null){
+            MascotNameText.text = mascot.name;
+        }
+        if (MascotStackNumberText != null){
+            MascotStackNumberText.text = mascot.StackNumber == 1 ? "" : mascot.StackNumber.ToString();
+        }
     }
     public List<TooltipInfo> GetTooltipInfo()
     {
-        return new List<TooltipInfo>();
+        string description = $"<size=50>{mascot.name}</size>\n<size=36>{mascot.description}</size>";
+        TooltipInfo tooltipInfo = new TooltipInfo(description);
+        return new List<TooltipInfo>(){tooltipInfo};
     }
 }

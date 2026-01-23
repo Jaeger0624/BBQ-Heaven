@@ -114,6 +114,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2188531019319595379}
   - component: {fileID: 4179737936033203228}
+  - component: {fileID: 1726400861272243742}
   m_Layer: 0
   m_Name: "\u5409\u7965\u7269Container"
   m_TagString: Untagged
@@ -135,10 +136,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 6031919661526950979}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &4179737936033203228
 MonoBehaviour:
@@ -158,7 +159,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4
-  m_Spacing: 30
+  m_Spacing: 90
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
@@ -166,6 +167,23 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &1726400861272243742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 395114683716942276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d230e88d73ba9e94bada34e95a3a46bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  foodContainer: {fileID: 2188531019319595379}
+  controlGridLayout: 0
+  gridLayoutGroup: {fileID: 0}
+  cellSize: {x: 100, y: 100}
+  cellSpacing: {x: 10, y: 10}
 --- !u!1 &439346822444305906
 GameObject:
   m_ObjectHideFlags: 0
@@ -1163,7 +1181,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b64f604fde7089d44b271a5ffb507fcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  priceText: {fileID: 0}
+  priceText: {fileID: 4691913565004368970}
   button: {fileID: 0}
 --- !u!1 &3000892890171094936
 GameObject:
@@ -1642,9 +1660,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 4987742146149481346}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 163.9725, y: -232.1575}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5277741104070646179
@@ -1779,7 +1797,9 @@ MonoBehaviour:
   shopDescriptionText: {fileID: 1022602864004512078}
   foodDisplayContainer: {fileID: 4551808956245057594}
   foodDisplayRefreshButton: {fileID: 1564359902527845603}
-  deletePriceButton: {fileID: 7357508747307381118}
+  mascotDisplayContainer: {fileID: 1726400861272243742}
+  mascotDisplayRefreshButton: {fileID: 7698274596837883885}
+  foodDeleteButton: {fileID: 7357508747307381118}
 --- !u!114 &6497146097390663215
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2095,9 +2115,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 4987742146149481346}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 163.9725, y: -137.1575}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7052467282168070708
@@ -2489,9 +2509,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 4987742146149481346}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 163.9725, y: -327.1575}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8579870627956058675
@@ -2946,5 +2966,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b64f604fde7089d44b271a5ffb507fcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  priceText: {fileID: 0}
+  priceText: {fileID: 3686574644164834104}
   button: {fileID: 0}

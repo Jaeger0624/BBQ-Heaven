@@ -67,5 +67,3 @@ public class FoodDisplayContainer : MonoBehaviour, IController, IDisplayContaine
     }
     public GameObject GetGameObject() => gameObject;
 }
-
-
