@@ -8,6 +8,7 @@ public interface ICustomerTag{
     string name { get; }
     void Execute(DealContext context);
     List<bool> Preview(DealContext context);
+    List<CustomerCGA> CustomerCGAs { get; }
 }
 
 public class CustomerTag : ICustomerTag, ICanGetSystem, ICanSendEvent
@@ -15,6 +16,7 @@ public class CustomerTag : ICustomerTag, ICanGetSystem, ICanSendEvent
     public CustomerTagData customerTagData;
     public string name => customerTagData.Name;
     public List<TagCGA> tagCGAs;
+    public List<CustomerCGA> CustomerCGAs => CustomerCGAs.ToList();
     public CustomerTag(CustomerTagData customerTagData){
         this.customerTagData = customerTagData;
         this.tagCGAs = new List<TagCGA>();

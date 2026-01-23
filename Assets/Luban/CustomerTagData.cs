@@ -26,6 +26,7 @@ public sealed partial class CustomerTagData : Luban.BeanBase
         { if(!_buf["signedValue"].IsNumber) { throw new SerializationException(); }  SignedValue = _buf["signedValue"]; }
         { if(!_buf["type"].IsNumber) { throw new SerializationException(); }  Type = (CustomerTagType)_buf["type"].AsInt; }
         { var __json0 = _buf["tagCGAs"]; if(!__json0.IsArray) { throw new SerializationException(); } TagCGAs = new System.Collections.Generic.List<TagCGA>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { TagCGA __v0;  { if(!__e0.IsObject) { throw new SerializationException(); }  __v0 = global::cfg.TagCGA.DeserializeTagCGA(__e0);  }  TagCGAs.Add(__v0); }   }
+        { var __json0 = _buf["actionCGAs"]; if(!__json0.IsArray) { throw new SerializationException(); } ActionCGAs = new System.Collections.Generic.List<CustomerCGA>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { CustomerCGA __v0;  { if(!__e0.IsObject) { throw new SerializationException(); }  __v0 = global::cfg.CustomerCGA.DeserializeCustomerCGA(__e0);  }  ActionCGAs.Add(__v0); }   }
     }
 
     public static CustomerTagData DeserializeCustomerTagData(JSONNode _buf)
@@ -42,6 +43,7 @@ public sealed partial class CustomerTagData : Luban.BeanBase
     /// </summary>
     public readonly CustomerTagType Type;
     public readonly System.Collections.Generic.List<TagCGA> TagCGAs;
+    public readonly System.Collections.Generic.List<CustomerCGA> ActionCGAs;
    
     public const int __ID__ = -1162436474;
     public override int GetTypeId() => __ID__;
@@ -49,6 +51,7 @@ public sealed partial class CustomerTagData : Luban.BeanBase
     public  void ResolveRef(Tables tables)
     {
         foreach (var _e in TagCGAs) { _e?.ResolveRef(tables); }
+        foreach (var _e in ActionCGAs) { _e?.ResolveRef(tables); }
     }
 
     public override string ToString()
@@ -60,6 +63,7 @@ public sealed partial class CustomerTagData : Luban.BeanBase
         + "signedValue:" + SignedValue + ","
         + "type:" + Type + ","
         + "tagCGAs:" + Luban.StringUtil.CollectionToString(TagCGAs) + ","
+        + "actionCGAs:" + Luban.StringUtil.CollectionToString(ActionCGAs) + ","
         + "}";
     }
 }

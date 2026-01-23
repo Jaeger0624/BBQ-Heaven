@@ -46,6 +46,7 @@ public abstract partial class GameAction : Luban.BeanBase
             case "GA_获得金币": return new GA_获得金币(_buf);
             case "GA_获得Buff": return new GA_获得Buff(_buf);
             case "GA_减少Buff": return new GA_减少Buff(_buf);
+            case "GA_增加顾客等待值": return new GA_增加顾客等待值(_buf);
             default: throw new SerializationException();
         }
     }

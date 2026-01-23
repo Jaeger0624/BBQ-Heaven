@@ -11,6 +11,8 @@ public class PlayerInfoData{
     public int reputation;
     public int nextLevelReputation;
     public int level;
+    // 收入
+    public int income;
     [OdinSerialize]
     public List<Mascot> mascots;
     [OdinSerialize]

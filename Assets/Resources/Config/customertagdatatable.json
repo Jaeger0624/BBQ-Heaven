@@ -36,7 +36,7 @@
       },
       {
         "GADescription": "<size=50>0.8x</size>",
-        "CDDescription": "食材多于7个",
+        "CDDescription": "食材多于6个",
         "type": 2,
         "cga": {
           "ID": "2",
@@ -49,7 +49,7 @@
               "sign": 2,
               "DV2": {
                 "$type": "DV_值",
-                "number": 7
+                "number": 6
               }
             }
           ],
@@ -62,7 +62,8 @@
           ]
         }
       }
-    ]
+    ],
+    "actionCGAs": []
   },
   {
     "ID": "2",
@@ -73,7 +74,7 @@
     "tagCGAs": [
       {
         "GADescription": "<size=50>1.5x</size>",
-        "CDDescription": "食材多于7个",
+        "CDDescription": "食材多于6个",
         "type": 1,
         "cga": {
           "ID": "1",
@@ -86,7 +87,7 @@
               "sign": 2,
               "DV2": {
                 "$type": "DV_值",
-                "number": 7
+                "number": 6
               }
             }
           ],
@@ -127,6 +128,40 @@
           ]
         }
       }
+    ],
+    "actionCGAs": []
+  },
+  {
+    "ID": "3",
+    "name": "捣蛋鬼",
+    "description": "其他人很讨厌这家伙！",
+    "signedValue": 0,
+    "type": 0,
+    "tagCGAs": [],
+    "actionCGAs": [
+      {
+        "type": 1,
+        "cga": {
+          "ID": "2",
+          "conditions": [],
+          "actions": [
+            {
+              "$type": "GA_增加顾客等待值",
+              "value": {
+                "$type": "DV_值",
+                "number": 5
+              },
+              "info": {
+                "strategy": 2,
+                "value": {
+                  "$type": "DV_值",
+                  "number": 2
+                }
+              }
+            }
+          ]
+        }
+      }
     ]
   },
   {
@@ -158,6 +193,7 @@
           ]
         }
       }
-    ]
+    ],
+    "actionCGAs": []
   }
 ]

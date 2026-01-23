@@ -16525,7 +16525,7 @@ GameObject:
   - component: {fileID: 841469284}
   - component: {fileID: 841469285}
   m_Layer: 0
-  m_Name: "\u9876\u6846"
+  m_Name: "\u9876\u6846\u7BA1\u7406\u5668"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16615,6 +16615,7 @@ MonoBehaviour:
   coinText: {fileID: 1690574006}
   reputationText: {fileID: 1024538927}
   levelText: {fileID: 1412833967}
+  incomeText: {fileID: 422847629}
 --- !u!1 &854102650
 GameObject:
   m_ObjectHideFlags: 0

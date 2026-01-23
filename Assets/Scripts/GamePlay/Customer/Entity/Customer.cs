@@ -49,6 +49,11 @@ public class Customer : ICanGetSystem, ICanRegisterEvent, ICanSendEvent{
 
     public void SetState(CustomerState state){
         this.state = state;
+
+        // 当顾客状态改变为Ordering时，触发出现时动作
+        if (state == CustomerState.Ordering){
+            this.GetSystem<ICustomerSystem>().CustomerActionHandler.HandleCustomerAction(new List<Customer>{this}, CustomerActionType.出现时, new List<object>());
+        }
     }
     public IArchitecture GetArchitecture()
     {

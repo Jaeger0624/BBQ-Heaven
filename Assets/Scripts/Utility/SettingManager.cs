@@ -23,8 +23,11 @@ public class SettingManager : MonoBehaviour, IController,ICanSendEvent{
             Destroy(this.gameObject);
             return;
         }
-        _instance = this;
-        DontDestroyOnLoad(this.gameObject);
+        else{
+            _instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+
 
         // 获取Settings
         _devSettings = Resources.Load<DevSettings>("SO/DevSettings");

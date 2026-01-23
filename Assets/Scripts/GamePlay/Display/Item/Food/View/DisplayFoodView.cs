@@ -116,11 +116,11 @@ public class DisplayFoodView : MonoBehaviour, IDisplayItemView<FoodUIContext>{
             }
             enhancementViews.Add(enhancementImage);
         }
-        // Debug.Log($"创建了 {enhancementViews.Count} 个强化槽");
         // 强制刷新布局
         LayoutRebuilder.ForceRebuildLayoutImmediate(enhancementParent as RectTransform);
 
         int amount = _context.RuntimeFood.Enhancements.Count;
+        // Debug.Log($"有{enhancementViews.Count}个强化槽，但需要绑定{amount}个强化槽");
         // 绑定强化槽
         for (int i = 0; i < amount; i++){
             if (i >= amount){
@@ -128,7 +128,6 @@ public class DisplayFoodView : MonoBehaviour, IDisplayItemView<FoodUIContext>{
                 break;
             }
             enhancementViews[i].sprite = SettingManager.Instance.ArtSettings.EnhancementSprites.GetSprite($"食材强化图标_{_context.RuntimeFood.Enhancements[i].SpriteName}");   
-
         }
 
         for (int i = 0; i < enhancementViews.Count; i++){

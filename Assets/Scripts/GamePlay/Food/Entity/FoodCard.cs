@@ -27,6 +27,7 @@ public class FoodCard : ICanGetSystem{
     [NonSerialized]
     public Dictionary<FoodGAType, List<CGA>> foodGAs;
     public List<SustainEffect> sustainEffects => foodData.SEs;
+    [OdinSerialize]
     public int MaxSlots {get; private set;} = 2; // 默认最大槽位为2
     [OdinSerialize]
     public List<FoodCardEnhancement> Enhancements = new List<FoodCardEnhancement>();

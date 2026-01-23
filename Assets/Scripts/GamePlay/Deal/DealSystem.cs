@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System;
 using UniRx;
+using cfg;
 
 
 /// <summary>
@@ -207,6 +208,9 @@ public class DealSystem : AbstractSystem, IDealSystem
 
 		// 交易完成事件（把结果发出去，让DealController自动处理成动画）
 		this.SendEvent(new DealCompletedEvent(result));
+
+		// 触发顾客订单完成后动作
+		this.GetSystem<ICustomerSystem>().CustomerActionHandler.HandleCustomerAction(new List<Customer>{context.Customer}, CustomerActionType.订单完成后, new List<object>{result, context});
 
 		// 顾客离开（服务完成）
 		this.GetSystem<ICustomerSystem>().LeaveCustomer(new List<Customer>{context.Customer});

@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
-using UnityEditor.U2D.Aseprite;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 [CreateAssetMenu(fileName = "SpriteReferenceSO", menuName = "SpriteReferenceSO")]
 public class SpriteReferenceSO : ScriptableObject

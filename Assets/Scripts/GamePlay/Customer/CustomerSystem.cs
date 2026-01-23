@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using cfg;
 using QFramework;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ public interface ICustomerSystem : ISystem, ICanSendQuery{
     List<Customer> OrderingCustomers { get; }
     CustomerSatisfaction Satisfaction { get; set; }
     CustomerLookMaker CustomerLookMaker { get; set; }
+    CustomerActionHandler CustomerActionHandler { get; }
     #endregion
     #region logic
     // 生成每日顾客序列后即时添加顾客，如果isPreScheduled为true，则是在每日生成前
@@ -38,6 +40,24 @@ public class CustomerSystem_新 : AbstractCustomerSystem
     private float naturalArriveChance => SettingManager.GetSetting<GameplaySettings>().每分钟来一个顾客的可能性;
     private ICustomerFactory customerFactory;
     private Rng rng => this.GetSystem<IRngSystem>().GetSubRng<ICustomerSystem>();
+    private CustomerActionHandler customerActionHandler;
+    public override CustomerActionHandler CustomerActionHandler => customerActionHandler;
+    protected override void OnInit()
+    {
+        base.OnInit();  
+        customerFactory = new CustomerFactory_默认影响权重();
+
+        customerActionHandler = new CustomerActionHandler();
+        customerActionHandler.Init();
+    }
+
+    protected override void OnDeinit()
+    {
+        base.OnDeinit();
+        customerFactory = null;
+
+        customerActionHandler.Release();
+    }
     protected override void OnStartNewDay(StartNewDayEvent evt)
     {
         if (!evt.StageMeet(EventStage.System)) return;
@@ -114,7 +134,6 @@ public class CustomerSystem_新 : AbstractCustomerSystem
     }
 
     private void OnTimeTick_迎来新顾客(TimeTickEvent evt){
-        // 每日初始有两个顾客
         int timePoint = evt.timePoint;
         List<Customer> customersToCreate = new();
         for (int i = 0; i < timePoint; i++){
@@ -185,7 +204,13 @@ public class CustomerSystem_新 : AbstractCustomerSystem
 
     public override void LeaveCustomer(List<Customer> customers)
     {
+
+        if (customers.Count == 0){Debug.LogWarning("移除顾客时，传入的顾客列表为空"); return;}
+
         customers.ForEach(customer => {
+
+            customerActionHandler.HandleCustomerAction(new List<Customer>{customer}, CustomerActionType.离开时, new List<object>());
+
             // 1. 移除顾客
             OrderingCustomers.Remove(customer);
             // 2. 添加到已离开的顾客列表
@@ -194,9 +219,15 @@ public class CustomerSystem_新 : AbstractCustomerSystem
             customer.SetState(CustomerState.Leaved);
         });
 
+
         
-        // 4. 发送移除顾客事件，播放离开动画等
+        // 5. 发送移除顾客事件，播放离开动画等
         this.SendEvent<RemoveCustomerEvent>(new RemoveCustomerEvent(customers));
+
+        // 6. 对所有未离开的顾客，触发其他顾客离开时动作
+        List<Customer> customersNotLeaved = OrderingCustomers.Where(customer => !customers.Contains(customer)).ToList();
+        customerActionHandler.HandleCustomerAction(customersNotLeaved, CustomerActionType.其他顾客离开时, new List<object>());
+
 
         List<Customer> customersToCreate = new();
         foreach (var customer in customers){
@@ -237,17 +268,7 @@ public class CustomerSystem_新 : AbstractCustomerSystem
         preScheduledCustomers.Add((scheduleInfo.customer, arriveTime));
     }
 
-    protected override void OnInit()
-    {
-        base.OnInit();  
-        customerFactory = new CustomerFactory_默认影响权重();
-    }
 
-    protected override void OnDeinit()
-    {
-        base.OnDeinit();
-        customerFactory = null;
-    }
 }
 #region CustomerSystem抽象层
 public abstract class AbstractCustomerSystem : AbstractSystem, ICustomerSystem
@@ -256,6 +277,7 @@ public abstract class AbstractCustomerSystem : AbstractSystem, ICustomerSystem
     public List<Customer> OrderingCustomers => orderingCustomers;
     public CustomerSatisfaction Satisfaction { get; set; }
     public CustomerLookMaker CustomerLookMaker { get; set; } = new CustomerLookMaker();
+    public abstract CustomerActionHandler CustomerActionHandler { get;}
     /// <summary> 等待顾客队列，用于处理排队和填补空缺 </summary>
     protected Queue<Customer> waitingCustomers = new Queue<Customer>();
     /// <summary> 当日顾客实例字典，用于存储顾客实例 </summary>

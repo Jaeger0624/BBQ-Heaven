@@ -4,12 +4,13 @@ using UnityEngine;
 using UnityEngine.Timeline;
 
 public interface IEconomySystem : ISystem, ISavable{
-    int baseScore{get;}
+    ReactiveProperty<int> income{get;}
     int maxInterestScore{get;}
     int profitScore{get;}
     ReactiveProperty<int> coin { get; }
     void AddCoin(int amount);
     void CostCoin(int amount);
+    void ChangeIncome(int amount);
     DailyInfo GetDailyInfo(IGetDailyEconomy getDailyEconomyStrategy);
     /// <summary>
     /// 生效日结算
@@ -19,7 +20,7 @@ public interface IEconomySystem : ISystem, ISavable{
 }
 public class EconomySystem : AbstractSystem, IEconomySystem
 {
-    public int baseScore{get; set;} = 3;
+    public ReactiveProperty<int> income{get; private set;}
     public int maxInterestScore{get; set;} = 5;
     public int profitScore{get; set;} = 2;
     // Q币，用于购买道具和升级等
@@ -28,6 +29,7 @@ public class EconomySystem : AbstractSystem, IEconomySystem
     protected override void OnInit()
     {
         coin = new ReactiveProperty<int>(0);
+        income = new ReactiveProperty<int>(3);
         this.RegisterEvent<StartNewDayEvent>(OnStartNewDay);
         this.RegisterEvent<DealCompletedEvent>(OnDealCompleted);
         this.RegisterEvent<AddEncounterEvent>(OnAddEncounter);
@@ -35,6 +37,7 @@ public class EconomySystem : AbstractSystem, IEconomySystem
     protected override void OnDeinit()
     {
         coin.Dispose();
+        income.Dispose();
         this.UnRegisterEvent<StartNewDayEvent>(OnStartNewDay);
         this.UnRegisterEvent<DealCompletedEvent>(OnDealCompleted);
         this.UnRegisterEvent<AddEncounterEvent>(OnAddEncounter);
@@ -71,10 +74,12 @@ public class EconomySystem : AbstractSystem, IEconomySystem
     public void Save(GameArchive archive)
     {
         archive.playerInfoData.coin = coin.Value;
+        archive.playerInfoData.income = income.Value;
     }
     public void Load(GameArchive archive)
     {
         coin.Value = archive.playerInfoData.coin;
+        income.Value = archive.playerInfoData.income;
     }
     public void AddCoin(int amount)
     {
@@ -89,6 +94,17 @@ public class EconomySystem : AbstractSystem, IEconomySystem
             return;
         }
         coin.Value -= amount;
+    }
+
+    public void ChangeIncome(int amount)
+    {
+        if (income.Value + amount < 0)
+        {
+            Debug.Log($"经济系统：基础得分不足，无法增加 {amount} 基础得分");
+            income.Value = 0;
+            return;
+        }
+        income.Value += amount;
     }
 
     public DailyInfo GetDailyInfo(IGetDailyEconomy getDailyEconomyStrategy)
@@ -121,7 +137,7 @@ public abstract class AbstractGetDailyEconomyStrategy : IGetDailyEconomy, ICanGe
 
 public class GetDailyEconomyStrategy_默认 : AbstractGetDailyEconomyStrategy{
     public override DailyEconomy GetDailyEconomyInfo(){
-        int baseScore = this.GetSystem<IEconomySystem>().baseScore;
+        int baseScore = this.GetSystem<IEconomySystem>().income.Value;
         int interestScore = GetInterestScore();
         int profitScore = GetProfitScore();
         return new DailyEconomy(baseScore, interestScore, profitScore);
@@ -162,7 +178,7 @@ public class GetDailyEconomyStrategy_零 : AbstractGetDailyEconomyStrategy{
 
 public class GetDailyEconomyStrategy_拉满 : AbstractGetDailyEconomyStrategy{
     public override DailyEconomy GetDailyEconomyInfo(){
-        int baseScore = this.GetSystem<IEconomySystem>().baseScore;
+        int baseScore = this.GetSystem<IEconomySystem>().income.Value;
         int maxInterestScore = this.GetSystem<IEconomySystem>().maxInterestScore;
         int profitScore = this.GetSystem<IEconomySystem>().profitScore;
         return new DailyEconomy(baseScore, maxInterestScore, profitScore);

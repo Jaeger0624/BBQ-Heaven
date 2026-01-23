@@ -1,4 +1,5 @@
 using QFramework;
+using Sirenix.OdinInspector;
 using TMPro;
 using UniRx;
 using UnityEngine;
@@ -8,6 +9,10 @@ public class TopBlankController : MonoBehaviour, IController
     [SerializeField] private TextMeshProUGUI coinText;
     [SerializeField] private TextMeshProUGUI reputationText;
     [SerializeField] private TextMeshProUGUI levelText;
+
+    // 收入
+    [LabelText("收入")]
+    [SerializeField] private TextMeshProUGUI incomeText;
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
 
     
@@ -28,14 +33,23 @@ public class TopBlankController : MonoBehaviour, IController
             UpdateReputationInfo(this.GetSystem<IPCSystem>().Reputation.Value, nextLevelReputation);
         }).AddTo(this);
 
+        this.GetSystem<IEconomySystem>().income.Subscribe((baseScore) => {
+            UpdateIncomeInfo(baseScore);
+        }).AddTo(this);
+
         // 初始化
         UpateCoinInfo(this.GetSystem<IEconomySystem>().coin.Value);
         UpdateReputationInfo(this.GetSystem<IPCSystem>().Reputation.Value, this.GetSystem<IPCSystem>().NextLevelReputation.Value);
         UpdateLevelInfo(this.GetSystem<IPCSystem>().Level.Value);
+        UpdateIncomeInfo(this.GetSystem<IEconomySystem>().income.Value);
     }
 
     private void UpateCoinInfo(int value) => coinText.text = $"<color=yellow>Q:</color>{value}";
     private void UpdateReputationInfo(int value, int nextLevelReputation) => reputationText.text = $"<color=yellow>口碑:</color>{value}/{nextLevelReputation}";
     private void UpdateLevelInfo(int value) => levelText.text = $"<color=yellow>等级:</color>{value}";
 
+    private void UpdateIncomeInfo(int value){
+        incomeText.text = $"+{value}<color=yellow>Q</color>";
+        incomeText.ForceMeshUpdate();
+    }
 }
