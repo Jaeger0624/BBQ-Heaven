@@ -10,6 +10,7 @@ public class TargetSelector{
         if (targetType == CardTargetType.无) return;
         else if (targetType == CardTargetType.食材){
             List<FoodInstance> foodInstances = GameArchitecture.Interface.GetSystem<IFoodSystem>().GetFoodInstances().Values.ToList();
+            Debug.Log($"【TargetSelector】高亮食材: {foodInstances.Count}");
             List<Vector2Int> positions = foodInstances.Select(x => x.position).ToList();
             GameArchitecture.Interface.GetSystem<IBoardSystem>().HighlightCells(positions);
         }

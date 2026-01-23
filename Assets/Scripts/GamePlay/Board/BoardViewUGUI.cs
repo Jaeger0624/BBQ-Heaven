@@ -45,6 +45,7 @@ public class BoardViewUGUI : MonoBehaviour, IController
         // Debug.Log($"HighlightCells: {positions.Count}");
         if (reset) UnhighlightAll();
         foreach (var position in positions){
+            if (position == new Vector2Int(-1, -1)) continue;
             highlightedCells.Add(position);
             boardCellDict[position].Highlight();
         }
@@ -52,6 +53,7 @@ public class BoardViewUGUI : MonoBehaviour, IController
     public void UnhighlightAll(){
         // Debug.Log($"UnhighlightAll: {highlightedCells.Count}");
         foreach (var position in highlightedCells){
+            if (position == new Vector2Int(-1, -1)) continue;
             boardCellDict[position].Unhighlight();
         }
         highlightedCells.Clear();
