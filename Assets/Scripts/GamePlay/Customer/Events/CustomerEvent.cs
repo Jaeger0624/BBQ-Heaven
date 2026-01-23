@@ -54,3 +54,19 @@ public class CurrentCustomerUpdateEvent : AbstractEvent{
     }
 }
 #endregion
+
+
+
+#region 高光
+
+public class HighlightCustomersEvent : AbstractEvent{
+    public List<Customer> customers = new List<Customer>();
+    public HighlightCustomersEvent(List<Customer> customers){
+        this.customers = customers;
+    }
+}
+
+public class UnhighlightCustomersEvent : AbstractEvent{
+}
+
+#endregion

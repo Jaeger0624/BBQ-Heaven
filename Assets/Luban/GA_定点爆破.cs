@@ -13,23 +13,21 @@ using SimpleJSON;
 
 namespace cfg
 {
-public sealed partial class GA_修改地块 : GameAction
+public sealed partial class GA_定点爆破 : GameAction
 {
-    public GA_修改地块(JSONNode _buf)  : base(_buf) 
+    public GA_定点爆破(JSONNode _buf)  : base(_buf) 
     {
         { if(!_buf["info"].IsObject) { throw new SerializationException(); }  Info = global::cfg.GetCellInfo.DeserializeGetCellInfo(_buf["info"]);  }
-        { if(!_buf["tileId"].IsString) { throw new SerializationException(); }  TileId = _buf["tileId"]; }
     }
 
-    public static GA_修改地块 DeserializeGA_修改地块(JSONNode _buf)
+    public static GA_定点爆破 DeserializeGA_定点爆破(JSONNode _buf)
     {
-        return new GA_修改地块(_buf);
+        return new GA_定点爆破(_buf);
     }
 
     public readonly GetCellInfo Info;
-    public readonly string TileId;
    
-    public const int __ID__ = 1172081335;
+    public const int __ID__ = 1264147410;
     public override int GetTypeId() => __ID__;
 
     public override void ResolveRef(Tables tables)
@@ -42,7 +40,6 @@ public sealed partial class GA_修改地块 : GameAction
     {
         return "{ "
         + "info:" + Info + ","
-        + "tileId:" + TileId + ","
         + "}";
     }
 }

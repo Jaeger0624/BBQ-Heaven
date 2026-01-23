@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using cfg;
 using QFramework;
+using UniRx;
 using UnityEngine;
 
 public class CustomerActionHandler : ICanGetSystem, ICanSendEvent, ICanRegisterEvent{
@@ -15,6 +16,7 @@ public class CustomerActionHandler : ICanGetSystem, ICanSendEvent, ICanRegisterE
         customerActionTypes.Remove(CustomerActionType.出现时);
         customerActionTypes.Remove(CustomerActionType.订单完成后);
         customerActionTypes.Remove(CustomerActionType.离开时);
+        customerActionTypes.Remove(CustomerActionType.订单进行时);
 
 
         customerActionTypes.ForEach(RegisterSingleAction);
@@ -24,19 +26,25 @@ public class CustomerActionHandler : ICanGetSystem, ICanSendEvent, ICanRegisterE
         unRegisters.Clear();
     }
 
-    public void HandleCustomerAction(List<Customer> customers, CustomerActionType customerActionType, List<object> parameters){
+    public IObservable<Unit> HandleCustomerAction(List<Customer> customers, CustomerActionType customerActionType, List<object> parameters){
         // 1. 获取正在点餐的顾客
-        if (customers.Count == 0){Debug.LogWarning("触发顾客动作时，传入的顾客列表为空"); return;}
+        if (customers.Count == 0){Debug.LogWarning("触发顾客动作时，传入的顾客列表为空"); return Observable.ReturnUnit();}
 
+        Debug.Log($"【CustomerActionHandler】触发顾客动作: {customerActionType}");
+        List<IObservable<Unit>> actionsToRun = new List<IObservable<Unit>>();
         // 2. 遍历顾客，执行顾客动作
         foreach (var customer in customers){
             foreach (var tag in customer.customerTags){
-                List<CustomerCGA> customerCGAs = tag.CustomerCGAs.Where(x => x.Type == customerActionType).ToList();
+                List<CustomerCGA> customerCGAs = tag.CustomerActionCGAs.Where(x => x.Type == customerActionType).ToList();
                 foreach (var cga in customerCGAs){
-                    cga.Cga.Execute(customer, parameters);
+                    // actionsToRun.Add(this.GetSystem<IGASystem>().ApplyCGAImmediate(customer, cga.Cga, parameters));
+                    this.GetSystem<IGASystem>().ApplyCGA(customer, cga.Cga, parameters);
                 }
             }
         }
+        if (actionsToRun.Count == 0){return Observable.ReturnUnit();}
+        // 3. 执行顾客动作
+        return actionsToRun.Concat().Select(_ => Unit.Default);
     }
     // 与系统外的交互，需要注册事件
     private void RegisterSingleAction(CustomerActionType customerActionType){

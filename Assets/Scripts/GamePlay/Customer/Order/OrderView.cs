@@ -11,6 +11,7 @@ public class OrderView : MonoBehaviour, ICanSendEvent
 {
     public Customer customer{get; private set;}
     [SerializeField] private Image BackgroundImage;
+    [SerializeField] private Image highlightImage;
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI patienceText;
     public TextMeshProUGUI customerTagsText;
@@ -74,5 +75,12 @@ public class OrderView : MonoBehaviour, ICanSendEvent
     public void SetViewSelected(bool isSelected){
         this.isSelected = isSelected;
         BackgroundImage.color = isSelected ? Color.green : Color.white;
+    }
+
+    public void Highlight(){
+        highlightImage.gameObject.SetActive(true);
+    }
+    public void Unhighlight(){
+        highlightImage.gameObject.SetActive(false);
     }
 }

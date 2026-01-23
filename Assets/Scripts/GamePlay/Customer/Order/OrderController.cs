@@ -13,6 +13,10 @@ public class OrderController : MonoBehaviour, IController, ICanSendEvent
         this.RegisterEvent<AddCustomerEvent>(OnAddCustomerEvent).UnRegisterWhenDisabled(this);
         this.RegisterEvent<RemoveCustomerEvent>(OnRemoveCustomerEvent).UnRegisterWhenDisabled(this);
         this.RegisterEvent<CurrentCustomerUpdateEvent>(OnCurrentCustomerUpdate).UnRegisterWhenDisabled(this);
+
+
+        this.RegisterEvent<HighlightCustomersEvent>(OnHighlightCustomersEvent).UnRegisterWhenDisabled(this);
+        this.RegisterEvent<UnhighlightCustomersEvent>(OnUnhighlightCustomersEvent).UnRegisterWhenDisabled(this);
     }
     private void OnAddCustomerEvent(AddCustomerEvent e){
         e.customers.ForEach(customer => {
@@ -57,6 +61,16 @@ public class OrderController : MonoBehaviour, IController, ICanSendEvent
     public void UpdateAll(){
         orderViews.Values.ToList().ForEach(orderView => {
             orderView.UpdateVisual();
+        });
+    }
+    private void OnHighlightCustomersEvent(HighlightCustomersEvent e){
+        e.customers.ForEach(customer => {
+            orderViews[customer.guid].Highlight();
+        });
+    }
+    private void OnUnhighlightCustomersEvent(UnhighlightCustomersEvent e){
+        orderViews.Values.ToList().ForEach(orderView => {
+            orderView.Unhighlight();
         });
     }
 }

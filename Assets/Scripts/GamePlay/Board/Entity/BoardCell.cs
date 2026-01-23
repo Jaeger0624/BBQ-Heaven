@@ -2,7 +2,7 @@ using cfg;
 using QFramework;
 using UnityEngine;
 
-public class BoardCell : IGridComponent, ICanGetSystem{
+public class BoardCell : IGridComponent, ICanGetSystem, ICellPosition{
     public Vector2Int position { get; private set; } = new Vector2Int(-1, -1);
     public string instanceGuid { get; private set; } // 实例GUID，不一定是食材
 
@@ -24,5 +24,5 @@ public class BoardCell : IGridComponent, ICanGetSystem{
         this.TileID = tileID;
     }
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
-
+    public Vector2Int GetCellPosition() => position;
 }

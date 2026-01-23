@@ -142,7 +142,7 @@
       {
         "type": 1,
         "cga": {
-          "ID": "2",
+          "ID": "1",
           "conditions": [],
           "actions": [
             {
@@ -195,5 +195,28 @@
       }
     ],
     "actionCGAs": []
+  },
+  {
+    "ID": "5",
+    "name": "讨价还价",
+    "description": "可能会和你掰扯掰扯…",
+    "signedValue": 0,
+    "type": 0,
+    "tagCGAs": [],
+    "actionCGAs": [
+      {
+        "type": 5,
+        "cga": {
+          "ID": "1",
+          "conditions": [],
+          "actions": [
+            {
+              "$type": "GA_触发瞬时遭遇",
+              "ID": "bargain"
+            }
+          ]
+        }
+      }
+    ]
   }
 ]

@@ -8,7 +8,7 @@ public interface ICustomerTag{
     string name { get; }
     void Execute(DealContext context);
     List<bool> Preview(DealContext context);
-    List<CustomerCGA> CustomerCGAs { get; }
+    public List<CustomerCGA> CustomerActionCGAs { get; }
 }
 
 public class CustomerTag : ICustomerTag, ICanGetSystem, ICanSendEvent
@@ -16,12 +16,17 @@ public class CustomerTag : ICustomerTag, ICanGetSystem, ICanSendEvent
     public CustomerTagData customerTagData;
     public string name => customerTagData.Name;
     public List<TagCGA> tagCGAs;
-    public List<CustomerCGA> CustomerCGAs => CustomerCGAs.ToList();
+    public List<CustomerCGA> CustomerCGAs;
+    public List<CustomerCGA> CustomerActionCGAs => CustomerCGAs.ToList();
     public CustomerTag(CustomerTagData customerTagData){
         this.customerTagData = customerTagData;
         this.tagCGAs = new List<TagCGA>();
         foreach (var tagCGA in customerTagData.TagCGAs){
             this.tagCGAs.Add(new TagCGA(tagCGA));
+        }
+        this.CustomerCGAs = new List<CustomerCGA>();
+        foreach (var customerCGA in customerTagData.ActionCGAs){
+            this.CustomerCGAs.Add(new CustomerCGA(customerCGA));
         }
     }
     public void Execute(DealContext context)
@@ -50,7 +55,12 @@ public class CustomerTag : ICustomerTag, ICanGetSystem, ICanSendEvent
 
         int index = results.FindIndex(x => x == true);
         if (index == -1){
-            Debug.Log($"【CustomerTag】{name} 未触发");
+            if (tagCGAs.Count == 0){
+                return;
+            }
+            else{
+                Debug.Log($"【CustomerTag】{name} 未触发");
+            }
         }
         else{
             Debug.Log($"【CustomerTag】{name} 触发, {tagCGAs[index].CDDescription}");

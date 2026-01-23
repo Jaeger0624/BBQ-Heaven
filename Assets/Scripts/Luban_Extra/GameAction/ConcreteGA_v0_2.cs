@@ -230,30 +230,29 @@ namespace cfg{
 
     public partial class GA_修改地块 : GameAction
     {
-        public GA_修改地块(string tileId)
+        public GA_修改地块(GetCellInfo info, string tileId)
         {
             this.TileId = tileId;   
+            this.Info = info;
         }
-        public override GameAction Clone() => new GA_修改地块(TileId);
+        public override GameAction Clone() => new GA_修改地块(Info, TileId);
 
         public override void Execute(object sender, List<object> param){}
         public override IObservable<GAResult> ExecuteAsync(object sender, List<object> param){
 
-            BoardCell targetCell = param.FirstOrDefault(x => x is BoardCell) as BoardCell;
-            if (targetCell == null)
+            List<BoardCell> targetCells = Info.GetCells(sender, param);
+            
+            if (targetCells == null || targetCells.Count == 0)
             {
                 Debug.LogError($"[GA_修改地块] 没有目标地块: {sender}");
                 return Observable.Return<GAResult>(GAResult.Empty);
             }
-            TileData tileData = this.GetSystem<IDataSystem>().GetTileData(TileId);
-            TileData oldTileData = this.GetSystem<IDataSystem>().GetTileData(targetCell.TileID);
-            if (tileData == null)
+
+            foreach (var cell in targetCells)
             {
-                Debug.LogError($"[GA_修改地块] 地块数据不存在: {TileId}");
-                return Observable.Return<GAResult>(GAResult.Empty);
+                this.GetSystem<IBoardSystem>().SetCellTile(cell.position, TileId);
             }
-            Debug.Log($"[GA_修改地块] 修改地块: {targetCell.position} 旧地块：{oldTileData.Name} 新地块：{tileData.Name}");
-            this.GetSystem<IBoardSystem>().SetCellTile(targetCell.position, TileId);
+
             return Observable.Return(GAResult.Empty);
         }
         public override IAnimTask GetAnimTask(){return null;}

@@ -89,18 +89,24 @@ public class DealSystem : AbstractSystem, IDealSystem
 
 		// 重置满意度
 		ResetSatisfaction();
+		
+		// string encounterId = "1";
+		// if (!string.IsNullOrEmpty(encounterId))
+		// {
+		// 	// 【遭遇入口】等待遭遇结果
+		// 	string encounterResult = await this.GetSystem<IEncounterSystem>().TriggerInstantEncounter(encounterId, new List<object>{context});
+		// 	Debug.Log($"【DealSystem】遭遇结果: {encounterResult}");
+		// }
+
 
 		// 创建上下文
 		DealContext context = new DealContext(bbq, customer, this.GetSystem<ICustomerSystem>().Satisfaction);
 
-		string encounterId = "1";
+		// 触发顾客订单进行时动作（如“讨价还价”等）
+		IObservable<Unit> encounterObservable = this.GetSystem<ICustomerSystem>().CustomerActionHandler.HandleCustomerAction(new List<Customer>{customer}, CustomerActionType.订单进行时, new List<object>{bbq, context});
 
-		if (!string.IsNullOrEmpty(encounterId))
-		{
-			// 【遭遇入口】等待遭遇结果
-			string encounterResult = await this.GetSystem<IEncounterSystem>().TriggerInstantEncounter(encounterId, new List<object>{context});
-			Debug.Log($"【DealSystem】遭遇结果: {encounterResult}");
-		}
+		// 等待顾客订单进行时动作完成
+		await encounterObservable;
 
 		// 进行满意度的处理计算
 		DealResult result = GetResult(context);

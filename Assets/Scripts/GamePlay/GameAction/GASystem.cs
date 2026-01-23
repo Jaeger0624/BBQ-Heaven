@@ -14,13 +14,13 @@ public interface IGASystem : ISystem{
     // 处理GA
     // param是用于让玩家在runtime时传递参数给GA（例如操作决定的参数）
     void ApplyGA(object sender, GameAction gameAction, List<object> param);
-    IObservable<Unit> ApplyGAImmediate(object sender, GameAction gameAction, List<object> param);
+    IObservable<Unit> ApplyGAImmediate(object sender, GameAction gameAction, List<object> param); 
+    IObservable<Unit> ApplyCGAImmediate(object sender, CGA cga, List<object> param);
     // 设置触发器，等待触发器触发后执行
     void SetTrigger(object sender);
     void SendAction(object sender, Action action);
     // 处理CGA
     void ApplyCGA(object sender, CGA cga, List<object> param);
-
     // 处理SE
     void ApplySE(object sender, SustainEffect sustainEffect);
     void RemoveSE(object sender, SustainEffect sustainEffect);
@@ -95,6 +95,7 @@ public class GASystem : AbstractSystem, IGASystem{
             Param = param 
         });
     }
+
     private void EnqueueTask(GATask task)
     {
         _queue.Enqueue(task);
@@ -156,6 +157,12 @@ public class GASystem : AbstractSystem, IGASystem{
                 }
                 return Observable.ReturnUnit();
             });
+    }
+    public IObservable<Unit> ApplyCGAImmediate(object sender, CGA cga, List<object> param)
+    {
+        // 直接调用内部的执行流构建方法，不经过 EnqueueTask 和 ProcessQueue
+        // 注意：这里假设 ExecuteCGAStream 是你内部处理CGA逻辑的方法
+        return ExecuteCGAStream(sender, cga, param);
     }
 
     // --- 核心逻辑块 B：执行 CGA ---

@@ -205,7 +205,7 @@ public class CustomerSystem_新 : AbstractCustomerSystem
     public override void LeaveCustomer(List<Customer> customers)
     {
 
-        if (customers.Count == 0){Debug.LogWarning("移除顾客时，传入的顾客列表为空"); return;}
+        if (customers.Count == 0){return;}
 
         customers.ForEach(customer => {
 

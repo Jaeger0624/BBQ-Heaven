@@ -47,6 +47,9 @@ public abstract partial class GameAction : Luban.BeanBase
             case "GA_获得Buff": return new GA_获得Buff(_buf);
             case "GA_减少Buff": return new GA_减少Buff(_buf);
             case "GA_增加顾客等待值": return new GA_增加顾客等待值(_buf);
+            case "GA_触发遭遇": return new GA_触发遭遇(_buf);
+            case "GA_触发瞬时遭遇": return new GA_触发瞬时遭遇(_buf);
+            case "GA_定点爆破": return new GA_定点爆破(_buf);
             default: throw new SerializationException();
         }
     }

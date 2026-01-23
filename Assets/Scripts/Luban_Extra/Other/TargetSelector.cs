@@ -34,6 +34,9 @@ public class TargetSelector{
             List<Vector2Int> positions = cells.Select(x => x.position).ToList();
             GameArchitecture.Interface.GetSystem<IBoardSystem>().HighlightCells(positions);
         }
+        else if (targetType == CardTargetType.任意顾客){
+            GameArchitecture.Interface.SendEvent(new HighlightCustomersEvent(GameArchitecture.Interface.GetSystem<ICustomerSystem>().OrderingCustomers.ToList()));
+        }
         else{
             Debug.LogError("【Highlighter】不支持的目标类型: {targetType}");
         }
@@ -103,6 +106,13 @@ public class TargetSelector{
                 return null;
             }
             return new List<object>{targetCell};
+        }
+        else if (targetType == CardTargetType.任意顾客){
+            OrderView targetOrderView = targetObject.GetComponent<OrderView>();
+            if (targetOrderView == null){
+                return null;
+            }
+            return new List<object>{targetOrderView.customer};
         }
         else{
             Debug.LogError("【TargetSelector】不支持的目标类型: {targetType}");

@@ -225,7 +225,15 @@ public class CardHandView : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
 
     private void HighLight(CardTargetType targetType) => TargetSelector.Highlight(targetType);
-    private void UnHighLight() => this.GetSystem<IBoardSystem>().ClearHighlight();
+    private void UnHighLight(){
+
+        // 1. 清除棋盘高光
+        this.GetSystem<IBoardSystem>().ClearHighlight();
+
+        
+        // 2. 清除顾客高光
+        this.SendEvent(new UnhighlightCustomersEvent());
+    }
 
     private List<object> GetParam(CardTargetType targetType, GameObject targetObject) => TargetSelector.GetParam(targetType, targetObject);
 

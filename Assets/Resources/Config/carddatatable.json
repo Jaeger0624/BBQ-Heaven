@@ -170,6 +170,10 @@
           "actions": [
             {
               "$type": "GA_修改地块",
+              "info": {
+                "strategy": 2,
+                "isRandom": false
+              },
               "tileId": "Ice"
             }
           ]
@@ -220,6 +224,65 @@
               }
             }
           ]
+        }
+      }
+    ]
+  },
+  {
+    "ID": "9",
+    "name": "复制食材",
+    "description": "选择一个食材，在随机位置生成其原始复制",
+    "cost": 2,
+    "target": 1,
+    "CGAs": [
+      {
+        "type": 0,
+        "action": {
+          "ID": "1",
+          "conditions": [],
+          "actions": []
+        }
+      }
+    ]
+  },
+  {
+    "ID": "10",
+    "name": "定点爆破",
+    "description": "挤开周围的食材",
+    "cost": 2,
+    "target": 4,
+    "CGAs": [
+      {
+        "type": 0,
+        "action": {
+          "ID": "1",
+          "conditions": [],
+          "actions": [
+            {
+              "$type": "GA_定点爆破",
+              "info": {
+                "strategy": 2,
+                "isRandom": false
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "ID": "11",
+    "name": "请离",
+    "description": "立刻让一个顾客离开",
+    "cost": 1,
+    "target": 6,
+    "CGAs": [
+      {
+        "type": 0,
+        "action": {
+          "ID": "1",
+          "conditions": [],
+          "actions": []
         }
       }
     ]

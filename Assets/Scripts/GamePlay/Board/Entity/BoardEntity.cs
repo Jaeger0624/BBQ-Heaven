@@ -7,8 +7,11 @@ public enum BoardEntityType{
     食材,
     非食材,
 }
+public interface ICellPosition{
+    Vector2Int GetCellPosition();
+}
 // 负责处理运动、图像、显示等
-public abstract class BoardEntity : ICanGetSystem, ITooltipData{
+public abstract class BoardEntity : ICanGetSystem, ITooltipData, ICellPosition{
     public string guid { get; private set; }
     public abstract string name { get; }
     public abstract object data { get;}
@@ -31,4 +34,5 @@ public abstract class BoardEntity : ICanGetSystem, ITooltipData{
 
     // Helper methods
     public abstract Sprite GetSprite();
+    public Vector2Int GetCellPosition() => position;
 }

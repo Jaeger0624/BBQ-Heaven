@@ -61,4 +61,11 @@ public partial class CGA : ICanGetSystem, IHaveAnim{
             this.Cga = new CGA(tagCGA.Cga);
         }
     }
+
+    public partial class CustomerCGA{
+        public CustomerCGA(CustomerCGA customerCGA){
+            this.Cga = new CGA(customerCGA.Cga);
+            this.Type = customerCGA.Type;
+        }
+    }
 }
