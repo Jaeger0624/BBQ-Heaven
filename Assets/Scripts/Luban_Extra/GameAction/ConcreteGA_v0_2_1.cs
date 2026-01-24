@@ -134,4 +134,43 @@ namespace cfg{
             return new EmptyAnimTask();
         }
     }
+
+    public partial class GA_修改稀有度概率 : GameAction
+    {
+        public GA_修改稀有度概率(RankProbability probs)
+        {
+            this.Probs = probs;
+        }
+        public override GameAction Clone() => new GA_修改稀有度概率(Probs);
+
+        public override void Execute(object sender, List<object> param)
+        {
+            Dictionary<Rank, float> probabilities = new Dictionary<Rank, float>();
+            probabilities.Add(Rank.普通, Probs.Probability普通);
+            probabilities.Add(Rank.稀有, Probs.Probability稀有);
+            probabilities.Add(Rank.史诗, Probs.Probability史诗);
+            probabilities.Add(Rank.传说, Probs.Probability传说);
+            ProbabilityInfo probabilityInfo = new ProbabilityInfo(probabilities);
+            this.GetSystem<IRandomSystem>().SetProbability(probabilityInfo);
+        }
+        public override IAnimTask GetAnimTask() => new EmptyAnimTask();
+    }
+    public partial class GA_获得收入 : GameAction
+    {
+        public GA_获得收入(DynamicValue value)
+        {
+            this.Value = value;
+        }
+        public override GameAction Clone() => new GA_获得收入(Value);
+
+        public override void Execute(object sender, List<object> param)
+        {
+            this.GetSystem<IEconomySystem>().ChangeIncome(Value.GetValue(sender, param));
+        }
+
+        public override IAnimTask GetAnimTask()
+        {
+            return new EmptyAnimTask();
+        }
+    }
 }

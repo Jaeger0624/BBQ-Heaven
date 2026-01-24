@@ -11,6 +11,8 @@ public class PlayerInfoData{
     public int reputation;
     public int nextLevelReputation;
     public int level;
+    [OdinSerialize]
+    public Dictionary<int, bool> unlockedLevels;
     // 收入
     public int income;
     [OdinSerialize]

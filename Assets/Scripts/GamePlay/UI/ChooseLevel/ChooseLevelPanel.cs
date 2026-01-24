@@ -91,5 +91,12 @@ public class ChooseLevelPanel : MonoBehaviour, IController
         // 2. 更新关卡文本
         string levelName = this.GetSystem<IDataSystem>().GetLevelData(currentLevel.ToString()).Name;
         levelText.text = levelName;
+
+        Sprite sprite = SettingManager.Instance.ArtSettings.PlanetSprites.GetSprite("星球图片(AI)-"+currentLevel.ToString());
+        if (sprite == null){
+            Debug.LogError("Sprite is null");
+            return;
+        }
+        levelImage.sprite = sprite;
     }
 }

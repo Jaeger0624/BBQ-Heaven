@@ -43,6 +43,7 @@ public abstract partial class GameAction : Luban.BeanBase
             case "GA_修改地块": return new GA_修改地块(_buf);
             case "GA_创建实体": return new GA_创建实体(_buf);
             case "GA_获得声望": return new GA_获得声望(_buf);
+            case "GA_获得收入": return new GA_获得收入(_buf);
             case "GA_获得金币": return new GA_获得金币(_buf);
             case "GA_获得Buff": return new GA_获得Buff(_buf);
             case "GA_减少Buff": return new GA_减少Buff(_buf);
@@ -52,6 +53,7 @@ public abstract partial class GameAction : Luban.BeanBase
             case "GA_定点爆破": return new GA_定点爆破(_buf);
             case "GA_使顾客离开": return new GA_使顾客离开(_buf);
             case "GA_效果选择": return new GA_效果选择(_buf);
+            case "GA_修改稀有度概率": return new GA_修改稀有度概率(_buf);
             default: throw new SerializationException();
         }
     }

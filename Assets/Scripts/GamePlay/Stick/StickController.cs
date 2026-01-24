@@ -15,19 +15,15 @@ using UnityEngine;
 public class StickController : MonoBehaviour, IController, ICanSendEvent{
     [SerializeField] private GameObject stickViewPrefab;
     [SerializeField] private Transform stickViewContainer;  // 烤串父物体
-
     private IStickSystem stickSystem => this.GetSystem<IStickSystem>();
     private List<StickView> stickViews = new List<StickView>();
     private List<Transform> slots = new List<Transform>();
-    private float scrollWheelCD = 0.2f;
-    private float lastScrollWheelTime = 0f;
     public IArchitecture GetArchitecture()
     {
         return GameArchitecture.Interface;
     }
     void Update()
     {
-
         // 按下鼠标滚轮，则检测滚轮操作
         if (Input.GetMouseButtonDown(2)){
             if (stickSystem.selectedStick != null){

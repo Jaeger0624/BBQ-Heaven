@@ -301,6 +301,7 @@ public class GameTest : MonoBehaviour, IController, ICanSendEvent{
         GUILayout.Label($"声望: {this.GetSystem<IPCSystem>().Reputation.Value}");
         GUILayout.Label($"等级: {this.GetSystem<IPCSystem>().Level.Value}");
         GUILayout.Label($"下一级声望: {this.GetSystem<IPCSystem>().NextLevelReputation.Value}");
+        GUILayout.Label($"解锁的等级: {string.Join("\n", this.GetSystem<IPCSystem>().UnlockedLevels.Select(x => $"{x.Key}: {x.Value}"))}");
 
 
 

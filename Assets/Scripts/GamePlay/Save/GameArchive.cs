@@ -24,4 +24,8 @@ public class GameArchive
     [OdinSerialize]
     // 随机数系统
     public RngSaveData rngSaveData = new RngSaveData();
+
+    [OdinSerialize]
+    // 随机池系统
+    public ProbabilityInfo probabilityInfo;
 }

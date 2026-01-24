@@ -6,31 +6,27 @@ using QFramework;
 using UnityEngine;
 
 public interface IRandomStrategy{
-    List<T> Random<T>(int amount) where T : class;
+    List<T> Random<T>(int amount, Rng rng) where T : class;
 
 
 }
 public abstract class AbstractRandomStrategy : IRandomStrategy, ICanGetSystem{
-    public abstract List<T> Random<T>(int amount) where T : class;
+    public abstract List<T> Random<T>(int amount, Rng rng) where T : class;
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
 }
 
 public class Random_纯随机 : AbstractRandomStrategy{
-    public override List<T> Random<T>(int amount){
+    public override List<T> Random<T>(int amount, Rng rng){
         IDataSystem dataSystem = this.GetSystem<IDataSystem>();
         List<T> result = new List<T>();
-        Rng rng = null;
         if (typeof(T) == typeof(FoodData)){
             result = dataSystem.GetAllFoodData().Select(item => item as T).ToList();
-            rng = this.GetSystem<IRngSystem>().GetSubRng<IFoodSystem>();
         }
         else if (typeof(T) == typeof(MascotData)){
             result = dataSystem.GetAllMascotData().Select(item => item as T).ToList();
-            rng = this.GetSystem<IRngSystem>().GetSubRng<IMascotSystem>();
         }
         else if (typeof(T) == typeof(StickData)){
             result = dataSystem.GetAllStickData().Select(item => item as T).ToList();
-            rng = this.GetSystem<IRngSystem>().GetSubRng<IStickSystem>();
         }
         if (result.Count == 0) return new List<T>();
         amount = Mathf.Min(amount, result.Count);
@@ -41,7 +37,7 @@ public class Random_纯随机 : AbstractRandomStrategy{
 
 
 public class Random_考虑Build权重 : AbstractRandomStrategy{
-    public override List<T> Random<T>(int amount){
+    public override List<T> Random<T>(int amount, Rng rng){
         return new List<T>();
     }
 

@@ -1,15 +1,44 @@
 [
   {
     "ID": "1",
-    "name": "无人问津",
+    "name": "查无此人",
     "rank": 1,
     "description": "",
     "effects": [
       "收入+3",
-      "物品刷新率："
+      "物品刷新率：\n<color=green>65%</color> <color=blue>35%</color> <color=purple>0%</color> <color=yellow>0%</color>"
     ],
     "totalReputation": 0,
-    "actions": []
+    "actions": [
+      {
+        "ID": "1",
+        "conditions": [],
+        "actions": [
+          {
+            "$type": "GA_获得收入",
+            "value": {
+              "$type": "DV_值",
+              "number": 3
+            }
+          }
+        ]
+      },
+      {
+        "ID": "2",
+        "conditions": [],
+        "actions": [
+          {
+            "$type": "GA_修改稀有度概率",
+            "probs": {
+              "probability_普通": 0.65,
+              "probability_稀有": 0.35,
+              "probability_史诗": 0,
+              "probability_传说": 0
+            }
+          }
+        ]
+      }
+    ]
   },
   {
     "ID": "2",
@@ -17,10 +46,40 @@
     "rank": 2,
     "description": "",
     "effects": [
-      "收入+2"
+      "收入+2",
+      "物品刷新率："
     ],
     "totalReputation": 0,
-    "actions": []
+    "actions": [
+      {
+        "ID": "1",
+        "conditions": [],
+        "actions": [
+          {
+            "$type": "GA_获得收入",
+            "value": {
+              "$type": "DV_值",
+              "number": 2
+            }
+          }
+        ]
+      },
+      {
+        "ID": "2",
+        "conditions": [],
+        "actions": [
+          {
+            "$type": "GA_修改稀有度概率",
+            "probs": {
+              "probability_普通": 0.55,
+              "probability_稀有": 0.35,
+              "probability_史诗": 0.1,
+              "probability_传说": 0
+            }
+          }
+        ]
+      }
+    ]
   },
   {
     "ID": "3",
@@ -29,7 +88,36 @@
     "description": "",
     "effects": [],
     "totalReputation": 0,
-    "actions": []
+    "actions": [
+      {
+        "ID": "1",
+        "conditions": [],
+        "actions": [
+          {
+            "$type": "GA_获得收入",
+            "value": {
+              "$type": "DV_值",
+              "number": 2
+            }
+          }
+        ]
+      },
+      {
+        "ID": "2",
+        "conditions": [],
+        "actions": [
+          {
+            "$type": "GA_修改稀有度概率",
+            "probs": {
+              "probability_普通": 0.4,
+              "probability_稀有": 0.4,
+              "probability_史诗": 0.15,
+              "probability_传说": 0.05
+            }
+          }
+        ]
+      }
+    ]
   },
   {
     "ID": "4",

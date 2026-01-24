@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StickSprites: {fileID: 11400000, guid: 627d6eb007c2cf647915abc2331db87d, type: 2}
   EnhancementSprites: {fileID: 11400000, guid: 3368b352e7536354293db5866a3ec09b, type: 2}
+  PlanetSprites: {fileID: 11400000, guid: 68278bfbb718b00408ce0a8a11f8417b, type: 2}

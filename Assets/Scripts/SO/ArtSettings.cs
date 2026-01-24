@@ -6,4 +6,5 @@ public class ArtSettings : ScriptableObject
 {
     public SpriteReferenceSO StickSprites;
     public SpriteReferenceSO EnhancementSprites;
+    public SpriteReferenceSO PlanetSprites;
 }

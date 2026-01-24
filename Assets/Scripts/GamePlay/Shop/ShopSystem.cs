@@ -100,13 +100,17 @@ public class ShopSystem : AbstractSystem, IShopSystem{
 
     private List<IShopItem> FinishShopTask(ShopTask shopTask, IRandomStrategy strategy){
         IRandomSystem randomSystem = this.GetSystem<IRandomSystem>();
+        Rng rng = null;
         switch (shopTask.type){
             case ShopItemType.Food:
-                return ConcreteItemConverter<FoodData>(randomSystem.RandomGet<FoodData>(shopTask.amount, strategy));
+                rng = this.GetSystem<IRngSystem>().GetSubRng<IFoodSystem>();
+                return ConcreteItemConverter<FoodData>(randomSystem.RandomGet<FoodData>(shopTask.amount, rng, strategy));
             case ShopItemType.Mascot:
-                return ConcreteItemConverter<MascotData>(randomSystem.RandomGet<MascotData>(shopTask.amount, strategy));
+                rng = this.GetSystem<IRngSystem>().GetSubRng<IMascotSystem>();
+                return ConcreteItemConverter<MascotData>(randomSystem.RandomGet<MascotData>(shopTask.amount, rng, strategy));
             case ShopItemType.Stick:
-                return ConcreteItemConverter<StickData>(randomSystem.RandomGet<StickData>(shopTask.amount, strategy));
+                rng = this.GetSystem<IRngSystem>().GetSubRng<IStickSystem>();
+                return ConcreteItemConverter<StickData>(randomSystem.RandomGet<StickData>(shopTask.amount, rng, strategy));
             default:
                 Debug.LogError($"无法生成商品: {shopTask.type}");
                 return new List<IShopItem>();

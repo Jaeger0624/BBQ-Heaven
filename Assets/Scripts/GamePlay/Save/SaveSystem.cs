@@ -27,14 +27,14 @@ public class SaveSystem : AbstractSystem, ISaveSystem{
     }
 
     public void SaveSystemData(){
-        byte[] bytes = SerializationUtility.SerializeValue(SystemData, DataFormat.Binary);
+        byte[] bytes = SerializationUtility.SerializeValue(SystemData, DataFormat.JSON);
         File.WriteAllBytes(systemDataPath, bytes);
         Debug.Log($"<color=green>【SaveSystem】系统数据已保存至: {systemDataPath}</color>");
     }
     public void LoadSystemData(){
         if (File.Exists(systemDataPath)){
             byte[] bytes = File.ReadAllBytes(systemDataPath);
-            SystemData = SerializationUtility.DeserializeValue<SystemData>(bytes, DataFormat.Binary);
+            SystemData = SerializationUtility.DeserializeValue<SystemData>(bytes, DataFormat.JSON);
             if (SystemData == null){
                 Debug.LogError("<color=red>【SaveSystem】系统数据文件解析失败！</color>");
                 return;
@@ -46,7 +46,7 @@ public class SaveSystem : AbstractSystem, ISaveSystem{
         else{
             Debug.Log("<color=yellow>【SaveSystem】系统数据文件不存在！</color>");
             SystemData = new SystemData();
-            byte[] bytes = SerializationUtility.SerializeValue(SystemData, DataFormat.Binary);
+            byte[] bytes = SerializationUtility.SerializeValue(SystemData, DataFormat.JSON);
             File.WriteAllBytes(systemDataPath, bytes);
         }
     }
@@ -61,7 +61,7 @@ public class SaveSystem : AbstractSystem, ISaveSystem{
 
         // 2. 【核心修改】使用 Odin 序列化
         // DataFormat.Binary: 性能最高，体积最小，完美支持多态
-        byte[] bytes = SerializationUtility.SerializeValue(gameArchive, DataFormat.Binary);
+        byte[] bytes = SerializationUtility.SerializeValue(gameArchive, DataFormat.JSON);
         
         File.WriteAllBytes(savePath, bytes);
         
@@ -82,7 +82,7 @@ public class SaveSystem : AbstractSystem, ISaveSystem{
             return null;
         }
         byte[] bytes = File.ReadAllBytes(savePath);
-        GameArchive gameArchive = SerializationUtility.DeserializeValue<GameArchive>(bytes, DataFormat.Binary);
+        GameArchive gameArchive = SerializationUtility.DeserializeValue<GameArchive>(bytes, DataFormat.JSON);
         if (gameArchive == null)
         {
             Debug.LogError("存档文件解析失败！");

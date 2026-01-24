@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using cfg;
 using QFramework;
 using UniRx;
@@ -12,6 +13,7 @@ public interface IPCSystem : ISystem, ISavable{
     ReactiveProperty<int> Level { get; }
     ReactiveProperty<int> Reputation { get; }
     ReactiveProperty<int> NextLevelReputation { get; }
+    Dictionary<int, bool> UnlockedLevels { get; }
     PlayerCharacter ChoosePC(string id);
     void InitPC(PlayerCharacter playerCharacter);
     // 增加口碑
@@ -27,13 +29,27 @@ public class PCSystem : AbstractSystem, IPCSystem
     public ReactiveProperty<int> NextLevelReputation { get; private set; } = new ReactiveProperty<int>(10);
     // 角色信息
     private PlayerCharacter currentPC;
+    public Dictionary<int, bool> UnlockedLevels => unlockedLevels;
+    private Dictionary<int, bool> unlockedLevels = new Dictionary<int, bool>();
 
     protected override void OnInit()
     {
+        unlockedLevels = new Dictionary<int, bool>
+        {
+            // 初始只有第一级是解锁的
+            { 1, true },
+            { 2, false },
+            { 3, false },
+            { 4, false },
+            { 5, false },
+            { 6, false },
+            { 7, false }
+        };
     }
     protected override void OnDeinit()
     {
         ClearPC();
+        unlockedLevels.Clear();
     }
     public void Save(GameArchive archive)
     {
@@ -41,10 +57,20 @@ public class PCSystem : AbstractSystem, IPCSystem
         archive.playerInfoData.reputation = Reputation.Value;
         archive.playerInfoData.nextLevelReputation = NextLevelReputation.Value;
         archive.playerInfoData.level = Level.Value;
+
+        // 导入解锁的等级信息
+        archive.playerInfoData.unlockedLevels = unlockedLevels;
     }
     public void Load(GameArchive archive)
     {
-        LoadPC(archive.playerInfoData.playerCharacter);
+        ReloadPC(archive.playerInfoData.playerCharacter);
+
+        Reputation.Value = archive.playerInfoData.reputation;
+        NextLevelReputation.Value = archive.playerInfoData.nextLevelReputation;
+        Level.Value = archive.playerInfoData.level;
+
+        // 导入解锁的等级信息
+        unlockedLevels = archive.playerInfoData.unlockedLevels;
     }
     #region 声望部分
     public void AddReputation(int amount)
@@ -75,6 +101,20 @@ public class PCSystem : AbstractSystem, IPCSystem
         Reputation.Value = Reputation.Value - NextLevelReputation.Value;
         NextLevelReputation.Value = Level.Value * 2 + 8;
         Debug.Log($"升级到等级: {Level.Value}, 下一级声望: {NextLevelReputation.Value}");
+
+        if (unlockedLevels[Level.Value]) return;
+
+        // 解锁下一级（从1->2，解锁的是2)
+        unlockedLevels[Level.Value] = true;
+        // 触发升级效果
+        ReputationData reputationData = this.GetSystem<IDataSystem>().GetAllReputationData().FirstOrDefault(x => x.Rank == Level.Value);
+        if (reputationData != null)
+        {
+            foreach (var se in reputationData.Actions)
+            {
+                this.GetSystem<IGASystem>().ApplyCGA(currentPC, new CGA(se), null);
+            }
+        }
     } 
     private void Downgrade(){
         Level.Value--;
@@ -133,7 +173,7 @@ public class PCSystem : AbstractSystem, IPCSystem
         // 5. 创建主动技能
     }
 
-    private void LoadPC(PlayerCharacter playerCharacter)
+    private void ReloadPC(PlayerCharacter playerCharacter)
     {
         currentPC = playerCharacter;
         Debug.Log($"加载玩家角色: {currentPC.data.Name}");
