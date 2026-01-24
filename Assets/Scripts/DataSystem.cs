@@ -58,6 +58,10 @@ public interface IDataSystem : ISystem{
     BuffData GetBuffData(string id, bool byName = false);
     List<BuffData> GetAllBuffData();
 
+    // 获取声望配置
+    ReputationData GetReputationData(string id);
+    List<ReputationData> GetAllReputationData();
+
 }
 public class DataSystem : AbstractSystem, IDataSystem{
 
@@ -194,5 +198,13 @@ public class DataSystem : AbstractSystem, IDataSystem{
     public List<BuffData> GetAllBuffData()
     {
         return tables.BuffDataTable.DataList;
+    }
+    public ReputationData GetReputationData(string id)
+    {
+        return tables.ReputationDataTable.Get(id);
+    }
+    public List<ReputationData> GetAllReputationData()
+    {
+        return tables.ReputationDataTable.DataList;
     }
 }
