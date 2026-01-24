@@ -1,7 +1,7 @@
 {
     "$id": 0,
     "$type": "0|GameArchive, Assembly-CSharp",
-    "saveTime": "2026-01-24 20:52:02",
+    "saveTime": "2026-01-25 00:14:16",
     "playerInfoData": {
         "$id": 1,
         "$type": "1|PlayerInfoData, Assembly-CSharp",
@@ -25,7 +25,7 @@
                         {
                             "$id": 5,
                             "$type": "5|cfg.SE_\u76d1\u542c\u4e8b\u4ef6, Assembly-CSharp",
-                            "guid": "5b8f0e38-125e-41ae-93c4-3fd7e047769b",
+                            "guid": "45a80da6-1f39-45f3-8272-2a45a6f63ade",
                             "Evt": 3,
                             "Actions": {
                                 "$id": 6,
@@ -78,7 +78,7 @@
                         {
                             "$id": 14,
                             "$type": 5,
-                            "guid": "898be4cb-c199-4476-8142-64a3b5e6d36d",
+                            "guid": "ff648394-3fed-4d78-a9c6-56dd656c84fe",
                             "Evt": 1,
                             "Actions": {
                                 "$id": 15,
@@ -134,7 +134,7 @@
                 }
             }
         },
-        "coin": 8,
+        "coin": 0,
         "reputation": 0,
         "nextLevelReputation": 10,
         "level": 1,
@@ -145,7 +145,7 @@
                 "$id": 23,
                 "$type": "17|System.Collections.Generic.GenericEqualityComparer`1[[System.Int32, mscorlib]], mscorlib"
             },
-            "$rlength": 7,
+            "$rlength": 5,
             "$rcontent": [
                 {
                     "$k": 1,
@@ -166,14 +166,6 @@
                 {
                     "$k": 5,
                     "$v": false
-                },
-                {
-                    "$k": 6,
-                    "$v": false
-                },
-                {
-                    "$k": 7,
-                    "$v": false
                 }
             ]
         },
@@ -192,18 +184,18 @@
                 "$id": 26,
                 "$type": "20|System.Collections.Generic.GenericEqualityComparer`1[[System.String, mscorlib]], mscorlib"
             },
-            "$rlength": 41,
+            "$rlength": 40,
             "$rcontent": [
                 {
-                    "$k": "261410bf-d07e-46a3-93c3-3ce1d0fd99c5",
+                    "$k": "8ccf5db9-b126-41c8-9a1b-8e05406898aa",
                     "$v": {
                         "$id": 27,
                         "$type": "21|FoodCard, Assembly-CSharp",
-                        "guid": "261410bf-d07e-46a3-93c3-3ce1d0fd99c5",
-                        "foodDataId": "lemon",
+                        "guid": "8ccf5db9-b126-41c8-9a1b-8e05406898aa",
+                        "foodDataId": "tomato",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 2,
+                        "foodType": 1,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 28,
@@ -219,15 +211,15 @@
                     }
                 },
                 {
-                    "$k": "2d551a4f-aa27-4960-845f-d13fdd08880b",
+                    "$k": "75674a3c-b590-4353-babd-491ad00237c4",
                     "$v": {
                         "$id": 30,
                         "$type": 21,
-                        "guid": "2d551a4f-aa27-4960-845f-d13fdd08880b",
-                        "foodDataId": "lemon",
+                        "guid": "75674a3c-b590-4353-babd-491ad00237c4",
+                        "foodDataId": "tomato",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 2,
+                        "foodType": 1,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 31,
@@ -240,15 +232,15 @@
                     }
                 },
                 {
-                    "$k": "64725e15-7b14-4d5b-8c4b-0fc0d04b9bf7",
+                    "$k": "1be9ec75-6281-48a3-98d9-8a67c4a19ab0",
                     "$v": {
                         "$id": 32,
                         "$type": 21,
-                        "guid": "64725e15-7b14-4d5b-8c4b-0fc0d04b9bf7",
-                        "foodDataId": "lemon",
+                        "guid": "1be9ec75-6281-48a3-98d9-8a67c4a19ab0",
+                        "foodDataId": "tomato",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 2,
+                        "foodType": 1,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 33,
@@ -261,15 +253,15 @@
                     }
                 },
                 {
-                    "$k": "7f159aa8-abaa-4cad-a4cb-b82d470a9a89",
+                    "$k": "1290c760-261e-4e0b-a037-0f8ce45c282d",
                     "$v": {
                         "$id": 34,
                         "$type": 21,
-                        "guid": "7f159aa8-abaa-4cad-a4cb-b82d470a9a89",
-                        "foodDataId": "lemon",
+                        "guid": "1290c760-261e-4e0b-a037-0f8ce45c282d",
+                        "foodDataId": "tomato",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 2,
+                        "foodType": 1,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 35,
@@ -282,15 +274,15 @@
                     }
                 },
                 {
-                    "$k": "0d805125-9e0a-452a-b061-34e332290d8b",
+                    "$k": "7d1132ca-a899-49cb-8964-6fa6a9869aca",
                     "$v": {
                         "$id": 36,
                         "$type": 21,
-                        "guid": "0d805125-9e0a-452a-b061-34e332290d8b",
-                        "foodDataId": "lemon",
+                        "guid": "7d1132ca-a899-49cb-8964-6fa6a9869aca",
+                        "foodDataId": "tomato",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 2,
+                        "foodType": 1,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 37,
@@ -303,15 +295,15 @@
                     }
                 },
                 {
-                    "$k": "ce033320-6827-4b8a-975b-200bd909a439",
+                    "$k": "cc050ec1-65d5-4512-b80f-f29fa540c5ed",
                     "$v": {
                         "$id": 38,
                         "$type": 21,
-                        "guid": "ce033320-6827-4b8a-975b-200bd909a439",
-                        "foodDataId": "lemon",
+                        "guid": "cc050ec1-65d5-4512-b80f-f29fa540c5ed",
+                        "foodDataId": "tomato",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 2,
+                        "foodType": 1,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 39,
@@ -324,15 +316,15 @@
                     }
                 },
                 {
-                    "$k": "f5450ccc-361d-4a9f-bda4-cea9a542462a",
+                    "$k": "c1cd4a18-f98b-4332-9c1e-6802ecf96d78",
                     "$v": {
                         "$id": 40,
                         "$type": 21,
-                        "guid": "f5450ccc-361d-4a9f-bda4-cea9a542462a",
-                        "foodDataId": "lemon",
+                        "guid": "c1cd4a18-f98b-4332-9c1e-6802ecf96d78",
+                        "foodDataId": "tomato",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 2,
+                        "foodType": 1,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 41,
@@ -345,15 +337,15 @@
                     }
                 },
                 {
-                    "$k": "b9817217-570d-426a-b891-5a82755e6e96",
+                    "$k": "72408d7d-87b2-4bfe-95f1-dbdc24fedd6b",
                     "$v": {
                         "$id": 42,
                         "$type": 21,
-                        "guid": "b9817217-570d-426a-b891-5a82755e6e96",
-                        "foodDataId": "lemon",
+                        "guid": "72408d7d-87b2-4bfe-95f1-dbdc24fedd6b",
+                        "foodDataId": "tomato",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 2,
+                        "foodType": 1,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 43,
@@ -366,15 +358,15 @@
                     }
                 },
                 {
-                    "$k": "be28feff-db63-4eff-8c61-27c9d0b0679e",
+                    "$k": "dd308795-c638-407b-992e-9676c1ff7512",
                     "$v": {
                         "$id": 44,
                         "$type": 21,
-                        "guid": "be28feff-db63-4eff-8c61-27c9d0b0679e",
-                        "foodDataId": "lemon",
+                        "guid": "dd308795-c638-407b-992e-9676c1ff7512",
+                        "foodDataId": "tomato",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 2,
+                        "foodType": 1,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 45,
@@ -387,15 +379,15 @@
                     }
                 },
                 {
-                    "$k": "05ee7b10-0153-4eb8-bae4-c97cfe056f0e",
+                    "$k": "d3c0c0de-3840-4a17-87ef-7859eb5e5426",
                     "$v": {
                         "$id": 46,
                         "$type": 21,
-                        "guid": "05ee7b10-0153-4eb8-bae4-c97cfe056f0e",
-                        "foodDataId": "lemon",
+                        "guid": "d3c0c0de-3840-4a17-87ef-7859eb5e5426",
+                        "foodDataId": "tomato",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 2,
+                        "foodType": 1,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 47,
@@ -408,15 +400,15 @@
                     }
                 },
                 {
-                    "$k": "1efe2766-fcbd-449e-a510-9ee3b116cfa0",
+                    "$k": "4b339297-9224-4f11-ad94-706d4a3fbef7",
                     "$v": {
                         "$id": 48,
                         "$type": 21,
-                        "guid": "1efe2766-fcbd-449e-a510-9ee3b116cfa0",
-                        "foodDataId": "beer",
+                        "guid": "4b339297-9224-4f11-ad94-706d4a3fbef7",
+                        "foodDataId": "shrimp",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 2,
+                        "foodType": 8,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 49,
@@ -429,15 +421,15 @@
                     }
                 },
                 {
-                    "$k": "941d3ae2-489e-4446-8dbd-50e9c40111cf",
+                    "$k": "090aebc3-970b-41b8-a31d-24cc452e6a96",
                     "$v": {
                         "$id": 50,
                         "$type": 21,
-                        "guid": "941d3ae2-489e-4446-8dbd-50e9c40111cf",
-                        "foodDataId": "beer",
+                        "guid": "090aebc3-970b-41b8-a31d-24cc452e6a96",
+                        "foodDataId": "shrimp",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 2,
+                        "foodType": 8,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 51,
@@ -450,15 +442,15 @@
                     }
                 },
                 {
-                    "$k": "2a0811bf-30c5-4ff3-89ec-519bb48cf53e",
+                    "$k": "cfee3368-bbfa-4608-80e1-c28cb103d1f8",
                     "$v": {
                         "$id": 52,
                         "$type": 21,
-                        "guid": "2a0811bf-30c5-4ff3-89ec-519bb48cf53e",
-                        "foodDataId": "beer",
+                        "guid": "cfee3368-bbfa-4608-80e1-c28cb103d1f8",
+                        "foodDataId": "shrimp",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 2,
+                        "foodType": 8,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 53,
@@ -471,15 +463,15 @@
                     }
                 },
                 {
-                    "$k": "1e0856b8-8ffb-4328-8d8a-16835359b4fa",
+                    "$k": "a1617bff-5840-44ad-af8d-3e0f37b6f6a8",
                     "$v": {
                         "$id": 54,
                         "$type": 21,
-                        "guid": "1e0856b8-8ffb-4328-8d8a-16835359b4fa",
-                        "foodDataId": "beer",
+                        "guid": "a1617bff-5840-44ad-af8d-3e0f37b6f6a8",
+                        "foodDataId": "shrimp",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 2,
+                        "foodType": 8,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 55,
@@ -492,15 +484,15 @@
                     }
                 },
                 {
-                    "$k": "87b5f63f-77d5-4ee8-a4ba-2867cfc3e7d7",
+                    "$k": "e13e8661-ebdc-4ba5-b543-770155a006b3",
                     "$v": {
                         "$id": 56,
                         "$type": 21,
-                        "guid": "87b5f63f-77d5-4ee8-a4ba-2867cfc3e7d7",
-                        "foodDataId": "beer",
+                        "guid": "e13e8661-ebdc-4ba5-b543-770155a006b3",
+                        "foodDataId": "shrimp",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 2,
+                        "foodType": 8,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 57,
@@ -513,15 +505,15 @@
                     }
                 },
                 {
-                    "$k": "4a1375fa-6c06-4cb1-8473-ee6bc39822e7",
+                    "$k": "fb8c7f86-0936-487b-b768-ba89e8b3354b",
                     "$v": {
                         "$id": 58,
                         "$type": 21,
-                        "guid": "4a1375fa-6c06-4cb1-8473-ee6bc39822e7",
-                        "foodDataId": "beer",
+                        "guid": "fb8c7f86-0936-487b-b768-ba89e8b3354b",
+                        "foodDataId": "shrimp",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 2,
+                        "foodType": 8,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 59,
@@ -534,15 +526,15 @@
                     }
                 },
                 {
-                    "$k": "a168e9f4-108f-4bc6-92c6-530f6df72915",
+                    "$k": "43a0174e-d165-4420-afc5-f2370162698c",
                     "$v": {
                         "$id": 60,
                         "$type": 21,
-                        "guid": "a168e9f4-108f-4bc6-92c6-530f6df72915",
-                        "foodDataId": "beer",
+                        "guid": "43a0174e-d165-4420-afc5-f2370162698c",
+                        "foodDataId": "shrimp",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 2,
+                        "foodType": 8,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 61,
@@ -555,15 +547,15 @@
                     }
                 },
                 {
-                    "$k": "cc3eb3bd-0787-4841-9a8f-1ae1c289b574",
+                    "$k": "0c70e1df-6402-4840-bf2a-a1c75638cb81",
                     "$v": {
                         "$id": 62,
                         "$type": 21,
-                        "guid": "cc3eb3bd-0787-4841-9a8f-1ae1c289b574",
-                        "foodDataId": "beer",
+                        "guid": "0c70e1df-6402-4840-bf2a-a1c75638cb81",
+                        "foodDataId": "shrimp",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 2,
+                        "foodType": 8,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 63,
@@ -576,15 +568,15 @@
                     }
                 },
                 {
-                    "$k": "9207f233-98a6-493e-9c5f-0b88b77d8ba6",
+                    "$k": "14888466-71f9-436e-b86f-54717f9244e2",
                     "$v": {
                         "$id": 64,
                         "$type": 21,
-                        "guid": "9207f233-98a6-493e-9c5f-0b88b77d8ba6",
-                        "foodDataId": "beer",
+                        "guid": "14888466-71f9-436e-b86f-54717f9244e2",
+                        "foodDataId": "shrimp",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 2,
+                        "foodType": 8,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 65,
@@ -597,15 +589,15 @@
                     }
                 },
                 {
-                    "$k": "e6280cb2-f335-43d8-85fa-8472df224f55",
+                    "$k": "c0e36abb-d53f-41aa-835f-f4df60b7cb46",
                     "$v": {
                         "$id": 66,
                         "$type": 21,
-                        "guid": "e6280cb2-f335-43d8-85fa-8472df224f55",
-                        "foodDataId": "beer",
+                        "guid": "c0e36abb-d53f-41aa-835f-f4df60b7cb46",
+                        "foodDataId": "shrimp",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 2,
+                        "foodType": 8,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 67,
@@ -618,15 +610,15 @@
                     }
                 },
                 {
-                    "$k": "5b630dac-3e2f-4f3f-ab95-fd6d9c4a59f3",
+                    "$k": "24a95083-3b9f-47a4-b661-a190941c2f7d",
                     "$v": {
                         "$id": 68,
                         "$type": 21,
-                        "guid": "5b630dac-3e2f-4f3f-ab95-fd6d9c4a59f3",
-                        "foodDataId": "cherry_bomb",
+                        "guid": "24a95083-3b9f-47a4-b661-a190941c2f7d",
+                        "foodDataId": "spicy_strip",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 2,
+                        "foodType": 16,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 69,
@@ -639,15 +631,15 @@
                     }
                 },
                 {
-                    "$k": "ff6a2fc9-c1dc-4375-903d-858aee79a6d6",
+                    "$k": "fd7073de-49a2-41d9-8276-75bef4c52c37",
                     "$v": {
                         "$id": 70,
                         "$type": 21,
-                        "guid": "ff6a2fc9-c1dc-4375-903d-858aee79a6d6",
-                        "foodDataId": "cherry_bomb",
+                        "guid": "fd7073de-49a2-41d9-8276-75bef4c52c37",
+                        "foodDataId": "spicy_strip",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 2,
+                        "foodType": 16,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 71,
@@ -660,15 +652,15 @@
                     }
                 },
                 {
-                    "$k": "c121a9ea-7b44-482c-9345-0eff63e6f68a",
+                    "$k": "58b27ef7-5c0e-4baa-94ad-e680a6ec2edf",
                     "$v": {
                         "$id": 72,
                         "$type": 21,
-                        "guid": "c121a9ea-7b44-482c-9345-0eff63e6f68a",
-                        "foodDataId": "cherry_bomb",
+                        "guid": "58b27ef7-5c0e-4baa-94ad-e680a6ec2edf",
+                        "foodDataId": "spicy_strip",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 2,
+                        "foodType": 16,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 73,
@@ -681,15 +673,15 @@
                     }
                 },
                 {
-                    "$k": "8448d118-ecff-4a60-8058-56a8d338cc1b",
+                    "$k": "66beba5f-c41a-44fd-b20c-98e9fe26020e",
                     "$v": {
                         "$id": 74,
                         "$type": 21,
-                        "guid": "8448d118-ecff-4a60-8058-56a8d338cc1b",
-                        "foodDataId": "cherry_bomb",
+                        "guid": "66beba5f-c41a-44fd-b20c-98e9fe26020e",
+                        "foodDataId": "spicy_strip",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 2,
+                        "foodType": 16,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 75,
@@ -702,15 +694,15 @@
                     }
                 },
                 {
-                    "$k": "cbdc41b4-9a36-437a-a1d8-6254e2efcb2f",
+                    "$k": "1a3bdb35-b475-4a90-b23a-f83db609d581",
                     "$v": {
                         "$id": 76,
                         "$type": 21,
-                        "guid": "cbdc41b4-9a36-437a-a1d8-6254e2efcb2f",
-                        "foodDataId": "cherry_bomb",
+                        "guid": "1a3bdb35-b475-4a90-b23a-f83db609d581",
+                        "foodDataId": "spicy_strip",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 2,
+                        "foodType": 16,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 77,
@@ -723,15 +715,15 @@
                     }
                 },
                 {
-                    "$k": "c176da90-a75a-4eba-8925-da68f6c002b3",
+                    "$k": "004f39ea-7881-4389-a137-e21f6aaca1aa",
                     "$v": {
                         "$id": 78,
                         "$type": 21,
-                        "guid": "c176da90-a75a-4eba-8925-da68f6c002b3",
-                        "foodDataId": "cherry_bomb",
+                        "guid": "004f39ea-7881-4389-a137-e21f6aaca1aa",
+                        "foodDataId": "spicy_strip",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 2,
+                        "foodType": 16,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 79,
@@ -744,15 +736,15 @@
                     }
                 },
                 {
-                    "$k": "90139b78-f94a-4331-a31b-76758c46c200",
+                    "$k": "5a44ef6e-03b3-44a0-852e-4ad2f387fbb4",
                     "$v": {
                         "$id": 80,
                         "$type": 21,
-                        "guid": "90139b78-f94a-4331-a31b-76758c46c200",
-                        "foodDataId": "cherry_bomb",
+                        "guid": "5a44ef6e-03b3-44a0-852e-4ad2f387fbb4",
+                        "foodDataId": "spicy_strip",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 2,
+                        "foodType": 16,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 81,
@@ -765,15 +757,15 @@
                     }
                 },
                 {
-                    "$k": "e0d2ac8c-e164-4710-b58b-e58dabd93ecc",
+                    "$k": "aa856ae6-da0a-41b9-a581-44e005de9812",
                     "$v": {
                         "$id": 82,
                         "$type": 21,
-                        "guid": "e0d2ac8c-e164-4710-b58b-e58dabd93ecc",
-                        "foodDataId": "cherry_bomb",
+                        "guid": "aa856ae6-da0a-41b9-a581-44e005de9812",
+                        "foodDataId": "spicy_strip",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 2,
+                        "foodType": 16,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 83,
@@ -786,15 +778,15 @@
                     }
                 },
                 {
-                    "$k": "ea19b515-2367-444d-ab1d-748e7fe46f6d",
+                    "$k": "193b6a75-287b-4061-bb41-873adefb5356",
                     "$v": {
                         "$id": 84,
                         "$type": 21,
-                        "guid": "ea19b515-2367-444d-ab1d-748e7fe46f6d",
-                        "foodDataId": "cherry_bomb",
+                        "guid": "193b6a75-287b-4061-bb41-873adefb5356",
+                        "foodDataId": "spicy_strip",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 2,
+                        "foodType": 16,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 85,
@@ -807,15 +799,15 @@
                     }
                 },
                 {
-                    "$k": "a462b790-532c-4d68-881c-2c0c54f3a6e1",
+                    "$k": "3d3bfd8e-10d9-47d5-a7cf-2b27e8c4e872",
                     "$v": {
                         "$id": 86,
                         "$type": 21,
-                        "guid": "a462b790-532c-4d68-881c-2c0c54f3a6e1",
-                        "foodDataId": "cherry_bomb",
+                        "guid": "3d3bfd8e-10d9-47d5-a7cf-2b27e8c4e872",
+                        "foodDataId": "spicy_strip",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 2,
+                        "foodType": 16,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 87,
@@ -828,15 +820,15 @@
                     }
                 },
                 {
-                    "$k": "0502204e-b120-4119-bf47-661701e95da1",
+                    "$k": "69809fb9-f871-487c-b2e3-640de19e691b",
                     "$v": {
                         "$id": 88,
                         "$type": 21,
-                        "guid": "0502204e-b120-4119-bf47-661701e95da1",
-                        "foodDataId": "spicy_strip",
+                        "guid": "69809fb9-f871-487c-b2e3-640de19e691b",
+                        "foodDataId": "cherry_bomb",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 16,
+                        "foodType": 2,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 89,
@@ -849,15 +841,15 @@
                     }
                 },
                 {
-                    "$k": "63a961bb-1a8f-48fc-8ae5-8da3f2eb92b2",
+                    "$k": "5297aba1-ee66-43ec-a3ef-7c31aeca0a77",
                     "$v": {
                         "$id": 90,
                         "$type": 21,
-                        "guid": "63a961bb-1a8f-48fc-8ae5-8da3f2eb92b2",
-                        "foodDataId": "spicy_strip",
+                        "guid": "5297aba1-ee66-43ec-a3ef-7c31aeca0a77",
+                        "foodDataId": "cherry_bomb",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 16,
+                        "foodType": 2,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 91,
@@ -870,15 +862,15 @@
                     }
                 },
                 {
-                    "$k": "0402a7cf-f6ad-472e-8a87-15af3d2b51eb",
+                    "$k": "1c99450e-a91b-48a5-9c90-427babf278fb",
                     "$v": {
                         "$id": 92,
                         "$type": 21,
-                        "guid": "0402a7cf-f6ad-472e-8a87-15af3d2b51eb",
-                        "foodDataId": "spicy_strip",
+                        "guid": "1c99450e-a91b-48a5-9c90-427babf278fb",
+                        "foodDataId": "cherry_bomb",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 16,
+                        "foodType": 2,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 93,
@@ -891,15 +883,15 @@
                     }
                 },
                 {
-                    "$k": "9f7d7ec0-2ad9-449b-a1c1-c398d835f62c",
+                    "$k": "0e352596-a1fe-4efa-b65e-25f5f8edbe15",
                     "$v": {
                         "$id": 94,
                         "$type": 21,
-                        "guid": "9f7d7ec0-2ad9-449b-a1c1-c398d835f62c",
-                        "foodDataId": "spicy_strip",
+                        "guid": "0e352596-a1fe-4efa-b65e-25f5f8edbe15",
+                        "foodDataId": "cherry_bomb",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 16,
+                        "foodType": 2,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 95,
@@ -912,15 +904,15 @@
                     }
                 },
                 {
-                    "$k": "c3f7aac7-3dc2-43b1-9572-7d9b7dec8c0e",
+                    "$k": "6be5c150-e5f9-4f7e-ba40-b411844cce55",
                     "$v": {
                         "$id": 96,
                         "$type": 21,
-                        "guid": "c3f7aac7-3dc2-43b1-9572-7d9b7dec8c0e",
-                        "foodDataId": "spicy_strip",
+                        "guid": "6be5c150-e5f9-4f7e-ba40-b411844cce55",
+                        "foodDataId": "cherry_bomb",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 16,
+                        "foodType": 2,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 97,
@@ -933,15 +925,15 @@
                     }
                 },
                 {
-                    "$k": "e1b56fe8-dda9-43b8-8dd0-d9626357c44f",
+                    "$k": "5f551db3-5186-4497-82c3-a7b24288a9c2",
                     "$v": {
                         "$id": 98,
                         "$type": 21,
-                        "guid": "e1b56fe8-dda9-43b8-8dd0-d9626357c44f",
-                        "foodDataId": "spicy_strip",
+                        "guid": "5f551db3-5186-4497-82c3-a7b24288a9c2",
+                        "foodDataId": "cherry_bomb",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 16,
+                        "foodType": 2,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 99,
@@ -954,15 +946,15 @@
                     }
                 },
                 {
-                    "$k": "8fa914fc-a9df-4483-9da5-ec31bc6d5232",
+                    "$k": "92d14f9a-6c4d-47d2-af75-87e15e3d709f",
                     "$v": {
                         "$id": 100,
                         "$type": 21,
-                        "guid": "8fa914fc-a9df-4483-9da5-ec31bc6d5232",
-                        "foodDataId": "spicy_strip",
+                        "guid": "92d14f9a-6c4d-47d2-af75-87e15e3d709f",
+                        "foodDataId": "cherry_bomb",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 16,
+                        "foodType": 2,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 101,
@@ -975,15 +967,15 @@
                     }
                 },
                 {
-                    "$k": "4d4948bb-72c8-4d42-81dd-405382c5d9d6",
+                    "$k": "85832891-3575-4958-b859-6b79a06f10f5",
                     "$v": {
                         "$id": 102,
                         "$type": 21,
-                        "guid": "4d4948bb-72c8-4d42-81dd-405382c5d9d6",
-                        "foodDataId": "spicy_strip",
+                        "guid": "85832891-3575-4958-b859-6b79a06f10f5",
+                        "foodDataId": "cherry_bomb",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 16,
+                        "foodType": 2,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 103,
@@ -996,15 +988,15 @@
                     }
                 },
                 {
-                    "$k": "d276ba1e-ed2a-4b3f-ba84-9d3b0340b32f",
+                    "$k": "6320a843-e5ad-45ef-96ab-c7d98db8805c",
                     "$v": {
                         "$id": 104,
                         "$type": 21,
-                        "guid": "d276ba1e-ed2a-4b3f-ba84-9d3b0340b32f",
-                        "foodDataId": "spicy_strip",
+                        "guid": "6320a843-e5ad-45ef-96ab-c7d98db8805c",
+                        "foodDataId": "cherry_bomb",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 16,
+                        "foodType": 2,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 105,
@@ -1017,15 +1009,15 @@
                     }
                 },
                 {
-                    "$k": "ce3c755d-ef2e-4995-b7fd-d347552dbb72",
+                    "$k": "b8ec56bc-e665-4b6d-87f5-64d04f73ca08",
                     "$v": {
                         "$id": 106,
                         "$type": 21,
-                        "guid": "ce3c755d-ef2e-4995-b7fd-d347552dbb72",
-                        "foodDataId": "spicy_strip",
+                        "guid": "b8ec56bc-e665-4b6d-87f5-64d04f73ca08",
+                        "foodDataId": "cherry_bomb",
                         "MaxSlots": 2,
                         "isTemporary": false,
-                        "foodType": 16,
+                        "foodType": 2,
                         "foodTag": 0,
                         "Enhancements": {
                             "$id": 107,
@@ -1036,42 +1028,22 @@
                             ]
                         }
                     }
-                },
-                {
-                    "$k": "16a9039e-5686-44e6-9ad9-aa7cd94193ed",
-                    "$v": {
-                        "$id": 108,
-                        "$type": 21,
-                        "guid": "16a9039e-5686-44e6-9ad9-aa7cd94193ed",
-                        "foodDataId": "cookie",
-                        "MaxSlots": 2,
-                        "isTemporary": false,
-                        "foodType": 16,
-                        "foodTag": 1,
-                        "Enhancements": {
-                            "$id": 109,
-                            "$type": 22,
-                            "$rlength": 0,
-                            "$rcontent": [
-                            ]
-                        }
-                    }
                 }
             ]
         },
         "stickRepositorys": {
-            "$id": 110,
+            "$id": 108,
             "$type": "24|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[Stick, Assembly-CSharp]], mscorlib",
             "comparer": $iref:26,
             "$rlength": 3,
             "$rcontent": [
                 {
-                    "$k": "040f1886-efa6-4cd7-86bd-361f23e64981",
+                    "$k": "fa0f04af-0374-4274-8c22-52b02f8b1551",
                     "$v": {
-                        "$id": 111,
+                        "$id": 109,
                         "$type": "25|Stick, Assembly-CSharp",
                         "stickData": {
-                            "$id": 112,
+                            "$id": 110,
                             "$type": "26|cfg.StickData, Assembly-CSharp",
                             "ID": "wood",
                             "Name": "\u6728\u7b7e",
@@ -1083,7 +1055,7 @@
                             "Sprite": "BBQ_0"
                         },
                         "strategy": {
-                            "$id": 113,
+                            "$id": 111,
                             "$type": "27|StickStrategy_\u9ed8\u8ba4, Assembly-CSharp"
                         },
                         "maxFoodCount": 6,
@@ -1092,12 +1064,12 @@
                     }
                 },
                 {
-                    "$k": "a1516fec-dbec-48d2-b480-4f59360c3958",
+                    "$k": "bdf117d1-34ac-4b1e-8704-c2ea5be04db2",
                     "$v": {
-                        "$id": 114,
+                        "$id": 112,
                         "$type": 25,
                         "stickData": {
-                            "$id": 115,
+                            "$id": 113,
                             "$type": 26,
                             "ID": "iron",
                             "Name": "\u94c1\u7b7e",
@@ -1109,7 +1081,7 @@
                             "Sprite": "BBQ_1"
                         },
                         "strategy": {
-                            "$id": 116,
+                            "$id": 114,
                             "$type": 27
                         },
                         "maxFoodCount": 8,
@@ -1118,12 +1090,12 @@
                     }
                 },
                 {
-                    "$k": "8316f84d-9db9-46ab-9473-b7cf0b75696b",
+                    "$k": "961317e1-a9d7-49c1-9dfe-0b09c0bc07b8",
                     "$v": {
-                        "$id": 117,
+                        "$id": 115,
                         "$type": 25,
                         "stickData": {
-                            "$id": 118,
+                            "$id": 116,
                             "$type": 26,
                             "ID": "short",
                             "Name": "\u77ed\u7b7e",
@@ -1135,7 +1107,7 @@
                             "Sprite": "BBQ_2"
                         },
                         "strategy": {
-                            "$id": 119,
+                            "$id": 117,
                             "$type": 27
                         },
                         "maxFoodCount": 4,
@@ -1146,17 +1118,17 @@
             ]
         },
         "cardRepositorys": {
-            "$id": 120,
+            "$id": 118,
             "$type": "28|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[Card, Assembly-CSharp]], mscorlib",
             "comparer": $iref:26,
             "$rlength": 10,
             "$rcontent": [
                 {
-                    "$k": "47540f55-7ddb-4f44-9e6d-5e5849c3a156",
+                    "$k": "67847597-0965-4abc-a925-c38f3d68616b",
                     "$v": {
-                        "$id": 121,
+                        "$id": 119,
                         "$type": "29|Card, Assembly-CSharp",
-                        "guid": "47540f55-7ddb-4f44-9e6d-5e5849c3a156",
+                        "guid": "67847597-0965-4abc-a925-c38f3d68616b",
                         "id": "12",
                         "name": "\u65b9\u5411\u79fb\u52a8",
                         "description": "\u9009\u62e9\u4e00\u4e2a\u98df\u6750\uff0c\u4f7f\u5176\u5411\u4e00\u4e2a\u65b9\u5411\u79fb\u52a8",
@@ -1164,11 +1136,35 @@
                     }
                 },
                 {
-                    "$k": "47013f07-ae46-4895-82f1-d6b9def76a1d",
+                    "$k": "e85eb639-06c8-4427-a0aa-604af131716c",
+                    "$v": {
+                        "$id": 120,
+                        "$type": 29,
+                        "guid": "e85eb639-06c8-4427-a0aa-604af131716c",
+                        "id": "12",
+                        "name": "\u65b9\u5411\u79fb\u52a8",
+                        "description": "\u9009\u62e9\u4e00\u4e2a\u98df\u6750\uff0c\u4f7f\u5176\u5411\u4e00\u4e2a\u65b9\u5411\u79fb\u52a8",
+                        "cost": 2
+                    }
+                },
+                {
+                    "$k": "906dd71d-e113-4ca6-af81-4b546fba4a64",
+                    "$v": {
+                        "$id": 121,
+                        "$type": 29,
+                        "guid": "906dd71d-e113-4ca6-af81-4b546fba4a64",
+                        "id": "12",
+                        "name": "\u65b9\u5411\u79fb\u52a8",
+                        "description": "\u9009\u62e9\u4e00\u4e2a\u98df\u6750\uff0c\u4f7f\u5176\u5411\u4e00\u4e2a\u65b9\u5411\u79fb\u52a8",
+                        "cost": 2
+                    }
+                },
+                {
+                    "$k": "23699cb3-74d4-4281-bb2d-b0ca042140d4",
                     "$v": {
                         "$id": 122,
                         "$type": 29,
-                        "guid": "47013f07-ae46-4895-82f1-d6b9def76a1d",
+                        "guid": "23699cb3-74d4-4281-bb2d-b0ca042140d4",
                         "id": "12",
                         "name": "\u65b9\u5411\u79fb\u52a8",
                         "description": "\u9009\u62e9\u4e00\u4e2a\u98df\u6750\uff0c\u4f7f\u5176\u5411\u4e00\u4e2a\u65b9\u5411\u79fb\u52a8",
@@ -1176,11 +1172,11 @@
                     }
                 },
                 {
-                    "$k": "d378278f-005a-4017-95b8-eb14b17c7a39",
+                    "$k": "2d9873aa-79cb-4a41-99bb-c2a3cf0d8b47",
                     "$v": {
                         "$id": 123,
                         "$type": 29,
-                        "guid": "d378278f-005a-4017-95b8-eb14b17c7a39",
+                        "guid": "2d9873aa-79cb-4a41-99bb-c2a3cf0d8b47",
                         "id": "12",
                         "name": "\u65b9\u5411\u79fb\u52a8",
                         "description": "\u9009\u62e9\u4e00\u4e2a\u98df\u6750\uff0c\u4f7f\u5176\u5411\u4e00\u4e2a\u65b9\u5411\u79fb\u52a8",
@@ -1188,11 +1184,11 @@
                     }
                 },
                 {
-                    "$k": "02912c27-0504-44f1-b043-c851165bfe34",
+                    "$k": "5e31c89a-8e90-4573-9d7b-a8bbf12737d4",
                     "$v": {
                         "$id": 124,
                         "$type": 29,
-                        "guid": "02912c27-0504-44f1-b043-c851165bfe34",
+                        "guid": "5e31c89a-8e90-4573-9d7b-a8bbf12737d4",
                         "id": "12",
                         "name": "\u65b9\u5411\u79fb\u52a8",
                         "description": "\u9009\u62e9\u4e00\u4e2a\u98df\u6750\uff0c\u4f7f\u5176\u5411\u4e00\u4e2a\u65b9\u5411\u79fb\u52a8",
@@ -1200,11 +1196,11 @@
                     }
                 },
                 {
-                    "$k": "f9ec8a67-476a-455b-b14e-7f77abc1361b",
+                    "$k": "558b94ff-c2e6-4a92-a4a1-77023ba43756",
                     "$v": {
                         "$id": 125,
                         "$type": 29,
-                        "guid": "f9ec8a67-476a-455b-b14e-7f77abc1361b",
+                        "guid": "558b94ff-c2e6-4a92-a4a1-77023ba43756",
                         "id": "12",
                         "name": "\u65b9\u5411\u79fb\u52a8",
                         "description": "\u9009\u62e9\u4e00\u4e2a\u98df\u6750\uff0c\u4f7f\u5176\u5411\u4e00\u4e2a\u65b9\u5411\u79fb\u52a8",
@@ -1212,11 +1208,11 @@
                     }
                 },
                 {
-                    "$k": "61a44848-3555-49cd-a738-980f8a77bdca",
+                    "$k": "49baf13b-222f-4aee-a871-a39a208e3070",
                     "$v": {
                         "$id": 126,
                         "$type": 29,
-                        "guid": "61a44848-3555-49cd-a738-980f8a77bdca",
+                        "guid": "49baf13b-222f-4aee-a871-a39a208e3070",
                         "id": "12",
                         "name": "\u65b9\u5411\u79fb\u52a8",
                         "description": "\u9009\u62e9\u4e00\u4e2a\u98df\u6750\uff0c\u4f7f\u5176\u5411\u4e00\u4e2a\u65b9\u5411\u79fb\u52a8",
@@ -1224,11 +1220,11 @@
                     }
                 },
                 {
-                    "$k": "3810f2b5-cd1d-4a16-8efa-94d27a7db3dd",
+                    "$k": "0be4b171-7ec5-437c-a1c5-46af99c3856e",
                     "$v": {
                         "$id": 127,
                         "$type": 29,
-                        "guid": "3810f2b5-cd1d-4a16-8efa-94d27a7db3dd",
+                        "guid": "0be4b171-7ec5-437c-a1c5-46af99c3856e",
                         "id": "12",
                         "name": "\u65b9\u5411\u79fb\u52a8",
                         "description": "\u9009\u62e9\u4e00\u4e2a\u98df\u6750\uff0c\u4f7f\u5176\u5411\u4e00\u4e2a\u65b9\u5411\u79fb\u52a8",
@@ -1236,35 +1232,11 @@
                     }
                 },
                 {
-                    "$k": "c77c0a20-38e4-494a-81ae-95eb9e74c172",
+                    "$k": "83db42bb-5fa5-400f-974d-8c839d9a3fb6",
                     "$v": {
                         "$id": 128,
                         "$type": 29,
-                        "guid": "c77c0a20-38e4-494a-81ae-95eb9e74c172",
-                        "id": "12",
-                        "name": "\u65b9\u5411\u79fb\u52a8",
-                        "description": "\u9009\u62e9\u4e00\u4e2a\u98df\u6750\uff0c\u4f7f\u5176\u5411\u4e00\u4e2a\u65b9\u5411\u79fb\u52a8",
-                        "cost": 2
-                    }
-                },
-                {
-                    "$k": "8c6332c3-468d-40de-97ba-20eed0aaafa3",
-                    "$v": {
-                        "$id": 129,
-                        "$type": 29,
-                        "guid": "8c6332c3-468d-40de-97ba-20eed0aaafa3",
-                        "id": "12",
-                        "name": "\u65b9\u5411\u79fb\u52a8",
-                        "description": "\u9009\u62e9\u4e00\u4e2a\u98df\u6750\uff0c\u4f7f\u5176\u5411\u4e00\u4e2a\u65b9\u5411\u79fb\u52a8",
-                        "cost": 2
-                    }
-                },
-                {
-                    "$k": "85b12ef4-d6e7-4040-a813-214f990618f3",
-                    "$v": {
-                        "$id": 130,
-                        "$type": 29,
-                        "guid": "85b12ef4-d6e7-4040-a813-214f990618f3",
+                        "guid": "83db42bb-5fa5-400f-974d-8c839d9a3fb6",
                         "id": "12",
                         "name": "\u65b9\u5411\u79fb\u52a8",
                         "description": "\u9009\u62e9\u4e00\u4e2a\u98df\u6750\uff0c\u4f7f\u5176\u5411\u4e00\u4e2a\u65b9\u5411\u79fb\u52a8",
@@ -1274,45 +1246,45 @@
             ]
         },
         "recipes": {
-            "$id": 131,
+            "$id": 129,
             "$type": "30|System.Collections.Generic.List`1[[Recipe, Assembly-CSharp]], mscorlib",
             "$rlength": 3,
             "$rcontent": [
                 {
-                    "$id": 132,
+                    "$id": 130,
                     "$type": "31|Recipe, Assembly-CSharp",
                     "name": "\u5927\u9910",
                     "description": "\u5b8c\u5168\u662f\u5927\u9910\uff01",
                     "ruleDescription": "\u70e4\u4e32\u4e0a\u7684\u98df\u7269\u4e0d\u5c11\u4e8e6\u4e2a",
                     "actionDescription": "\u8865\u51451\u4e2a\u98df\u6750",
                     "rules": {
-                        "$id": 133,
+                        "$id": 131,
                         "$type": "32|System.Collections.Generic.List`1[[cfg.RecipeRule, Assembly-CSharp]], mscorlib",
                         "$rlength": 3,
                         "$rcontent": [
                             {
-                                "$id": 134,
+                                "$id": 132,
                                 "$type": "33|cfg.RecipeRule, Assembly-CSharp",
                                 "Rank": 1,
                                 "Action": {
-                                    "$id": 135,
+                                    "$id": 133,
                                     "$type": 7,
                                     "ID": "",
                                     "Conditions": {
-                                        "$id": 136,
+                                        "$id": 134,
                                         "$type": 8,
                                         "$rlength": 1,
                                         "$rcontent": [
                                             {
-                                                "$id": 137,
+                                                "$id": 135,
                                                 "$type": "34|cfg.Condition_DV\u68c0\u6d4b, Assembly-CSharp",
                                                 "DV1": {
-                                                    "$id": 138,
+                                                    "$id": 136,
                                                     "$type": "35|cfg.DV_\u5f53\u524d\u6784\u5efa\u70e4\u4e32\u98df\u6750\u6570\u91cf, Assembly-CSharp"
                                                 },
                                                 "Sign": 4,
                                                 "DV2": {
-                                                    "$id": 139,
+                                                    "$id": 137,
                                                     "$type": "36|cfg.DV_\u503c, Assembly-CSharp",
                                                     "Number": 6
                                                 }
@@ -1320,7 +1292,7 @@
                                         ]
                                     },
                                     "Actions": {
-                                        "$id": 140,
+                                        "$id": 138,
                                         "$type": 9,
                                         "$rlength": 0,
                                         "$rcontent": [
@@ -1329,28 +1301,28 @@
                                 }
                             },
                             {
-                                "$id": 141,
+                                "$id": 139,
                                 "$type": 33,
                                 "Rank": 2,
                                 "Action": {
-                                    "$id": 142,
+                                    "$id": 140,
                                     "$type": 7,
                                     "ID": "",
                                     "Conditions": {
-                                        "$id": 143,
+                                        "$id": 141,
                                         "$type": 8,
                                         "$rlength": 1,
                                         "$rcontent": [
                                             {
-                                                "$id": 144,
+                                                "$id": 142,
                                                 "$type": 34,
                                                 "DV1": {
-                                                    "$id": 145,
+                                                    "$id": 143,
                                                     "$type": 35
                                                 },
                                                 "Sign": 4,
                                                 "DV2": {
-                                                    "$id": 146,
+                                                    "$id": 144,
                                                     "$type": 36,
                                                     "Number": 7
                                                 }
@@ -1358,7 +1330,7 @@
                                         ]
                                     },
                                     "Actions": {
-                                        "$id": 147,
+                                        "$id": 145,
                                         "$type": 9,
                                         "$rlength": 0,
                                         "$rcontent": [
@@ -1367,28 +1339,28 @@
                                 }
                             },
                             {
-                                "$id": 148,
+                                "$id": 146,
                                 "$type": 33,
                                 "Rank": 3,
                                 "Action": {
-                                    "$id": 149,
+                                    "$id": 147,
                                     "$type": 7,
                                     "ID": "",
                                     "Conditions": {
-                                        "$id": 150,
+                                        "$id": 148,
                                         "$type": 8,
                                         "$rlength": 1,
                                         "$rcontent": [
                                             {
-                                                "$id": 151,
+                                                "$id": 149,
                                                 "$type": 34,
                                                 "DV1": {
-                                                    "$id": 152,
+                                                    "$id": 150,
                                                     "$type": 35
                                                 },
                                                 "Sign": 2,
                                                 "DV2": {
-                                                    "$id": 153,
+                                                    "$id": 151,
                                                     "$type": 36,
                                                     "Number": 8
                                                 }
@@ -1396,7 +1368,7 @@
                                         ]
                                     },
                                     "Actions": {
-                                        "$id": 154,
+                                        "$id": 152,
                                         "$type": 9,
                                         "$rlength": 0,
                                         "$rcontent": [
@@ -1408,40 +1380,40 @@
                     }
                 },
                 {
-                    "$id": 155,
+                    "$id": 153,
                     "$type": 31,
                     "name": "\u5c0f\u5de7\u7cbe\u608d",
                     "description": "\u4e0d\u997f\u4e0d\u6491\u521a\u521a\u597d\uff01",
                     "ruleDescription": "\u70e4\u4e32\u4e0a\u7684\u98df\u7269\u5c11\u4e8e5\u4e2a",
                     "actionDescription": "\u4e3a\u70e4\u4e32+5/+5",
                     "rules": {
-                        "$id": 156,
+                        "$id": 154,
                         "$type": 32,
                         "$rlength": 3,
                         "$rcontent": [
                             {
-                                "$id": 157,
+                                "$id": 155,
                                 "$type": 33,
                                 "Rank": 1,
                                 "Action": {
-                                    "$id": 158,
+                                    "$id": 156,
                                     "$type": 7,
                                     "ID": "",
                                     "Conditions": {
-                                        "$id": 159,
+                                        "$id": 157,
                                         "$type": 8,
                                         "$rlength": 1,
                                         "$rcontent": [
                                             {
-                                                "$id": 160,
+                                                "$id": 158,
                                                 "$type": 34,
                                                 "DV1": {
-                                                    "$id": 161,
+                                                    "$id": 159,
                                                     "$type": 35
                                                 },
                                                 "Sign": 4,
                                                 "DV2": {
-                                                    "$id": 162,
+                                                    "$id": 160,
                                                     "$type": 36,
                                                     "Number": 5
                                                 }
@@ -1449,7 +1421,7 @@
                                         ]
                                     },
                                     "Actions": {
-                                        "$id": 163,
+                                        "$id": 161,
                                         "$type": 9,
                                         "$rlength": 0,
                                         "$rcontent": [
@@ -1458,28 +1430,28 @@
                                 }
                             },
                             {
-                                "$id": 164,
+                                "$id": 162,
                                 "$type": 33,
                                 "Rank": 2,
                                 "Action": {
-                                    "$id": 165,
+                                    "$id": 163,
                                     "$type": 7,
                                     "ID": "",
                                     "Conditions": {
-                                        "$id": 166,
+                                        "$id": 164,
                                         "$type": 8,
                                         "$rlength": 1,
                                         "$rcontent": [
                                             {
-                                                "$id": 167,
+                                                "$id": 165,
                                                 "$type": 34,
                                                 "DV1": {
-                                                    "$id": 168,
+                                                    "$id": 166,
                                                     "$type": 35
                                                 },
                                                 "Sign": 4,
                                                 "DV2": {
-                                                    "$id": 169,
+                                                    "$id": 167,
                                                     "$type": 36,
                                                     "Number": 4
                                                 }
@@ -1487,7 +1459,7 @@
                                         ]
                                     },
                                     "Actions": {
-                                        "$id": 170,
+                                        "$id": 168,
                                         "$type": 9,
                                         "$rlength": 0,
                                         "$rcontent": [
@@ -1496,28 +1468,28 @@
                                 }
                             },
                             {
-                                "$id": 171,
+                                "$id": 169,
                                 "$type": 33,
                                 "Rank": 3,
                                 "Action": {
-                                    "$id": 172,
+                                    "$id": 170,
                                     "$type": 7,
                                     "ID": "",
                                     "Conditions": {
-                                        "$id": 173,
+                                        "$id": 171,
                                         "$type": 8,
                                         "$rlength": 1,
                                         "$rcontent": [
                                             {
-                                                "$id": 174,
+                                                "$id": 172,
                                                 "$type": 34,
                                                 "DV1": {
-                                                    "$id": 175,
+                                                    "$id": 173,
                                                     "$type": 35
                                                 },
                                                 "Sign": 3,
                                                 "DV2": {
-                                                    "$id": 176,
+                                                    "$id": 174,
                                                     "$type": 36,
                                                     "Number": 3
                                                 }
@@ -1525,7 +1497,7 @@
                                         ]
                                     },
                                     "Actions": {
-                                        "$id": 177,
+                                        "$id": 175,
                                         "$type": 9,
                                         "$rlength": 0,
                                         "$rcontent": [
@@ -1537,40 +1509,40 @@
                     }
                 },
                 {
-                    "$id": 178,
+                    "$id": 176,
                     "$type": 31,
                     "name": "\u4f18\u96c5\u56de\u6587",
                     "description": "\u56de\u6587\u4e32\uff01",
                     "ruleDescription": "",
                     "actionDescription": "",
                     "rules": {
-                        "$id": 179,
+                        "$id": 177,
                         "$type": 32,
                         "$rlength": 3,
                         "$rcontent": [
                             {
-                                "$id": 180,
+                                "$id": 178,
                                 "$type": 33,
                                 "Rank": 1,
                                 "Action": {
-                                    "$id": 181,
+                                    "$id": 179,
                                     "$type": 7,
                                     "ID": "",
                                     "Conditions": {
-                                        "$id": 182,
+                                        "$id": 180,
                                         "$type": 8,
                                         "$rlength": 1,
                                         "$rcontent": [
                                             {
-                                                "$id": 183,
+                                                "$id": 181,
                                                 "$type": 34,
                                                 "DV1": {
-                                                    "$id": 184,
+                                                    "$id": 182,
                                                     "$type": "37|cfg.DV_\u56de\u6587\u4e32, Assembly-CSharp"
                                                 },
                                                 "Sign": 4,
                                                 "DV2": {
-                                                    "$id": 185,
+                                                    "$id": 183,
                                                     "$type": 36,
                                                     "Number": 2
                                                 }
@@ -1578,7 +1550,7 @@
                                         ]
                                     },
                                     "Actions": {
-                                        "$id": 186,
+                                        "$id": 184,
                                         "$type": 9,
                                         "$rlength": 0,
                                         "$rcontent": [
@@ -1587,28 +1559,28 @@
                                 }
                             },
                             {
-                                "$id": 187,
+                                "$id": 185,
                                 "$type": 33,
                                 "Rank": 2,
                                 "Action": {
-                                    "$id": 188,
+                                    "$id": 186,
                                     "$type": 7,
                                     "ID": "",
                                     "Conditions": {
-                                        "$id": 189,
+                                        "$id": 187,
                                         "$type": 8,
                                         "$rlength": 1,
                                         "$rcontent": [
                                             {
-                                                "$id": 190,
+                                                "$id": 188,
                                                 "$type": 34,
                                                 "DV1": {
-                                                    "$id": 191,
+                                                    "$id": 189,
                                                     "$type": 37
                                                 },
                                                 "Sign": 4,
                                                 "DV2": {
-                                                    "$id": 192,
+                                                    "$id": 190,
                                                     "$type": 36,
                                                     "Number": 3
                                                 }
@@ -1616,7 +1588,7 @@
                                         ]
                                     },
                                     "Actions": {
-                                        "$id": 193,
+                                        "$id": 191,
                                         "$type": 9,
                                         "$rlength": 0,
                                         "$rcontent": [
@@ -1625,28 +1597,28 @@
                                 }
                             },
                             {
-                                "$id": 194,
+                                "$id": 192,
                                 "$type": 33,
                                 "Rank": 3,
                                 "Action": {
-                                    "$id": 195,
+                                    "$id": 193,
                                     "$type": 7,
                                     "ID": "",
                                     "Conditions": {
-                                        "$id": 196,
+                                        "$id": 194,
                                         "$type": 8,
                                         "$rlength": 1,
                                         "$rcontent": [
                                             {
-                                                "$id": 197,
+                                                "$id": 195,
                                                 "$type": 34,
                                                 "DV1": {
-                                                    "$id": 198,
+                                                    "$id": 196,
                                                     "$type": 37
                                                 },
                                                 "Sign": 4,
                                                 "DV2": {
-                                                    "$id": 199,
+                                                    "$id": 197,
                                                     "$type": 36,
                                                     "Number": 4
                                                 }
@@ -1654,7 +1626,7 @@
                                         ]
                                     },
                                     "Actions": {
-                                        "$id": 200,
+                                        "$id": 198,
                                         "$type": 9,
                                         "$rlength": 0,
                                         "$rcontent": [
@@ -1669,58 +1641,46 @@
         }
     },
     "gameProcessData": {
-        "$id": 201,
+        "$id": 199,
         "$type": "38|GameProcessData, Assembly-CSharp",
         "month": 1,
-        "day": 1,
+        "day": 0,
         "stateIndexes": {
-            "$id": 202,
+            "$id": 200,
             "$type": "39|System.Collections.Generic.List`1[[System.Int32, mscorlib]], mscorlib",
             "$rlength": 3,
             "$rcontent": [
                 0,
-                1,
+                0,
                 0
             ]
         }
     },
     "rngSaveData": {
-        "$id": 203,
+        "$id": 201,
         "$type": "40|RngSaveData, Assembly-CSharp",
-        "MainSeed": 208132,
+        "MainSeed": 873826,
         "SubRngCallCounts": {
-            "$id": 204,
+            "$id": 202,
             "$type": "41|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Int32, mscorlib]], mscorlib",
             "comparer": $iref:26,
-            "$rlength": 4,
+            "$rlength": 1,
             "$rcontent": [
                 {
                     "$k": "IFoodSystem",
-                    "$v": 23
-                },
-                {
-                    "$k": "IBoardSystem",
-                    "$v": 20
-                },
-                {
-                    "$k": "ICustomerSystem",
-                    "$v": 57
-                },
-                {
-                    "$k": "IMascotSystem",
-                    "$v": 6
+                    "$v": 4
                 }
             ]
         }
     },
     "probabilityInfo": {
-        "$id": 205,
+        "$id": 203,
         "$type": "42|ProbabilityInfo, Assembly-CSharp",
         "probabilities": {
-            "$id": 206,
+            "$id": 204,
             "$type": "43|System.Collections.Generic.Dictionary`2[[cfg.Rank, Assembly-CSharp],[System.Single, mscorlib]], mscorlib",
             "comparer": {
-                "$id": 207,
+                "$id": 205,
                 "$type": "44|System.Collections.Generic.EnumEqualityComparer`1[[cfg.Rank, Assembly-CSharp]], mscorlib",
                 "$rlength": 0,
                 "$rcontent": [

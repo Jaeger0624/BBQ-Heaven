@@ -33,7 +33,7 @@ public class MascotView : MonoBehaviour, IShowTooltip{
     public List<TooltipInfo> GetTooltipInfo()
     {
         List<TooltipInfo> tooltipInfos = new List<TooltipInfo>();
-        TooltipInfo tooltipInfo = new TooltipInfo($"<size=48>{mascot.name}</size>\n<size=32>{mascot.description}</size>");
+        TooltipInfo tooltipInfo = new TooltipInfo($"<size=48>{mascot.name}</size>\n<size=32>{mascot.effectDescription}</size>");
         tooltipInfos.Add(tooltipInfo);
         return tooltipInfos;
     }

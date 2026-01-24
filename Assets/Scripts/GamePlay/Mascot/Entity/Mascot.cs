@@ -7,6 +7,7 @@ public class Mascot : ICanGetSystem{
     public string ID => data.ID;
     public string name;
     public string description;
+    public string effectDescription;
     public readonly MascotData data;
     // 堆叠数量
     public int StackNumber = 1;
@@ -18,6 +19,7 @@ public class Mascot : ICanGetSystem{
         this.name = data.Name;
         this.description = data.Description;
         this.SEs = data.MainSE;
+        this.effectDescription = data.EffectDescription;
     }
 
     public void OnAdd()

@@ -17,6 +17,10 @@ public class CameraShaker : MonoBehaviour
     [SerializeField] private float _defaultStrength = 1f; // 震动幅度
     [SerializeField] private int _defaultVibrato = 20;    // 震动频率（越高越急促）
     [SerializeField] private float _defaultRandomness = 90f; // 随机性
+    [SerializeField] private float _heavyShakeDuration = 0.4f;
+    [Header("配置")]
+    [SerializeField] private float _heavyShakeStrength = 3f;
+    [SerializeField] private float _lightShakeStrength = 0.5f;
 
     [Header("引用")]
     public List<ShakeInfo> TargetToShake; // 拖入你的 Main Camera，或者 Canvas 的 RectTransform
@@ -88,9 +92,9 @@ public class CameraShaker : MonoBehaviour
     
     // 受到重击（预设的大震动）
     [Button("重击")]
-    public void HeavyShake() => ShakeAll(3f, 0.4f);
+    public void HeavyShake() => ShakeAll(_heavyShakeStrength, _heavyShakeDuration);
     
     // 轻微震动（UI交互反馈）
     [Button("轻微震动")]
-    public void LightShake() => ShakeAll(0.5f, 0.1f);
+    public void LightShake() => ShakeAll(_lightShakeStrength, _defaultDuration);
 }

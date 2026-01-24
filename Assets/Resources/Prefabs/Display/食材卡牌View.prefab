@@ -792,6 +792,7 @@ GameObject:
   - component: {fileID: 455872100828238712}
   - component: {fileID: 3461741886599855501}
   - component: {fileID: 1620924827716092986}
+  - component: {fileID: 986476535981639861}
   m_Layer: 0
   m_Name: "\u98DF\u6750\u5361\u724CView"
   m_TagString: Untagged
@@ -892,3 +893,17 @@ MonoBehaviour:
   foodPriceText: {fileID: 9055989916636445224}
   enhancementParent: {fileID: 8959925397248276566}
   enhancementViewPrefab: {fileID: 3745426728908827830}
+--- !u!114 &986476535981639861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9118714941195686715}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ee985f4240d7eb4385207a0e8c1f289, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetTransform: {fileID: 0}
+  anchor: 4

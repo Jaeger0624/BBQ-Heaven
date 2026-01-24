@@ -34,17 +34,16 @@ public class PCSystem : AbstractSystem, IPCSystem
 
     protected override void OnInit()
     {
-        unlockedLevels = new Dictionary<int, bool>
+        // 初始只有第一级是解锁的
+        List<ReputationData> reputationDatas = this.GetSystem<IDataSystem>().GetAllReputationData();
+        foreach (var reputationData in reputationDatas)
         {
-            // 初始只有第一级是解锁的
-            { 1, true },
-            { 2, false },
-            { 3, false },
-            { 4, false },
-            { 5, false },
-            { 6, false },
-            { 7, false }
-        };
+            unlockedLevels[reputationData.Rank] = false;
+        }
+        if (unlockedLevels.Count > 0)
+        {
+            unlockedLevels[1] = true;
+        }
     }
     protected override void OnDeinit()
     {

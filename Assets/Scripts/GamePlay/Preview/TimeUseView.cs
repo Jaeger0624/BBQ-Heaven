@@ -18,17 +18,30 @@ public class TimeUseView : MonoBehaviour, IController, ICanSendEvent{
     {
         this.RegisterEvent<ShowBBQPreviewEvent>(OnShowBBQPreviewEvent);
         this.RegisterEvent<HideBBQPreviewEvent>(OnHideBBQPreviewEvent);
+
+        this.RegisterEvent<ShowClockPreviewEvent>(OnShowClockPreviewEvent);
+        this.RegisterEvent<HideClockPreviewEvent>(OnHideClockPreviewEvent);
     }
     void OnDisable()
     {
         this.UnRegisterEvent<ShowBBQPreviewEvent>(OnShowBBQPreviewEvent);
         this.UnRegisterEvent<HideBBQPreviewEvent>(OnHideBBQPreviewEvent);
+
+        this.UnRegisterEvent<ShowClockPreviewEvent>(OnShowClockPreviewEvent);
+        this.UnRegisterEvent<HideClockPreviewEvent>(OnHideClockPreviewEvent);
     }
     private void OnShowBBQPreviewEvent(ShowBBQPreviewEvent evt){
         UpdateVisual(evt.preview.totalTimeCost);
         Show();
     }
     private void OnHideBBQPreviewEvent(HideBBQPreviewEvent evt){
+        Hide();
+    }
+    private void OnShowClockPreviewEvent(ShowClockPreviewEvent evt){
+        UpdateVisual(evt.time);
+        Show();
+    }
+    private void OnHideClockPreviewEvent(HideClockPreviewEvent evt){
         Hide();
     }
     public void UpdateVisual(int time){
@@ -56,6 +69,18 @@ public class ShowBBQPreviewEvent : AbstractEvent{
     }
 }
 
+
 public class HideBBQPreviewEvent : AbstractEvent{
     public HideBBQPreviewEvent(){}
+}
+
+public class ShowClockPreviewEvent : AbstractEvent{
+    public int time;
+    public ShowClockPreviewEvent(int time){
+        this.time = time;
+    }
+}
+
+public class HideClockPreviewEvent : AbstractEvent{
+    public HideClockPreviewEvent(){}
 }

@@ -16,6 +16,7 @@ public static class EventBinder{
                 return observer.RegisterEvent<StartNewDayEvent>(evt => {
                     // 若不是在系统前阶段，则不执行
                     if (!evt.StageMeet(EventStage.Before)) return;
+                    parameters.Clear();
                     parameters.AddRange(evt.parameters);
                     ApplyActions(parameters);
                 });
@@ -24,26 +25,31 @@ public static class EventBinder{
                 return observer.RegisterEvent<StartNewDayEvent>(evt => {
                     // 若不是在系统后阶段，则不执行
                     if (!evt.StageMeet(EventStage.After)) return;
+                    parameters.Clear();
                     parameters.AddRange(evt.parameters);
                     ApplyActions(parameters);
                 });
             case cfg.EventType.完成烧烤后:
                 return observer.RegisterEvent<FinishCombineBBQEvent>(evt => {
+                    parameters.Clear();
                     parameters.AddRange(evt.parameters);
                     ApplyActions(parameters);
                 });
             case cfg.EventType.抽牌后:
                 return observer.RegisterEvent<DrawSingleCardEvent>(evt => {
+                    parameters.Clear();
                     parameters.AddRange(evt.parameters);
                     ApplyActions(parameters);
                 });
             case cfg.EventType.串串构建时:
                 return observer.RegisterEvent<AfterCalculateBBQEvent>(evt => {
+                    parameters.Clear();
                     parameters.AddRange(evt.parameters);
                     ApplyActions(parameters);
                 });
             case cfg.EventType.使用卡牌:
                 return observer.RegisterEvent<UseCardEvent>(evt => {
+                    parameters.Clear();
                     parameters.Add(evt.card);
                     ApplyActions(parameters);
                 });

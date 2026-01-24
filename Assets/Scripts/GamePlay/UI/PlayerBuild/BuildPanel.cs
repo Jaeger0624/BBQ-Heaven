@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using cfg;
 using QFramework;
 using UnityEngine;
@@ -8,16 +9,11 @@ using UnityEngine.UI;
 /// 显示玩家构筑的面板
 /// </summary>
 public class BuildPanel : MonoBehaviour, IController{
-    [SerializeField] private Transform 食材容器;
-    [SerializeField] private Transform 吉祥物容器;
-    [SerializeField] private Transform 配方容器;
-    [SerializeField] private GameObject 食材预制体;
-    [SerializeField] private GameObject 吉祥物预制体;
-    [SerializeField] private GameObject 配方预制体;
-    private List<FoodDisplayView> foodDisplayViews = new List<FoodDisplayView>();
-    private List<MascotDisplayView> mascotDisplayViews = new List<MascotDisplayView>();
-    private List<RecipeDisplayView> recipeDisplayViews = new List<RecipeDisplayView>();
+    [SerializeField] private FoodDisplayContainer 食材容器;
+    [SerializeField] private MascotDisplayContainer 吉祥物容器;
 
+    [SerializeField] private CardDisplayContainer 卡牌容器;
+    // [SerializeField] private RecipeDisplayContainer 配方容器;
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
 
     void Start()
@@ -25,63 +21,51 @@ public class BuildPanel : MonoBehaviour, IController{
     }
 
     public void Show(){
+        // 清除之前的
         ClearAllDisplayViews();
         InitFoodDisplayViews();
         InitMascotDisplayViews();
+        InitCardDisplayViews();
         InitRecipeDisplayViews();
     }
 
     private void InitFoodDisplayViews()
     {
-        foodDisplayViews = new List<FoodDisplayView>();
-        Dictionary<string, int> foodRepositoryDict = this.GetSystem<IFoodSystem>().GetFoodRepositoryDict();
-        foreach (var food in foodRepositoryDict)
-        {
-            FoodDisplayView foodDisplayView = Instantiate(食材预制体, 食材容器).GetComponent<FoodDisplayView>();
-            FoodData foodData = this.GetSystem<IDataSystem>().GetFoodData(food.Key);
-            foodDisplayView.Bind(foodData, food.Value);
-            foodDisplayViews.Add(foodDisplayView);
-        }
+        食材容器.GetGameObject().SetActive(true);
+        List<FoodCard> foodCards = this.GetSystem<IFoodSystem>().FoodRepositorys().Values.ToList();
+        List<FoodUIContext> foodInstances = foodCards.Select(food => new FoodUIContext(food)).ToList();
+        食材容器.RefreshUI(foodInstances, new CollectionFoodStrategy());
     }
 
     private void InitMascotDisplayViews()
+    {   
+        吉祥物容器.GetGameObject().SetActive(true);
+        List<MascotUIContext> mascotUIContexts = this.GetSystem<IMascotSystem>().Mascots.Values.Select(mascot => new MascotUIContext(mascot)).ToList();
+        吉祥物容器.RefreshUI(mascotUIContexts, new CollectionMascotStrategy());
+    }
+
+    private void InitCardDisplayViews()
     {
-        mascotDisplayViews = new List<MascotDisplayView>();
-        foreach (var mascot in this.GetSystem<IMascotSystem>().Mascots)
-        {
-            MascotDisplayView mascotDisplayView = Instantiate(吉祥物预制体, 吉祥物容器).GetComponent<MascotDisplayView>();
-            mascotDisplayView.Bind(mascot.Value);
-            mascotDisplayViews.Add(mascotDisplayView);
-        }
+        卡牌容器.GetGameObject().SetActive(true);
+        List<CardUIContext> cardUIContexts = this.GetSystem<ICardSystem>().CardRepository.Values.Select(card => new CardUIContext(card)).ToList();
+        卡牌容器.RefreshUI(cardUIContexts, new CollectionCardStrategy());
     }
 
     private void InitRecipeDisplayViews()
     {
-        recipeDisplayViews = new List<RecipeDisplayView>();
-        foreach (var recipe in this.GetSystem<IRecipeSystem>().Recipes())
-        {
-            RecipeDisplayView recipeDisplayView = Instantiate(配方预制体, 配方容器).GetComponent<RecipeDisplayView>();
-            recipeDisplayView.Bind(recipe);
-            recipeDisplayViews.Add(recipeDisplayView);
-        }
+        // recipeDisplayViews = new List<RecipeDisplayView>();
+        // foreach (var recipe in this.GetSystem<IRecipeSystem>().Recipes())
+        // {
+        //     RecipeDisplayView recipeDisplayView = Instantiate(配方预制体, 配方容器).GetComponent<RecipeDisplayView>();
+        //     recipeDisplayView.Bind(recipe);
+        //     recipeDisplayViews.Add(recipeDisplayView);
+        // }
     }
 
     private void ClearAllDisplayViews()
     {
-        foreach (var foodDisplayView in foodDisplayViews)
-        {
-            Destroy(foodDisplayView.gameObject);
-        }
-        foodDisplayViews.Clear();
-        foreach (var mascotDisplayView in mascotDisplayViews)
-        {
-            Destroy(mascotDisplayView.gameObject);
-        }
-        mascotDisplayViews.Clear();
-        foreach (var recipeDisplayView in recipeDisplayViews)
-        {
-            Destroy(recipeDisplayView.gameObject);
-        }
-        recipeDisplayViews.Clear();
+        // 食材容器.GetGameObject().SetActive(false);
+        // 吉祥物容器.GetGameObject().SetActive(false);
+        // 配方容器.GetGameObject().SetActive(false);
     }
 }

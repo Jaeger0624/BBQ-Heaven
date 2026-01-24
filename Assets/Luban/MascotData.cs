@@ -23,6 +23,7 @@ public sealed partial class MascotData : Luban.BeanBase
         { if(!_buf["stackable"].IsBoolean) { throw new SerializationException(); }  Stackable = _buf["stackable"]; }
         { if(!_buf["rank"].IsNumber) { throw new SerializationException(); }  Rank = (Rank)_buf["rank"].AsInt; }
         { var __json0 = _buf["mainSE"]; if(!__json0.IsArray) { throw new SerializationException(); } MainSE = new System.Collections.Generic.List<SustainEffect>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { SustainEffect __v0;  { if(!__e0.IsObject) { throw new SerializationException(); }  __v0 = global::cfg.SustainEffect.DeserializeSustainEffect(__e0);  }  MainSE.Add(__v0); }   }
+        { if(!_buf["effectDescription"].IsString) { throw new SerializationException(); }  EffectDescription = _buf["effectDescription"]; }
     }
 
     public static MascotData DeserializeMascotData(JSONNode _buf)
@@ -36,6 +37,7 @@ public sealed partial class MascotData : Luban.BeanBase
     public readonly bool Stackable;
     public readonly Rank Rank;
     public readonly System.Collections.Generic.List<SustainEffect> MainSE;
+    public readonly string EffectDescription;
    
     public const int __ID__ = -1960698061;
     public override int GetTypeId() => __ID__;
@@ -54,6 +56,7 @@ public sealed partial class MascotData : Luban.BeanBase
         + "stackable:" + Stackable + ","
         + "rank:" + Rank + ","
         + "mainSE:" + Luban.StringUtil.CollectionToString(MainSE) + ","
+        + "effectDescription:" + EffectDescription + ","
         + "}";
     }
 }

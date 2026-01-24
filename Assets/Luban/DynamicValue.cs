@@ -30,6 +30,7 @@ public abstract partial class DynamicValue : Luban.BeanBase
             case "DV_食材实例数量": return new DV_食材实例数量(_buf);
             case "DV_售卖食材数量": return new DV_售卖食材数量(_buf);
             case "DV_回文串": return new DV_回文串(_buf);
+            case "DV_当前串空位数": return new DV_当前串空位数(_buf);
             default: throw new SerializationException();
         }
     }

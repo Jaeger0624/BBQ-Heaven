@@ -11,6 +11,7 @@ public enum CardSystemState{
 public interface ICardSystem : ISystem, ISavable{
     CardPile CardPile { get; }
     CardSystemState State { get; set; }
+    Dictionary<string, Card> CardRepository { get; }
     void InitCardPile();
     // 添加卡牌到卡牌库
     void AddCardToRepository(string cardId);
@@ -33,6 +34,7 @@ public class CardSystem : AbstractSystem, ICardSystem
     // 每单日运营开始时，卡牌系统负责初始化卡牌堆
     private CardPile cardPile;
     public CardPile CardPile => cardPile;
+    public Dictionary<string, Card> CardRepository => cardRepository;
     protected override void OnInit()
     {
         cardRepository = new Dictionary<string, Card>();

@@ -153,4 +153,56 @@ namespace cfg{
             }
         }
     }
+
+
+    public partial class DV_当前串空位数 : DynamicValue
+    {
+        public override int GetValue(object target, List<object> param)
+        {
+            BBQProcessContext context = param?.FirstOrDefault() as BBQProcessContext;
+            if (context == null){
+                Debug.LogError("上下文为空");
+                return 0;
+            }
+
+            // 第一个食材是什么
+            // Debug.Log($"【DV_当前串空位数】<color=blue>第一个食材: {context.targetBBQ.foodInstances[0].food.foodData.Name}</color>");
+
+            int FoodAmount = context.targetBBQ.foodInstances.Count;
+            int maxAmount = context.targetBBQ.stick.maxFoodCount;
+            int originValue = maxAmount - FoodAmount;
+
+            // Debug.Log($"【DV_当前串空位数】<color=blue>食材数量: {FoodAmount}, 最大数量: {maxAmount}, 空位数: {originValue}</color>");
+
+            int final = Exp.GetValue(originValue);
+            return final;
+        }
+    }
+
+    public partial class Expression{
+        public int GetValue(int originValue)
+        {
+            int result = originValue;
+            // 解析表达式
+            string expression = this.Text;
+
+            List<string> tokens = expression.Split(' ').ToList();
+            for (int i = 0; i < tokens.Count; i++){
+                string token = tokens[i];
+                if (token == "+"){
+                    result += int.Parse(tokens[i + 1]);
+                }
+                else if (token == "-"){
+                    result -= int.Parse(tokens[i + 1]);
+                }
+                else if (token == "*"){
+                    result *= int.Parse(tokens[i + 1]);
+                }
+                else if (token == "/"){
+                    result /= int.Parse(tokens[i + 1]);
+                }
+            }
+            return result;
+        }
+    }
 }

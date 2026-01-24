@@ -22,6 +22,7 @@ public class Card : ICanGetSystem{
     public CardTargetType targetType => cardData.Target;
     [NonSerialized]
     private CardData cardData;
+    public CardData CardData => cardData;
     public Card(CardData cardData){
         this.guid = Guid.NewGuid().ToString();
         this.id = cardData.ID;

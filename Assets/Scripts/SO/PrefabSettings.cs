@@ -12,5 +12,6 @@ public class PrefabSettings : ScriptableObject
 
     // [Header("装饰品展示")]
 
-    // [Header("卡牌展示")]
+    [Header("卡牌展示")]
+    public DisplayCardView cardItemPrefab;
 }

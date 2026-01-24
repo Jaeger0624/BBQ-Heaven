@@ -8,7 +8,7 @@ using DG.Tweening;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 
-public class DisplayFoodView : MonoBehaviour, IDisplayItemView<FoodUIContext>{
+public class DisplayFoodView : MonoBehaviour, IDisplayItemView<FoodUIContext>, IShowTooltip{
     private FoodUIContext _context;
     private Action<FoodUIContext> _onClick;
     [SerializeField] private Image foodImage;
@@ -141,6 +141,21 @@ public class DisplayFoodView : MonoBehaviour, IDisplayItemView<FoodUIContext>{
             Destroy(child.gameObject);
         }
         LayoutRebuilder.ForceRebuildLayoutImmediate(enhancementParent as RectTransform);
+    }
+
+    public List<TooltipInfo> GetTooltipInfo()
+    {
+        List<TooltipInfo> tooltipInfos = new List<TooltipInfo>();
+        string description = $"<size=48>{_context.ConfigData.Name}</size>\n<size=36>{_context.ConfigData.EffectDescription}</size>";
+        TooltipInfo tooltipInfo = new TooltipInfo(description);
+        tooltipInfos.Add(tooltipInfo);
+
+        // 添加强化信息
+        foreach (var enhancement in _context.RuntimeFood.Enhancements){
+            TooltipInfo enhancementTooltipInfo = new TooltipInfo($"<size=50>{enhancement.Name}</size>\n<size=36>{enhancement.Description}</size>");
+            tooltipInfos.Add(enhancementTooltipInfo);
+        }
+        return tooltipInfos;
     }
     #endregion
 }

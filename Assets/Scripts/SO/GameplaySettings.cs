@@ -16,6 +16,8 @@ public class GameplaySettings : ScriptableObject{
     public int 默认每日开始客户数 = 2;
     [LabelText("每分钟来一个顾客的可能性（不能大于等于1）")]
     public float 每分钟来一个顾客的可能性 = 0.2f;
+    [LabelText("最大同时点餐顾客数量")]
+    public int 最大同时点餐顾客数量 = 3;
 
     [LabelText("默认顾客满意度区间")]
     public List<float> 默认顾客满意度区间 = new List<float>{1.5f,2.5f,3f};

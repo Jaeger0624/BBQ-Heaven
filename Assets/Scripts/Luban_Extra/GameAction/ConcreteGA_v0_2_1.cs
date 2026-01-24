@@ -26,8 +26,14 @@ namespace cfg{
                 Debug.LogError("【GA_增加顾客等待值】没有顾客");
                 return;
             }
+            int value = Value.GetValue(sender, param);
             customers.ForEach(customer => {
-                customer.PatienceNow.Value += Value.GetValue(sender, param);
+                if (customer.PatienceNow.Value + value <= 0){
+                    customer.PatienceNow.Value = 0;
+                }
+                else{
+                    customer.PatienceNow.Value += value;
+                }
             });
         }
 

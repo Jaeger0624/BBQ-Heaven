@@ -273,7 +273,7 @@ public class CustomerSystem_新 : AbstractCustomerSystem
 #region CustomerSystem抽象层
 public abstract class AbstractCustomerSystem : AbstractSystem, ICustomerSystem
 {
-    private int maxOrderAmount = 3; // 最大同时点餐顾客数量
+    private int maxOrderAmount => SettingManager.GetSetting<GameplaySettings>().最大同时点餐顾客数量; // 最大同时点餐顾客数量
     public List<Customer> OrderingCustomers => orderingCustomers;
     public CustomerSatisfaction Satisfaction { get; set; }
     public CustomerLookMaker CustomerLookMaker { get; set; } = new CustomerLookMaker();

@@ -35,8 +35,7 @@ public class TooltipManager : MonoBehaviour
             return;
         }
         isShowing = true;
-        // TODO: 先负责显示一个TooltipInfo
-        tooltipUI.Show(tooltipInfos[0].description);
+        tooltipUI.Show(tooltipInfos);
     }
     public void Hide(){
         if (!useTooltip) return;

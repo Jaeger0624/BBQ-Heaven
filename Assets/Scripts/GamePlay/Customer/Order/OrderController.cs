@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using QFramework;
+using TMPro;
 using UnityEngine;
 
 public class OrderController : MonoBehaviour, IController, ICanSendEvent
@@ -8,6 +9,7 @@ public class OrderController : MonoBehaviour, IController, ICanSendEvent
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
     public Transform orderContainer;
     public GameObject orderViewPrefab;
+    [SerializeField] private TextMeshProUGUI orderCountText;
     private Dictionary<string, OrderView> orderViews = new Dictionary<string, OrderView>();
     void OnEnable(){
         this.RegisterEvent<AddCustomerEvent>(OnAddCustomerEvent).UnRegisterWhenDisabled(this);
@@ -45,6 +47,11 @@ public class OrderController : MonoBehaviour, IController, ICanSendEvent
         OrderView orderView = Instantiate(orderViewPrefab, orderContainer, false).GetComponent<OrderView>();
         orderView.Bind(customer);
         orderViews.Add(customer.guid, orderView);
+
+        UpdateOrderCountText();
+    }
+    private void UpdateOrderCountText(){
+        orderCountText.text = $"订单数: {orderViews.Count} / {SettingManager.GetSetting<GameplaySettings>().最大同时点餐顾客数量}";
     }
     public void RemoveOrderView(Customer customer){
         if (orderViews.TryGetValue(customer.guid, out OrderView orderView))

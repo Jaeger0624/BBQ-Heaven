@@ -623,7 +623,7 @@ namespace QFramework
 
         public void Send<T>() where T : new() => mEvents.GetEvent<EasyEvent<T>>()?.Trigger(new T());
 
-        public void Send<T>(T e) => mEvents.GetEvent<EasyEvent<T>>()?.Trigger(e);
+        public void Send<T>(T e){mEvents.GetEvent<EasyEvent<T>>()?.Trigger(e);}
 
         public IUnRegister Register<T>(Action<T> onEvent) => mEvents.GetOrAddEvent<EasyEvent<T>>().Register(onEvent);
 

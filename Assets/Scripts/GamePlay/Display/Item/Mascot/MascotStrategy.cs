@@ -1,6 +1,14 @@
 using UnityEngine;
 using QFramework;
 
+// 纯展示，没啥用处
+public class CollectionMascotStrategy : ItemInteractStrategyBase<MascotUIContext, DisplayMascotView>{
+    public override void OnBind(DisplayMascotView itemView, MascotUIContext data){
+    }
+    public override void OnClick(MascotUIContext data, DisplayMascotView itemView){
+    }
+}
+// 购买吉祥物
 public class BuyMascotStrategy : ItemInteractStrategyBase<MascotUIContext, DisplayMascotView>{
     public override void OnBind(DisplayMascotView itemView, MascotUIContext data){
     }

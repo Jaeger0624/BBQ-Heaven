@@ -22,7 +22,8 @@
           }
         ]
       }
-    ]
+    ],
+    "effectDescription": "会叫"
   },
   {
     "ID": "2",
@@ -50,7 +51,8 @@
           }
         ]
       }
-    ]
+    ],
+    "effectDescription": "恐怖"
   },
   {
     "ID": "3",
@@ -92,7 +94,8 @@
           }
         ]
       }
-    ]
+    ],
+    "effectDescription": "每抽一张技能牌，随机使得一个食材+1/+1"
   },
   {
     "ID": "4",
@@ -124,7 +127,8 @@
           }
         ]
       }
-    ]
+    ],
+    "effectDescription": ""
   },
   {
     "ID": "5",
@@ -156,6 +160,42 @@
           }
         ]
       }
-    ]
+    ],
+    "effectDescription": ""
+  },
+  {
+    "ID": "6",
+    "name": "小而精",
+    "description": "",
+    "stackable": false,
+    "rank": 1,
+    "mainSE": [
+      {
+        "$type": "SE_监听事件",
+        "evt": 5,
+        "actions": [
+          {
+            "ID": "1",
+            "conditions": [],
+            "actions": [
+              {
+                "$type": "GA_直接修改当前烧烤值",
+                "rarityValue": {
+                  "$type": "DV_当前串空位数",
+                  "Exp": {
+                    "text": "* 2"
+                  }
+                },
+                "tasteValue": {
+                  "$type": "DV_值",
+                  "number": 0
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "effectDescription": "烤串构建完成时，为该串增加 2*空位数 的珍稀度"
   }
 ]
