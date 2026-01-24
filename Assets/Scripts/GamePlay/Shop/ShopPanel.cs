@@ -12,6 +12,7 @@ public class ShopPanel : MonoBehaviour, IController, ICanSendEvent{
     [Header("商店信息")]
     [SerializeField] private TextMeshProUGUI shopTypeText;
     [SerializeField] private TextMeshProUGUI shopDescriptionText;
+    [SerializeField] private TextMeshProUGUI ProbabilityText;
     [Header("商店食材商品")]
     [SerializeField] private FoodDisplayContainer foodDisplayContainer;
     [SerializeField] private PriceButton foodDisplayRefreshButton;
@@ -33,6 +34,15 @@ public class ShopPanel : MonoBehaviour, IController, ICanSendEvent{
         // 1. 加载商店信息
         shopTypeText.text = shopInitContext.shopName;
         shopDescriptionText.text = shopInitContext.shopDescription;
+
+        if (ProbabilityText != null){
+            ProbabilityInfo probabilityInfo = this.GetSystem<IRandomSystem>().probabilityInfo;
+            ProbabilityText.text = $"刷新概率\n" +
+            $"<color=green>普通</color>: {probabilityInfo.probabilities[Rank.普通] * 100}% " +
+            $"<color=blue>稀有</color>: {probabilityInfo.probabilities[Rank.稀有] * 100}% \n" +
+            $"<color=purple>史诗</color>: {probabilityInfo.probabilities[Rank.史诗] * 100}% " +
+            $"<color=yellow>传说</color>: {probabilityInfo.probabilities[Rank.传说] * 100}% ";
+        }
         // 2. 生成商店商品
         GenerateShopItems();
         // 3. 绑定按钮
@@ -81,6 +91,10 @@ public class ShopPanel : MonoBehaviour, IController, ICanSendEvent{
             mascotDisplayContainer.RefreshUI();
         }
     }    
+
+    public void ContinueProcess(){
+        this.SendEvent<ProcessMoveNextEvent>();
+    }
 }
 
 // 不同商店刷新价格不一样也很关键

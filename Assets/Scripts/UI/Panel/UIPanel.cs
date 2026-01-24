@@ -1,12 +1,13 @@
 using System;
 using DG.Tweening;
 using QFramework;
+using UniRx;
 using UnityEngine;
 using UnityEngine.Events;
 
 public interface IUIPanel{
     void Show();
-    void Hide();
+    IObservable<Unit> Hide();
 }
 
 public class UIPanel : MonoBehaviour, IController, IUIPanel{
@@ -48,15 +49,20 @@ public class UIPanel : MonoBehaviour, IController, IUIPanel{
         canvasGroup.blocksRaycasts = true;
         canvasGroup.interactable = true;
     }
-    public void Hide(){
-        if (!isVisible) return;
+    public IObservable<Unit> Hide(){
+        if (!isVisible) return Observable.ReturnUnit();
         isVisible = false;
         onHide.Invoke();
 
-        if (canvasGroup == null) return;
+        if (canvasGroup == null) return Observable.ReturnUnit();
         canvasGroup.blocksRaycasts = false;
         canvasGroup.interactable = false;
-        canvasGroup.DOFade(0, 0.3f).SetEase(Ease.OutSine).SetUpdate(true);
+        AsyncSubject<Unit> animTask = new AsyncSubject<Unit>();
+        canvasGroup.DOFade(0, 0.3f).SetEase(Ease.OutSine).SetUpdate(true).OnComplete(() => {
+            animTask.OnNext(Unit.Default);
+            animTask.OnCompleted();
+        });
+        return animTask;
     }
     public void ForceHide(){
         if(!isVisible) return;

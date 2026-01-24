@@ -8,12 +8,20 @@ public class ShopController : MonoBehaviour, IController{
     [SerializeField] private Transform shopPanelParent;
     [SerializeField] private GameObject shopPanel_普通商店_Prefab;
     [SerializeField] private GameObject shopPanel_批发商店_Prefab;
+    private ShopPanel currentShopPanel;
     void OnEnable()
     {
-
+        this.RegisterEvent<CreateShopPanelEvent>(OnCreateShopPanelEvent);
+        this.RegisterEvent<CloseShopPanelEvent>(OnCloseShopPanelEvent);
     }
     void OnDisable()
     {
+        this.UnRegisterEvent<CreateShopPanelEvent>(OnCreateShopPanelEvent);
+        this.UnRegisterEvent<CloseShopPanelEvent>(OnCloseShopPanelEvent);
+    }
+    private void OnCreateShopPanelEvent(CreateShopPanelEvent evt){
+        Debug.Log("【ShopController】创建商店面板: " + evt.shopInitContext.shopName);
+        CreateShopPanel(evt.shopInitContext);
     }
     private void CreateShopPanel(ShopInitContext shopInitContext){
         ShopPanel shopPanel = null;
@@ -35,6 +43,22 @@ public class ShopController : MonoBehaviour, IController{
             shopPanel.Init(shopInitContext);
             shopPanel.uiPanel.Show();
         }).AddTo(this);
+
+        // 设定当前商店面板
+        currentShopPanel = shopPanel;
+    }
+
+    private void OnCloseShopPanelEvent(CloseShopPanelEvent evt){
+        if (currentShopPanel != null){
+            GameObject shopPanelGameObject = currentShopPanel.gameObject;
+            currentShopPanel.uiPanel.Hide().Subscribe(_ => {
+                Destroy(shopPanelGameObject);
+            }).AddTo(this);
+            currentShopPanel = null;
+        }
+        else{
+            Debug.LogError("【ShopController】当前商店面板为空");
+        }
     }
     [Button]
     public void Test_标准商店(){

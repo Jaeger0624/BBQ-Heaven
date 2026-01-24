@@ -20,4 +20,5 @@ public enum UIPanelType{
     食材展示界面,
     图鉴界面,
     声望详情界面,
+    图片教程界面,
 }
