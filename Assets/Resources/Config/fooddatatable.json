@@ -5,39 +5,43 @@
     "description": "这是一颗苹果",
     "type": 2,
     "tag": 0,
-    "rarity": 2,
+    "rarity": 5,
     "taste": 5,
     "sprite": "Apple",
-    "effectDescription": "如果食材周围有空位，则美味度+1、珍稀度+1",
+    "effectDescription": "被串取时，随机为串串+5珍稀度或+5美味度",
     "CGAs": [
       {
-        "type": 3,
+        "type": 1,
         "action": {
           "ID": "1",
-          "conditions": [
-            {
-              "$type": "Condition_DV检测",
-              "DV1": {
-                "$type": "DV_周围空位数"
-              },
-              "sign": 2,
-              "DV2": {
-                "$type": "DV_值",
-                "number": 1
-              }
-            }
-          ],
+          "conditions": [],
           "actions": [
             {
-              "$type": "GA_直接修改当前烧烤值",
-              "rarityValue": {
-                "$type": "DV_值",
-                "number": 1
-              },
-              "tasteValue": {
-                "$type": "DV_值",
-                "number": 1
-              }
+              "$type": "GA_随机触发",
+              "actions": [
+                {
+                  "$type": "GA_直接修改当前烧烤值",
+                  "rarityValue": {
+                    "$type": "DV_值",
+                    "number": 5
+                  },
+                  "tasteValue": {
+                    "$type": "DV_值",
+                    "number": 0
+                  }
+                },
+                {
+                  "$type": "GA_直接修改当前烧烤值",
+                  "rarityValue": {
+                    "$type": "DV_值",
+                    "number": 0
+                  },
+                  "tasteValue": {
+                    "$type": "DV_值",
+                    "number": 5
+                  }
+                }
+              ]
             }
           ]
         }
@@ -53,10 +57,10 @@
     "description": "这是一瓶啤酒",
     "type": 2,
     "tag": 0,
-    "rarity": 1,
-    "taste": 5,
+    "rarity": 3,
+    "taste": 3,
     "sprite": "Beer",
-    "effectDescription": "如果食材周围有至少2个空位，则美味度+2、珍稀度+2",
+    "effectDescription": "如果食材周围有至少2个空位，则美味度+5、珍稀度+5",
     "CGAs": [
       {
         "type": 3,
@@ -74,11 +78,11 @@
               "$type": "GA_直接修改当前烧烤值",
               "rarityValue": {
                 "$type": "DV_值",
-                "number": 2
+                "number": 5
               },
               "tasteValue": {
                 "$type": "DV_值",
-                "number": 2
+                "number": 5
               }
             }
           ]
@@ -95,10 +99,10 @@
     "description": "曲奇饼干",
     "type": 16,
     "tag": 1,
-    "rarity": 2,
-    "taste": 3,
+    "rarity": 6,
+    "taste": 4,
     "sprite": "Cookie",
-    "effectDescription": "添加到烤串上时\\n为周围随机1个未添加到烤串上的食材\\n+2美味度 +2珍稀度",
+    "effectDescription": "添加到串串上时\\n为周围随机2个未添加到串串上的食材\\n+2美味度 +3珍稀度",
     "CGAs": [
       {
         "type": 1,
@@ -116,11 +120,11 @@
                 "$type": "GA_为食材加属性",
                 "rarity": {
                   "$type": "DV_值",
-                  "number": 1
+                  "number": 2
                 },
                 "taste": {
                   "$type": "DV_值",
-                  "number": 1
+                  "number": 3
                 },
                 "info": {
                   "strategy": 1,
@@ -149,10 +153,10 @@
     "description": "一只跳跳虾！",
     "type": 8,
     "tag": 0,
-    "rarity": 2,
-    "taste": 2,
+    "rarity": 4,
+    "taste": 4,
     "sprite": "Shrimp",
-    "effectDescription": "完成烤串后\\n往随机一个方向移动\\n并增加属性+1/+1",
+    "effectDescription": "完成串串后\\n往随机一个方向移动\\n并增加属性+2/+2",
     "CGAs": [],
     "SEs": [
       {
@@ -191,11 +195,11 @@
                 "$type": "GA_为食材加属性",
                 "rarity": {
                   "$type": "DV_值",
-                  "number": 1
+                  "number": 2
                 },
                 "taste": {
                   "$type": "DV_值",
-                  "number": 1
+                  "number": 2
                 },
                 "info": {
                   "strategy": 3,
@@ -225,7 +229,7 @@
     "rarity": 3,
     "taste": 3,
     "sprite": "Lemon",
-    "effectDescription": "被选中时\\n每与另一个柠檬相邻，则烧烤属性+2/+2",
+    "effectDescription": "被选中时\\n每与另一个柠檬相邻，则烧烤属性+3/+3",
     "CGAs": [
       {
         "type": 3,
@@ -243,11 +247,11 @@
                 "$type": "GA_直接修改当前烧烤值",
                 "rarityValue": {
                   "$type": "DV_值",
-                  "number": 2
+                  "number": 3
                 },
                 "tasteValue": {
                   "$type": "DV_值",
-                  "number": 2
+                  "number": 3
                 }
               }
             }
@@ -265,10 +269,10 @@
     "description": "夹心饼干",
     "type": 16,
     "tag": 0,
-    "rarity": 5,
-    "taste": 5,
+    "rarity": 6,
+    "taste": 4,
     "sprite": "Bread",
-    "effectDescription": "",
+    "effectDescription": "串串构建完时\n若奥利奥是第一个食材\n则为串串美味度+7",
     "CGAs": [
       {
         "type": 2,
@@ -285,11 +289,11 @@
               "$type": "GA_直接修改当前烧烤值",
               "rarityValue": {
                 "$type": "DV_值",
-                "number": 5
+                "number": 0
               },
               "tasteValue": {
                 "$type": "DV_值",
-                "number": 5
+                "number": 7
               }
             }
           ]
@@ -306,10 +310,10 @@
     "description": "德芙，纵享丝滑~",
     "type": 16,
     "tag": 0,
-    "rarity": 4,
-    "taste": 4,
+    "rarity": 2,
+    "taste": 20,
     "sprite": "Sushi",
-    "effectDescription": "添加到烤串上时，获得一层【丝滑】",
+    "effectDescription": "添加到串串上时，获得一层【丝滑】",
     "CGAs": [
       {
         "type": 1,
@@ -334,62 +338,13 @@
     "timeCost": 1
   },
   {
-    "ID": "spicy_strip",
-    "name": "辣条",
-    "description": "",
-    "type": 16,
-    "tag": 0,
-    "rarity": 5,
-    "taste": 5,
-    "sprite": "PotatoRed",
-    "effectDescription": "",
-    "CGAs": [],
-    "SEs": [
-      {
-        "$type": "SE_监听事件",
-        "evt": 3,
-        "actions": [
-          {
-            "ID": "1",
-            "conditions": [],
-            "actions": [
-              {
-                "$type": "GA_为食材加属性",
-                "rarity": {
-                  "$type": "DV_值",
-                  "number": 2
-                },
-                "taste": {
-                  "$type": "DV_值",
-                  "number": 2
-                },
-                "info": {
-                  "strategy": 1,
-                  "value": {
-                    "$type": "DV_值",
-                    "number": -1
-                  },
-                  "types": [
-                    1
-                  ]
-                }
-              }
-            ]
-          }
-        ]
-      }
-    ],
-    "rank": 1,
-    "timeCost": 1
-  },
-  {
     "ID": "cherry_bomb",
     "name": "樱桃炸弹",
     "description": "脾气不太好",
     "type": 2,
     "tag": 0,
-    "rarity": 2,
-    "taste": 4,
+    "rarity": 5,
+    "taste": 5,
     "sprite": "Cherry",
     "effectDescription": "被串取时\\n将周围实体弹开1格",
     "CGAs": [
@@ -415,15 +370,15 @@
     "timeCost": 1
   },
   {
-    "ID": "QQ_suger",
+    "ID": "QQ_sugar",
     "name": "QQ糖",
     "description": "QQ弹弹~",
     "type": 16,
     "tag": 0,
-    "rarity": 2,
-    "taste": 5,
+    "rarity": 5,
+    "taste": 10,
     "sprite": "Jam",
-    "effectDescription": "被撞击时，珍稀度+2",
+    "effectDescription": "被撞击时，珍稀度+5\n撞击时，美味度+5",
     "CGAs": [
       {
         "type": 5,
@@ -454,33 +409,25 @@
             }
           ]
         }
-      }
-    ],
-    "SEs": [],
-    "rank": 1,
-    "timeCost": 1
-  },
-  {
-    "ID": "tomato",
-    "name": "番茄",
-    "description": "这是一颗番茄",
-    "type": 1,
-    "tag": 0,
-    "rarity": 1,
-    "taste": 5,
-    "sprite": "Tomato",
-    "effectDescription": "添加到烤串时，随机将周围一个食材",
-    "CGAs": [
+      },
       {
-        "type": 1,
+        "type": 4,
         "action": {
-          "ID": "1",
+          "ID": "2",
           "conditions": [],
           "actions": [
             {
-              "$type": "GA_添加食材到烤串",
+              "$type": "GA_为食材加属性",
+              "rarity": {
+                "$type": "DV_值",
+                "number": 0
+              },
+              "taste": {
+                "$type": "DV_值",
+                "number": 2
+              },
               "info": {
-                "strategy": 1,
+                "strategy": 3,
                 "value": {
                   "$type": "DV_值",
                   "number": 1
@@ -492,33 +439,51 @@
             }
           ]
         }
-      },
+      }
+    ],
+    "SEs": [],
+    "rank": 1,
+    "timeCost": 1
+  },
+  {
+    "ID": "potato",
+    "name": "土豆",
+    "description": "",
+    "type": 1,
+    "tag": 0,
+    "rarity": 4,
+    "taste": 4,
+    "sprite": "Potato",
+    "effectDescription": "串串构建完时\n若串上有且只有一个土豆\n则为串串属性值+6/+6",
+    "CGAs": [
       {
-        "type": 0,
+        "type": 2,
         "action": {
           "ID": "1",
-          "conditions": [],
+          "conditions": [
+            {
+              "$type": "Condition_DV检测",
+              "DV1": {
+                "$type": "DV_串上某食材数量",
+                "foodID": "potato"
+              },
+              "sign": 4,
+              "DV2": {
+                "$type": "DV_值",
+                "number": 1
+              }
+            }
+          ],
           "actions": [
             {
-              "$type": "GA_为食材加属性",
-              "rarity": {
+              "$type": "GA_直接修改当前烧烤值",
+              "rarityValue": {
                 "$type": "DV_值",
-                "number": 1
+                "number": 6
               },
-              "taste": {
+              "tasteValue": {
                 "$type": "DV_值",
-                "number": 1
-              },
-              "info": {
-                "strategy": 1,
-                "value": {
-                  "$type": "DV_值",
-                  "number": 1
-                },
-                "types": [
-                  1,
-                  2
-                ]
+                "number": 6
               }
             }
           ]

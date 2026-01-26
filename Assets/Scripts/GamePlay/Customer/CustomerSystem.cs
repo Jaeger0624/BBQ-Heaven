@@ -124,7 +124,7 @@ public class CustomerSystem_新 : AbstractCustomerSystem
 
         // 2. 处理正在点餐的顾客
         customers.ForEach(customer => {
-            customer.PatienceNow.Value += evt.timePoint;
+            customer.ChangePatience(evt.timePoint);
 
             if (customer.PatienceNow.Value >= customer.PatienceMax.Value){
                 customer.isAboutToLeave = true;

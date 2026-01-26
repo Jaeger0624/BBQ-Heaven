@@ -36,13 +36,18 @@ public class PCSystem : AbstractSystem, IPCSystem
     {
         // 初始只有第一级是解锁的
         List<ReputationData> reputationDatas = this.GetSystem<IDataSystem>().GetAllReputationData();
-        foreach (var reputationData in reputationDatas)
+        foreach (var repu in reputationDatas)
         {
-            unlockedLevels[reputationData.Rank] = false;
+            unlockedLevels[repu.Rank] = false;
         }
         if (unlockedLevels.Count > 0)
         {
             unlockedLevels[1] = true;
+        }
+        ReputationData reputationData = reputationDatas.FirstOrDefault(x => x.Rank == 1);
+        if (reputationData != null)
+        {
+            NextLevelReputation.Value = reputationData.TotalReputation;
         }
     }
     protected override void OnDeinit()
@@ -81,32 +86,43 @@ public class PCSystem : AbstractSystem, IPCSystem
         while (Reputation.Value >= NextLevelReputation.Value){
             Upgrade();
         }
-        while (Reputation.Value < 0){
-            if (Level.Value > 1){
-                Downgrade();
-            }
-            else{
-                Reputation.Value = 0;
-                Debug.Log($"声望不能为负数，已重置为0");
-                break;
-            }
+
+        if (Reputation.Value < 0){
+            Reputation.Value = 0;
+            Debug.Log($"声望不能为负数，已重置为0");
         }
+
 
         this.SendEvent(new ReputationChangedEvent(amount));
     }
     
     private void Upgrade(){
+        if (Level.Value >= this.GetSystem<IDataSystem>().GetAllReputationData().Count)
+        {
+            Debug.Log("声望等级已达到最大");
+            return;
+        }
+
         Level.Value++;
-        Reputation.Value = Reputation.Value - NextLevelReputation.Value;
-        NextLevelReputation.Value = Level.Value * 2 + 8;
+
+        // 计算下一级声望
+        ReputationData reputationData = this.GetSystem<IDataSystem>().GetAllReputationData().FirstOrDefault(x => x.Rank == Level.Value);
+        if (reputationData != null)
+        {
+            NextLevelReputation.Value = reputationData.TotalReputation;
+        }
+        else{
+            Debug.LogError($"声望等级 {Level.Value} 不存在");
+            return;
+        }
+
         Debug.Log($"升级到等级: {Level.Value}, 下一级声望: {NextLevelReputation.Value}");
 
         if (unlockedLevels[Level.Value]) return;
 
         // 解锁下一级（从1->2，解锁的是2)
         unlockedLevels[Level.Value] = true;
-        // 触发升级效果
-        ReputationData reputationData = this.GetSystem<IDataSystem>().GetAllReputationData().FirstOrDefault(x => x.Rank == Level.Value);
+        
         if (reputationData != null)
         {
             foreach (var se in reputationData.Actions)
@@ -115,12 +131,6 @@ public class PCSystem : AbstractSystem, IPCSystem
             }
         }
     } 
-    private void Downgrade(){
-        Level.Value--;
-        Reputation.Value = Reputation.Value + NextLevelReputation.Value;
-        NextLevelReputation.Value = Level.Value * 2 + 8;
-        Debug.Log($"降级到等级: {Level.Value}, 下一级声望: {NextLevelReputation.Value}");
-    }
     #endregion
     #region 角色部分
     public PlayerCharacter ChoosePC(string id)
@@ -156,10 +166,23 @@ public class PCSystem : AbstractSystem, IPCSystem
 
         // 3. 添加基础卡牌
         // 获取第一张卡牌的ID
-        string cardID = this.GetSystem<IDataSystem>().GetAllCardData().Count.ToString();
-        for (int i = 0; i < 10; i++)
+        List<string> cardNames = new List<string>(){
+            "方向移动",
+            "补充",
+            "交换",
+            "定点爆破",
+            "请离",
+            "抽牌",
+        };
+        foreach (var cardName in cardNames)
         {
-            this.GetSystem<ICardSystem>().AddCardToRepository(cardID);
+            CardData cardData = this.GetSystem<IDataSystem>().GetAllCardData().FirstOrDefault(x => x.Name == cardName);
+            if (cardData == null)
+            {
+                Debug.LogError($"卡牌数据不存在: {cardName}");
+                continue;
+            }
+            this.GetSystem<ICardSystem>().AddCardToRepository(cardData.ID);
         }
 
         // 5. 添加初始被动技能

@@ -22,4 +22,8 @@ public class AnimSettings : ScriptableObject
     public float timeProgressBarAnimEaseOvershootOrAmplitude = 1.50f;
     [LabelText("时间进度条动画缓动周期")]
     public float timeProgressBarAnimEasePeriod = 0.4f;
+
+
+
+    public float ScoreTextAnimDuration = 0.8f;
 }

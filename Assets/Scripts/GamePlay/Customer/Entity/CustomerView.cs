@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class CustomerView : MonoBehaviour{
     [SerializeField] private Image image;
     [SerializeField] private TextMeshProUGUI nameText;
-    [SerializeField] private Sprite[] sprites;
+    private List<Sprite> sprites => SettingManager.Instance.ArtSettings.CustomerSprites.sprites;
     public Customer currentCustomer { get; private set; } = null;
     [SerializeField] private TextMeshProUGUI descriptionText;
 
@@ -25,7 +25,7 @@ public class CustomerView : MonoBehaviour{
             return;
         }
 
-        image.sprite = sprites[currentCustomer.customerLook.SpriteIndex];
+        image.sprite = currentCustomer.customerLook;
         image.gameObject.SetActive(true);
         nameText.text = currentCustomer.name;
 

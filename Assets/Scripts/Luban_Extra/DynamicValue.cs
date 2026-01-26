@@ -205,4 +205,16 @@ namespace cfg{
             return result;
         }
     }
+
+    public partial class DV_串上某食材数量 : DynamicValue {
+        public override int GetValue(object target, List<object> param)
+        {
+            BBQProcessContext context = param?.FirstOrDefault() as BBQProcessContext;
+            if (context == null){
+                Debug.LogError("上下文为空");
+                return 0;
+            }
+            return context.targetBBQ.foodInstances.Count(x => x.food.foodData.ID == FoodID);
+        }
+    }
 }

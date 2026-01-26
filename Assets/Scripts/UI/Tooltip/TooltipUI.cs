@@ -28,8 +28,10 @@ public class TooltipUI : MonoBehaviour, IController {
     // 配置
     private float maxWidth => SettingManager.Instance.DevSettings.tooltipMaxWidth; // 假设你有这个
     private Vector2 padding => SettingManager.Instance.DevSettings.tooltipPadding; // 假设你有这个
-
+    private TooltipAlignType alignType = TooltipAlignType.左;
+    private VerticalLayoutGroup verticalLayoutGroup;
     private IDisposable disposable;
+
 
     // --- 修改核心：参数改为 List<TooltipInfo> ---
     public void Show(List<TooltipInfo> dataList) {
@@ -74,7 +76,7 @@ public class TooltipUI : MonoBehaviour, IController {
         // 遍历设置数据
         for (int i = 0; i < activeElements.Count; i++) {
             if (i < dataList.Count) {
-                activeElements[i].SetData(dataList[i], maxWidth);
+                activeElements[i].SetData(dataList[i]);
                 activeElements[i].gameObject.SetActive(true);
             } else {
                 // 多余的隐藏
@@ -112,6 +114,7 @@ public class TooltipUI : MonoBehaviour, IController {
     void Awake() {
         if (rectTransform == null) rectTransform = GetComponent<RectTransform>();
         if (canvasGroup == null) canvasGroup = GetComponent<CanvasGroup>();
+        if (verticalLayoutGroup == null) verticalLayoutGroup = GetComponent<VerticalLayoutGroup>();
     }
 
     void Update() {
@@ -124,11 +127,21 @@ public class TooltipUI : MonoBehaviour, IController {
             Vector3 mousePosition = Utility.GetMousePosition2D(); // 假设 Utility 存在
             Vector3 screenPosition = Camera.main.WorldToScreenPoint(mousePosition);
             transform.position = GetAnchorPosition(screenPosition);
+            if (alignType == TooltipAlignType.左) {
+                verticalLayoutGroup.childAlignment = TextAnchor.MiddleLeft;
+            } else {
+                verticalLayoutGroup.childAlignment = TextAnchor.MiddleRight;
+            }
         } else {
             if (parent == null) return;
             Vector3 targetPosition = parent.targetTransform.position;
             Vector3 screenPosition = Camera.main.WorldToScreenPoint(targetPosition);
             transform.position = GetAnchorPosition(screenPosition);
+            if (alignType == TooltipAlignType.左) {
+                verticalLayoutGroup.childAlignment = TextAnchor.MiddleLeft;
+            } else {
+                verticalLayoutGroup.childAlignment = TextAnchor.MiddleRight;
+            }
         }
     }
 
@@ -140,6 +153,7 @@ public class TooltipUI : MonoBehaviour, IController {
         this.parent = parent;
         if (parent == null) return;
         this.anchor = parent.anchor;
+        this.alignType = parent.alignType;
     }
 
     private Vector2 GetAnchorPosition(Vector3 targetPosition) {

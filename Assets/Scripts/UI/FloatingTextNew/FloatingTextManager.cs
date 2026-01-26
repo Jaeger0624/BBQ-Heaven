@@ -24,15 +24,15 @@ public class FloatingTextManager : MonoBehaviour
     // ============================================
     // API 1: 普通伤害/状态 (最常用)
     // ============================================
-    public void Show(Vector3 worldPos, string content, Color? color = null)
+    public void Show(Vector3 worldPos, string content, Color? color = null, FloatingTextInfo info = null)
     {
-        Spawn(worldPos, content, FloatingTextMode.Normal, null, ScatterMode.Both, null, color);
+        Spawn(worldPos, content, FloatingTextMode.Normal, null, ScatterMode.Both, null, color, info);
     }
     
     // 重载：传数值
-    public void Show(Vector3 worldPos, float value, Color? color = null)
+    public void Show(Vector3 worldPos, float value, Color? color = null, FloatingTextInfo info = null)
     {
-        Show(worldPos, Mathf.RoundToInt(value).ToString(), color);
+        Show(worldPos, Mathf.RoundToInt(value).ToString(), color, info);
     }
 
     // ============================================
@@ -56,7 +56,7 @@ public class FloatingTextManager : MonoBehaviour
     // ============================================
     // 内部实现
     // ============================================
-    private void Spawn(Vector3 worldPos, string content, FloatingTextMode mode, Vector3? targetPos, ScatterMode scatterMode, System.Action onArrive, Color? color)
+    private void Spawn(Vector3 worldPos, string content, FloatingTextMode mode, Vector3? targetPos, ScatterMode scatterMode, System.Action onArrive, Color? color, FloatingTextInfo info = null)
     {
         // 1. 坐标转换 (World -> Screen)
         // 如果你的 UI 是 ScreenSpace-Overlay:
@@ -65,7 +65,7 @@ public class FloatingTextManager : MonoBehaviour
         var instance = GetFromPool();
 
         // 3. 初始化
-        instance.Init(content, worldPos, mode, ReturnToPool, targetPos, scatterMode, onArrive, color);
+        instance.Init(content, worldPos, mode, ReturnToPool, targetPos, scatterMode, onArrive, color, 1f, info);
     }
 
     private FloatingTextInstance GetFromPool()
@@ -98,6 +98,12 @@ public class FloatingTextManager : MonoBehaviour
         ShowGather(new Vector3(0, 2, 0), _testTargetUI, "美味度", SettingManager.Instance.FloatingTextSettings.testScatterMode, null);
     }
 
+    [Button]
+    private void Test_跳字()
+    {
+        Show(new Vector3(0, 2, 0), "<size=36><color=yellow>美味度</color></size> \n<size=56>1000x</size>", Color.white);
+    }
+
 
 
     #region API - 具体使用场景封装
@@ -115,4 +121,17 @@ public class FloatingTextManager : MonoBehaviour
 
 
     #endregion
+}
+
+public class FloatingTextInfo{
+    public string content;
+    public float duration;
+    public Color? color;
+    public Vector2 direction = Vector2.up;
+    public FloatingTextInfo(string content, float duration, Color? color, Vector2 direction = default){
+        this.content = content;
+        this.duration = duration;
+        this.color = color;
+        this.direction = direction == default ? Vector2.up : direction;
+    }
 }

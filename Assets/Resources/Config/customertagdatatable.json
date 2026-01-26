@@ -134,7 +134,7 @@
   {
     "ID": "3",
     "name": "捣蛋鬼",
-    "description": "其他人很讨厌这家伙！",
+    "description": "每次串完串后\n使队伍中的顾客等待值+5",
     "signedValue": 0,
     "type": 0,
     "tagCGAs": [],
@@ -222,7 +222,7 @@
   {
     "ID": "6",
     "name": "开心果",
-    "description": "大家都很喜欢它",
+    "description": "每次串完串后\n使队伍中的顾客等待值-5",
     "signedValue": 0,
     "type": 0,
     "tagCGAs": [],

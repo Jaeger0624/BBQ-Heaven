@@ -25,6 +25,7 @@ public class FloatingTextInstance : MonoBehaviour
     [Header("物理下坠模式参数")]
     [SerializeField] private float _jumpPower = 100f;   // 跳跃高度
     [SerializeField] private float _dropHeight = 150f;  // 下坠深度
+    [SerializeField] private float _floatHeight = 0.5f;  // 上飘高度
 
     // 内部状态
     private Sequence _seq;
@@ -38,7 +39,7 @@ public class FloatingTextInstance : MonoBehaviour
     }
 
     public void Init(string content, Vector3 startPos, FloatingTextMode mode, Action<FloatingTextInstance> onRecycle, 
-                     Vector3? targetPos = null, ScatterMode scatterMode = ScatterMode.Both, Action onArrive = null, Color? color = null, float sizeScale = 1f)
+                     Vector3? targetPos = null, ScatterMode scatterMode = ScatterMode.Both, Action onArrive = null, Color? color = null, float sizeScale = 1f, FloatingTextInfo info = null)
     {
         _recycleCallback = onRecycle;
 
@@ -52,11 +53,12 @@ public class FloatingTextInstance : MonoBehaviour
         
         gameObject.SetActive(true);
 
-        PlayAnim(mode, targetPos, scatterMode, onArrive);
+        PlayAnim(mode, targetPos, scatterMode, onArrive, info);
     }
 
-    private void PlayAnim(FloatingTextMode mode, Vector3? targetPos, ScatterMode scatterMode, Action onArrive)
+    private void PlayAnim(FloatingTextMode mode, Vector3? targetPos, ScatterMode scatterMode, Action onArrive, FloatingTextInfo info)
     {
+        float duration = info?.duration ?? _duration;
         _seq = DOTween.Sequence();
         _seq.SetUpdate(_useUnscaledTime);
 
@@ -65,7 +67,10 @@ public class FloatingTextInstance : MonoBehaviour
         {
             case FloatingTextMode.Normal:
                 // 普通上飘
-                _seq.Join(_rectTransform.DOMoveY(_rectTransform.position.y + 100f, _duration).SetEase(Ease.OutQuad).SetLink(gameObject));
+                // 支持自定义方向
+                Vector2 direction = info?.direction ?? Vector2.up;
+                Vector3 t = _rectTransform.position + new Vector3(direction.x * _floatHeight, direction.y * _floatHeight, 0);
+                _seq.Join(_rectTransform.DOMove(t, duration).SetEase(Ease.OutSine, 10f,0.5f).SetLink(gameObject));
                 DoScalePunch(_seq); // Q弹
                 break;
 
@@ -90,7 +95,7 @@ public class FloatingTextInstance : MonoBehaviour
         else
         {
             // 淡出销毁
-            _seq.Insert(_duration * 0.8f, _canvasGroup.DOFade(0f, _duration * 0.2f).SetLink(gameObject));
+            _seq.Insert(duration * 0.8f, _canvasGroup.DOFade(0f, duration * 0.2f).SetLink(gameObject));
             _seq.OnComplete(() => _recycleCallback?.Invoke(this));
         }
     }

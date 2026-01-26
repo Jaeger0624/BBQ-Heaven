@@ -58,7 +58,18 @@ public class GameState_开始新游戏 : AbstractGameState
         {
             new Enhancement_双重()
         };
-        List<FoodPack> foodPacks = foodRng.PickMany<FoodPack>(this.GetSystem<IDataSystem>().GetAllFoodData().Select(foodData => new FoodPack(foodData.ID, 10, enhancements)).ToList(), 4);
+
+        List<string> initialFoodIds = new List<string>(){
+            "shrimp",
+            "apple",
+            "QQ_sugar",
+            "potato",
+        };
+
+        List<FoodPack> foodPacks = initialFoodIds.Select(foodId => new FoodPack(foodId, 4, enhancements)).ToList();
+
+        // 指定初始食材
+        // List<FoodPack> foodPacks = foodRng.PickMany<FoodPack>(this.GetSystem<IDataSystem>().GetAllFoodData().Select(foodData => new FoodPack(foodData.ID, 10, enhancements)).ToList(), 4);
         this.GetSystem<IFoodSystem>().AddFoodToRepository(foodPacks);
 
         Debug.Log("【GameSystem】新游戏初始化完成");

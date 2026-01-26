@@ -79,6 +79,8 @@ public class EntityViewController : MonoBehaviour, IController
         GameObject prefab = entity is FoodInstance ? FoodInstanceViewPrefab : EntityViewPrefab;
         IEntityView entityView = Instantiate(prefab, transform).GetComponent<IEntityView>();
         entityView.Bind(entity);
+
+        entity.BindEntityView(entityView);
         return entityView;
     }
 

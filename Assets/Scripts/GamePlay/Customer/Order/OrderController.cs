@@ -3,6 +3,7 @@ using System.Linq;
 using QFramework;
 using TMPro;
 using UnityEngine;
+using DG.Tweening;
 
 public class OrderController : MonoBehaviour, IController, ICanSendEvent
 {
@@ -19,6 +20,26 @@ public class OrderController : MonoBehaviour, IController, ICanSendEvent
 
         this.RegisterEvent<HighlightCustomersEvent>(OnHighlightCustomersEvent).UnRegisterWhenDisabled(this);
         this.RegisterEvent<UnhighlightCustomersEvent>(OnUnhighlightCustomersEvent).UnRegisterWhenDisabled(this);
+
+
+        this.RegisterEvent<ChangeCustomerPatienceEvent>(OnChangeCustomerPatienceEvent).UnRegisterWhenDisabled(this);
+    }
+    private void OnChangeCustomerPatienceEvent(ChangeCustomerPatienceEvent e){
+        // 跳字
+        string text = null;
+        if (e.value > 0){
+            text = $"等待值增加了 {e.value}";
+        }
+        else{
+            if (e.value == 0){
+                text = $"等待值保持不变";
+            }
+            else{
+                text = $"等待值减少了 {e.value}";
+            }
+        }
+        OrderView orderView = orderViews[e.customer.guid];
+        FloatingTextManager.Instance.Show(orderView.transform.position, text, Color.white, new FloatingTextInfo(text, 1.2f, Color.white, Vector2.right));
     }
     private void OnAddCustomerEvent(AddCustomerEvent e){
         e.customers.ForEach(customer => {
@@ -49,6 +70,9 @@ public class OrderController : MonoBehaviour, IController, ICanSendEvent
         orderViews.Add(customer.guid, orderView);
 
         UpdateOrderCountText();
+
+        orderView.BackgroundImage.gameObject.transform.localPosition = new Vector3(-1, 0, 0);
+        orderView.BackgroundImage.gameObject.transform.DOLocalMoveX(0, 0.5f).SetEase(Ease.OutBack).SetLink(orderView.BackgroundImage.gameObject);
     }
     private void UpdateOrderCountText(){
         orderCountText.text = $"订单数: {orderViews.Count} / {SettingManager.GetSetting<GameplaySettings>().最大同时点餐顾客数量}";

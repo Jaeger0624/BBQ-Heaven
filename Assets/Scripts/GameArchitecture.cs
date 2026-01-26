@@ -101,11 +101,12 @@ public class GameArchitecture : Architecture<GameArchitecture>
     {
         base.OnDeinit();
     }
-
+#if UNITY_EDITOR
     // 关闭游戏时调用
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     public static void ExitOnApplicationQuit()
     {
         Interface.Deinit();
     }
+#endif
 }

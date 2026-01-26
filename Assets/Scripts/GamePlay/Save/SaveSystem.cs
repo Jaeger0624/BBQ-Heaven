@@ -14,8 +14,8 @@ public interface ISaveSystem : ISystem{
 }
 public class SaveSystem : AbstractSystem, ISaveSystem{
     // 存到Persistent文件夹下
-    private string savePath => "Assets/Persistent/save.json";
-    private string systemDataPath => "Assets/Persistent/systemData.json";
+    private string savePath => Application.persistentDataPath + "/save.json";
+    private string systemDataPath => Application.persistentDataPath + "/systemData.json";
     public SystemData SystemData { get; private set; }
     protected override void OnInit()
     {

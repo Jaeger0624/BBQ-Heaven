@@ -55,6 +55,7 @@ public class IndexRule_FoodType : IndexRuleBase{
         this.foodType = foodType;
     }
     public override List<FoodInstance> GetFoodInstances(){
-        return this.GetSystem<IFoodSystem>().GetFoodInstancesByState(FoodInstanceState.棋盘上).Values.ToList().Where(x => x.food.foodType == foodType).ToList();
+        // 获取所有食材实例，并过滤出指定类型的食材实例
+        return this.GetSystem<IFoodSystem>().GetFoodInstances().Values.ToList().Where(x => x.food.foodType == foodType).ToList();
     }
 }

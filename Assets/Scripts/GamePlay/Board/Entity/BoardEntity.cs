@@ -18,7 +18,7 @@ public abstract class BoardEntity : ICanGetSystem, ITooltipData, ICellPosition{
     public Vector2Int position;
     public abstract BoardEntityType type { get; }
     public Vector2Int lastMoveDirection = Vector2Int.zero;
-
+    private IEntityView entityView;
     public BoardEntity(){
         this.guid = Guid.NewGuid().ToString();
         this.position = new Vector2Int(-1, -1);
@@ -31,8 +31,12 @@ public abstract class BoardEntity : ICanGetSystem, ITooltipData, ICellPosition{
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
     public abstract List<TooltipInfo> GetTooltipInfos();
 
-
-    // Helper methods
+    // Helper methods   
     public abstract Sprite GetSprite();
+    public void BindEntityView(IEntityView entityView){
+        this.entityView = entityView;
+    }
+
+    public IEntityView GetEntityView() => entityView;
     public Vector2Int GetCellPosition() => position;
 }

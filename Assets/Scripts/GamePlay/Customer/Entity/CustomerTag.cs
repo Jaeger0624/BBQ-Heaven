@@ -6,6 +6,7 @@ using UnityEngine;
 
 public interface ICustomerTag{
     string name { get; }
+    string description { get; }
     void Execute(DealContext context);
     List<bool> Preview(DealContext context);
     public List<CustomerCGA> CustomerActionCGAs { get; }
@@ -15,6 +16,7 @@ public class CustomerTag : ICustomerTag, ICanGetSystem, ICanSendEvent
 {
     public CustomerTagData customerTagData;
     public string name => customerTagData.Name;
+    public string description => customerTagData.Description;
     public List<TagCGA> tagCGAs;
     public List<CustomerCGA> CustomerCGAs;
     public List<CustomerCGA> CustomerActionCGAs => CustomerCGAs.ToList();

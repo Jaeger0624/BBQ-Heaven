@@ -54,6 +54,8 @@ public abstract partial class GameAction : Luban.BeanBase
             case "GA_使顾客离开": return new GA_使顾客离开(_buf);
             case "GA_效果选择": return new GA_效果选择(_buf);
             case "GA_修改稀有度概率": return new GA_修改稀有度概率(_buf);
+            case "GA_随机触发": return new GA_随机触发(_buf);
+            case "GA_随机选卡": return new GA_随机选卡(_buf);
             default: throw new SerializationException();
         }
     }

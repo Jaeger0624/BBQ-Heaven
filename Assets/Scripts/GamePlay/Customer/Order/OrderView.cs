@@ -7,10 +7,10 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class OrderView : MonoBehaviour, ICanSendEvent
+public class OrderView : MonoBehaviour, ICanSendEvent, IShowTooltip
 {
     public Customer customer{get; private set;}
-    [SerializeField] private Image BackgroundImage;
+    [SerializeField] public Image BackgroundImage;
     [SerializeField] private Image highlightImage;
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI patienceText;
@@ -54,7 +54,7 @@ public class OrderView : MonoBehaviour, ICanSendEvent
 
     private void UpdateCustomerTags(){
         string tags = string.Join(", ", customer.customerTags.Select(x => x.name));
-        customerTagsText.text = $"<color=yellow>Tag：</color>{tags}";
+        customerTagsText.text = $"<color=yellow>Tag：</color>\n{tags}";
     }
     private void UpdatePatience(){
         patienceText.text = $"{customer.PatienceNow.Value}/{customer.PatienceMax.Value}";
@@ -82,5 +82,14 @@ public class OrderView : MonoBehaviour, ICanSendEvent
     }
     public void Unhighlight(){
         highlightImage.gameObject.SetActive(false);
+    }
+
+    public List<TooltipInfo> GetTooltipInfo()
+    {
+        List<TooltipInfo> tooltipInfos = new List<TooltipInfo>();
+        foreach (var customerTag in customer.customerTags){
+            tooltipInfos.Add(new TooltipInfo($"<size=44>{customerTag.name}</size>\n<size=32>{customerTag.description}</size>"));
+        }
+        return tooltipInfos;
     }
 }

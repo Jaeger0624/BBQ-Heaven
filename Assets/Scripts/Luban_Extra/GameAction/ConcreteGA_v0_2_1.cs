@@ -28,12 +28,7 @@ namespace cfg{
             }
             int value = Value.GetValue(sender, param);
             customers.ForEach(customer => {
-                if (customer.PatienceNow.Value + value <= 0){
-                    customer.PatienceNow.Value = 0;
-                }
-                else{
-                    customer.PatienceNow.Value += value;
-                }
+                customer.ChangePatience(value);
             });
         }
 
@@ -178,5 +173,44 @@ namespace cfg{
         {
             return new EmptyAnimTask();
         }
+    }
+
+    public partial class GA_随机触发 : GameAction
+    {
+        public GA_随机触发(List<GameAction> actions)
+        {
+            this.Actions = actions;
+        }
+        public override GameAction Clone() => new GA_随机触发(Actions);
+        public override void Execute(object sender, List<object> param)
+        {
+            if (Actions == null || Actions.Count == 0) return;
+
+            Rng rng = this.GetSystem<IRngSystem>().GetSubRng<IGASystem>();
+            GameAction randomAction = rng.PickOne(Actions);
+            this.GetSystem<IGASystem>().ApplyGA(sender, randomAction, param);
+        }
+        public override IAnimTask GetAnimTask() => new EmptyAnimTask();
+    }
+
+    public partial class GA_随机选卡 : GameAction
+    {
+        public GA_随机选卡(DynamicValue value)
+        {
+            this.Value = value;
+        }
+        public override GameAction Clone() => new GA_随机选卡(Value);
+        public override void Execute(object sender, List<object> param)
+        {
+            int count = Value.GetValue(sender, param);
+            if (count <= 0){
+                Debug.LogError("【GA_随机选卡】选卡数量不能小于等于0");
+                return;
+            }
+
+            // 发起选择请求
+            this.GetSystem<ISelectorSystem>().RequestSelection(new SelectionRequest_随机卡牌(count), count, SelectionPanelType.Choices);
+        }
+        public override IAnimTask GetAnimTask() => new EmptyAnimTask();
     }
 }

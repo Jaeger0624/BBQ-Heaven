@@ -74,7 +74,7 @@ public class Requirement_具体食材站位 : CustomerRequirement{
         bool isType = rng.NextBool();
         if (isType){
             // 选择食材类型，更宽松
-            finalAmount += 1;
+            finalAmount += 2;
             Context.isType = true;
             Context.selectedFoodType = rng.PickOne(Enum.GetValues(typeof(FoodType)).Cast<FoodType>().Where(x => x != FoodType.无 && x != FoodType.肉类).ToList());
         }

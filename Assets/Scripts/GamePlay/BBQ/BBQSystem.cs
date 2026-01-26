@@ -7,6 +7,7 @@ using UnityEngine;
 
 public interface IBBQSystem : ISystem{
     BBQPreview PreviewFoodInstances { get;}
+    bool IsBBQing { get; }
     BBQ GetCurrentBBQ();
     void SetPreview(BBQPreview preview);
     void FinishBBQ(Stick stick, List<FoodInstance> foodInstances);
@@ -24,6 +25,8 @@ public class BBQSystem : AbstractSystem, IBBQSystem
     // 当前在运算，待存储的烧烤实例
     private BBQ currentBBQ;
     private IBBQCalculator calculator = new BBQCalculator_食材基础值逐个加();
+    private bool isBBQing = false;
+    public bool IsBBQing => isBBQing;
 
     public BBQPreview PreviewFoodInstances { get; private set; }
     public void SetPreview(BBQPreview preview) => PreviewFoodInstances = preview;
@@ -53,7 +56,7 @@ public class BBQSystem : AbstractSystem, IBBQSystem
     }
     // 完成一次烧烤
     public void FinishBBQ(Stick stick, List<FoodInstance> foodInstances){
-
+        isBBQing = true;
         this.GetSystem<IStickSystem>().UseCurrentStick(stick);  // 会同时取消选中烤串
         
         BBQ bbq = new BBQ(stick, foodInstances);    // 创建烧烤实例
@@ -121,7 +124,7 @@ public class BBQSystem : AbstractSystem, IBBQSystem
         });
 
         // 1. 设置一层锁
-        this.GetSystem<IGASystem>().SetTrigger(context.targetBBQ);
+        this.GetSystem<IGASystem>().SetTrigger(context.targetBBQ);   
 
 
 
@@ -164,7 +167,10 @@ public class BBQSystem : AbstractSystem, IBBQSystem
 
         // 延时提醒动画发生
         this.GetSystem<IAnimationSystem>().Append(new SequenceAnimTask(new List<IAnimTask>{
-            new DelayAnimTask(0.5f, true),
+            new ActionAnimTask(() => {
+                isBBQing = false;
+            }),
+            new DelayAnimTask(0.3f, true),
             new ActionAnimTask(() => {
                 this.SendEvent(new AddBBQToRepositoryEvent(bbq));
             }),

@@ -81,23 +81,15 @@ public class DealSystem : AbstractSystem, IDealSystem
 		if (bbq == null || customer == null) return;
 		this.SendEvent(new DealStartedEvent(bbq, customer));
 
-		// 开启满意度条
-		this.GetSystem<IAnimationSystem>().Append(new SequenceAnimTask(new List<IAnimTask>{
-			new ActionAnimTask(() => this.SendEvent(new ShowStatisBarEvent())),
-			new DelayAnimTask(0.5f, true),
-		}));
+		// // 开启满意度条
+		// this.GetSystem<IAnimationSystem>().Append(new SequenceAnimTask(new List<IAnimTask>{
+		// 	new ActionAnimTask(() => this.SendEvent(new ShowStatisBarEvent())),
+		// 	new DelayAnimTask(0.5f, true),
+		// }));
 
 		// 重置满意度
 		ResetSatisfaction();
 		
-		// string encounterId = "1";
-		// if (!string.IsNullOrEmpty(encounterId))
-		// {
-		// 	// 【遭遇入口】等待遭遇结果
-		// 	string encounterResult = await this.GetSystem<IEncounterSystem>().TriggerInstantEncounter(encounterId, new List<object>{context});
-		// 	Debug.Log($"【DealSystem】遭遇结果: {encounterResult}");
-		// }
-
 
 		// 创建上下文
 		DealContext context = new DealContext(bbq, customer, this.GetSystem<ICustomerSystem>().Satisfaction);
@@ -107,6 +99,27 @@ public class DealSystem : AbstractSystem, IDealSystem
 
 		// 等待顾客订单进行时动作完成
 		await encounterObservable;
+
+		int rarity = bbq.totalRarity.Value;
+		int taste = bbq.totalTaste.Value;
+		Color rarityColor = SettingManager.Instance.DevSettings.AddRarityTextColor;
+		Color tasteColor = SettingManager.Instance.DevSettings.AddTasteTextColor;
+		float scoreTextAnimDuration = SettingManager.Instance.AnimSettings.ScoreTextAnimDuration;
+		// 乘上基本得分
+		List<IAnimTask> animTasks = new List<IAnimTask>(){
+			new ActionAnimTask(() => this.SendEvent(new ShowScorePanelEvent())),
+			new DelayAnimTask(0.1f, true),
+			new ActionAnimTask(() => this.SendEvent(new ShowScoreTextEvent($"{rarity.ToString().ToColor(rarityColor)} x {taste.ToString().ToColor(tasteColor)}"))),
+			new DelayAnimTask(scoreTextAnimDuration + 0.2f, true),
+			// new ActionAnimTask(() => this.SendEvent(new UpdateScoreViewEvent(rarity))),
+			// new DelayAnimTask(0.6f, true),
+			new ActionAnimTask(() => this.SendEvent(new UpdateScoreViewEvent(taste * rarity))),
+			new DelayAnimTask(scoreTextAnimDuration + 0.2f, true),
+			// new ActionAnimTask(() => this.SendEvent(new CloseScorePanelEvent())),
+		};
+
+		IAnimTask animTask = new SequenceAnimTask(animTasks);
+		this.GetSystem<IAnimationSystem>().Append(animTask);
 
 		// 进行满意度的处理计算
 		DealResult result = GetResult(context);
@@ -124,7 +137,7 @@ public class DealSystem : AbstractSystem, IDealSystem
 
 		// 获取满意度（含顾客身上 Tag 的效果执行）
 		Debug.Log($"【DealSystem】开始计算满意度：顾客:{context.Customer.name}");
-
+		List<ScoreRecord> scoreRecords = new List<ScoreRecord>();
 		// 最终满意度总乘区
 		(float satisfaction, CustomerSatisfaction Satis) = GetSatisfaction(context);
 
@@ -133,8 +146,11 @@ public class DealSystem : AbstractSystem, IDealSystem
 		int taste = context.BBQ.totalTaste.Value;
 		float rawPrice = satisfaction * rarity * taste;
 
+		scoreRecords.Add(new ScoreRecord("满意度", satisfaction, rawPrice));
+
 		// 获取其他得分乘区
 		Dictionary<string, float> otherMultipliers = new();
+
 		// 1. 添加得分乘区
 		foreach (var multiplier in scoreMultipliers){
 			otherMultipliers.Add(multiplier.Key, multiplier.Value);
@@ -147,12 +163,27 @@ public class DealSystem : AbstractSystem, IDealSystem
 		// 执行乘区计算
 		foreach (var multiplier in otherMultipliers){
 			rawPrice *= multiplier.Value;
+			scoreRecords.Add(new ScoreRecord(multiplier.Key, multiplier.Value, rawPrice));
 		}
+
+		// 星级计算
+		foreach (var record in reviewResult.Records){
+			if (record.IsMet){
+				if (record.StarValue <= 2){
+					Debug.LogError($"【DealSystem】星级计算至少要是3星，否则无效，错误记录：{record.Description}");
+					continue;
+				}
+				rawPrice *= record.StarValue / 2f;
+				scoreRecords.Add(new ScoreRecord(record.Description, record.StarValue / 2f, rawPrice));
+			}
+		}
+
 		int roundedRawPrice = Mathf.RoundToInt(rawPrice);
 		// 计算价格
 		int money = earnMoneyStrategy.EarnMoney(roundedRawPrice);
 
-		DealResult result = new DealResult(context.BBQ, context.Customer, satisfaction, Satis, otherMultipliers, rarity, taste, money, rawPrice);
+		DealResult result = new DealResult(context.BBQ, context.Customer, satisfaction, Satis, otherMultipliers, rarity, taste, money, rawPrice, scoreRecords);
+
 
 		// 基础计算完成：派发事件，允许 GA 基于当前交易对结果进行调整
 		return result;
@@ -193,6 +224,21 @@ public class DealSystem : AbstractSystem, IDealSystem
 
 
 	private void AfterDeal(DealResult result, DealContext context){
+		float scoreTextAnimDuration = SettingManager.Instance.AnimSettings.ScoreTextAnimDuration;
+		List<ScoreRecord> scoreRecords = result.scoreRecords;
+		List<IAnimTask> animTasks = new List<IAnimTask>();
+		foreach (var record in scoreRecords){
+			
+			// 更新得分面板
+			string multiplierText = $"<size=36><color=yellow>{record.name}</color></size>\n<size=56>{record.multiplier}x</size>";
+			animTasks.Add(new ActionAnimTask(() => this.SendEvent(new UpdateScoreViewEvent(Mathf.RoundToInt(record.currentScore), multiplierText))));
+			animTasks.Add(new DelayAnimTask(scoreTextAnimDuration + 0.2f, true));
+		}
+		animTasks.Add(new DelayAnimTask(0.5f, true));
+		animTasks.Add(new ActionAnimTask(() => this.SendEvent(new CloseScorePanelEvent())));
+
+		this.GetSystem<IAnimationSystem>().Append(new SequenceAnimTask(animTasks));
+
 		// 将得分转换
 		// 结算落账（现金）
 		this.GetSystem<IScoreSystem>().ChangeScore(result.price);
@@ -200,11 +246,11 @@ public class DealSystem : AbstractSystem, IDealSystem
 		// 增加顾客的声望值
 		this.GetSystem<IPCSystem>().AddReputation(context.Customer.reputation);
 
-		// 关闭满意度条
-		this.GetSystem<IAnimationSystem>().Append(new SequenceAnimTask(new List<IAnimTask>{
-			new DelayAnimTask(0.5f, true),
-			new ActionAnimTask(() => this.SendEvent(new HideStatisBarEvent())),
-		}));
+		// // 关闭满意度条
+		// this.GetSystem<IAnimationSystem>().Append(new SequenceAnimTask(new List<IAnimTask>{
+		// 	new DelayAnimTask(0.5f, true),
+		// 	new ActionAnimTask(() => this.SendEvent(new HideStatisBarEvent())),
+		// }));
 		
 		// 消耗资源：食材实例彻底移除
 		foreach (var food in context.BBQ.foodInstances)

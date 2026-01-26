@@ -21,29 +21,22 @@ public class Requirement_食材连续 : CustomerRequirement{
             return false;
         }
         int maxAmount = 0;
-        string currentFoodID = null;
         if (specificType){
-            foreach (FoodInstance foodInstance in dealContext.BBQ.foodInstances){
-                if (currentFoodID == null){
-                    currentFoodID = foodInstance.food.foodData.ID;
-                    maxAmount = 1;
-                }
-                else{
-                    if (currentFoodID == foodInstance.food.foodData.ID){
-                        maxAmount++;
+            // 若有4个食材，判断3个连续，需要2轮
+            int round = dealContext.BBQ.foodInstances.Count - targetAmount + 1;
+            for (int i = 0; i < round; i++){
+                string id = dealContext.BBQ.foodInstances[i].food.foodData.ID;
+                for (int j = 0; j < targetAmount; j++){
+                    if (dealContext.BBQ.foodInstances[i + j].food.foodData.ID != id){
+                        break;
                     }
-                    else{
-                        maxAmount = 1;
-                        currentFoodID = foodInstance.food.foodData.ID;
+                    if (j == targetAmount - 1){
+                        return true;
                     }
-                }
-                if (maxAmount >= targetAmount){
-                    return true;
                 }
             }
         }
         else{
-        // 位置必须连续
             foreach (FoodInstance foodInstance in dealContext.BBQ.foodInstances){
                 if (foodInstance.food.foodData.Type == foodType){
                     maxAmount += 1;
@@ -69,7 +62,7 @@ public class Requirement_食材连续 : CustomerRequirement{
         }
         // 2~4个
         targetAmount = rng.NextInt(2, 5);
-        StarAmount = targetAmount;
+        StarAmount = targetAmount + 1;
     }
     protected override bool ConcreteConflicted(CustomerRequirement otherRequirement){
         if (otherRequirement is Requirement_食材少于 otherRequirement_食材少于){

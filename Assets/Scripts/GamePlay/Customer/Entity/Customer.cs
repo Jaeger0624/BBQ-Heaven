@@ -14,7 +14,8 @@ using UnityEngine;
 public class Customer : ICanGetSystem, ICanRegisterEvent, ICanSendEvent{
     public readonly string guid;
     public string name { get; private set; } = "";
-    public CustomerLook customerLook;
+    // public CustomerLook customerLook;
+    public Sprite customerLook;
     // 顾客标签
     public List<ICustomerTag> customerTags;
     // 耐心阈值 
@@ -41,7 +42,9 @@ public class Customer : ICanGetSystem, ICanRegisterEvent, ICanSendEvent{
 
         GenerateCustomerTags();
 
-        this.customerLook = this.GetSystem<ICustomerSystem>().CustomerLookMaker.GetCustomerLook(name, new GetCustomerLookStrategy_纯随机());
+        // this.customerLook = this.GetSystem<ICustomerSystem>().CustomerLookMaker.GetCustomerLook(name, new GetCustomerLookStrategy_纯随机());
+        Rng rng = this.GetSystem<IRngSystem>().GetSubRng<ICustomerSystem>();
+        this.customerLook = rng.PickOne(SettingManager.Instance.ArtSettings.CustomerSprites.sprites);
 
         // 生成要求
         RefreshRequirements();
@@ -60,6 +63,16 @@ public class Customer : ICanGetSystem, ICanRegisterEvent, ICanSendEvent{
         return GameArchitecture.Interface;
     }
 
+    public void ChangePatience(int value){
+        if (PatienceNow.Value + value <= 0){
+            PatienceNow.Value = 0;
+        }
+        else{
+            PatienceNow.Value += value;
+        }
+        this.SendEvent(new ChangeCustomerPatienceEvent(this, value));
+    }
+
     public ReviewResult Review(DealContext context){
         if (requirements == null || requirements.Count == 0){
             Debug.LogError($"【Customer】{name} 要求为空，重新生成");
@@ -75,7 +88,7 @@ public class Customer : ICanGetSystem, ICanRegisterEvent, ICanSendEvent{
         foreach (var requirement in requirements){
             bool isMet = requirement.IsMet(this, new List<object>{context});
             reviewResult.Records.Add(new RequirementCheckRecord{
-                Description = requirement.Name,
+                Description = requirement.GetDescription(),
                 StarValue = requirement.StarAmount,
                 IsMet = isMet
             });
@@ -120,4 +133,14 @@ public enum CustomerState{
     /// 已服务
     /// </summary>
     Leaved,
+}
+
+
+public class ChangeCustomerPatienceEvent : AbstractEvent{
+    public Customer customer;
+    public int value;
+    public ChangeCustomerPatienceEvent(Customer customer, int value){
+        this.customer = customer;
+        this.value = value;
+    }
 }

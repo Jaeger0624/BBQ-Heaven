@@ -79,14 +79,6 @@ public class Requirement_是否包含食材种类 : CustomerRequirement{
                     }
                 }
                 return true;
-            case ContainType.只有:
-                foreach (var foodInstance in dealContext.BBQ.foodInstances){
-                    // 对于每一个食材实例，判断是否包含所有食材类型
-                    if (!foodTypes.Contains(foodInstance.food.foodData.Type)){
-                        return false;
-                    }
-                }
-                return true;
             case ContainType.没有:
                 foreach (var foodType in foodTypes){
                     if (dealContext.BBQ.foodInstances.Any(x => x.food.foodData.Type == foodType)){
@@ -103,24 +95,22 @@ public class Requirement_是否包含食材种类 : CustomerRequirement{
         int finalAmount = 0;
 
         // 选择包含类型
-        ContainType = rng.PickOne(Enum.GetValues(typeof(ContainType)).Cast<ContainType>().ToList());
-        // 1~3个
-        int typeAmount = rng.NextInt(1, 4);
+        ContainType = rng.PickOne(Enum.GetValues(typeof(ContainType)).Cast<ContainType>().Where(x => x != ContainType.只有).ToList());
+        // 1~2个
+        int typeAmount = rng.NextInt(1, 3);
         foodTypes = rng.PickMany(Enum.GetValues(typeof(FoodType)).Cast<FoodType>().Where(x => x != FoodType.无 && x != FoodType.肉类).ToList(), typeAmount);
+
+        List<FoodType> tempFoodTypes = new List<FoodType>(foodTypes);
 
         // 组合得到最终星数
         switch (ContainType){
             case ContainType.包含:
                 // 包含越多难度越高，所以星数越高
-                finalAmount = typeAmount;
-                break;
-            case ContainType.只有:
-                // 只有越难度越高，所以星数越高
-                finalAmount = 3;
+                finalAmount = typeAmount + 2;
                 break;
             case ContainType.没有:
                 // 没有越多难度越高，所以星数越高
-                finalAmount = typeAmount;
+                finalAmount = typeAmount + 3;
                 break;
         }
 
@@ -158,7 +148,7 @@ public class Requirement_食材丰富度 : CustomerRequirement{
         // 3种 -> 1.5星(3)
         // 4种 -> 2星(4)
         targetAmount = rng.NextInt(2, 5);
-        StarAmount = 6 - targetAmount;
+        StarAmount = 7 - targetAmount;
     }
     protected override bool ConcreteConflicted(CustomerRequirement otherRequirement){
         if (otherRequirement is Requirement_是否包含食材种类 other){

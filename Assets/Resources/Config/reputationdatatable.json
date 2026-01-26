@@ -6,7 +6,8 @@
     "description": "",
     "effects": [
       "收入+3",
-      "物品刷新率：\n<color=green>65%</color> <color=blue>35%</color> <color=purple>0%</color> <color=yellow>0%</color>"
+      "物品刷新率：\n<color=green>65%</color> <color=blue>35%</color> <color=purple>0%</color> <color=yellow>0%</color>",
+      "选择一张卡牌"
     ],
     "totalReputation": 10,
     "actions": [
@@ -37,6 +38,19 @@
             }
           }
         ]
+      },
+      {
+        "ID": "3",
+        "conditions": [],
+        "actions": [
+          {
+            "$type": "GA_随机选卡",
+            "value": {
+              "$type": "DV_值",
+              "number": 3
+            }
+          }
+        ]
       }
     ]
   },
@@ -47,7 +61,8 @@
     "description": "",
     "effects": [
       "收入+2",
-      "物品刷新率：\n<color=green>55%</color> <color=blue>35%</color> <color=purple>10%</color> <color=yellow>0%</color>"
+      "物品刷新率：\n<color=green>55%</color> <color=blue>35%</color> <color=purple>10%</color> <color=yellow>0%</color>",
+      "选择一张卡牌"
     ],
     "totalReputation": 20,
     "actions": [
@@ -75,6 +90,19 @@
               "probability_稀有": 0.35,
               "probability_史诗": 0.1,
               "probability_传说": 0
+            }
+          }
+        ]
+      },
+      {
+        "ID": "3",
+        "conditions": [],
+        "actions": [
+          {
+            "$type": "GA_随机选卡",
+            "value": {
+              "$type": "DV_值",
+              "number": 3
             }
           }
         ]

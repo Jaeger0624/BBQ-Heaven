@@ -1,30 +1,5 @@
 [
   {
-    "ID": "1",
-    "name": "测试",
-    "description": "测试！",
-    "cost": 0,
-    "target": 0,
-    "CGAs": [
-      {
-        "type": 0,
-        "action": {
-          "ID": "1",
-          "conditions": [],
-          "actions": [
-            {
-              "$type": "GA_抽牌",
-              "value": {
-                "$type": "DV_值",
-                "number": 1
-              }
-            }
-          ]
-        }
-      }
-    ]
-  },
-  {
     "ID": "2",
     "name": "移动",
     "description": "移动！",
@@ -62,7 +37,7 @@
   {
     "ID": "3",
     "name": "补充",
-    "description": "补充",
+    "description": "抽取3张食材卡",
     "cost": 1,
     "target": 0,
     "CGAs": [
@@ -87,7 +62,7 @@
   {
     "ID": "4",
     "name": "交换",
-    "description": "交换",
+    "description": "交换两个相邻食材的位置",
     "cost": 1,
     "target": 3,
     "CGAs": [
@@ -206,8 +181,8 @@
   {
     "ID": "8",
     "name": "抽牌",
-    "description": "抽牌",
-    "cost": 2,
+    "description": "抽两张牌",
+    "cost": 1,
     "target": 0,
     "CGAs": [
       {
@@ -229,27 +204,10 @@
     ]
   },
   {
-    "ID": "9",
-    "name": "复制食材",
-    "description": "选择一个食材，在随机位置生成其原始复制",
-    "cost": 2,
-    "target": 1,
-    "CGAs": [
-      {
-        "type": 0,
-        "action": {
-          "ID": "1",
-          "conditions": [],
-          "actions": []
-        }
-      }
-    ]
-  },
-  {
     "ID": "10",
     "name": "定点爆破",
     "description": "挤开周围的食材",
-    "cost": 2,
+    "cost": 1,
     "target": 4,
     "CGAs": [
       {
@@ -302,7 +260,7 @@
     "ID": "12",
     "name": "方向移动",
     "description": "选择一个食材，使其向一个方向移动",
-    "cost": 2,
+    "cost": 1,
     "target": 1,
     "CGAs": [
       {

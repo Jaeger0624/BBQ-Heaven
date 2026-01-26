@@ -25,7 +25,7 @@ public class Requirement_食材少于 : CustomerRequirement{
         // 不多于3个 -> 1.5星(3)
         // 不多于4个 -> 1星(2)
         targetAmount = rng.NextInt(2, 5);
-        StarAmount = 6 - targetAmount;
+        StarAmount = 7 - targetAmount;
     }
     protected override bool ConcreteConflicted(CustomerRequirement otherRequirement){
         return false;
@@ -58,7 +58,7 @@ public class Requirement_食材多于 : CustomerRequirement{
         // 不少于6个 -> 1.5星(3)
         // 不少于7个 -> 2星(4)
         targetAmount = rng.NextInt(5, 8);
-        StarAmount = targetAmount - 3;
+        StarAmount = targetAmount - 2;
     }
     protected override bool ConcreteConflicted(CustomerRequirement otherRequirement){
         return false;
@@ -94,7 +94,7 @@ public class Requirement_食材范围 : CustomerRequirement{
         int rangeAmount = maxAmount - minAmount + 1;
 
         // 范围越大越容易，星级越低
-        StarAmount = 5 - rangeAmount;
+        StarAmount = 7 - rangeAmount;
     }
     protected override bool ConcreteConflicted(CustomerRequirement otherRequirement){
         return false;

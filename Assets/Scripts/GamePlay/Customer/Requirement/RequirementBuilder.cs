@@ -19,7 +19,7 @@ public class RequirementBuilder : ICanGetSystem{
         new Requirement_是否包含食材种类(),
 
         new Requirement_食材少于(),
-        new Requirement_食材多于(),
+        // new Requirement_食材多于(),
         new Requirement_食材范围(),
         
         new Requirement_具体食材站位(),

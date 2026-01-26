@@ -14,6 +14,12 @@ public class GameState_日结算 : AbstractGameState
         this.SendEvent(new 退出日结算_Event());
         this.SendEvent(new CloseDailyEconomyPanelEvent());
         this.SendEvent(new HideMainGamePlayEvent());
+
+        // 若检测到目前天数是第二天
+        if (this.GetSystem<IGameSystem>().CurrentDay == 2)
+        {
+            this.SendEvent(new UIPanelEvent(UIPanelType.感谢游玩界面, UIPanelAction.Show));
+        }
     }
 }
 

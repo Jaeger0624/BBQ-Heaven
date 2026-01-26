@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AnimSpeed: 0
   UseAnimTimeScale: 1
-  AnimTimeScale: 4.23
+  AnimTimeScale: 2.5
   AnimTimeScaleSpeed: 0.002
   baseTimeScale: 2
   maxTimeScale: 6
-  defaultAnimInterval: 0.1
+  defaultAnimInterval: 0.5
   targetFrameRate: 500
   AddRarityTextColor: {r: 1, g: 0.9568628, b: 0.37254903, a: 1}
   AddTasteTextColor: {r: 0.97647065, g: 0.61960787, b: 0.44705886, a: 1}

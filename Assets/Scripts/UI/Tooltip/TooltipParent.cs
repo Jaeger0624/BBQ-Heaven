@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 public class TooltipParent : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler{
     public Transform targetTransform;
     public TooltipAnchor anchor = TooltipAnchor.中心;
+    public TooltipAlignType alignType = TooltipAlignType.右;
     public IDisposable showTask;
     public IShowTooltip tooltip;
     public bool followMouse => targetTransform == null;
@@ -34,4 +35,10 @@ public class TooltipParent : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     private void ShowTooltip(){
         TooltipManager.Instance.ShowTooltip(this);
     }
+}
+
+
+public enum TooltipAlignType{
+    左,
+    右,
 }

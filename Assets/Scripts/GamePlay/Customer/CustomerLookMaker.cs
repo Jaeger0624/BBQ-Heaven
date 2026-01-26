@@ -76,7 +76,8 @@ public class GetCustomerLookStrategy_根据字典生成 : IGetCustomerLookStrate
         List<int> indices = customerLooks[lookType];
         if (indices.Count == 0){
             // 如果空了，则重新生成
-            customerLooks[lookType] = new List<int>(Enumerable.Range(0, 15));
+            int maxAmount = SettingManager.Instance.ArtSettings.CustomerSprites.sprites.Count;
+            customerLooks[lookType] = new List<int>(Enumerable.Range(0, maxAmount));
         }
         indices = customerLooks[lookType];
         

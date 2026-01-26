@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ArtSettings", menuName = "Settings/ArtSettings")]
@@ -7,4 +7,6 @@ public class ArtSettings : ScriptableObject
     public SpriteReferenceSO StickSprites;
     public SpriteReferenceSO EnhancementSprites;
     public SpriteReferenceSO PlanetSprites;
+    public SpriteReferenceSO CustomerSprites;
+    public SpriteReferenceSO PicturesGuides;
 }

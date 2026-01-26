@@ -21,5 +21,6 @@ public class Entity : BoardEntity
         return tooltipInfos;
     }
 
+
     public override Sprite GetSprite() => Resources.Load<Sprite>("Sprites/" + entityData.Sprite);
 }

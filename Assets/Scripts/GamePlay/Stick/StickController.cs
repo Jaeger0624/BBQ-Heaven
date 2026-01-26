@@ -24,12 +24,17 @@ public class StickController : MonoBehaviour, IController, ICanSendEvent{
     }
     void Update()
     {
+        if (this.GetSystem<IBBQSystem>().IsBBQing && stickSystem.selectedStick != null){
+            stickViews.ForEach(x => x.OnUnselect());
+            stickSystem.UnselectStick();
+            SendClearEvents();
+        }
+
         // 按下鼠标滚轮，则检测滚轮操作
         if (Input.GetMouseButtonDown(2)){
             if (stickSystem.selectedStick != null){
                 stickViews.ForEach(x => x.OnUnselect());
                 stickSystem.UnselectStick();
-
 
                 SendClearEvents();
             }

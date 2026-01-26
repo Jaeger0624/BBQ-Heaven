@@ -58,11 +58,11 @@
     "ID": "2",
     "name": "三花",
     "description": "可爱三花",
-    "SkillDescription": "<color=yellow>被动：</color>每天开始经营时，额外补充10个食材",
+    "SkillDescription": "<color=yellow>被动：</color>每次串完串后，抽取两张食材卡",
     "SEs": [
       {
         "$type": "SE_监听事件",
-        "evt": 2,
+        "evt": 3,
         "actions": [
           {
             "ID": "1",
@@ -72,7 +72,7 @@
                 "$type": "GA_补充食材",
                 "value": {
                   "$type": "DV_值",
-                  "number": 10
+                  "number": 2
                 }
               }
             ]
