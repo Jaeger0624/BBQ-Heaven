@@ -20,6 +20,6 @@ public class GameState_日前提升 : AbstractGameState
     }
     public override void OnExit()
     {
-        this.SendEvent(new HideShop_日前提升());
+        // this.SendEvent(new HideShop_日前提升());
     }
 }

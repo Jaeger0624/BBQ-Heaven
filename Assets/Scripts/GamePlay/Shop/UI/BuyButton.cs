@@ -57,7 +57,8 @@ public class BuyButton : MonoBehaviour, IController
             Debug.Log("金币不足，无法购买");
             return;
         }
-        this.GetSystem<IShopSystem>().Buy(shopItem);
+        // this.GetSystem<IShopSystem>().Buy(shopItem);
+        Debug.Log("已弃用BuyButton");
         OnBuyButtonClick?.Invoke();
     }
 }
