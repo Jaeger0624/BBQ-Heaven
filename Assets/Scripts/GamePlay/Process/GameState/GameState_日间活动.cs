@@ -7,11 +7,7 @@ public class GameState_日间活动 : AbstractGameState
         Debug.Log("【GameState】进入日间活动状态");
 
 
-        ShopInitContext shopInitContext = new ShopInitContext(){
-            shopType = ShopType.普通,
-            shopName = "普通商店",
-            shopDescription = "普通商店",
-        };
+        ShopInitContext shopInitContext = new ShopInitContext_普通商店();
 
         this.GetSystem<IShopSystem>().GenerateShop(shopInitContext);
     }

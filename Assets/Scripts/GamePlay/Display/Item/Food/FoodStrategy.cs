@@ -42,6 +42,10 @@ public class MultiDeleteFoodStrategy : ItemInteractStrategyBase<FoodUIContext, D
 }
 
 public class BuyFoodStrategy : ItemInteractStrategyBase<FoodUIContext, DisplayFoodView>{
+    private bool isMultiple;
+    public BuyFoodStrategy(bool isMultiple){
+        this.isMultiple = isMultiple;
+    }
     public override void OnBind(DisplayFoodView itemView, FoodUIContext data){
     }
     public override void OnClick(FoodUIContext data, DisplayFoodView itemView){
@@ -57,7 +61,16 @@ public class BuyFoodStrategy : ItemInteractStrategyBase<FoodUIContext, DisplayFo
         }
 
         // 1. 获得食材到仓库
-        this.GetSystem<IFoodSystem>().AddFoodToRepository(new List<FoodCard>(){data.RuntimeFood});
+        if (isMultiple){
+            if (data.Count <= 0) {Debug.LogError("BuyFoodStrategy 的 data.Count 为0"); return;}
+            List<FoodCard> foodCards = new List<FoodCard>();
+            for (int i = 0; i < data.Count; i++){
+                foodCards.Add(data.RuntimeFood.Clone());
+            }
+            this.GetSystem<IFoodSystem>().AddFoodToRepository(foodCards);
+        } else {
+            this.GetSystem<IFoodSystem>().AddFoodToRepository(new List<FoodCard>(){data.RuntimeFood});
+        }
 
         // 2. 扣除金币
         this.GetSystem<IEconomySystem>().CostCoin(data.Price);

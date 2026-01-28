@@ -62,19 +62,11 @@ public class ShopController : MonoBehaviour, IController{
     }
     [Button]
     public void Test_标准商店(){
-        CreateShopPanel(new ShopInitContext(){
-            shopType = ShopType.普通,
-                shopName = "普通商店",
-                shopDescription = "普通商店",
-            });
+        CreateShopPanel(new ShopInitContext_普通商店());
     }
     [Button]
     public void Test_批发商店(){
-        CreateShopPanel(new ShopInitContext(){
-            shopType = ShopType.批发,
-            shopName = "批发商店",
-            shopDescription = "批发商店中的东西，都不能单买喔~",
-        });
+        CreateShopPanel(new ShopInitContext_批发商店());
     }
 }
 

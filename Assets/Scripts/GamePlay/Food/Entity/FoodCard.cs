@@ -118,6 +118,16 @@ public class FoodCard : ICanGetSystem{
         
     }
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
+
+    public FoodCard Clone(){
+        FoodCard clone = new FoodCard(foodData, isTemporary);
+
+        // 深拷贝Enhancements
+        foreach (var enhancement in Enhancements){
+            clone.AddEnhancement(enhancement);
+        }
+        return clone;
+    }
 }
 
 public class FoodPack{

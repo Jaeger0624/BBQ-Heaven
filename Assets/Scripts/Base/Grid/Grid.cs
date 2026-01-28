@@ -56,7 +56,7 @@ public class Grid<T> : GridBase where T : IGridComponent
     }
     public T GetCell(int x, int y)
     {
-        if (!IsValidPosition(x, y)) return default(T);
+        if (!IsValidPosition(x, y)) return default;
         return cells[x, y];
     }
     private T CreateNewCell(int x, int y) => this.createCell();

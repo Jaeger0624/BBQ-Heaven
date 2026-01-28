@@ -12,6 +12,11 @@ public partial class CGA : ICanGetSystem, IHaveAnim{
         this.Conditions = new List<Condition>(cga.Conditions);
         this.Actions = new List<GameAction>(cga.Actions.Select(x => x.Clone()));
     }
+    public CGA(GameAction action){
+        this.ID = Guid.NewGuid().ToString();
+        this.Conditions = new List<Condition>();
+        this.Actions = new List<GameAction>(){action};
+    }
     public bool Execute(object sender, List<object> param)
     {
         // 只要有一个条件不满足，就跳过执行

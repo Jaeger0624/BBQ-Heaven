@@ -10,17 +10,17 @@ public class ShopPanel : MonoBehaviour, IController, ICanSendEvent{
     [Header("商店基本组件")]
     [SerializeField] public UIPanel uiPanel;
     [Header("商店信息")]
-    [SerializeField] private TextMeshProUGUI shopTypeText;
-    [SerializeField] private TextMeshProUGUI shopDescriptionText;
-    [SerializeField] private TextMeshProUGUI ProbabilityText;
+    [SerializeField] public TextMeshProUGUI shopTypeText;
+    [SerializeField] public TextMeshProUGUI shopDescriptionText;
+    [SerializeField] public TextMeshProUGUI ProbabilityText;
     [Header("商店食材商品")]
-    [SerializeField] private FoodDisplayContainer foodDisplayContainer;
-    [SerializeField] private PriceButton foodDisplayRefreshButton;
+    [SerializeField] public FoodDisplayContainer foodDisplayContainer;
+    [SerializeField] public PriceButton foodDisplayRefreshButton;
     [Header("商店吉祥物商品")]
-    [SerializeField] private MascotDisplayContainer mascotDisplayContainer;
-    [SerializeField] private PriceButton mascotDisplayRefreshButton;
+    [SerializeField] public MascotDisplayContainer mascotDisplayContainer;
+    [SerializeField] public PriceButton mascotDisplayRefreshButton;
     [Header("商店删除商品")]
-    [SerializeField] private PriceButton foodDeleteButton;
+    [SerializeField] public PriceButton foodDeleteButton;
 
     // [SerializeField] private ButtonUI 
 
@@ -77,19 +77,7 @@ public class ShopPanel : MonoBehaviour, IController, ICanSendEvent{
     {
         if (shopInitContext == null) {Debug.LogError("ShopPanel 的 shopInitContext 为空"); return;}
 
-
-        if (foodDisplayContainer != null){
-            IDisplayTask<FoodUIContext, DisplayFoodView> displayTask = new FoodDisplayTask_随机获取若干(new BuyFoodStrategy(), 3);
-            foodDisplayContainer.SetDisplayTask(displayTask);
-
-            foodDisplayContainer.RefreshUI();
-        }
-        if (mascotDisplayContainer != null){
-            IDisplayTask<MascotUIContext, DisplayMascotView> displayTask = new MascotDisplayTask_随机获取若干(new BuyMascotStrategy(), 3);
-            mascotDisplayContainer.SetDisplayTask(displayTask);
-
-            mascotDisplayContainer.RefreshUI();
-        }
+        shopInitContext.InitShopItems(this);
     }    
 
     public void ContinueProcess(){
@@ -108,24 +96,23 @@ public enum ShopType{
     盲盒
 }
 
-public class ShopInitContext{
+
+public abstract class ShopInitContext{
     public ShopType shopType;
     public string shopName;
     public string shopDescription;
+    /// <summary>
+    /// 初始化商店商品
+    /// </summary>
+    /// <param name="shopPanel">商店面板</param>
+    public abstract void InitShopItems(ShopPanel shopPanel);
+
     public static ShopInitContext Get(ShopType shopType){
         switch (shopType){
             case ShopType.普通:
-                return new ShopInitContext(){
-                    shopType = ShopType.普通,
-                    shopName = "普通商店",
-                    shopDescription = "普通商店中的东西，都是普通品质的",
-                };
+                return new ShopInitContext_普通商店();
             case ShopType.批发:
-                return new ShopInitContext(){
-                    shopType = ShopType.批发,
-                    shopName = "批发商店",
-                    shopDescription = "批发商店中的东西，都不能单买喔~",
-                };
+                return new ShopInitContext_批发商店();
             default:
                 Debug.LogError("不支持的商店类型：" + shopType);
                 return null;
@@ -134,50 +121,55 @@ public class ShopInitContext{
     public static ShopInitContext GetRandom(Rng rng){
         List<ShopInitContext> shopInitContexts = new List<ShopInitContext>
         {
-            new ShopInitContext()
-            {
-                shopType = ShopType.普通,
-                shopName = "普通商店",
-                shopDescription = "普通商店中的东西，都是普通品质的",
-            },
-            new ShopInitContext()
-            {
-                shopType = ShopType.批发,
-                shopName = "批发商店",
-                shopDescription = "批发商店中的东西，都不能单买喔~",
-            },
-            // new ShopInitContext()
-            // {
-            //     shopType = ShopType.折扣,
-            //     shopName = "折扣商店",
-            //     shopDescription = "折扣商店中的东西，都有折扣喔~",
-            // },
-            // new ShopInitContext()
-            // {
-            //     shopType = ShopType.收藏,
-            //     shopName = "收藏商店",
-            //     shopDescription = "收藏商店中的东西，都是收藏品喔~",
-            // },
-            // new ShopInitContext()
-            // {
-            //     shopType = ShopType.黑市,
-            //     shopName = "黑市商店",
-            //     shopDescription = "黑市商店中的东西，都是黑市品喔~",
-            // },
-            // new ShopInitContext()
-            // {
-            //     shopType = ShopType.升级,
-            //     shopName = "升级商店",
-            //     shopDescription = "升级商店中的东西，都是升级品喔~",
-            // },
-            // new ShopInitContext()
-            // {
-            //     shopType = ShopType.盲盒,
-            //     shopName = "盲盒商店",
-            //     shopDescription = "盲盒商店中的东西，都是盲盒品喔~",
-            // }
+            new ShopInitContext_普通商店(),
+            new ShopInitContext_批发商店()
         };
         return rng.PickOne(shopInitContexts);
     }
+}
 
+public class ShopInitContext_普通商店 : ShopInitContext
+{
+    public ShopInitContext_普通商店(){
+        shopType = ShopType.普通;
+        shopName = "普通商店";
+        shopDescription = "非常标准的商店！";
+    }
+    public override void InitShopItems(ShopPanel shopPanel)
+    {
+        if (shopPanel == null) {Debug.LogError("ShopInitContext_普通商店 的 shopPanel 为空"); return;}
+
+
+        if (shopPanel.foodDisplayContainer != null){
+            IDisplayTask<FoodUIContext, DisplayFoodView> displayTask = new FoodDisplayTask_随机获取若干(new BuyFoodStrategy(false), 3);
+            shopPanel.foodDisplayContainer.SetDisplayTask(displayTask);
+
+            shopPanel.foodDisplayContainer.RefreshUI();
+        }
+        if (shopPanel.mascotDisplayContainer != null){
+            IDisplayTask<MascotUIContext, DisplayMascotView> displayTask = new MascotDisplayTask_随机获取若干(new BuyMascotStrategy(), 3);
+            shopPanel.mascotDisplayContainer.SetDisplayTask(displayTask);
+
+            shopPanel.mascotDisplayContainer.RefreshUI();
+        }
+    }
+}
+
+public class ShopInitContext_批发商店 : ShopInitContext{
+    public ShopInitContext_批发商店(){
+        shopType = ShopType.批发;
+        shopName = "批发商店";
+        shopDescription = "批发商店中的东西，都不能单买喔~";
+    }
+    public override void InitShopItems(ShopPanel shopPanel)
+    {
+        if (shopPanel == null) {Debug.LogError("ShopInitContext_批发商店 的 shopPanel 为空"); return;}
+
+        if (shopPanel.foodDisplayContainer != null){
+            IDisplayTask<FoodUIContext, DisplayFoodView> displayTask = new FoodDisplayTask_随机获取若干(new BuyFoodStrategy(true), 3);
+            shopPanel.foodDisplayContainer.SetDisplayTask(displayTask);
+
+            shopPanel.foodDisplayContainer.RefreshUI();
+        }
+    }
 }

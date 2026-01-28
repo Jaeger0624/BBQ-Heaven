@@ -109,7 +109,8 @@ public class BoardSystem : AbstractSystem, IBoardSystem
             Debug.LogError($"【BoardSystem】移除棋盘格子实例失败: {position} 不存在");
             return;
         }
-        RemoveCellInstance(position);
+        cell.SetInstance(null);
+        _boardStateChangedSubject.OnNext(Unit.Default);
     }
     public BoardCell GetStopPosition(Vector2Int origin, Vector2Int direction, int distance, out BoardEntity entity){
         Vector2Int res = origin;
