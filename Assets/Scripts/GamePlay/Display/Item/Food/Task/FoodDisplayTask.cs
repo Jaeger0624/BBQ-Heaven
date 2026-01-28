@@ -6,9 +6,11 @@ using QFramework;
 public class FoodDisplayTask_随机获取若干 : IDisplayTask<FoodUIContext, DisplayFoodView>{
     private IItemInteractStrategy<FoodUIContext, DisplayFoodView> _strategy;
     private int _amount;
-    public FoodDisplayTask_随机获取若干(IItemInteractStrategy<FoodUIContext, DisplayFoodView> strategy, int amount){
+    private bool _isMultiple;
+    public FoodDisplayTask_随机获取若干(IItemInteractStrategy<FoodUIContext, DisplayFoodView> strategy, int amount, bool isMultiple){
         _strategy = strategy;
         _amount = amount;
+        _isMultiple = isMultiple;
     }
     public IItemInteractStrategy<FoodUIContext, DisplayFoodView> GetStrategy() => _strategy;
     public IEnumerable<FoodUIContext> GetList(){
@@ -21,7 +23,11 @@ public class FoodDisplayTask_随机获取若干 : IDisplayTask<FoodUIContext, Di
 
         foreach (var foodUIContext in foodUIContexts){
             foodUIContext.SetPrice(rng.NextInt(4,6));
-            foodUIContext.SetAmount(1);
+            if (_isMultiple){
+                foodUIContext.SetAmount(rng.NextInt(2, 5));
+            }else{
+                foodUIContext.SetAmount(1);
+            }
         }
         return foodUIContexts;
     }

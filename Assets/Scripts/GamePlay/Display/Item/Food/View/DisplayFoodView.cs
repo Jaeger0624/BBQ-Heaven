@@ -19,7 +19,12 @@ public class DisplayFoodView : MonoBehaviour, IDisplayItemView<FoodUIContext>, I
     [SerializeField] private TextMeshProUGUI foodCostText;
     [SerializeField] private TextMeshProUGUI foodRarityText;
     [SerializeField] private TextMeshProUGUI foodTasteText;
+
+    [Header("商店文本")]
+    [SerializeField] private TextMeshProUGUI foodAmountText;
     [SerializeField] private TextMeshProUGUI foodPriceText;
+
+    [Header("强化相关")]
     [LabelText("强化父物体")]
     [SerializeField] private Transform enhancementParent;
     [LabelText("强化预制体")]
@@ -68,7 +73,13 @@ public class DisplayFoodView : MonoBehaviour, IDisplayItemView<FoodUIContext>, I
                 foodPriceText.text = "";
             }
         }
-
+        if (foodAmountText!=null){
+            if (context.Count > 1){
+                foodAmountText.text = context.Count.ToString();
+            }else{
+                foodAmountText.text = "";
+            }
+        }
         if (enhancementParent!=null && enhancementViewPrefab!=null){
             ClearEnhancementViews();
             GenerateEnhancementViews();
