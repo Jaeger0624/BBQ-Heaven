@@ -251,5 +251,23 @@
         }
       }
     ]
+  },
+  {
+    "ID": "7",
+    "name": "商店老板",
+    "description": "",
+    "signedValue": 0,
+    "type": 0,
+    "tagCGAs": [],
+    "actionCGAs": []
+  },
+  {
+    "ID": "8",
+    "name": "吉格斯",
+    "description": "",
+    "signedValue": 0,
+    "type": 0,
+    "tagCGAs": [],
+    "actionCGAs": []
   }
 ]

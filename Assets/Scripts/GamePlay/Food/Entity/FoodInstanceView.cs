@@ -19,7 +19,8 @@ public class FoodInstanceView : MonoBehaviour, IController, IPointerEnterHandler
     public BoardEntity Entity => foodInstance;
     private FoodInstance foodInstance;
     [ReadOnly]
-    [SerializeField] private Image  foodImage;
+    [SerializeField] private Image foodImage;
+    [SerializeField] private Image newCreatedInfo;
     [SerializeField] private ParticleSystem buffedParticle;
     public UnityEvent OnPointerEnterEvent;
     private bool canShowPointerEnterAnim => foodInstance.state == FoodInstanceState.棋盘上;

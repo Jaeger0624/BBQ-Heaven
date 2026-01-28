@@ -12,10 +12,18 @@ public class ShopInitContext_批发商店 : ShopInitContext{
     {
         if (shop == null) {Debug.LogError("ShopInitContext_批发商店 的 shopPanel 为空"); return;}
 
+        // 1. 批发食材商品
         if (shop.foodDisplayContainer != null){
             IDisplayTask<FoodUIContext, DisplayFoodView> displayTask = new FoodDisplayTask_随机获取若干(new BuyFoodStrategy(true), 3, true);
             shop.foodDisplayContainer.SetDisplayTask(displayTask);
             shop.foodDisplayContainer.RefreshUI();
+        }
+
+        // 2. 绑定食材刷新按钮
+        if (shop.foodDisplayRefreshButton != null){
+            shop.foodDisplayRefreshButton.Bind(2, () => {
+                shop.foodDisplayContainer.RefreshUI();
+            });
         }
     }
 }

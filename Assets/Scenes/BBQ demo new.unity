@@ -5632,7 +5632,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &305980955
 RectTransform:
   m_ObjectHideFlags: 0
@@ -49174,7 +49174,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5542714010860633314, guid: b4ce9194601550841ac80421a7c7050d, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8945006514527229217, guid: b4ce9194601550841ac80421a7c7050d, type: 3}
       propertyPath: m_Name
@@ -49182,7 +49182,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8945006514527229217, guid: b4ce9194601550841ac80421a7c7050d, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -49374,6 +49374,10 @@ PrefabInstance:
     - target: {fileID: 296030127270214489, guid: 491a817260a35ec4a95ac44294e02b7c, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 296030127270214489, guid: 491a817260a35ec4a95ac44294e02b7c, type: 3}
+      propertyPath: m_MaxParticleSize
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 2223212455275670366, guid: 491a817260a35ec4a95ac44294e02b7c, type: 3}
       propertyPath: m_Name
