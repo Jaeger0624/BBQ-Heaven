@@ -73,7 +73,7 @@ public class ShopController : MonoBehaviour, IController{
         CreateShopPanel(new ShopInitContext(){
             shopType = ShopType.批发,
             shopName = "批发商店",
-            shopDescription = "批发商店",
+            shopDescription = "批发商店中的东西，都不能单买喔~",
         });
     }
 }

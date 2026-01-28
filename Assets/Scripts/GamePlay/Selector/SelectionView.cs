@@ -7,9 +7,10 @@ using UnityEngine.UI;
 
 public enum SelectionType
 {
-    Card,
-    Food,
-    Choices
+    卡牌,
+    食材,
+    选项,
+    自定义
 }
 public class SelectionView : MonoBehaviour, IController
 {
@@ -19,47 +20,91 @@ public class SelectionView : MonoBehaviour, IController
     [SerializeField] private TextMeshProUGUI effectDescriptionText;
     [SerializeField] private Image Image;
     [SerializeField] private ButtonUI button;
-    public void Bind(string Id, SelectionType selectionType)
+    public void Bind(SelectionBuildContext context)
     {
         button.OnClick.RemoveAllListeners();
-        switch (selectionType)
+        switch (context.SelectionType)
         {
-            case SelectionType.Card:
-                CardData cardData = this.GetSystem<IDataSystem>().GetCardData(Id);
+            case SelectionType.卡牌:
+                CardData cardData = this.GetSystem<IDataSystem>().GetCardData(context.Id);
                 if (cardData == null){
-                    Debug.LogError("卡牌数据不存在：" + Id);
+                    Debug.LogError("卡牌数据不存在：" + context.Id);
                     return;
                 }
-                nameText.text = cardData.Name;
-                descriptionText.text = cardData.Description;
-                effectDescriptionText.text = cardData.Description;
-                // Image.sprite = Resources.Load<Sprite>("Sprites/" + cardData.Sprite);
+                if (nameText != null){
+                    nameText.text = cardData.Name;
+                }
+                if (descriptionText != null){
+                    descriptionText.text = cardData.Description;
+                }
+                if (effectDescriptionText != null){
+                    effectDescriptionText.text = cardData.Description;
+                }
                 break;
-            case SelectionType.Food:
-                FoodData foodData = this.GetSystem<IDataSystem>().GetFoodData(Id);
+            case SelectionType.食材:
+                FoodData foodData = this.GetSystem<IDataSystem>().GetFoodData(context.Id);
                 if (foodData == null){
-                    Debug.LogError("食材数据不存在：" + Id);
+                    Debug.LogError("食材数据不存在：" + context.Id);
                     return;
                 }
-                nameText.text = foodData.Name;
-                descriptionText.text = foodData.Description;
-                effectDescriptionText.text = foodData.EffectDescription;
-                Image.sprite = Resources.Load<Sprite>("Sprites/" + foodData.Sprite);
+                if (nameText != null){
+                    nameText.text = foodData.Name;
+                }
+                if (descriptionText != null){
+                    descriptionText.text = foodData.Description;
+                }
+                if (effectDescriptionText != null){
+                    effectDescriptionText.text = foodData.EffectDescription;
+                }
+                if (Image != null){
+                    Image.sprite = Resources.Load<Sprite>("Sprites/" + foodData.Sprite);
+                }
                 break;
-            case SelectionType.Choices:
-                OptionData optionData = this.GetSystem<IDataSystem>().GetOptionData(Id);
+            case SelectionType.选项:
+                OptionData optionData = this.GetSystem<IDataSystem>().GetOptionData(context.Id);
                 if (optionData == null){
-                    Debug.LogError("选项数据不存在：" + Id);
+                    Debug.LogError("选项数据不存在：" + context.Id);
                     return;
                 }
-                nameText.text = optionData.Name;
-                descriptionText.text = "";
-                effectDescriptionText.text = optionData.EffectDescription;
-                // Image.sprite = Resources.Load<Sprite>("Sprites/" + optionData.Sprite);
+                if (nameText != null){
+                    nameText.text = optionData.Name;
+                }
+                if (descriptionText != null){
+                    descriptionText.text = "";
+                }
+                if (effectDescriptionText != null){
+                    effectDescriptionText.text = optionData.EffectDescription;
+                }
+                break;
+            case SelectionType.自定义:
+                if (nameText != null){
+                    nameText.text = context.Name;
+                }
+                if (descriptionText != null){
+                    descriptionText.text = context.Description;
+                }
+                if (effectDescriptionText != null){
+                    effectDescriptionText.text = context.EffectDescription;
+                }
                 break;
             default:
-                Debug.LogError("不支持的选择类型：" + selectionType);
+                Debug.LogError("不支持的选择类型：" + context.SelectionType);
                 break;
         }
+    }
+}
+
+
+public class SelectionBuildContext{
+    public SelectionType SelectionType;
+    public string Id;
+    public string Name;
+    public string Description;
+    public string EffectDescription;
+
+    public SelectionBuildContext(SelectionType selectionType, string id){
+        this.SelectionType = selectionType;
+        this.Id = id;
+
     }
 }

@@ -22,7 +22,12 @@ public interface IFoodSystem : ISystem, ISavable{
     void DeleteFoodFromRepository(FoodCard food);
     // 创建食材实例
     FoodInstance CreateFoodInstance(Vector2Int position, FoodCard food);
+
+    // 移除食材实例
     void RemoveFoodInstance(string guid);
+    // 消耗食材实例
+    void ConsumeFoodInstance(string guid);
+    // 放上烤串
     void PutFoodInstanceToStick(string guid);
     // 补充食物
     Dictionary<string, int> GetFoodRepositoryAmounts();
@@ -191,9 +196,9 @@ public partial class FoodSystem : AbstractSystem, IFoodSystem
             Debug.LogError($"【FoodPile】移除食材实例失败: {guid} 不存在");
             return;
         }
-        if (foodInstance.position != new Vector2Int(-1, -1) || foodInstance.state == FoodInstanceState.棋盘上){
+        if (foodInstance.position != new Vector2Int(-1, -1) && foodInstance.state == FoodInstanceState.棋盘上){
             // 从棋盘上移除
-            this.GetSystem<IBoardSystem>().SetCellInstance(foodInstance.position, null);
+            this.GetSystem<IBoardSystem>().RemoveCellInstance(foodInstance.position);
         }
         // 从棋盘实体系统中移除
         this.GetSystem<IBoardEntitySystem>().UnregisterEntity(foodInstance);
@@ -203,7 +208,27 @@ public partial class FoodSystem : AbstractSystem, IFoodSystem
 
         FoodInstances.Remove(guid);
     }
-    
+
+    // 消耗食材实例，只能是棋盘上的食材实例
+    public void ConsumeFoodInstance(string guid)
+    {
+        if (!FoodInstances.TryGetValue(guid, out FoodInstance foodInstance)){
+            Debug.LogError($"【FoodSystem】消耗食材实例失败: {guid} 不存在");
+            return;
+        }
+
+        if (foodInstance.state != FoodInstanceState.棋盘上){
+            Debug.LogError($"【FoodSystem】消耗食材实例失败: {guid} 不在棋盘上");
+            return;
+        }
+
+        this.GetSystem<IBoardSystem>().RemoveCellInstance(foodInstance.position);
+        this.GetSystem<IBoardEntitySystem>().UnregisterEntity(foodInstance);
+
+        this.SendEvent(new ConsumeFoodInstanceEvent(foodInstance));
+
+        FoodInstances.Remove(guid);
+    }
     // 放上烤串
     // 只是将食材实例的position设置为(-1, -1)，不真正移除
     public void PutFoodInstanceToStick(string guid)

@@ -94,7 +94,10 @@ public class Requirement_食材范围 : CustomerRequirement{
         int rangeAmount = maxAmount - minAmount + 1;
 
         // 范围越大越容易，星级越低
-        StarAmount = 7 - rangeAmount;
+        StarAmount = 9 - rangeAmount;
+        if (StarAmount >= 6){
+            StarAmount = 6;
+        }
     }
     protected override bool ConcreteConflicted(CustomerRequirement otherRequirement){
         return false;

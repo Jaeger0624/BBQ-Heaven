@@ -23,6 +23,7 @@ public interface IBoardSystem : ISystem{
     void ClearHighlight();
     // 和棋盘实例相关的操作
     void SetCellInstance(Vector2Int position, string instanceGuid);
+    void RemoveCellInstance(Vector2Int position);
     // 和地块相关的操作
     void SetCellTile(Vector2Int position, string tileID);
 }
@@ -102,7 +103,14 @@ public class BoardSystem : AbstractSystem, IBoardSystem
         }
         _boardStateChangedSubject.OnNext(Unit.Default);
     }
-
+    public void RemoveCellInstance(Vector2Int position){
+        BoardCell cell = GetCell(position);
+        if (cell == null){
+            Debug.LogError($"【BoardSystem】移除棋盘格子实例失败: {position} 不存在");
+            return;
+        }
+        RemoveCellInstance(position);
+    }
     public BoardCell GetStopPosition(Vector2Int origin, Vector2Int direction, int distance, out BoardEntity entity){
         Vector2Int res = origin;
         entity = null;

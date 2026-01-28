@@ -10,9 +10,11 @@ using Sirenix.Serialization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+// 这种Type不会决定逻辑区别，只是用来导向不同的预制体而已
 public enum SelectionPanelType{
-    Event,
-    Choices,
+    日间事件,
+    食材,
+    通用选择,
 }
 public class SelectionPanel : MonoBehaviour, IController
 {
@@ -25,7 +27,6 @@ public class SelectionPanel : MonoBehaviour, IController
     // 刷新次数
     [SerializeField] private TextMeshProUGUI refreshAmountText;
     [SerializeField] private ButtonUI refreshButton;
-    [SerializeField] private RectTransform buttonParent;
     private int refreshAmount = 0;
     private List<SelectionView> selectionViews = new List<SelectionView>();
     private ISelectionRequest currentRequest = null;
@@ -61,17 +62,17 @@ public class SelectionPanel : MonoBehaviour, IController
         // 2. 设置标题
         titleText.text = evt.Title;
 
-        if (evt.Choices.Count != selectionViews.Count) {Debug.LogError("选择数量不一致"); return;}
+        if (evt.Contexts.Count != selectionViews.Count) {Debug.LogError("选择数量不一致"); return;}
         // 3. 重置选择
-        for (int i = 0; i < evt.Choices.Count; i++)
+        for (int i = 0; i < evt.Contexts.Count; i++)
         {
-            var choice = evt.Choices[i];
+            var context = evt.Contexts[i];
             SelectionView selectionView = selectionViews[i];
-            selectionView.Bind(choice, evt.SelectionType);
+            selectionView.Bind(context);
             selectionView.GetComponent<ButtonUI>().OnClick.AddListener(() =>
             {
                 // 触发回调，通知 GA 恢复执行
-                evt.OnSelect?.Invoke(choice);
+                evt.OnSelect?.Invoke(context);
                 
                 // 关闭面板
                 Hide();
@@ -105,18 +106,18 @@ public class SelectionPanel : MonoBehaviour, IController
         // 3. 生成选项
         SelectRequest request = currentRequest.Create();
         titleText.text = request.Title;
-        foreach (var choice in request.Choices)
+        foreach (var context in request.Contexts)
         {
             var go = Instantiate(choicePrefab, selectionContainer);
             SelectionView selectionView = go.GetComponent<SelectionView>();
             selectionViews.Add(selectionView);
-            selectionView.Bind(choice, request.SelectionType);
+            selectionView.Bind(context);
             
             // 绑定点击事件
             go.GetComponent<ButtonUI>().OnClick.AddListener(() =>
             {
                 // A. 触发回调，通知 GA 恢复执行
-                request.OnSelect?.Invoke(choice);
+                request.OnSelect?.Invoke(context);
                 
                 // B. 关闭面板
                 Hide();
@@ -162,5 +163,12 @@ public class SelectionPanel : MonoBehaviour, IController
         foodDatas = this.GetSystem<IDataSystem>().GetAllFoodData().OrderBy(x => Guid.NewGuid()).Take(3).ToList();
 
         this.GetSystem<ISelectorSystem>().RequestSelection(new SelectionRequest_随机食材(3), 3, selectionPanelType);
+    }
+    [Button("测试：选择商店")]
+    private void Test_ShopSelection(SelectionPanelType selectionPanelType){
+        List<ShopType> shopTypes = new List<ShopType>();
+        shopTypes.Add(ShopType.普通);
+        shopTypes.Add(ShopType.批发);
+        this.GetSystem<ISelectorSystem>().RequestSelection(new SelectionRequest_选择商店(shopTypes), 0, selectionPanelType);
     }
 }

@@ -128,7 +128,7 @@ namespace cfg{
         public override void Execute(object sender, List<object> param)
         {
             List<OptionData> options = Options.Select(x => this.GetSystem<IDataSystem>().GetOptionData(x)).ToList();
-            this.GetSystem<ISelectorSystem>().RequestSelection(new SelectionRequest_效果选项(options, sender, param), 0, SelectionPanelType.Choices);
+            this.GetSystem<ISelectorSystem>().RequestSelection(new SelectionRequest_效果选项(options, sender, param), 0, SelectionPanelType.通用选择);
         }
         public override IAnimTask GetAnimTask()
         {
@@ -209,7 +209,7 @@ namespace cfg{
             }
 
             // 发起选择请求
-            this.GetSystem<ISelectorSystem>().RequestSelection(new SelectionRequest_随机卡牌(count), count, SelectionPanelType.Choices);
+            this.GetSystem<ISelectorSystem>().RequestSelection(new SelectionRequest_随机卡牌(count), count, SelectionPanelType.通用选择);
         }
         public override IAnimTask GetAnimTask() => new EmptyAnimTask();
     }

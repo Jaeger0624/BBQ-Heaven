@@ -6,16 +6,14 @@ using QFramework;
 // 通用请求选择事件
 public class SelectRequest
 {
-    public List<string> Choices;      // 候选项
+    public List<SelectionBuildContext> Contexts;      // 候选项
     public string Title;                // 标题
-    public Action<string> OnSelect;   // 核心：选择后的回调函数
-    public SelectionType SelectionType; // 选择类型
-    public SelectRequest(List<string> choices, string title, SelectionType selectionType, Action<string> onSelect)
+    public Action<SelectionBuildContext> OnSelect;   // 核心：选择后的回调函数
+    public SelectRequest(List<SelectionBuildContext> choices, string title, Action<SelectionBuildContext> onSelect)
     {
-        Choices = choices;
+        Contexts = choices;
         Title = title;
         OnSelect = onSelect;
-        SelectionType = selectionType;
     }
 }
 

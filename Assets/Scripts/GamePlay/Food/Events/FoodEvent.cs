@@ -59,5 +59,12 @@ public class UpdateFoodRepositoryAmountEvent : AbstractEvent{
         this.foodRepositoryAmounts = foodRepositoryAmounts;
     }
 }
+
+public class ConsumeFoodInstanceEvent : AbstractEvent{
+    public FoodInstance foodInstance;
+    public ConsumeFoodInstanceEvent(FoodInstance foodInstance){
+        this.foodInstance = foodInstance;
+    }
+}
 #endregion
 

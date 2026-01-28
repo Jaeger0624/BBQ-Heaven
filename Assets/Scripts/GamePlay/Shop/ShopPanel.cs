@@ -107,17 +107,77 @@ public enum ShopType{
     升级,
     盲盒
 }
+
 public class ShopInitContext{
     public ShopType shopType;
     public string shopName;
     public string shopDescription;
-}
+    public static ShopInitContext Get(ShopType shopType){
+        switch (shopType){
+            case ShopType.普通:
+                return new ShopInitContext(){
+                    shopType = ShopType.普通,
+                    shopName = "普通商店",
+                    shopDescription = "普通商店中的东西，都是普通品质的",
+                };
+            case ShopType.批发:
+                return new ShopInitContext(){
+                    shopType = ShopType.批发,
+                    shopName = "批发商店",
+                    shopDescription = "批发商店中的东西，都不能单买喔~",
+                };
+            default:
+                Debug.LogError("不支持的商店类型：" + shopType);
+                return null;
+        }
+    }
+    public static ShopInitContext GetRandom(Rng rng){
+        List<ShopInitContext> shopInitContexts = new List<ShopInitContext>
+        {
+            new ShopInitContext()
+            {
+                shopType = ShopType.普通,
+                shopName = "普通商店",
+                shopDescription = "普通商店中的东西，都是普通品质的",
+            },
+            new ShopInitContext()
+            {
+                shopType = ShopType.批发,
+                shopName = "批发商店",
+                shopDescription = "批发商店中的东西，都不能单买喔~",
+            },
+            // new ShopInitContext()
+            // {
+            //     shopType = ShopType.折扣,
+            //     shopName = "折扣商店",
+            //     shopDescription = "折扣商店中的东西，都有折扣喔~",
+            // },
+            // new ShopInitContext()
+            // {
+            //     shopType = ShopType.收藏,
+            //     shopName = "收藏商店",
+            //     shopDescription = "收藏商店中的东西，都是收藏品喔~",
+            // },
+            // new ShopInitContext()
+            // {
+            //     shopType = ShopType.黑市,
+            //     shopName = "黑市商店",
+            //     shopDescription = "黑市商店中的东西，都是黑市品喔~",
+            // },
+            // new ShopInitContext()
+            // {
+            //     shopType = ShopType.升级,
+            //     shopName = "升级商店",
+            //     shopDescription = "升级商店中的东西，都是升级品喔~",
+            // },
+            // new ShopInitContext()
+            // {
+            //     shopType = ShopType.盲盒,
+            //     shopName = "盲盒商店",
+            //     shopDescription = "盲盒商店中的东西，都是盲盒品喔~",
+            // }
+        };
+        return rng.PickOne(shopInitContexts);
+    }
 
-
-// 用来指导商店的生成信息，也是区分商店的类型的重要信息
-public class ShopInfo{
-    public ShopItemType shopItemType;
-    public int shopItemAmount;
-    // 折扣概率
-    public bool isDiscount;
 }
