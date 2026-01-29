@@ -18,7 +18,6 @@ public class FoodSelectController : MonoBehaviour, IController
         // 在有烤串被选中的情况下，如果点击食材
         if (this.GetSystem<IStickSystem>().selectedStick != null && Input.GetMouseButtonDown(0)){
             if (this.GetSystem<BlackboardSystem>().hoveredCell == null) return;
-            
         }
     }
 }

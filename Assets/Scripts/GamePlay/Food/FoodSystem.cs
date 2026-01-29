@@ -22,7 +22,6 @@ public interface IFoodSystem : ISystem, ISavable{
     void DeleteFoodFromRepository(FoodCard food);
     // 创建食材实例
     FoodInstance CreateFoodInstance(Vector2Int position, FoodCard food);
-
     // 移除食材实例
     void RemoveFoodInstance(string guid);
     // 消耗食材实例
@@ -44,7 +43,6 @@ public partial class FoodSystem : AbstractSystem, IFoodSystem
     private Dictionary<string, FoodCard> foodRepositorys = new Dictionary<string, FoodCard>();  // 食材仓库字典
     public Dictionary<string, FoodCard> FoodRepositorys() => foodRepositorys;
     private Dictionary<string, FoodInstance> FoodInstances = new Dictionary<string, FoodInstance>();
-
     // 当前剩余补充机会
     public FoodPile foodPile = new FoodPile(new List<FoodCard>());
     public FoodPile FoodPile => foodPile;

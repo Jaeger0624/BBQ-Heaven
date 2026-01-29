@@ -19,7 +19,6 @@ public class FoodAnimController : MonoBehaviour, IController
         this.RegisterEvent<FoodInstanceExecuteActionEvent>(OnFoodInstanceExecuteAction).UnRegisterWhenDisabled(this);
     }
 
-
     /// <summary>
     /// 食材实例视图动画事件
     /// </summary>

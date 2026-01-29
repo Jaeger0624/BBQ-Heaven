@@ -30,14 +30,13 @@ namespace cfg{
             if (string.IsNullOrEmpty(Id))
             {
                 int res = foodInstance.GetSurroundingFoodInstances().Count;
-                // Debug.Log($"【DV_周围食材数】食材实例: {foodInstance.name}, 周围食材数: {res}");
                 return res;
             }
             else{
                 // 获取指定ID的食材周围食材数
                 List<FoodInstance> surroundingFoodInstances = foodInstance.GetSurroundingFoodInstances().Where(x => x.food.foodData.ID == Id).ToList();   
                 int res = surroundingFoodInstances.Count;
-                // Debug.Log($"【DV_周围食材数】食材实例: {foodInstance.name}, 周围{Id}食材数: {res}");
+
                 return res;
             }
         }

@@ -14,8 +14,6 @@ public class GameState_日间活动 : AbstractGameState
     public override void OnExit(){
         Debug.Log("【GameState】退出日间活动状态");
         
-        // this.SendEvent(new HideShopEvent_日间商店());
-
         this.SendEvent(new CloseShopPanelEvent());
     }
 }

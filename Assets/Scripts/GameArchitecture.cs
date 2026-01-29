@@ -2,7 +2,7 @@ using System.Text;
 using QFramework;
 using UnityEngine;
 
-public class GameArchitecture : Architecture<GameArchitecture>  
+public class GameArchitecture : Architecture<GameArchitecture>
 {
     /// <summary>
     /// 初始化架构
@@ -14,8 +14,6 @@ public class GameArchitecture : Architecture<GameArchitecture>
         // 游戏系统的初始化应该通过 InitGame() 或 ResetGame() 显式调用
         InitGame();
     }
-
-
     public static void ResetGame(){
         // 先反初始化
         if (mArchitecture != null)
@@ -25,12 +23,12 @@ public class GameArchitecture : Architecture<GameArchitecture>
         }
         // 重新初始化架构（这会创建新的架构实例并调用 Init()）
         InitArchitecture();
-        // InitArchitecture() 中的 Init() 会调用 InitGame()，所以这里不需要再次调用
     }
 
     public static void InitGame(){
         Debug.Log("【GameArchitecture】初始化游戏系统");
         StringBuilder sb = new StringBuilder("系统初始化列表");
+
         // 注册系统
         Interface.RegisterSystem<ISaveSystem>(new SaveSystem());  // 存档系统
         sb.Append("\nSaveSystem - 存档系统");
@@ -94,7 +92,6 @@ public class GameArchitecture : Architecture<GameArchitecture>
         sb.Append("\nBuffSystem - Buff系统");
         Interface.RegisterSystem<IGuideSystem>(new GuideSystem());  // 引导系统
         sb.Append("\nGuideSystem - 引导系统");
-        // Debug.Log(sb.ToString());
     }
 
     protected override void OnDeinit()

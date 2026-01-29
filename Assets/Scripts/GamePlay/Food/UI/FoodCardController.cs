@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 
 public class FoodCardController : MonoBehaviour, IController, ICanSendEvent{
+
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
     [SerializeField] private TextMeshProUGUI foodCardAmountText;
     [SerializeField] private Transform foodCardContainer;
@@ -15,22 +16,17 @@ public class FoodCardController : MonoBehaviour, IController, ICanSendEvent{
     {
         this.RegisterEvent<FoodCardPileUpdateEvent>(OnFoodCardPileUpdate);
         this.RegisterEvent<DrawFoodCardEvent>(OnDrawFoodCardEvent);
-
     }
-
     private void OnDestroy() 
     {
         this.UnRegisterEvent<FoodCardPileUpdateEvent>(OnFoodCardPileUpdate);
         this.UnRegisterEvent<DrawFoodCardEvent>(OnDrawFoodCardEvent);
-
         DOTween.Kill(this);
     }
-
     private void OnFoodCardPileUpdate(FoodCardPileUpdateEvent evt)
     {
         UpdateVisual();
     }
-
     private void UpdateVisual()
     {
         if (foodCardAmountText == null) {Debug.LogError("FoodCardController 的 foodCardAmountText 为空"); return;}
@@ -84,7 +80,6 @@ public class FoodCardController : MonoBehaviour, IController, ICanSendEvent{
     {
         this.GetSystem<IFoodSystem>().RefreshFoodPile();
     }
-
     public void OnButtonEnter(){
         if (this.GetSystem<IFoodSystem>().FoodPile.JustRefreshed) return;
         this.SendEvent(new TimePreviewEvent(this.GetSystem<IFoodSystem>().RefreshFoodCost));
