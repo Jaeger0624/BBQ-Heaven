@@ -81,15 +81,9 @@ public class DealSystem : AbstractSystem, IDealSystem
 		if (bbq == null || customer == null) return;
 		this.SendEvent(new DealStartedEvent(bbq, customer));
 
-		// // 开启满意度条
-		// this.GetSystem<IAnimationSystem>().Append(new SequenceAnimTask(new List<IAnimTask>{
-		// 	new ActionAnimTask(() => this.SendEvent(new ShowStatisBarEvent())),
-		// 	new DelayAnimTask(0.5f, true),
-		// }));
-
 		// 重置满意度
 		ResetSatisfaction();
-		
+		customer.isServed = true;
 
 		// 创建上下文
 		DealContext context = new DealContext(bbq, customer, this.GetSystem<ICustomerSystem>().Satisfaction);
@@ -245,12 +239,6 @@ public class DealSystem : AbstractSystem, IDealSystem
 
 		// 增加顾客的声望值
 		this.GetSystem<IPCSystem>().AddReputation(context.Customer.reputation);
-
-		// // 关闭满意度条
-		// this.GetSystem<IAnimationSystem>().Append(new SequenceAnimTask(new List<IAnimTask>{
-		// 	new DelayAnimTask(0.5f, true),
-		// 	new ActionAnimTask(() => this.SendEvent(new HideStatisBarEvent())),
-		// }));
 		
 		// 消耗资源：食材实例彻底移除
 		foreach (var food in context.BBQ.foodInstances)

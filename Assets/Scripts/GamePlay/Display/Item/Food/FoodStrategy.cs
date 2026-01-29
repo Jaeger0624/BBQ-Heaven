@@ -55,7 +55,7 @@ public class BuyFoodStrategy : ItemInteractStrategyBase<FoodUIContext, DisplayFo
         if (data.RuntimeFood == null) {Debug.LogError("BuyFoodStrategy 的 data.RuntimeFood 为空"); return;}
 
         // 若价格不够
-        if (this.GetSystem<IEconomySystem>().coin.Value < data.Price){
+        if (this.GetSystem<IEconomySystem>().coin.Value < data.PriceContext.Price){
             Debug.Log("金币不足，无法购买");
             return;
         }
@@ -73,7 +73,7 @@ public class BuyFoodStrategy : ItemInteractStrategyBase<FoodUIContext, DisplayFo
         }
 
         // 2. 扣除金币
-        this.GetSystem<IEconomySystem>().CostCoin(data.Price);
+        this.GetSystem<IEconomySystem>().CostCoin(data.PriceContext.Price);
 
         // 3. 隐藏自身
         itemView.gameObject.SetActive(false);

@@ -14,7 +14,8 @@ public class ShopInitContext_批发商店 : ShopInitContext{
 
         // 1. 批发食材商品
         if (shop.foodDisplayContainer != null){
-            IDisplayTask<FoodUIContext, DisplayFoodView> displayTask = new FoodDisplayTask_随机获取若干(new BuyFoodStrategy(true), 3, true);
+            IDisplayTask<FoodUIContext, DisplayFoodView> displayTask = FoodDisplayTask_随机获取若干.Build(ShopType.批发);
+
             shop.foodDisplayContainer.SetDisplayTask(displayTask);
             shop.foodDisplayContainer.RefreshUI();
         }

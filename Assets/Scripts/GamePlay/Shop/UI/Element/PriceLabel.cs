@@ -4,15 +4,24 @@ using UnityEngine.UI;
 
 public class PriceLabel : MonoBehaviour{
     // 是否有打折
-    private bool isDiscount = false;
     [SerializeField] private TextMeshProUGUI priceText;
     [SerializeField] private TextMeshProUGUI originalPriceText;
     [SerializeField] private TextMeshProUGUI discountPriceText;
     [SerializeField] private Image discountImage;
-    public void SetPrice(int price){
-        priceText.text = price.ToString();
-        if (isDiscount){
-            discountImage.gameObject.SetActive(true);
+    public void SetPrice(PriceContext priceContext){
+
+        if (priceContext.IsDiscount){
+            priceText.text = $"<s>{priceContext.OriginalPrice}</s> {priceContext.Price}<color=yellow>Q</color>";
         }
+        else{
+            // originalPriceText.gameObject.SetActive(false);
+            priceText.text = $"{priceContext.Price}<color=yellow>Q</color>";
+        }
+    }
+    public void Hide(){
+        gameObject.SetActive(false);
+    }
+    public void Show(){
+        gameObject.SetActive(true);
     }
 }

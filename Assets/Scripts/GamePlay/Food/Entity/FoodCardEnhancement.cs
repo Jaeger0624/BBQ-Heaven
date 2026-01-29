@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Sirenix.Serialization;
 
 [Serializable]
@@ -16,6 +17,16 @@ public abstract class FoodCardEnhancement
 
     // 【实例级强化】影响生成实例后的属性 (例如：初始美味度+1)
     public virtual void OnInstanceCreated(FoodInstance instance) { }
+
+    public static FoodCardEnhancement GetRandomEnhancement(Rng rng){
+        List<FoodCardEnhancement> enhancements = new List<FoodCardEnhancement>
+        {
+            new Enhancement_双重(),
+            new Enhancement_多重(),
+            new Enhancement_省时(),
+        };
+        return rng.PickOne(enhancements);
+    }
 }
 
 [Serializable]

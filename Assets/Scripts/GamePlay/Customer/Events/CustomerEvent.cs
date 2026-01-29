@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using QFramework;
+using UnityEngine;
 #region 事件
 public class AddCustomerEvent : AbstractEvent{
     public List<Customer> customers = new List<Customer>();
@@ -70,3 +71,30 @@ public class UnhighlightCustomersEvent : AbstractEvent{
 }
 
 #endregion
+
+
+public class ChangeCustomerPatienceEvent : AbstractEvent{
+    public Customer customer;
+    public int value;
+    public ChangeCustomerPatienceEvent(Customer customer, int value){
+        this.customer = customer;
+        this.value = value;
+    }
+}
+
+public class ChangeCustomerPatienceEvent_飘字 : AbstractEvent, IFloatingTextEvent{
+    public Customer customer;
+    public int value;
+    public Transform targetTransform;
+    public ChangeCustomerPatienceEvent_飘字(Customer customer, int value, Transform targetTransform){
+        this.customer = customer;
+        this.value = value;
+        this.targetTransform = targetTransform;
+    }
+    public string GetDescription(){
+        return $"{customer.name} 的等待值增加了 {value}";
+    }
+    public Vector3 GetPosition(){
+        return targetTransform.position;
+    }
+}

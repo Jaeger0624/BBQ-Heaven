@@ -208,9 +208,11 @@ public class CustomerSystem_新 : AbstractCustomerSystem
         if (customers.Count == 0){return;}
 
         customers.ForEach(customer => {
-
             customerActionHandler.HandleCustomerAction(new List<Customer>{customer}, CustomerActionType.离开时, new List<object>());
-
+            // 若未服务，扣除声望
+            if (!customer.isServed){
+                this.GetSystem<IPCSystem>().AddReputation(-customer.reputationPenalty);
+            }
             // 1. 移除顾客
             OrderingCustomers.Remove(customer);
             // 2. 添加到已离开的顾客列表
@@ -218,16 +220,11 @@ public class CustomerSystem_新 : AbstractCustomerSystem
             // 3. 设置顾客状态
             customer.SetState(CustomerState.Leaved);
         });
-
-
-        
         // 5. 发送移除顾客事件，播放离开动画等
         this.SendEvent<RemoveCustomerEvent>(new RemoveCustomerEvent(customers));
-
         // 6. 对所有未离开的顾客，触发其他顾客离开时动作
         List<Customer> customersNotLeaved = OrderingCustomers.Where(customer => !customers.Contains(customer)).ToList();
         customerActionHandler.HandleCustomerAction(customersNotLeaved, CustomerActionType.其他顾客离开时, new List<object>());
-
 
         List<Customer> customersToCreate = new();
         foreach (var customer in customers){
@@ -267,6 +264,8 @@ public class CustomerSystem_新 : AbstractCustomerSystem
 
         preScheduledCustomers.Add((scheduleInfo.customer, arriveTime));
     }
+
+
 
 
 }

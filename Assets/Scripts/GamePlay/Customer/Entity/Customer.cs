@@ -24,10 +24,14 @@ public class Customer : ICanGetSystem, ICanRegisterEvent, ICanSendEvent{
     public ReactiveProperty<int> PatienceNow;
     // 顾客状态
     public CustomerState state = CustomerState.Waiting;
+    // 是否已服务
+    public bool isServed = false;
     // 是否即将离开
     public bool isAboutToLeave = false;
     // 顾客的声望值
     public int reputation = 2;
+    // 顾客的声望值惩罚
+    public int reputationPenalty = 1;
 
     // 【新增：顾客需求】
     // 顾客
@@ -136,11 +140,3 @@ public enum CustomerState{
 }
 
 
-public class ChangeCustomerPatienceEvent : AbstractEvent{
-    public Customer customer;
-    public int value;
-    public ChangeCustomerPatienceEvent(Customer customer, int value){
-        this.customer = customer;
-        this.value = value;
-    }
-}

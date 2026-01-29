@@ -39,7 +39,7 @@ public class OrderController : MonoBehaviour, IController, ICanSendEvent
             }
         }
         OrderView orderView = orderViews[e.customer.guid];
-        FloatingTextManager.Instance.Show(orderView.transform.position, text, Color.white, new FloatingTextInfo(text, 1.2f, Color.white, Vector2.right));
+        this.SendEvent(new ChangeCustomerPatienceEvent_飘字(e.customer, e.value, orderView.transform));
     }
     private void OnAddCustomerEvent(AddCustomerEvent e){
         e.customers.ForEach(customer => {

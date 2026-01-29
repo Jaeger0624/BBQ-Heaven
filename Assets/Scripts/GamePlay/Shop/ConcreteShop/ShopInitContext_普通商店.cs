@@ -15,7 +15,7 @@ public class ShopInitContext_普通商店 : ShopInitContext
 
         // 1. 设置食材商品
         if (shop.foodDisplayContainer != null){
-            IDisplayTask<FoodUIContext, DisplayFoodView> displayTask = new FoodDisplayTask_随机获取若干(new BuyFoodStrategy(false), 3, false);
+            IDisplayTask<FoodUIContext, DisplayFoodView> displayTask = FoodDisplayTask_随机获取若干.Build(ShopType.普通);
             shop.foodDisplayContainer.SetDisplayTask(displayTask);
             shop.foodDisplayContainer.RefreshUI();
         }

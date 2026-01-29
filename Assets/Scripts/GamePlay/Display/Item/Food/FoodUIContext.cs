@@ -14,7 +14,7 @@ public class FoodUIContext
     public bool IsOwned => RuntimeFood != null;  // 仓库用：是否拥有
     public int Count { get; private set; } // 数量展示
 
-    public int Price { get; private set; } = -1; // 价格 = -1 表示没有价格
+    public PriceContext PriceContext { get; private set; } = null;
     // --- 构造函数 ---
     
     // 场景 A: 仓库/商店 (通过 Food 构建)
@@ -35,8 +35,8 @@ public class FoodUIContext
         Count = 0;
     }
 
-    public void SetPrice(int price){
-        Price = price;
+    public void SetPrice(PriceContext priceContext){
+        PriceContext = priceContext;
     }
     public void SetAmount(int amount){
         Count = amount;

@@ -22,7 +22,7 @@ public class DisplayFoodView : MonoBehaviour, IDisplayItemView<FoodUIContext>, I
 
     [Header("商店文本")]
     [SerializeField] private TextMeshProUGUI foodAmountText;
-    [SerializeField] private TextMeshProUGUI foodPriceText;
+    [SerializeField] private PriceLabel PriceLabel;
 
     [Header("强化相关")]
     [LabelText("强化父物体")]
@@ -65,12 +65,12 @@ public class DisplayFoodView : MonoBehaviour, IDisplayItemView<FoodUIContext>, I
                     break;
             }
         }
-        if (foodPriceText!=null){
-            if (context.Price != -1){
-                foodPriceText.text = $"{context.Price}<color=yellow>Q</color>";
+        if (PriceLabel!=null){
+            if (context.PriceContext != null){
+                PriceLabel.SetPrice(context.PriceContext);
             }
             else{
-                foodPriceText.text = "";
+                PriceLabel.Hide();
             }
         }
         if (foodAmountText!=null){

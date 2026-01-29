@@ -11,8 +11,10 @@ public class FloatingTextHandler : MonoBehaviour, IController
     public void OnEnable() {
         this.RegisterEvent<CollisionEntityEvent>(OnCollisionEntityEvent).UnRegisterWhenDisabled(this);
 
-        
+        this.RegisterEvent<ChangeCustomerPatienceEvent_飘字>(OnChangeCustomerPatienceEvent_飘字).UnRegisterWhenDisabled(this);
     }
+
+    // 实体碰撞跳字
     private void OnCollisionEntityEvent(CollisionEntityEvent evt)
     {
         BoardEntity entity = evt.initiator;
@@ -25,4 +27,9 @@ public class FloatingTextHandler : MonoBehaviour, IController
             Debug.LogError($"【FloatingTextHandler】实体视图不存在: {entity.guid}");
         }
     }
+
+    // 顾客等待值变化跳字
+    private void OnChangeCustomerPatienceEvent_飘字(ChangeCustomerPatienceEvent_飘字 evt)
+    => FloatingTextManager.Instance.Show(evt.GetPosition(), evt.GetDescription(), Color.white, new FloatingTextInfo(evt.GetDescription(), 1.2f, Color.white, Vector2.right));
+    
 }

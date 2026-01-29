@@ -1,13 +1,15 @@
+using System.Collections.Generic;
 using QFramework;
 using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using UniRx;
 using UnityEngine;
 
-public class ShopController : MonoBehaviour, IController{
+public class ShopController : SerializedMonoBehaviour, IController{
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
     [SerializeField] private Transform shopPanelParent;
-    [SerializeField] private GameObject shopPanel_普通商店_Prefab;
-    [SerializeField] private GameObject shopPanel_批发商店_Prefab;
+    [OdinSerialize]
+    public Dictionary<ShopType, GameObject> shopPanelPrefabs = new Dictionary<ShopType, GameObject>();
     private ShopPanel currentShopPanel;
     void OnEnable()
     {
@@ -26,16 +28,14 @@ public class ShopController : MonoBehaviour, IController{
     private void CreateShopPanel(ShopInitContext shopInitContext){
         ShopPanel shopPanel = null;
 
-        switch (shopInitContext.shopType){
-            case ShopType.普通:
-                shopPanel = Instantiate(shopPanel_普通商店_Prefab, shopPanelParent).GetComponent<ShopPanel>();
-
-                break;
-            case ShopType.批发:
-                shopPanel = Instantiate(shopPanel_批发商店_Prefab, shopPanelParent).GetComponent<ShopPanel>();
-                break;
+        if (shopPanelPrefabs.ContainsKey(shopInitContext.shopType)){
+            shopPanel = Instantiate(shopPanelPrefabs[shopInitContext.shopType], shopPanelParent).GetComponent<ShopPanel>();
+            shopPanel.uiPanel.ForceHide();
         }
-        shopPanel.uiPanel.ForceHide();
+        else{
+            Debug.LogError("【ShopController】不支持的商店类型: " + shopInitContext.shopType);
+            return;
+        }
 
 
         // 过2帧后初始化
@@ -60,13 +60,10 @@ public class ShopController : MonoBehaviour, IController{
             Debug.LogError("【ShopController】当前商店面板为空");
         }
     }
+
     [Button]
-    public void Test_标准商店(){
-        CreateShopPanel(new ShopInitContext_普通商店());
-    }
-    [Button]
-    public void Test_批发商店(){
-        CreateShopPanel(new ShopInitContext_批发商店());
+    public void Test_CreateShopPanel(ShopType shopType){
+        CreateShopPanel(ShopInitContext.Get(shopType));
     }
 }
 

@@ -60,7 +60,6 @@ public class ShopPanel : MonoBehaviour, IController, ICanSendEvent{
     }
 }
 
-// 不同商店刷新价格不一样也很关键
 public enum ShopType{
     普通,
     批发,
@@ -68,5 +67,6 @@ public enum ShopType{
     收藏,
     黑市,
     升级,
-    盲盒
+    盲盒,
+    强化,
 }

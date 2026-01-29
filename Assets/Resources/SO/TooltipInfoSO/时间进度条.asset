@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c7f20cef6680c34a87de54419efd3b8, type: 3}
+  m_Name: "\u65F6\u95F4\u8FDB\u5EA6\u6761"
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  tooltipInfos:
+  - text: "\u65F6\u95F4\u8FDB\u5EA6\u6761"
+    size: 48
+    needResize: 1
+  - text: "\u4ECA\u65E5\u7ECF\u8425\u8FDB\u5EA6\u7684\u76F4\u89C2\u663E\u793A"
+    size: 24
+    needResize: 1
+  - text: "\u4E32\u4E32\u3001\u4F7F\u7528\u5361\u724C\u3001\u8865\u5145\u98DF\u6750\u4ED3\u50A8\u7B49\u64CD\u4F5C"
+    size: 24
+    needResize: 1
+  - text: "\u90FD\u4F1A\u6D88\u8017\u65F6\u95F4\uFF0C\u9700\u8981\u5408\u7406\u5206\u914D\uFF01"
+    size: 24
+    needResize: 1

@@ -17,30 +17,17 @@ public class Requirement_食材连续 : CustomerRequirement{
             return false;
         }
         // 如果数量都不满足，直接返回false
-        if (dealContext.BBQ.foodInstances.Count(x => x.food.foodData.Type == foodType) < targetAmount){
+        if (dealContext.BBQ.foodInstances.Count < targetAmount){
+            Debug.Log($"食材数量不满足：{dealContext.BBQ.foodInstances.Count} < {targetAmount}");
             return false;
         }
         int maxAmount = 0;
         if (specificType){
-            // 若有4个食材，判断3个连续，需要2轮
-            int round = dealContext.BBQ.foodInstances.Count - targetAmount + 1;
-            for (int i = 0; i < round; i++){
-                string id = dealContext.BBQ.foodInstances[i].food.foodData.ID;
-                for (int j = 0; j < targetAmount; j++){
-                    if (dealContext.BBQ.foodInstances[i + j].food.foodData.ID != id){
-                        break;
-                    }
-                    if (j == targetAmount - 1){
-                        return true;
-                    }
-                }
-            }
-        }
-        else{
             foreach (FoodInstance foodInstance in dealContext.BBQ.foodInstances){
                 if (foodInstance.food.foodData.Type == foodType){
                     maxAmount += 1;
                     if (maxAmount >= targetAmount){
+                        Debug.Log($"食材连续：{foodInstance.food.foodData.Type} {maxAmount} >= {targetAmount}");
                         return true;
                     }
                     continue;
@@ -50,6 +37,23 @@ public class Requirement_食材连续 : CustomerRequirement{
                 }
             }
         }
+        else{
+            // 若有4个食材，判断3个连续，需要2轮
+            int round = dealContext.BBQ.foodInstances.Count - targetAmount + 1;
+            for (int i = 0; i < round; i++){
+                string id = dealContext.BBQ.foodInstances[i].food.foodData.ID;
+                for (int j = 0; j < targetAmount; j++){
+                    if (dealContext.BBQ.foodInstances[i + j].food.foodData.ID != id){
+                        break;
+                    }
+                    if (j == targetAmount - 1){
+                        Debug.Log($"非具体类型，且食材连续：{id}");
+                        return true;
+                    }
+                }
+            }
+        }
+        Debug.Log($"食材不连续");
         return false;
     }
     protected override void InternalInit(Customer customer, List<object> context, Rng rng){

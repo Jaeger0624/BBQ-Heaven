@@ -18,17 +18,13 @@ public abstract class ShopInitContext{
                 return new ShopInitContext_普通商店();
             case ShopType.批发:
                 return new ShopInitContext_批发商店();
+            case ShopType.折扣:
+                return new ShopInitContext_折扣商店();
+            case ShopType.强化:
+                return new ShopInitContext_强化商店();
             default:
                 Debug.LogError("不支持的商店类型：" + shopType);
                 return null;
         }
-    }
-    public static ShopInitContext GetRandom(Rng rng){
-        List<ShopInitContext> shopInitContexts = new List<ShopInitContext>
-        {
-            new ShopInitContext_普通商店(),
-            new ShopInitContext_批发商店()
-        };
-        return rng.PickOne(shopInitContexts);
     }
 }
