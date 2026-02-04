@@ -92,7 +92,7 @@ public class ChangeCustomerPatienceEvent_飘字 : AbstractEvent, IFloatingTextEv
         this.targetTransform = targetTransform;
     }
     public string GetDescription(){
-        return $"{customer.name} 的等待值增加了 {value}";
+        return $"{customer.meta.name} 的等待值增加了 {value}";
     }
     public Vector3 GetPosition(){
         return targetTransform.position;

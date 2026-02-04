@@ -25,9 +25,9 @@ public class CustomerView : MonoBehaviour{
             return;
         }
 
-        image.sprite = currentCustomer.customerLook;
+        image.sprite = currentCustomer.meta.customerLook;
         image.gameObject.SetActive(true);
-        nameText.text = currentCustomer.name;
+        nameText.text = currentCustomer.meta.name;
 
         UpdateDescription();
     }
@@ -44,11 +44,11 @@ public class CustomerView : MonoBehaviour{
     {
         List<TooltipInfo> tooltipInfos = new List<TooltipInfo>
         {
-            new TooltipInfo($"<size=36>{currentCustomer.name}</size>")
+            new TooltipInfo($"<size=36>{currentCustomer.meta.name}</size>")
         };
         
 
-        currentCustomer.customerTags.ForEach(tag => {
+        currentCustomer.meta.customerTags.ForEach(tag => {
             tooltipInfos.Add(new TooltipInfo($"<size=24>{tag.name}</size>"));
         });
         return tooltipInfos;

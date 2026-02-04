@@ -53,7 +53,7 @@ public class OrderView : MonoBehaviour, ICanSendEvent, IShowTooltip
 
 
     private void UpdateCustomerTags(){
-        string tags = string.Join(", ", customer.customerTags.Select(x => x.name));
+        string tags = string.Join(", ", customer.meta.customerTags.Select(x => x.name));
         customerTagsText.text = $"<color=yellow>Tag：</color>\n{tags}";
     }
     private void UpdatePatience(){
@@ -87,7 +87,7 @@ public class OrderView : MonoBehaviour, ICanSendEvent, IShowTooltip
     public List<TooltipInfo> GetTooltipInfo()
     {
         List<TooltipInfo> tooltipInfos = new List<TooltipInfo>();
-        foreach (var customerTag in customer.customerTags){
+        foreach (var customerTag in customer.meta.customerTags){
             tooltipInfos.Add(new TooltipInfo($"<size=44>{customerTag.name}</size>\n<size=32>{customerTag.description}</size>"));
         }
         return tooltipInfos;

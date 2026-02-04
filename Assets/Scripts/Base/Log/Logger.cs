@@ -1,7 +1,8 @@
 using System.Runtime.CompilerServices;
+using QFramework;
 using UnityEngine;
 
-public interface ILogger{
+public interface ILogger : IUtility{
     void LogInfo(string message);
     void LogWarning(string message);
     void LogError(string message);

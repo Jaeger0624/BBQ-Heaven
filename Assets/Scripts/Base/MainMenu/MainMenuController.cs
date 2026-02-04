@@ -33,7 +33,7 @@ public class MainMenuController : MonoBehaviour, IController, ICanSendEvent
     {
         GameArchive gameArchive = this.GetSystem<ISaveSystem>().GetGameArchive();
         LoadingManger.Instance.LoadSceneAsync("BBQ demo new", () => {
-            Debug.Log("【场景加载】完成");
+            LogKit.I("【场景加载】完成");
             Observable.Timer(TimeSpan.FromSeconds(0.2f)).Subscribe(_ => {
                 this.GetSystem<IProcessSystem>().LoadGame(gameArchive);
             }).AddTo(LoadingManger.Instance.gameObject);
@@ -51,7 +51,7 @@ public class MainMenuController : MonoBehaviour, IController, ICanSendEvent
     }
     private void OnExitButtonClick()
     {
-        Debug.Log("【MainMenu】退出游戏");
+        LogKit.I("【MainMenu】退出游戏");
         Application.Quit();
     }
 

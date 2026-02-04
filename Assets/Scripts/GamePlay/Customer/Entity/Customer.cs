@@ -11,13 +11,11 @@ using UnityEngine;
 /// <summary>
 /// 顾客实例类 - 实例层
 /// </summary>
+[Serializable]
 public class Customer : ICanGetSystem, ICanRegisterEvent, ICanSendEvent{
     public readonly string guid;
-    public string name { get; private set; } = "";
-    // public CustomerLook customerLook;
-    public Sprite customerLook;
-    // 顾客标签
-    public List<ICustomerTag> customerTags;
+    public string name => meta.name;
+    public MetaCustomer meta;
     // 耐心阈值 
     public ReactiveProperty<int> PatienceMax;
     // 当前耐心值
@@ -36,19 +34,12 @@ public class Customer : ICanGetSystem, ICanRegisterEvent, ICanSendEvent{
     // 【新增：顾客需求】
     // 顾客
     [OdinSerialize] public List<CustomerRequirement> requirements;
-    public Customer(string name, int patienceMax, int reputation){
+    public Customer(MetaCustomer metaCustomer, int patienceMax, int reputation){
         this.guid = Guid.NewGuid().ToString();
-        this.name = name;
+        this.meta = metaCustomer;
         this.PatienceMax = new ReactiveProperty<int>(patienceMax);
         this.PatienceNow = new ReactiveProperty<int>(0);
         this.reputation = reputation;
-        // 设置一下喜好
-
-        GenerateCustomerTags();
-
-        // this.customerLook = this.GetSystem<ICustomerSystem>().CustomerLookMaker.GetCustomerLook(name, new GetCustomerLookStrategy_纯随机());
-        Rng rng = this.GetSystem<IRngSystem>().GetSubRng<ICustomerSystem>();
-        this.customerLook = rng.PickOne(SettingManager.Instance.ArtSettings.CustomerSprites.sprites);
 
         // 生成要求
         RefreshRequirements();
@@ -79,7 +70,7 @@ public class Customer : ICanGetSystem, ICanRegisterEvent, ICanSendEvent{
 
     public ReviewResult Review(DealContext context){
         if (requirements == null || requirements.Count == 0){
-            Debug.LogError($"【Customer】{name} 要求为空，重新生成");
+            Debug.LogError($"【Customer】{meta.name} 要求为空，重新生成");
             RefreshRequirements();
         }
 
@@ -112,16 +103,6 @@ public class Customer : ICanGetSystem, ICanRegisterEvent, ICanSendEvent{
         requirements = builder.GenerateGroup(this);
     }
 
-    public void GenerateCustomerTags(){
-        customerTags = new List<ICustomerTag>();
-        Rng rng = this.GetSystem<IRngSystem>().GetSubRng<ICustomerSystem>();
-        List<CustomerTagData> tagDatas = this.GetSystem<IDataSystem>().GetAllCustomerTagData();
-
-        // 随机选取一定数量的标签
-        List<CustomerTagData> selectedTagDatas = rng.PickMany(tagDatas, 1);
-
-        customerTags.Add(CustomerTagFactory.CreateCustomerTag(selectedTagDatas[0]));
-    }
 }
 
 public enum CustomerState{

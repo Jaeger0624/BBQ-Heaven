@@ -12,7 +12,7 @@ public class ExitButton : MonoBehaviour
 
     private void OnExitButtonClick()
     {
-        Debug.Log("【ExitButton】退出游戏");
+        LogKit.I("【ExitButton】退出游戏");
         // 退出游戏
         Application.Quit();
     }

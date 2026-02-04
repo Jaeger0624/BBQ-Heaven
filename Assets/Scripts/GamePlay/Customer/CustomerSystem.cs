@@ -12,13 +12,13 @@ public interface ICustomerSystem : ISystem, ICanSendQuery{
     #region field
     List<Customer> OrderingCustomers { get; }
     CustomerSatisfaction Satisfaction { get; set; }
-    CustomerLookMaker CustomerLookMaker { get; set; }
     CustomerActionHandler CustomerActionHandler { get; }
+    // 顾客日志
+    CustomerRecorder Recorder { get; }
     #endregion
     #region logic
     // 生成每日顾客序列后即时添加顾客，如果isPreScheduled为true，则是在每日生成前
     public void CreateCustomer(List<Customer> customers);
-    public void PreScheduleCustomer(ScheduleInfo scheduleInfo);
     // 排队
     void EnqueueCustomer(Customer customer);
     // 补位
@@ -30,60 +30,53 @@ public interface ICustomerSystem : ISystem, ICanSendQuery{
     #region query
     bool IsMaxOrderAmount();
     int GetAmount(CustomerState state);
-    // 获取预定的顾客
-    List<(Customer, float)> GetPreScheduledCustomers();
     #endregion
 }
-public class CustomerSystem_新 : AbstractCustomerSystem
+public class CustomerSystem_新 : AbstractSystem, ICustomerSystem
 {
     // 每分钟来一个顾客的可能性（不能大于等于1）
     private float naturalArriveChance => SettingManager.GetSetting<GameplaySettings>().每分钟来一个顾客的可能性;
-    private ICustomerFactory customerFactory;
-    private Rng rng => this.GetSystem<IRngSystem>().GetSubRng<ICustomerSystem>();
     private CustomerActionHandler customerActionHandler;
-    public override CustomerActionHandler CustomerActionHandler => customerActionHandler;
+    public CustomerActionHandler CustomerActionHandler => customerActionHandler;
+    public List<Customer> OrderingCustomers { get; protected set; } = new();
+    public CustomerSatisfaction Satisfaction { get; set; } = new();
+    private Queue<Customer> waitingCustomers = new();
+    private List<Customer> leavedCustomers = new();
+    public CustomerRecorder Recorder { get; protected set; } = new();
     protected override void OnInit()
     {
-        base.OnInit();  
-        customerFactory = new CustomerFactory_默认影响权重();
+        this.RegisterEvent<StartNewDayEvent>(OnStartNewDay);
+        this.RegisterEvent<EndDayEvent>(OnEndDay);
+        this.RegisterEvent<TimeTickEvent>(OnTimeTick);
 
+        Recorder = new CustomerRecorder();
         customerActionHandler = new CustomerActionHandler();
         customerActionHandler.Init();
     }
 
     protected override void OnDeinit()
     {
-        base.OnDeinit();
-        customerFactory = null;
+        this.UnRegisterEvent<StartNewDayEvent>(OnStartNewDay);
+        this.UnRegisterEvent<EndDayEvent>(OnEndDay);
+        this.UnRegisterEvent<TimeTickEvent>(OnTimeTick);
 
         customerActionHandler.Release();
     }
-    protected override void OnStartNewDay(StartNewDayEvent evt)
+    public void OnStartNewDay(StartNewDayEvent evt)
     {
         if (!evt.StageMeet(EventStage.System)) return;
 
         // 设定总初始顾客数量
         int amount = SettingManager.GetSetting<GameplaySettings>().默认每日开始客户数;
 
-        // 处理预定顾客
-        List<Customer> customers = preScheduledCustomers.Where(info => info.Item2 == 0).Select(info => info.Item1).ToList();
-        int finalAmount = Math.Min(customers.Count, amount);
         List<Customer> customersToCreate = new();
-        customersToCreate.AddRange(customers.Take(finalAmount));
 
-        amount -= finalAmount;
-
-        // 补充顾客（如果还有剩余）
-        customersToCreate.AddRange(Enumerable.Repeat(0, amount).Select(_ => customerFactory.GenerateCustomer()));
+        customersToCreate.AddRange(Enumerable.Repeat(0, amount).Select(_ => Recorder.CreateCustomer(Recorder.CreateMetaCustomer(true))));
         CreateCustomer(customersToCreate);
     }
-    protected override void OnEndDay(EndDayEvent evt)
+    public void OnEndDay(EndDayEvent evt)
     {
         if (!evt.StageMeet(EventStage.System)) return;
-
-
-        // 1. 清除预定队列
-        preScheduledCustomers.Clear();
 
         // 2. 清除等待队列
         while (waitingCustomers.Count > 0){
@@ -106,7 +99,7 @@ public class CustomerSystem_新 : AbstractCustomerSystem
 
 
     }
-    protected override void OnTimeTick(TimeTickEvent evt)
+    public void OnTimeTick(TimeTickEvent evt)
     {
         // 先把当前正在点餐的顾客等待逻辑处理完
         OnTimeTick_处理正在点餐的顾客(evt);
@@ -138,16 +131,8 @@ public class CustomerSystem_新 : AbstractCustomerSystem
         List<Customer> customersToCreate = new();
         for (int i = 0; i < timePoint; i++){
 
-            float currentProcess = this.GetSystem<ITimeSystem>().CurrentProcess;
-
-            Customer scheduledCustomer = HandlePreScheduledCustomers(currentProcess);
-            if (scheduledCustomer != null){
-                customersToCreate.Add(scheduledCustomer);
-                continue;
-            }
-
-            if (rng.NextFloat() <= naturalArriveChance){
-                Customer customer = customerFactory.GenerateCustomer();
+            if (this.GetSystem<IRngSystem>().GetSubRng<ICustomerSystem>().NextFloat() <= naturalArriveChance){
+                Customer customer = Recorder.CreateCustomer(Recorder.CreateMetaCustomer(true));
                 customersToCreate.Add(customer);
             }
         }
@@ -155,33 +140,12 @@ public class CustomerSystem_新 : AbstractCustomerSystem
         // 只创建一次，可能含有多个顾客
         this.CreateCustomer(customersToCreate);
     }
-
-    private Customer HandlePreScheduledCustomers(float currentProcess){
-
-        // 1. 将预定顾客按到达时间排序
-        preScheduledCustomers.OrderBy(info => info.Item2).ToList();
-
-        // 2. 如果没有预定顾客，则返回空
-        if (preScheduledCustomers.Count == 0) return null;
-
-        // 3. 检查是否有在当前进度之前的（理论上不该有）
-
-        // 获取最早到达的预定顾客
-        (Customer customer, float arriveTime) = preScheduledCustomers.First();
-
-        // (例如)当前进程为0.5，到达时间为0.75，则比例为0.6666666666666666
-        float ratio = currentProcess / arriveTime;
-        
-        // 处理后的概率 -> 0.6666 * 0.6666 = 0.4444
-        float newChance = (float)Math.Pow(ratio, 2);
-
-        if (rng.NextFloat() <= newChance){
-            preScheduledCustomers.RemoveAll(info => info.Item1 == customer);
-            return customer;
-        }
-        return null;
+    
+    public bool IsMaxOrderAmount(){
+        return OrderingCustomers.Count >= SettingManager.GetSetting<GameplaySettings>().最大同时点餐顾客数量;
     }
-    public override void CreateCustomer(List<Customer> customers)
+
+    public void CreateCustomer(List<Customer> customers)
     {
         if (OrderingCustomers.Any(customer => customers.Contains(customer))){ Debug.LogWarning("创建顾客时，顾客已经在正在点餐的顾客列表中"); return; }
 
@@ -202,7 +166,7 @@ public class CustomerSystem_新 : AbstractCustomerSystem
         this.SendEvent<AddCustomerEvent>(new AddCustomerEvent(customersToCreate));
     }
 
-    public override void LeaveCustomer(List<Customer> customers)
+    public void LeaveCustomer(List<Customer> customers)
     {
 
         if (customers.Count == 0){return;}
@@ -242,56 +206,6 @@ public class CustomerSystem_新 : AbstractCustomerSystem
         leavedCustomers.Add(customer);
         customer.SetState(CustomerState.Leaved);
     }
-
-    public override void PreScheduleCustomer(ScheduleInfo scheduleInfo)
-    {
-        // 1. 获取预定时间
-        float arriveTime = scheduleInfo.arriveTime;
-
-        // 2. 合法性检测
-        if (arriveTime > 1){
-            Debug.LogWarning("预定顾客时，尝试预定一个顾客，但是到达时间大于1");
-            return;
-        }
-        if (arriveTime < 0){
-            Debug.LogWarning("预定顾客时，尝试预定一个顾客，但是到达时间小于0");
-            return;
-        }
-        if (scheduleInfo.customer == null){
-            Debug.LogWarning("预定顾客时，尝试预定一个顾客，但是顾客为空");
-            return;
-        }
-
-        preScheduledCustomers.Add((scheduleInfo.customer, arriveTime));
-    }
-
-
-
-
-}
-#region CustomerSystem抽象层
-public abstract class AbstractCustomerSystem : AbstractSystem, ICustomerSystem
-{
-    private int maxOrderAmount => SettingManager.GetSetting<GameplaySettings>().最大同时点餐顾客数量; // 最大同时点餐顾客数量
-    public List<Customer> OrderingCustomers => orderingCustomers;
-    public CustomerSatisfaction Satisfaction { get; set; }
-    public CustomerLookMaker CustomerLookMaker { get; set; } = new CustomerLookMaker();
-    public abstract CustomerActionHandler CustomerActionHandler { get;}
-    /// <summary> 等待顾客队列，用于处理排队和填补空缺 </summary>
-    protected Queue<Customer> waitingCustomers = new Queue<Customer>();
-    /// <summary> 当日顾客实例字典，用于存储顾客实例 </summary>
-    protected List<Customer> orderingCustomers = new List<Customer>();
-    /// <summary> 已离开的顾客，用于存储已离开的顾客实例 </summary>
-    protected List<Customer> leavedCustomers = new List<Customer>();
-
-    /// <summary> 预定的顾客，用于供外部处理预定顾客，并保留顾客和到达时间
-    /// float 用来表示大致的进程时间（比如预定顾客的到达时间）
-    /// </summary>
-    protected List<(Customer, float)> preScheduledCustomers = new List<(Customer, float)>();
-
-    public abstract void CreateCustomer(List<Customer> customers);
-    public abstract void LeaveCustomer(List<Customer> customers);
-    public abstract void PreScheduleCustomer(ScheduleInfo scheduleInfo);
     public Customer DequeueCustomer(){
         if (waitingCustomers.Count == 0) return null;
         Customer customer = waitingCustomers.Dequeue();
@@ -302,62 +216,8 @@ public abstract class AbstractCustomerSystem : AbstractSystem, ICustomerSystem
         waitingCustomers.Enqueue(customer);
     }
 
-    public List<(Customer, float)> GetPreScheduledCustomers()
-    {
-        List<(Customer, float)> res = new();
-        foreach (var (customer, arriveTime) in preScheduledCustomers){
-            res.Add((customer, arriveTime));
-        }
-        preScheduledCustomers.Clear();
-        return res;
-    }
-
     public int GetAmount(CustomerState state)
     {
-        switch(state){
-            case CustomerState.Ordering:
-                return OrderingCustomers.Count;
-            case CustomerState.Waiting:
-                return waitingCustomers.Count;
-            case CustomerState.Leaved:
-                return leavedCustomers.Count;
-            default:
-                Debug.LogWarning("获取顾客数量时，传入的顾客状态不合法");
-                return 0;
-        }
+        return OrderingCustomers.Count(customer => customer.state == state);
     }
-
-    public bool IsMaxOrderAmount()
-    {
-        int totalCustomerCount = OrderingCustomers.Count;
-        return totalCustomerCount >= maxOrderAmount;
-    }
-
-    public void PreScheduleCustomer(ScheduleInfo scheduleInfo, float arriveProgress)
-    {
-        Customer customer = scheduleInfo.customer;
-        if (customer == null && arriveProgress == -1){
-            Debug.LogWarning("预定顾客时，尝试预定一个顾客，但是顾客和到达时间都为空");
-            return;
-        }
-        preScheduledCustomers.Add((customer, arriveProgress));
-    }
-
-    protected override void OnInit()
-    {
-        this.RegisterEvent<StartNewDayEvent>(OnStartNewDay);
-        this.RegisterEvent<EndDayEvent>(OnEndDay);
-        this.RegisterEvent<TimeTickEvent>(OnTimeTick);
-        CustomerLookMaker.Reset();
-    }
-    protected override void OnDeinit()
-    {
-        this.UnRegisterEvent<StartNewDayEvent>(OnStartNewDay);
-        this.UnRegisterEvent<EndDayEvent>(OnEndDay);
-        this.UnRegisterEvent<TimeTickEvent>(OnTimeTick);
-    }
-    protected abstract void OnStartNewDay(StartNewDayEvent evt);
-    protected abstract void OnEndDay(EndDayEvent evt);
-    protected abstract void OnTimeTick(TimeTickEvent evt);
 }
-#endregion

@@ -22,4 +22,5 @@ public enum UIPanelType{
     声望详情界面,
     图片教程界面,
     感谢游玩界面,
+    顾客志界面
 }

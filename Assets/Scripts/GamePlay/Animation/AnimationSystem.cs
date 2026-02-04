@@ -80,7 +80,7 @@ public class AnimationSystem : AbstractSystem, IAnimationSystem
     
     private void OnTriggerAnimEvent(TriggerAnimEvent e)
     {
-        if (!_isPlaying[e.animQueue]) {Debug.LogError($"【AnimationSystem】动画通道 {e.animQueue} 未播放"); return;};
+        if (!_isPlaying[e.animQueue]) {LogKit.E($"【AnimationSystem】动画通道 {e.animQueue} 未播放"); return;};
 
         Observable.Timer(TimeSpan.FromSeconds(e.WaitTime)).Subscribe(_ => {
             // PlayNext
@@ -178,7 +178,7 @@ public class AnimationSystem : AbstractSystem, IAnimationSystem
             })
             .DoOnError(ex =>
             {
-                Debug.LogError($"AnimationSystem error: {ex}");
+                LogKit.E($"AnimationSystem error: {ex}");
                 PlayNext(key).Subscribe();
             });
     }

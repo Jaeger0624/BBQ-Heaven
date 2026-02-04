@@ -29,6 +29,8 @@ public class GameArchitecture : Architecture<GameArchitecture>
         Debug.Log("【GameArchitecture】初始化游戏系统");
         StringBuilder sb = new StringBuilder("系统初始化列表");
 
+        Interface.RegisterUtility<ILogger>(new UnityLogger());
+        
         // 注册系统
         Interface.RegisterSystem<ISaveSystem>(new SaveSystem());  // 存档系统
         sb.Append("\nSaveSystem - 存档系统");

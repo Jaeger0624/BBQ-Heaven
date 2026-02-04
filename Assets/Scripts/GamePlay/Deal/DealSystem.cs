@@ -190,11 +190,11 @@ public class DealSystem : AbstractSystem, IDealSystem
 	{
 
 		// 1. 检测是否有标签满足条件
-		bool hasAnyTagTriggered = context.Customer.customerTags.Any(tag => tag.Preview(context).Any(x => x));
+		bool hasAnyTagTriggered = context.Customer.meta.customerTags.Any(tag => tag.Preview(context).Any(x => x));
 		if (hasAnyTagTriggered) this.GetSystem<IAnimationSystem>().Append(AnimCombine_顾客Tag.Anim_顾客Tag_显示标签视图());
 
 		// 2. 执行标签
-		context.Customer.customerTags.ForEach(tag => {
+		context.Customer.meta.customerTags.ForEach(tag => {
 			// 2.1 内部顺序显示Tag结算与CGA效果
 			tag.Execute(context);
 		});

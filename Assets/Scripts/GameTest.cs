@@ -27,7 +27,7 @@ public class GameTest : MonoBehaviour, IController, ICanSendEvent{
         yield return new WaitForSecondsRealtime(0.25f);
         
         if (!this.GetSystem<IProcessSystem>().GameStarted){
-            Debug.Log("<color=yellow>【GameTest】开始新游戏</color>");
+            LogKit.I("<color=yellow>【GameTest】开始新游戏</color>");
             DifficultyData difficultyData = this.GetSystem<IDataSystem>().GetDifficultyData(0);
             LevelData levelData = this.GetSystem<IDataSystem>().GetLevelData("1");
             this.GetSystem<IProcessSystem>().StartNewGame(new NewGameInfo("1", Random.Range(0, 1000000), difficultyData, levelData));
@@ -51,7 +51,7 @@ public class GameTest : MonoBehaviour, IController, ICanSendEvent{
         if (Input.GetKeyDown(KeyCode.N))
         {
             this.SendEvent(new ProcessMoveNextEvent());
-            Debug.Log("【GameTest】手动推进流程状态");
+            LogKit.I("【GameTest】手动推进流程状态");
         }
     }
 #if UNITY_EDITOR
@@ -150,8 +150,8 @@ public class GameTest : MonoBehaviour, IController, ICanSendEvent{
             CustomerFactory_默认影响权重 customerFactory = new CustomerFactory_默认影响权重();
             Customer customer = customerFactory.GenerateCustomer();
             float arriveTime = 0.1f + 0.9f * this.GetSystem<IRngSystem>().GetSubRng<ICustomerSystem>().NextFloat();
-            Debug.Log($"添加一个预定顾客: {customer.name} 到达时间: {arriveTime}");
-            this.GetSystem<ICustomerSystem>().PreScheduleCustomer(new ScheduleInfo(customer, arriveTime));
+            LogKit.I($"添加一个预定顾客: {customer.meta.name} 到达时间: {arriveTime}");
+            LogKit.W("预定顾客功能暂未实现");
         }
         if (GUILayout.Button("刷新顾客")){
 
@@ -220,7 +220,7 @@ public class GameTest : MonoBehaviour, IController, ICanSendEvent{
         if (GUILayout.Button("推进流程 (N键)"))
         {
             this.SendEvent(new ProcessMoveNextEvent());
-            Debug.Log("【GameTest】手动推进流程状态");
+            LogKit.I("【GameTest】手动推进流程状态");
         }
 
         if (GUILayout.Button("添加一个新状态到根状态")){
@@ -332,15 +332,15 @@ public class GameTest : MonoBehaviour, IController, ICanSendEvent{
         }
         if (GUILayout.Button("设置种子")){
             rng = new Rng(currentSeed);
-            Debug.Log($"【GameTest】设置种子: {currentSeed}");
+            LogKit.I($"【GameTest】设置种子: {currentSeed}");
         }
         if (GUILayout.Button("获取随机Float")){
             float randomNumber = rng.NextFloat();
-            Debug.Log($"【GameTest】随机Float: {randomNumber}");
+            LogKit.I($"【GameTest】随机Float: {randomNumber}");
         }
         if (GUILayout.Button("获取随机Bool")){
             bool randomNumber = rng.NextBool();
-            Debug.Log($"【GameTest】随机Bool: {randomNumber}");
+            LogKit.I($"【GameTest】随机Bool: {randomNumber}");
         }
     }
 
@@ -378,7 +378,7 @@ public class GameTest : MonoBehaviour, IController, ICanSendEvent{
         if (GUILayout.Button("抽取n张卡片")){
             int cardCount = int.Parse(GUILayout.TextField("1", GUILayout.Width(100)));
             List<Card> cards = this.GetSystem<ICardSystem>().DrawCard(cardCount);
-            Debug.Log($"【GameTest】抽取了{cardCount}张卡片: {string.Join(", ", cards.Select(x => x.name))}");
+            LogKit.I($"【GameTest】抽取了{cardCount}张卡片: {string.Join(", ", cards.Select(x => x.name))}");
         }
         // 输入框
         cardId = GUILayout.TextField(cardId, GUILayout.Width(100)   );
@@ -386,7 +386,7 @@ public class GameTest : MonoBehaviour, IController, ICanSendEvent{
         // 获取一张指定id的卡牌
         if (GUILayout.Button("获取一张指定id的卡牌")){
             this.GetSystem<ICardSystem>().AddCardToRepository(cardId);
-            Debug.Log($"【GameTest】获取了一张指定id的卡牌: {cardId}");
+            LogKit.I($"【GameTest】获取了一张指定id的卡牌: {cardId}");
         }
     }
 }

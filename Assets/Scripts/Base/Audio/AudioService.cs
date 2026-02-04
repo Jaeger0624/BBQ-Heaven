@@ -40,7 +40,7 @@ public class AudioService : IAudioService
         var clip = Resources.Load<AudioClip>($"{audioType}/{clipName}");
         if (clip == null)
         {
-            Debug.LogWarning($"【AudioService】 无法找到音频: {clipName}");
+            LogKit.W($"【AudioService】 无法找到音频: {clipName}");
             return null;
         }
 

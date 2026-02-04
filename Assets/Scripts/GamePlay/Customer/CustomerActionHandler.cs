@@ -35,7 +35,7 @@ public class CustomerActionHandler : ICanGetSystem, ICanSendEvent, ICanRegisterE
 
         // 2. 遍历顾客，执行顾客动作
         foreach (var customer in customers){
-            foreach (var tag in customer.customerTags){
+            foreach (var tag in customer.meta.customerTags){
                 List<CustomerCGA> customerCGAs = tag.CustomerActionCGAs.Where(x => x.Type == customerActionType).ToList();
                 foreach (var cga in customerCGAs){
                     actionsToRun.Add(this.GetSystem<IGASystem>().ApplyCGA(customer, cga.Cga, parameters));
