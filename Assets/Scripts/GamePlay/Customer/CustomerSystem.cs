@@ -10,6 +10,7 @@ using UnityEngine;
 /// </summary>
 public interface ICustomerSystem : ISystem, ICanSendQuery{
     #region field
+    List<MetaCustomer> ArrivedCustomers { get; }
     List<Customer> OrderingCustomers { get; }
     CustomerSatisfaction Satisfaction { get; set; }
     CustomerActionHandler CustomerActionHandler { get; }
@@ -39,10 +40,13 @@ public class CustomerSystem_新 : AbstractSystem, ICustomerSystem
     private CustomerActionHandler customerActionHandler;
     public CustomerActionHandler CustomerActionHandler => customerActionHandler;
     public List<Customer> OrderingCustomers { get; protected set; } = new();
+    public List<MetaCustomer> ArrivedCustomers { get; protected set; } = new();
     public CustomerSatisfaction Satisfaction { get; set; } = new();
     private Queue<Customer> waitingCustomers = new();
     private List<Customer> leavedCustomers = new();
     public CustomerRecorder Recorder { get; protected set; } = new();
+    
+    private float oldCustomerChance = 0.3f; // 老顾客来店的可能性
     protected override void OnInit()
     {
         this.RegisterEvent<StartNewDayEvent>(OnStartNewDay);
@@ -71,8 +75,22 @@ public class CustomerSystem_新 : AbstractSystem, ICustomerSystem
 
         List<Customer> customersToCreate = new();
 
-        customersToCreate.AddRange(Enumerable.Repeat(0, amount).Select(_ => Recorder.CreateCustomer(Recorder.CreateMetaCustomer(true))));
+        customersToCreate.AddRange(Enumerable.Repeat(0, amount).Select(_ => CreateSingleCustomer()));
         CreateCustomer(customersToCreate);
+    }
+
+    private Customer CreateSingleCustomer(){
+        Rng rng = this.GetSystem<IRngSystem>().GetSubRng<ICustomerSystem>();
+        if (rng.NextFloat() <= oldCustomerChance){
+            Customer customer = Recorder.CreateCustomer(isOld: true);
+            CreateCustomer(new List<Customer>{customer});
+            return customer;
+        }
+        else{
+            Customer customer = Recorder.CreateCustomer(isOld: false);
+            CreateCustomer(new List<Customer>{customer});
+            return customer;
+        }
     }
     public void OnEndDay(EndDayEvent evt)
     {
@@ -97,6 +115,8 @@ public class CustomerSystem_新 : AbstractSystem, ICustomerSystem
         // 5. 移除所有已离开的顾客
         leavedCustomers.Clear();
 
+        // 6. 移除所有已到达的顾客
+        ArrivedCustomers.Clear();
 
     }
     public void OnTimeTick(TimeTickEvent evt)
@@ -132,7 +152,7 @@ public class CustomerSystem_新 : AbstractSystem, ICustomerSystem
         for (int i = 0; i < timePoint; i++){
 
             if (this.GetSystem<IRngSystem>().GetSubRng<ICustomerSystem>().NextFloat() <= naturalArriveChance){
-                Customer customer = Recorder.CreateCustomer(Recorder.CreateMetaCustomer(true));
+                Customer customer = CreateSingleCustomer();
                 customersToCreate.Add(customer);
             }
         }
@@ -162,6 +182,9 @@ public class CustomerSystem_新 : AbstractSystem, ICustomerSystem
                 customersToCreate.Add(customer);
             }
         });
+        
+        // 添加到已到达的顾客列表
+        ArrivedCustomers.AddRange(customersToCreate.Select(customer => customer.meta).ToList());
 
         this.SendEvent<AddCustomerEvent>(new AddCustomerEvent(customersToCreate));
     }

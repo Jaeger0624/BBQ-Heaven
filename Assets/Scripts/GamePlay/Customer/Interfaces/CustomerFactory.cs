@@ -33,9 +33,7 @@ public class CustomerFactory_默认影响权重 : ICustomerFactory{
         int patienceMax = 30 + 5 * random;
 
         int reputation = 2;
-        
-        Customer customer = new Customer(new MetaCustomer(name), patienceMax, reputation);
 
-        return customer;
+        return null;
     }
 }

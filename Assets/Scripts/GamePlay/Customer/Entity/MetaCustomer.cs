@@ -7,10 +7,12 @@ using UnityEngine;
 [Serializable]
 public class MetaCustomer : ICanGetSystem{
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
+    public readonly string guid;
     public string name;
     public List<ICustomerTag> customerTags;
     public Sprite customerLook;
     public MetaCustomer(string name){
+        this.guid = Guid.NewGuid().ToString();
         this.name = name;
         GenerateCustomerTag();
         Rng rng = this.GetSystem<IRngSystem>().GetSubRng<ICustomerSystem>();

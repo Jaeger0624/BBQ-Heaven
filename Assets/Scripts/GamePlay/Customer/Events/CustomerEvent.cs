@@ -98,3 +98,15 @@ public class ChangeCustomerPatienceEvent_飘字 : AbstractEvent, IFloatingTextEv
         return targetTransform.position;
     }
 }
+
+
+#region 元顾客事件
+
+public class CreateMetaCustomerEvent : AbstractEvent
+{
+    public CustomerRecord record;
+    public CreateMetaCustomerEvent(CustomerRecord metaCustomer){
+        this.record = metaCustomer;
+    }
+}
+#endregion
