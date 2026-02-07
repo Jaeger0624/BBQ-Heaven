@@ -15,7 +15,7 @@ public class TextSpawner : MonoBehaviour, ITextSpawner{
     [SerializeField] private Transform worldParent;
 
     [Header("Animation Settings")]
-    [SerializeField] private float lifetime => SettingManager.Instance.AnimSettings.textSpawnLifetime_默认;
+    private float lifetime => SettingManager.Instance.AnimSettings.textSpawnLifetime_默认;
     [SerializeField] private float launchDistance = 1.0f;
     [SerializeField] private float randomAngleDeg = 25f;
     [SerializeField] private float minScale = 0.75f;
