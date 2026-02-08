@@ -252,6 +252,9 @@ public class DealSystem : AbstractSystem, IDealSystem
 		// 触发顾客订单完成后动作
 		this.GetSystem<ICustomerSystem>().CustomerActionHandler.HandleCustomerAction(new List<Customer>{context.Customer}, CustomerActionType.订单完成后, new List<object>{result, context});
 
+		// 记录顾客服务次数
+		this.GetSystem<ICustomerSystem>().Recorder.OnServeCustomer(context, result);
+
 		// 顾客离开（服务完成）
 		this.GetSystem<ICustomerSystem>().LeaveCustomer(new List<Customer>{context.Customer});
 

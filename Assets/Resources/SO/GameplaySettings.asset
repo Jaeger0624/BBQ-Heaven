@@ -13,15 +13,14 @@ MonoBehaviour:
   m_Name: GameplaySettings
   m_EditorClassIdentifier: 
   "supplyFoodTime_\u9ED8\u8BA4": 5
-  "makeBBQTime_\u9ED8\u8BA4": 5
-  "soldBBQTime_\u9ED8\u8BA4": 5
   "\u70E4\u4E32\u989D\u5916\u65F6\u95F4\u6210\u672C_\u9ED8\u8BA4": 2
   "targetTime_\u9ED8\u8BA4": {x: 0, y: 21}
   "currentTime_\u9ED8\u8BA4": {x: 0, y: 20}
   "\u9ED8\u8BA4\u6BCF\u65E5\u5F00\u59CB\u5BA2\u6237\u6570": 2
   "\u6BCF\u5206\u949F\u6765\u4E00\u4E2A\u987E\u5BA2\u7684\u53EF\u80FD\u6027": 0.1
+  "\u6700\u5927\u540C\u65F6\u70B9\u9910\u987E\u5BA2\u6570\u91CF": 3
   "\u9ED8\u8BA4\u987E\u5BA2\u6EE1\u610F\u5EA6\u533A\u95F4":
   - 1.5
   - 2.5
   - 3
-  "\u6BCF\u65E5\u76EE\u6807\u5206\u6570\u5217\u8868": f4010000e8030000d0070000b80b000094110000
+  "\u6BCF\u65E5\u76EE\u6807\u5206\u6570\u5217\u8868": dc050000c4090000a00f00006419000010270000
