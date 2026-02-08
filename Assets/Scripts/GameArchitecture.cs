@@ -48,7 +48,7 @@ public class GameArchitecture : Architecture<GameArchitecture>
         sb.Append("\nBBQSystem - 烧烤系统");
         Interface.RegisterSystem<IScoreSystem>(new ScoreSystem());  // 分数系统
         sb.Append("\nScoreSystem - 分数系统");
-        Interface.RegisterSystem<ICustomerSystem>(new CustomerSystem_新());  // 顾客系统
+        Interface.RegisterSystem<ICustomerSystem>(new CustomerSystem());  // 顾客系统
         sb.Append("\nCustomerSystem - 顾客系统");
         Interface.RegisterSystem<IDealSystem>(new DealSystem());  // 交易系统
         sb.Append("\nDealSystem - 交易系统");

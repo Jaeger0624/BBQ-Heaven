@@ -6,7 +6,6 @@ public class GameState_经营日 : AbstractGameState
 
     public override void OnEnter(){
 
-        Debug.Log("【GameState】进入经营日状态");
 
 
 
@@ -23,7 +22,6 @@ public class GameState_经营日 : AbstractGameState
     }
     public override void OnExit(){
         this.GetSystem<IGameSystem>().EndDay();
-        Debug.Log("【GameState】退出经营日状态");
         this.SendEvent(new ChangePanelEvent(ProcessPanel.Customer));
     }
 }

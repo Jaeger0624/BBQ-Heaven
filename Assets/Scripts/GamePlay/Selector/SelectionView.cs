@@ -105,6 +105,12 @@ public class SelectionBuildContext{
     public SelectionBuildContext(SelectionType selectionType, string id){
         this.SelectionType = selectionType;
         this.Id = id;
-
+    }
+    public SelectionBuildContext(SelectionType selectionType, string id, string name, string description, string effectDescription){
+        this.SelectionType = selectionType;
+        this.Id = id;
+        this.Name = name;
+        this.Description = description;
+        this.EffectDescription = effectDescription;
     }
 }
