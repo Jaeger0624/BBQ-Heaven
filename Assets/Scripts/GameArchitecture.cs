@@ -5,6 +5,11 @@ using UnityEngine;
 public class GameArchitecture : Architecture<GameArchitecture>
 {
     /// <summary>
+    /// 是否为无头测试模式
+    /// </summary>
+    public static bool HeadlessMode = false;
+
+    /// <summary>
     /// 初始化架构
     /// </summary>
     protected override void Init()
@@ -86,8 +91,6 @@ public class GameArchitecture : Architecture<GameArchitecture>
         sb.Append("\nEncounterSystem - 事件系统");
         Interface.RegisterSystem<IBoardEntitySystem>(new BoardEntitySystem());  // 棋盘实体系统
         sb.Append("\nBoardEntitySystem - 棋盘实体系统");
-        Interface.RegisterSystem<IMyEventSystem>(new MyEventSystem());  // 事件系统
-        sb.Append("\nMyEventSystem - 事件系统");
         Interface.RegisterSystem<ICollectionSystem>(new CollectionSystem());  // 图鉴系统
         sb.Append("\nCollectionSystem - 图鉴系统");
         Interface.RegisterSystem<IBuffSystem>(new BuffSystem());  // Buff系统

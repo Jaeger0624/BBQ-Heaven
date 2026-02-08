@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using cfg;
-using PrimeTweenDemo;
 using QFramework;
 using UniRx;
 using UnityEngine;

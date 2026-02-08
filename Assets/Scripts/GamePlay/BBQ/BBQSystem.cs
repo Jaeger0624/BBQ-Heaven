@@ -126,8 +126,6 @@ public class BBQSystem : AbstractSystem, IBBQSystem
         // 1. 设置一层锁
         this.GetSystem<IGASystem>().SetTrigger(context.targetBBQ);   
 
-
-
         this.GetSystem<IGASystem>().SendAction(context.targetBBQ, () => {
             // 6. 发送完成烧烤事件
             this.SendEvent(new FinishCombineBBQEvent(context.targetBBQ, context));
@@ -140,20 +138,16 @@ public class BBQSystem : AbstractSystem, IBBQSystem
                 this.SendEvent(new FinishCombineBBQEvent_动画());
             }));
         });
-        
         this.GetSystem<IGASystem>().SendAction(context.targetBBQ, () => {
             // 5. 将当前烧烤实例存储到烧烤仓库中
             AddBBQToRepository(new List<object>{context});
         });
-
-
     }
     private void SetCurrentBBQ(BBQ bbq){
         if (bbq == null) return;
         currentBBQ = bbq;
         // Debug.Log($"【BBQSystem】设置当前烧烤实例: {bbq.guid}");
     }
-
     private void AddBBQToRepository(List<object> param){
         BBQProcessContext context = param?.FirstOrDefault() as BBQProcessContext;
         if (context == null){
@@ -180,12 +174,10 @@ public class BBQSystem : AbstractSystem, IBBQSystem
     {
         RemoveBBQFromRepository(evt.result.bbq);
     }
-
     private void RemoveBBQFromRepository(BBQ bbq){
         BBQRepository.Remove(bbq);
         this.SendEvent(new RemoveBBQFromRepositoryEvent(bbq));
     }
-
     public void SetCalculator(IBBQCalculator calculator){
         this.calculator = calculator;
         Debug.Log($"【BBQSystem】设置烧烤计算器为{calculator.GetType().Name}");
