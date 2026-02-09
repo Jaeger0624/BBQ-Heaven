@@ -162,7 +162,6 @@ public class EncounterSystem : AbstractSystem, IEncounterSystem
             CGA cga = new CGA(cgaData);
 
             var task = this.GetSystem<IGASystem>().ApplyCGAImmediate(this, cga, currentParams);
-            // var task = this.GetSystem<IGASystem>().ApplyCGA(this, cga, currentParams, true);
             cgaObservables.Add(task);
         }
 

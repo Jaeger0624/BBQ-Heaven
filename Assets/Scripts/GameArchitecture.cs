@@ -97,6 +97,10 @@ public class GameArchitecture : Architecture<GameArchitecture>
         sb.Append("\nBuffSystem - Buff系统");
         Interface.RegisterSystem<IGuideSystem>(new GuideSystem());  // 引导系统
         sb.Append("\nGuideSystem - 引导系统");
+
+
+        Interface.RegisterSystem<IProxySystem>(new ProxySystem());  // 代理系统
+        sb.Append("\nProxySystem - 代理系统");
     }
 
     protected override void OnDeinit()

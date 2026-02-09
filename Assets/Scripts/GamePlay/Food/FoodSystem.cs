@@ -9,7 +9,7 @@ public interface IFoodSystem : ISystem, ISavable{
     FoodPile FoodPile { get; }
     // 食材卡牌相关
     (List<FoodCard> cards, List<FoodInstance> instances) DrawFoodCard(int count);
-    void RefreshFoodPile();
+    bool RefreshFoodPile();
     // 获取食材实例
     FoodInstance GetFoodInstance(string guid);
     FoodInstance GetFoodInstance(Vector2Int position);
@@ -131,10 +131,11 @@ public partial class FoodSystem : AbstractSystem, IFoodSystem
         }
         return (foodCards, foodInstances);
     }
-    public void RefreshFoodPile(){
-        if (foodPile.JustRefreshed) {Debug.LogWarning("【FoodSystem】食材堆已经刷新过，不能重复刷新"); return;}
+    public bool RefreshFoodPile(){
+        if (foodPile.JustRefreshed) {Debug.LogWarning("【FoodSystem】食材堆已经刷新过，不能重复刷新"); return false;}
 
         foodPile.RefreshFoodPile();
+        return true;
     }
     public Dictionary<string, FoodInstance> GetFoodInstances(){
         // 只查询，不修改

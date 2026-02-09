@@ -32,7 +32,6 @@ public class CreateSelectionEvent : AbstractEvent{
         Subject = new AsyncSubject<Unit>();
     }
     public AsyncSubject<Unit> GetSubject(){
-        Debug.Log("【CreateSelectionEvent】获取Subject");
         return Subject;
     }
 }

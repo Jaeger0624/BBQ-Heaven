@@ -10,22 +10,20 @@ public class HeadlessTest : MonoBehaviour, IController, ICanGetSystem
     {
         return GameArchitecture.Interface;
     }
-    private void OnEnable()
+
+    void Start()
     {
-        this.RegisterEvent<CreateSelectionEvent>(HandleSelection);
-    }
-    private void OnDisable()
-    {
-        this.UnRegisterEvent<CreateSelectionEvent>(HandleSelection);
+        this.GetSystem<IProxySystem>().SetTesting(true);
     }
 
     [Button]
     private void ExecuteSingleTest(){
-
+        // 必须是先重置游戏
+        GameArchitecture.ResetGame();
+        
+        this.GetSystem<IProxySystem>().SetTesting(true);
         Debug.Log("【HeadlessTest】执行单个测试");
 
-        // 重置游戏
-        GameArchitecture.ResetGame();
         if (!this.GetSystem<IProcessSystem>().GameStarted){
             LogKit.I("<color=yellow>【HeadlessTest】开始新游戏</color>");
             DifficultyData difficultyData = this.GetSystem<IDataSystem>().GetDifficultyData(0);
@@ -37,16 +35,8 @@ public class HeadlessTest : MonoBehaviour, IController, ICanGetSystem
         }
     }
 
-    private void HandleSelection(CreateSelectionEvent evt){
-        Debug.Log("<color=purple>【HeadlessTest】代理处理选择事件: " + evt.SelectionRequest.Title + "</color>");
-        // 从选项中随机选择一个
-        ISelectionRequest selectionRequest = evt.SelectionRequest;
-        SelectRequest request = selectionRequest.Create();
-        int randomIndex = Random.Range(0, request.Contexts.Count);
-        SelectionBuildContext context = request.Contexts[randomIndex];
-        selectionRequest.OnSelect?.Invoke(context);
-
-        evt.GetSubject().OnNext(Unit.Default);
-        evt.GetSubject().OnCompleted();
+    [Button]
+    private void TryAction(){
+        this.GetSystem<IProxySystem>().TryAction();
     }
 }

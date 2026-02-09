@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using cfg;
+using UnityEngine;
 
 
 public class Requirement_食材连续 : CustomerRequirement{
@@ -13,12 +14,12 @@ public class Requirement_食材连续 : CustomerRequirement{
     protected override bool InternalCheckMet(Customer customer, List<object> context){
         DealContext dealContext = context.FirstOrDefault() as DealContext;
         if (dealContext == null){
-            LogKit.E("【CustomerRequirement】DealContext is null");
+            Debug.LogError("【CustomerRequirement】DealContext is null");
             return false;
         }
         // 如果数量都不满足，直接返回false
         if (dealContext.BBQ.foodInstances.Count < targetAmount){
-            LogKit.W($"【CustomerRequirement】食材数量不满足：{dealContext.BBQ.foodInstances.Count} < {targetAmount}");
+            Debug.LogWarning($"【CustomerRequirement】食材数量不满足：{dealContext.BBQ.foodInstances.Count} < {targetAmount}");
             return false;
         }
         int maxAmount = 0;
@@ -27,7 +28,6 @@ public class Requirement_食材连续 : CustomerRequirement{
                 if (foodInstance.food.foodData.Type == foodType){
                     maxAmount += 1;
                     if (maxAmount >= targetAmount){
-                        LogKit.I($"【CustomerRequirement】食材连续：{foodInstance.food.foodData.Type} {maxAmount} >= {targetAmount}");
                         return true;
                     }
                     continue;
@@ -47,13 +47,11 @@ public class Requirement_食材连续 : CustomerRequirement{
                         break;
                     }
                     if (j == targetAmount - 1){
-                        LogKit.I($"【CustomerRequirement】非具体类型，且食材连续：{id}");
                         return true;
                     }
                 }
             }
         }
-        LogKit.I($"【CustomerRequirement】食材不连续");
         return false;
     }
     protected override void InternalInit(Customer customer, List<object> context, Rng rng){

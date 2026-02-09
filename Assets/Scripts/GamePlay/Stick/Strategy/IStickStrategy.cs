@@ -8,7 +8,7 @@ using UnityEngine;
 public interface IStickStrategy : ICanGetSystem{
     List<BoardCell> GetRange(Vector2Int cellPosition, Stick stick);
     List<FoodInstance> GetFood(Vector2Int hoveredCellPos, Stick stick);
-    static int directionValue{
+    public static int directionValue{
         get{
             return direction % 4;
         }

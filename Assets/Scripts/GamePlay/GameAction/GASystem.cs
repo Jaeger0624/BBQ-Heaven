@@ -153,7 +153,6 @@ public class GASystem : AbstractSystem, IGASystem{
             error => 
             {
                 Debug.LogError($"[GASystem] 执行出错: {error}");
-
                 // 出错也视为完成，避免Deadlock
                 task.CompletionSource.OnError(error);
                 _isRunning = false;
@@ -164,7 +163,6 @@ public class GASystem : AbstractSystem, IGASystem{
                 // 核心点：当前任务流跑完后，通知外部
                 task.CompletionSource.OnNext(Unit.Default);
                 task.CompletionSource.OnCompleted();
-
                 _isRunning = false;
                 ProcessQueue(); // 递归处理下一个
             }
@@ -181,6 +179,10 @@ public class GASystem : AbstractSystem, IGASystem{
         return ga.ExecuteAsync(sender, param)
             .SelectMany(result => 
             {
+                // 如果是测试模式，则不执行动画
+                if (this.GetSystem<IProxySystem>().isTesting){
+                    return Observable.ReturnUnit();
+                }
                 if (result.AnimTask != null)
                 {
                     return this.GetSystem<IAnimationSystem>().PlayTaskAsync(result.AnimTask);
