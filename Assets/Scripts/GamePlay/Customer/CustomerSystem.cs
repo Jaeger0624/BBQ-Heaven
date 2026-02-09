@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using cfg;
 using QFramework;
-using UnityEngine;
+
 
 /// <summary>
 /// 区分交互接口和查询接口是很重要的，因为查询接口都是幂等操作，不影响系统稳定性
@@ -67,10 +67,10 @@ public class CustomerSystem : AbstractSystem, ICustomerSystem
                 oldCustomerChance = 0.3f;
                 break;
             default:
-                Debug.LogError($"【CustomerSystem】不支持的顾客时间：{customerTime}");
+                LogKit.E($"【CustomerSystem】不支持的顾客时间：{customerTime}");
                 break;
         }
-        Debug.Log($"【CustomerSystem】设置顾客时间：{this.CustomerTime}");
+        LogKit.I($"【CustomerSystem】设置顾客时间：{this.CustomerTime}");
     }
     protected override void OnInit()
     {
@@ -192,7 +192,7 @@ public class CustomerSystem : AbstractSystem, ICustomerSystem
 
     public void CreateCustomer(List<Customer> customers)
     {
-        if (OrderingCustomers.Any(customer => customers.Contains(customer))){ Debug.LogWarning("创建顾客时，顾客已经在正在点餐的顾客列表中"); return; }
+        if (OrderingCustomers.Any(customer => customers.Contains(customer))){ LogKit.W("【CustomerSystem】创建顾客时，顾客已经在正在点餐的顾客列表中"); return; }
 
         List<Customer> customersToCreate = new();
 

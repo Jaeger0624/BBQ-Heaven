@@ -82,10 +82,6 @@ public class CardPile : ICanSendEvent, ICanGetSystem{
 
     /// <summary> 使用卡牌 </summary>
     public void UseCard(Card card, List<object> param){
-        // 这个可以不用：可以在具体的卡牌中配置使用后的效果，是进入抽牌堆还是弃牌堆还是被消耗
-        // handPile.Remove(card);
-        // discardPile.Add(card);
-
         // 2. 执行卡牌效果
         card.OnUse(param);
 

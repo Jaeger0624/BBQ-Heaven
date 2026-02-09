@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using cfg;
 using QFramework;
-using UnityEngine;
+
 
 [Serializable]
 public class CustomerRecord{
@@ -73,7 +73,7 @@ public class CustomerRecorder : ICanGetSystem, ICanSendEvent{
         }
         
         if (metaCustomers.Count == 0){
-            Debug.LogError("顾客记录为空，无法获取顾客元数据");
+            LogKit.E("【CustomerRecorder】顾客记录为空，无法获取顾客元数据");
             return CreateMeta(true);
         }
         else{

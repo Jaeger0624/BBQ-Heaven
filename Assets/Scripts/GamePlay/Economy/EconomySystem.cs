@@ -1,7 +1,7 @@
 using QFramework;
 using UniRx;
 using UnityEngine;
-using UnityEngine.Timeline;
+
 
 public interface IEconomySystem : ISystem, ISavable{
     ReactiveProperty<int> income{get;}
@@ -89,7 +89,7 @@ public class EconomySystem : AbstractSystem, IEconomySystem
     {
         if (coin.Value < amount)
         {
-            Debug.Log($"经济系统：金币不足，无法扣除 {amount} 金币");
+            LogKit.W($"【EconomySystem】经济系统：金币不足，无法扣除 {amount} 金币");
             coin.Value = 0;
             return;
         }
@@ -100,7 +100,7 @@ public class EconomySystem : AbstractSystem, IEconomySystem
     {
         if (income.Value + amount < 0)
         {
-            Debug.Log($"经济系统：基础得分不足，无法增加 {amount} 基础得分");
+            LogKit.W($"【EconomySystem】经济系统：基础得分不足，无法增加 {amount} 基础得分");
             income.Value = 0;
             return;
         }
@@ -114,7 +114,7 @@ public class EconomySystem : AbstractSystem, IEconomySystem
         if (dailyInfo == null)
         {
             dailyInfo = new DailyInfo();
-            Debug.LogError("【EconomySystem】每日信息为空，创建新的每日信息");
+            LogKit.E("【EconomySystem】每日信息为空，创建新的每日信息");
         }
         dailyInfo.DailyEconomy = dailyEconomyInfo;
         return dailyInfo;

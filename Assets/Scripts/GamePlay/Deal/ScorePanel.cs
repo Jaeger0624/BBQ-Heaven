@@ -69,12 +69,8 @@ public class ScorePanel : MonoBehaviour, IController, ICanSendEvent{
     private void OnShowScoreTextEvent(ShowScoreTextEvent evt){
         isUpdateNumber = false;
         scoreText.text = evt.scoreText;
-
         ShakeNumber();
-
-
     }
-
     private void OnShowScorePanelEvent(ShowScorePanelEvent evt){
         Show();
     }

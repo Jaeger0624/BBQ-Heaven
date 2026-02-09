@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using cfg;
 using QFramework;
 using UniRx;
+using UnityEngine;
 
 // 通用请求选择事件
 public class SelectRequest
@@ -31,6 +32,7 @@ public class CreateSelectionEvent : AbstractEvent{
         Subject = new AsyncSubject<Unit>();
     }
     public AsyncSubject<Unit> GetSubject(){
+        Debug.Log("【CreateSelectionEvent】获取Subject");
         return Subject;
     }
 }

@@ -1,7 +1,6 @@
 using System;
 using cfg;
 using QFramework;
-using UnityEngine;
 /// <summary>
 /// 烤串系统 - 实例层
 /// </summary>
@@ -37,6 +36,5 @@ public class Stick : ICanGetSystem{
         extraTimeCost += SettingManager.Instance.GameplaySettings.烤串额外时间成本_默认;
         this.GetSystem<IStickSystem>().AddCurrentStick(this);
     }
-
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
 }
