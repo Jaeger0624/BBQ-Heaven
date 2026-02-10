@@ -29,6 +29,11 @@ public abstract partial class GameAction : ICanGetSystem, IHaveAnim, ICanSendEve
                 // 1. 跑你原来的同步逻辑 (Execute)
                 this.Execute(sender, param); 
                 
+                if (this.GetSystem<IProxySystem>().isTesting){
+                    observer.OnNext(GAResult.Empty);
+                    observer.OnCompleted();
+                    return Disposable.Empty;
+                }
                 // 2. 拿你原来的动画 (GetAnimTask)
                 var anim = this.GetAnimTask();
                 

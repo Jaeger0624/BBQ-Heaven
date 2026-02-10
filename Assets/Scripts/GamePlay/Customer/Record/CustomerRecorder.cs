@@ -12,13 +12,16 @@ using cfg;
 using QFramework;
 using UnityEngine;
 
+
 [Serializable]
 public class CustomerRecord{
     public MetaCustomer metaCustomer;
     public int visitCount;
+    public int totalSpent;
     public CustomerRecord(MetaCustomer metaCustomer){
         this.metaCustomer = metaCustomer;
         this.visitCount = 0;
+        this.totalSpent = 0;
     }
 }
 
@@ -29,10 +32,6 @@ public class CustomerRecorder : ICanGetSystem, ICanSendEvent{
     public MetaCustomer CreateMeta(bool needRecord){
         
         MetaCustomer metaCustomer = new MetaCustomer(GetName());
-
-        if (needRecord){
-            AddRecord(metaCustomer);
-        }
         return metaCustomer;
     }
     private void AddRecord(MetaCustomer metaCustomer){
@@ -41,12 +40,23 @@ public class CustomerRecorder : ICanGetSystem, ICanSendEvent{
 
         this.SendEvent(new CreateMetaCustomerEvent(record));
     }
+    public void OnServeCustomer(DealContext context, DealResult result){
+        // 如果已经在顾客志中
+        if (!customerRecords.Any(record => record.metaCustomer == context.Customer.meta)){
+            AddRecord(context.Customer.meta);
+        }
+
+        CustomerRecord record = customerRecords.FirstOrDefault(record => record.metaCustomer == context.Customer.meta);
+        record.visitCount++;
+        record.totalSpent += result.price;
+    }
     private Customer CreateCustomer(MetaCustomer metaCustomer){
         return new Customer(metaCustomer, 30, 2);
     }
 
     public Customer CreateCustomer(bool isOld){
         if (isOld){
+            // 从老顾客中筛选出未到达的顾客
             return CreateCustomer(GetMeta(notArrived: true));
         }
         else{
@@ -64,7 +74,7 @@ public class CustomerRecorder : ICanGetSystem, ICanSendEvent{
         }
         
         if (metaCustomers.Count == 0){
-            Debug.LogError("顾客记录为空，无法获取顾客元数据");
+            Debug.LogWarning("【CustomerRecorder】顾客记录为空，无法获取顾客元数据");
             return CreateMeta(true);
         }
         else{

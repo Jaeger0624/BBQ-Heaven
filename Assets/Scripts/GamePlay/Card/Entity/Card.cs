@@ -64,14 +64,5 @@ public class Card : ICanGetSystem{
         // 3. 消耗时间
         this.GetSystem<ITimeSystem>().PushTimePoint(cost);
     }
-
-    public void OnDraw(){
-
-    }
-
-    public void OnDiscard(){
-
-    }
-
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
 }

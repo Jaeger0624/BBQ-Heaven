@@ -54,4 +54,8 @@ public class DevSettings : ScriptableObject{
     public float hoverScale = 1.4f;
     public float hoverHeightOffset = 120f;
     public float targetingHeightOffset = 150f;
+
+
+    [Header("Tooltip")]
+    public float tooltipWaitTime = 0.5f;
 }

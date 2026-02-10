@@ -5,6 +5,11 @@ using UnityEngine;
 public class GameArchitecture : Architecture<GameArchitecture>
 {
     /// <summary>
+    /// 是否为无头测试模式
+    /// </summary>
+    public static bool HeadlessMode = false;
+
+    /// <summary>
     /// 初始化架构
     /// </summary>
     protected override void Init()
@@ -48,7 +53,7 @@ public class GameArchitecture : Architecture<GameArchitecture>
         sb.Append("\nBBQSystem - 烧烤系统");
         Interface.RegisterSystem<IScoreSystem>(new ScoreSystem());  // 分数系统
         sb.Append("\nScoreSystem - 分数系统");
-        Interface.RegisterSystem<ICustomerSystem>(new CustomerSystem_新());  // 顾客系统
+        Interface.RegisterSystem<ICustomerSystem>(new CustomerSystem());  // 顾客系统
         sb.Append("\nCustomerSystem - 顾客系统");
         Interface.RegisterSystem<IDealSystem>(new DealSystem());  // 交易系统
         sb.Append("\nDealSystem - 交易系统");
@@ -86,14 +91,16 @@ public class GameArchitecture : Architecture<GameArchitecture>
         sb.Append("\nEncounterSystem - 事件系统");
         Interface.RegisterSystem<IBoardEntitySystem>(new BoardEntitySystem());  // 棋盘实体系统
         sb.Append("\nBoardEntitySystem - 棋盘实体系统");
-        Interface.RegisterSystem<IMyEventSystem>(new MyEventSystem());  // 事件系统
-        sb.Append("\nMyEventSystem - 事件系统");
         Interface.RegisterSystem<ICollectionSystem>(new CollectionSystem());  // 图鉴系统
         sb.Append("\nCollectionSystem - 图鉴系统");
         Interface.RegisterSystem<IBuffSystem>(new BuffSystem());  // Buff系统
         sb.Append("\nBuffSystem - Buff系统");
         Interface.RegisterSystem<IGuideSystem>(new GuideSystem());  // 引导系统
         sb.Append("\nGuideSystem - 引导系统");
+
+
+        Interface.RegisterSystem<IProxySystem>(new ProxySystem());  // 代理系统
+        sb.Append("\nProxySystem - 代理系统");
     }
 
     protected override void OnDeinit()

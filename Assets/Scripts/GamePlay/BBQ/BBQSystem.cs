@@ -64,12 +64,15 @@ public class BBQSystem : AbstractSystem, IBBQSystem
         SetCurrentBBQ(bbq);  // 设置当前烧烤实例
 
         //TODO: 如果有监听Combine的条件且在Combine之前的事件，则在这里执行
-        this.SendEvent(new CombineBBQEvent(bbq));
 
-        this.GetSystem<IGASystem>().SendAction(bbq, () => {
-            this.SendEvent(new CombineBBQEvent_动画());
-        });
 
+        if (!this.GetSystem<IProxySystem>().isTesting){
+            this.SendEvent(new CombineBBQEvent(bbq));
+
+            this.GetSystem<IGASystem>().SendAction(bbq, () => {
+                this.SendEvent(new CombineBBQEvent_动画());
+            });
+        }
 
         BBQProcessContext context = new BBQProcessContext(currentBBQ);
 
@@ -104,56 +107,56 @@ public class BBQSystem : AbstractSystem, IBBQSystem
         BBQCalculator_食材基础值逐个加 calculator = new BBQCalculator_食材基础值逐个加();
         calculator.Calculate(context);
 
-        
         // 2.1 在计算完成后，添加动画暂停
         // 2.2 清除高亮显示
+        if (!this.GetSystem<IProxySystem>().isTesting){
+            this.GetSystem<IGASystem>().SendAction(context.targetBBQ, () => {
+                this.GetSystem<IAnimationSystem>().Append(new DelayAnimTask(0.3f, true));
+                this.SendEvent(new ClearAllBoardsHighlight());
+                Debug.Log("【BBQSystem】清除高亮显示");
+                this.GetSystem<IAnimationSystem>().Append(new DelayAnimTask(0.5f, true));
+            });
+        }
+
+
         this.GetSystem<IGASystem>().SendAction(context.targetBBQ, () => {
-            this.GetSystem<IAnimationSystem>().Append(new DelayAnimTask(0.3f, true));
-            this.SendEvent(new ClearAllBoardsHighlight());
-            Debug.Log("【BBQSystem】清除高亮显示");
-            this.GetSystem<IAnimationSystem>().Append(new DelayAnimTask(0.5f, true));
+            // 4. 检测配方触发情况
+            this.GetSystem<IRecipeSystem>().MatchRecipe(new List<object>{context});
         });
 
         this.GetSystem<IGASystem>().SendAction(context.targetBBQ, () => {
-
-
-            // 4. 检测配方触发情况
-            this.GetSystem<IRecipeSystem>().MatchRecipe(new List<object>{context});
-
             this.SendEvent(new AfterCalculateBBQEvent(context.targetBBQ, context));
         });
 
-        // 1. 设置一层锁
-        this.GetSystem<IGASystem>().SetTrigger(context.targetBBQ);   
-
-
+        if (!this.GetSystem<IProxySystem>().isTesting){
+            this.GetSystem<IGASystem>().SetTrigger(context.targetBBQ);   
+        }
+        //
 
         this.GetSystem<IGASystem>().SendAction(context.targetBBQ, () => {
-            // 6. 发送完成烧烤事件
             this.SendEvent(new FinishCombineBBQEvent(context.targetBBQ, context));
+        });
 
+        if (!this.GetSystem<IProxySystem>().isTesting){
+        this.GetSystem<IGASystem>().SendAction(context.targetBBQ, () => {
             // 7. 等待0.3s
             this.GetSystem<IAnimationSystem>().Append(new DelayAnimTask(0.3f, true));
-            
             // 8. 播放完成烧烤动画
             this.GetSystem<IAnimationSystem>().Append(new ActionAnimTask(() => {
                 this.SendEvent(new FinishCombineBBQEvent_动画());
             }));
         });
-        
+        }
         this.GetSystem<IGASystem>().SendAction(context.targetBBQ, () => {
             // 5. 将当前烧烤实例存储到烧烤仓库中
             AddBBQToRepository(new List<object>{context});
         });
-
-
     }
     private void SetCurrentBBQ(BBQ bbq){
         if (bbq == null) return;
         currentBBQ = bbq;
         // Debug.Log($"【BBQSystem】设置当前烧烤实例: {bbq.guid}");
     }
-
     private void AddBBQToRepository(List<object> param){
         BBQProcessContext context = param?.FirstOrDefault() as BBQProcessContext;
         if (context == null){
@@ -165,27 +168,31 @@ public class BBQSystem : AbstractSystem, IBBQSystem
 
         BBQRepository.Add(bbq);
 
+        if (!this.GetSystem<IProxySystem>().isTesting){
         // 延时提醒动画发生
-        this.GetSystem<IAnimationSystem>().Append(new SequenceAnimTask(new List<IAnimTask>{
-            new ActionAnimTask(() => {
-                isBBQing = false;
-            }),
-            new DelayAnimTask(0.3f, true),
-            new ActionAnimTask(() => {
-                this.SendEvent(new AddBBQToRepositoryEvent(bbq));
-            }),
-        }));
+            this.GetSystem<IAnimationSystem>().Append(new SequenceAnimTask(new List<IAnimTask>{
+                new ActionAnimTask(() => {
+                    isBBQing = false;
+                }),
+                new DelayAnimTask(0.3f, true),
+                new ActionAnimTask(() => {
+                    this.SendEvent(new AddBBQToRepositoryEvent(bbq));
+                }),
+            }));
+        }
+        else{
+            isBBQing = false;
+            this.SendEvent(new AddBBQToRepositoryEvent(bbq));
+        }
     }
     private void OnDealCompletedEvent(DealCompletedEvent evt)
     {
         RemoveBBQFromRepository(evt.result.bbq);
     }
-
     private void RemoveBBQFromRepository(BBQ bbq){
         BBQRepository.Remove(bbq);
         this.SendEvent(new RemoveBBQFromRepositoryEvent(bbq));
     }
-
     public void SetCalculator(IBBQCalculator calculator){
         this.calculator = calculator;
         Debug.Log($"【BBQSystem】设置烧烤计算器为{calculator.GetType().Name}");

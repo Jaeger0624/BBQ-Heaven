@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using cfg;
 using QFramework;
-using UnityEngine;
 
 public enum RequirementConflictGroup{
     无,
@@ -18,7 +17,7 @@ public abstract class CustomerRequirement : ICanGetSystem{
     private bool isInited = false;
     public bool IsMet(Customer customer, List<object> context){
         if (!isInited){
-            Debug.LogError("要求未初始化");
+            LogKit.E("【CustomerRequirement】要求未初始化");
             return false;
         }
         return InternalCheckMet(customer, context);
@@ -69,7 +68,7 @@ public class Requirement_是否包含食材种类 : CustomerRequirement{
 
     protected override bool InternalCheckMet(Customer customer, List<object> context){
         DealContext dealContext = context?.FirstOrDefault() as DealContext;
-        if (dealContext == null){ Debug.LogError("上下文为空"); return false;}
+        if (dealContext == null){ LogKit.E("【CustomerRequirement】上下文为空"); return false;}
 
         switch (ContainType){
             case ContainType.包含:
@@ -87,7 +86,7 @@ public class Requirement_是否包含食材种类 : CustomerRequirement{
                 }
                 return true;
             default:
-                Debug.LogError("未匹配到包含类型");
+                LogKit.E("【CustomerRequirement】未匹配到包含类型");
                 return false;
         }
     }
@@ -135,7 +134,7 @@ public class Requirement_食材丰富度 : CustomerRequirement{
     private int targetAmount;
     protected override bool InternalCheckMet(Customer customer, List<object> context){
         DealContext dealContext = context?.FirstOrDefault() as DealContext;
-        if (dealContext == null){ Debug.LogError("上下文为空"); return false;}
+        if (dealContext == null){ LogKit.E("【CustomerRequirement】上下文为空"); return false;}
         int amount = dealContext.BBQ.foodInstances.Select(x => x.food.foodData.Type).Distinct().Count();
         if (amount < targetAmount){
             return false;

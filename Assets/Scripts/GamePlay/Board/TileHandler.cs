@@ -3,6 +3,9 @@ using cfg;
 using QFramework;
 using UnityEngine;
 
+/// <summary>
+/// 管理实体移动等事件触发地块效果
+/// </summary>
 public class TileHandler : ICanGetSystem{
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
     public void EntityMove(MoveEntityEvent e){

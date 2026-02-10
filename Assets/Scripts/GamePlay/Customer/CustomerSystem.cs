@@ -5,10 +5,12 @@ using cfg;
 using QFramework;
 using UnityEngine;
 
+
 /// <summary>
 /// 区分交互接口和查询接口是很重要的，因为查询接口都是幂等操作，不影响系统稳定性
 /// </summary>
 public interface ICustomerSystem : ISystem, ICanSendQuery{
+    CustomerTime CustomerTime { get;}
     #region field
     List<MetaCustomer> ArrivedCustomers { get; }
     List<Customer> OrderingCustomers { get; }
@@ -26,6 +28,9 @@ public interface ICustomerSystem : ISystem, ICanSendQuery{
     Customer DequeueCustomer();
     // 移除顾客
     void LeaveCustomer(List<Customer> customers);
+
+    // 设置顾客时间
+    void SetCustomerTime(string customerTime);
     #endregion
 
     #region query
@@ -33,7 +38,12 @@ public interface ICustomerSystem : ISystem, ICanSendQuery{
     int GetAmount(CustomerState state);
     #endregion
 }
-public class CustomerSystem_新 : AbstractSystem, ICustomerSystem
+
+public enum CustomerTime{
+    午间,
+    夜间,
+}
+public class CustomerSystem : AbstractSystem, ICustomerSystem
 {
     // 每分钟来一个顾客的可能性（不能大于等于1）
     private float naturalArriveChance => SettingManager.GetSetting<GameplaySettings>().每分钟来一个顾客的可能性;
@@ -47,6 +57,22 @@ public class CustomerSystem_新 : AbstractSystem, ICustomerSystem
     public CustomerRecorder Recorder { get; protected set; } = new();
     
     private float oldCustomerChance = 0.3f; // 老顾客来店的可能性
+    public CustomerTime CustomerTime { get; set; } = CustomerTime.午间;
+    public void SetCustomerTime(string customerTime){
+        this.CustomerTime = Enum.Parse<CustomerTime>(customerTime);
+        switch (this.CustomerTime){
+            case CustomerTime.午间:
+                oldCustomerChance = 0.5f;
+                break;
+            case CustomerTime.夜间:
+                oldCustomerChance = 0.3f;
+                break;
+            default:
+                LogKit.E($"【CustomerSystem】不支持的顾客时间：{customerTime}");
+                break;
+        }
+        LogKit.I($"【CustomerSystem】设置顾客时间：{this.CustomerTime}");
+    }
     protected override void OnInit()
     {
         this.RegisterEvent<StartNewDayEvent>(OnStartNewDay);
@@ -148,6 +174,12 @@ public class CustomerSystem_新 : AbstractSystem, ICustomerSystem
 
     private void OnTimeTick_迎来新顾客(TimeTickEvent evt){
         int timePoint = evt.timePoint;
+
+        // 如果当前已经在超时状态
+        if (this.GetSystem<ITimeSystem>().isTimeUp){
+            Debug.Log("【CustomerSystem】当前已经在超时状态，不创建新顾客");
+            return;
+        }
         List<Customer> customersToCreate = new();
         for (int i = 0; i < timePoint; i++){
 
@@ -156,7 +188,9 @@ public class CustomerSystem_新 : AbstractSystem, ICustomerSystem
                 customersToCreate.Add(customer);
             }
         }
-
+        if (customersToCreate.Count == 0){
+            return;
+        }
         // 只创建一次，可能含有多个顾客
         this.CreateCustomer(customersToCreate);
     }
@@ -167,7 +201,7 @@ public class CustomerSystem_新 : AbstractSystem, ICustomerSystem
 
     public void CreateCustomer(List<Customer> customers)
     {
-        if (OrderingCustomers.Any(customer => customers.Contains(customer))){ Debug.LogWarning("创建顾客时，顾客已经在正在点餐的顾客列表中"); return; }
+        if (OrderingCustomers.Any(customer => customers.Contains(customer))){ LogKit.W("【CustomerSystem】创建顾客时，顾客已经在正在点餐的顾客列表中"); return; }
 
         List<Customer> customersToCreate = new();
 

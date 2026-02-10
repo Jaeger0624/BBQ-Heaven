@@ -4,7 +4,7 @@ using System.Linq;
 using cfg;
 using QFramework;
 using UniRx;
-using UnityEngine;
+
 
 public class CustomerActionHandler : ICanGetSystem, ICanSendEvent, ICanRegisterEvent{
     private List<IUnRegister> unRegisters = new List<IUnRegister>();
@@ -28,7 +28,7 @@ public class CustomerActionHandler : ICanGetSystem, ICanSendEvent, ICanRegisterE
 
     public IObservable<Unit> HandleCustomerAction(List<Customer> customers, CustomerActionType customerActionType, List<object> parameters){
         // 1. 获取正在点餐的顾客
-        if (customers.Count == 0){Debug.LogWarning("触发顾客动作时，传入的顾客列表为空"); return Observable.ReturnUnit();}
+        if (customers.Count == 0){LogKit.W("【CustomerActionHandler】触发顾客动作时，传入的顾客列表为空"); return Observable.ReturnUnit();}
 
         // Debug.Log($"【CustomerActionHandler】触发顾客动作: {customerActionType}");
         List<IObservable<Unit>> actionsToRun = new List<IObservable<Unit>>();
@@ -60,7 +60,7 @@ public class CustomerActionHandler : ICanGetSystem, ICanSendEvent, ICanRegisterE
                 });
                 break;
             default:
-                Debug.LogError($"未实现的系统外顾客动作类型: {customerActionType}");
+                LogKit.E($"【CustomerActionHandler】未实现的系统外顾客动作类型: {customerActionType}");
                 break;
         }
     }

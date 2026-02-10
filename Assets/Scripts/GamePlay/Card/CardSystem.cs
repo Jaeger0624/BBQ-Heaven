@@ -1,4 +1,3 @@
-using UnityEngine;
 using QFramework;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,7 +61,7 @@ public class CardSystem : AbstractSystem, ICardSystem
     {
         Dictionary<string, Card> newCardRepository = archive.playerInfoData.cardRepositorys.ToDictionary(card => card.Key, card => card.Value);
         if (newCardRepository.Count == 0){
-            Debug.LogError("卡牌仓库为空，无法加载");
+            LogKit.E("卡牌仓库为空，无法加载");
             return;
         }
         cardRepository = newCardRepository;
@@ -94,7 +93,7 @@ public class CardSystem : AbstractSystem, ICardSystem
     public void AddCardToRepository(string cardId)
     {
         CardData cardData = this.GetSystem<IDataSystem>().GetCardData(cardId);
-        if (cardData == null) {Debug.LogError("卡牌数据不存在：" + cardId); return;}
+        if (cardData == null) {LogKit.E("卡牌数据不存在：" + cardId); return;}
         Card card = new Card(cardData);
         cardRepository.Add(card.guid, card);
     }
@@ -114,7 +113,7 @@ public class CardSystem : AbstractSystem, ICardSystem
     public void InitCardPile()
     {
         if (cardRepository.Count == 0){
-            Debug.LogError("卡牌仓库为空，无法初始化卡牌堆");
+            LogKit.E("卡牌仓库为空，无法初始化卡牌堆");
             return;
         }
         cardPile = new CardPile(cardRepository.Values.ToList());
@@ -124,7 +123,7 @@ public class CardSystem : AbstractSystem, ICardSystem
     public List<Card> DrawCard(int count)
     {
         if (cardPile == null) {
-            Debug.LogWarning("CardPile not initialized");
+            LogKit.W("CardPile not initialized");
             InitCardPile();
         }
         return cardPile.DrawCard(count);
@@ -133,7 +132,7 @@ public class CardSystem : AbstractSystem, ICardSystem
     public void DiscardCard(List<Card> cards)
     {
         if (cardPile == null) {
-            Debug.LogWarning("CardPile not initialized");
+            LogKit.W("CardPile not initialized");
             InitCardPile();
         }
         cardPile.DiscardCard(cards);
@@ -141,15 +140,14 @@ public class CardSystem : AbstractSystem, ICardSystem
 
     public void UseCard(Card card, List<object> param)
     {
-        if (cardPile == null) {Debug.LogError("CardPile not initialized"); return;}
+        if (cardPile == null) {LogKit.E("CardPile not initialized"); return;}
         cardPile.UseCard(card, param);
 
         this.SendEvent(new UseCardEvent(card));
     }
     public void RefreshHandCards()
     {
-        if (cardPile == null) {Debug.LogError("CardPile not initialized"); return;}
+        if (cardPile == null) {LogKit.E("CardPile not initialized"); return;}
         cardPile.DiscardCard(cardPile.handPile);
     }
-
 }

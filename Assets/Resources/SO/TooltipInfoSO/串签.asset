@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c7f20cef6680c34a87de54419efd3b8, type: 3}
+  m_Name: "\u4E32\u7B7E"
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  tooltipInfos:
+  - text: "\u4E32\u7B7E"
+    size: 48
+    needResize: 1
+  - text: "\u6240\u6709\u8FD8\u672A\u88AB\u4F7F\u7528\u7684\u4E32\u7B7E\u4F1A\u5B58\u653E\u5728\u8FD9\u91CC\n<color=yellow>\u70B9\u51FB</color>\u9009\u4E2D\u4E32\u7B7E\u540E\uFF0C\u5373\u53EF\u5728\u68CB\u76D8\u4E0A\u4E32\u53D6\u98DF\u6750"
+    size: 30
+    needResize: 1

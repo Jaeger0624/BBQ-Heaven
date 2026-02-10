@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using QFramework;
 using TMPro;
@@ -5,7 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class StickView : MonoBehaviour, ICanGetSystem, ICanRegisterEvent, IPointerClickHandler{
+public class StickView : MonoBehaviour, IController, IShowTooltip, IPointerClickHandler{
     public Stick stick;
     public Transform slot{get; private set;}
     [SerializeField] private Image image;
@@ -76,5 +77,17 @@ public class StickView : MonoBehaviour, ICanGetSystem, ICanRegisterEvent, IPoint
         else{
             OnSelect();
         }
+    }
+
+    public List<TooltipInfo> GetTooltipInfo()
+    {
+        float nameSize = SettingManager.Instance.ArtSettings.NameSize;
+        float descriptionSize = SettingManager.Instance.ArtSettings.DescriptionSize;
+        string description = $"<size={nameSize}>{stick.stickData.Name}</size>\n" +
+        $"<size={descriptionSize}>{stick.stickData.Description}</size>\n" +
+        $"<size={descriptionSize}>时间消耗：{stick.extraTimeCost + stick.originalTimeCost}秒</size>";
+        return new List<TooltipInfo>{
+            new TooltipInfo(description)
+        };
     }
 }

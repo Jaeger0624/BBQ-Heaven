@@ -9,8 +9,8 @@ using UnityEngine;
 public interface ISelectorSystem : ISystem
 {
     IObservable<BoardCell> SelectCell(List<BoardCell> validCells);
-    void RequestSelection(ISelectionRequest selectionRequest, int refreshAmount, SelectionPanelType selectionPanelType);
-    }
+    IObservable<Unit> RequestSelection(ISelectionRequest selectionRequest, int refreshAmount, SelectionPanelType selectionPanelType);
+}
 public class SelectorSystem : AbstractSystem, ISelectorSystem
 {
 
@@ -56,24 +56,11 @@ public class SelectorSystem : AbstractSystem, ISelectorSystem
         });
     }
 
-    //TODO:
-    // public IObservable<OrderView> SelectOrder(List<OrderView> validOrders)
-    // {
-    //     return Observable.Create<OrderView>(observer =>
-    //     {
-    //         // 1. 高亮顾客
-    //         this.SendEvent(new HighlightCustomersEvent(validOrders.Select(order => order.customer).ToList()));
-
-    //         return Disposable.Create(() =>
-    //         {
-    //             this.SendEvent(new UnhighlightCustomersEvent());
-    //         });
-    //     });
-    // }
-
-    public void RequestSelection(ISelectionRequest selectionRequest, int refreshAmount, SelectionPanelType selectionPanelType)
+    public IObservable<Unit> RequestSelection(ISelectionRequest selectionRequest, int refreshAmount, SelectionPanelType selectionPanelType)
     {
         Debug.Log($"【SelectorSystem】请求选择: {selectionRequest.Title}");
-        this.SendEvent(new CreateSelectionEvent(selectionRequest, refreshAmount, selectionPanelType));
+        CreateSelectionEvent evt = new CreateSelectionEvent(selectionRequest, refreshAmount, selectionPanelType);
+        this.SendEvent(evt);
+        return evt.GetSubject().AsObservable();
     }
 }

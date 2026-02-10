@@ -5,7 +5,6 @@ public class GameState_经营月 : AbstractGameState
 {
     public override void OnEnter()
     {
-        Debug.Log("【GameState】进入经营月状态");
         this.GetSystem<IGameSystem>().StartMonth();
 
 
@@ -14,6 +13,5 @@ public class GameState_经营月 : AbstractGameState
     }
     public override void OnExit()
     {
-        Debug.Log("【GameState】退出经营月状态");
     }
 }

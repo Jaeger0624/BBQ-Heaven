@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using cfg;
 using QFramework;
-using UnityEngine;
+
 public class SpecificFoodPositionContext{
     public bool isType = false;
     public FoodCard selectedFoodCard = null;
@@ -17,7 +17,7 @@ public class Requirement_具体食材站位 : CustomerRequirement{
     public SpecificFoodPositionContext Context = new SpecificFoodPositionContext();
     protected override bool InternalCheckMet(Customer customer, List<object> context){
         DealContext dealContext = context?.FirstOrDefault() as DealContext;
-        if (dealContext == null){ Debug.LogError("上下文为空"); return false;}
+        if (dealContext == null){ LogKit.E("【CustomerRequirement】上下文为空"); return false;}
         switch (Context.PositionType){
             case SpecificFoodPositionType.首或尾:
                 FoodInstance firstFoodInstance = dealContext.BBQ.foodInstances[0];
@@ -58,7 +58,7 @@ public class Requirement_具体食材站位 : CustomerRequirement{
                 }
                 return false;
             default:
-                Debug.LogError("未匹配到位置类型");
+                LogKit.E("【CustomerRequirement】未匹配到位置类型");
                 return false;
         }
     }

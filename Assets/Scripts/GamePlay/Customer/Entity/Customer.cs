@@ -103,6 +103,18 @@ public class Customer : ICanGetSystem, ICanRegisterEvent, ICanSendEvent{
         requirements = builder.GenerateGroup(this);
     }
 
+    public int GetTempScore(BBQResultTemp resultTemp){
+        // 伪造一个订单
+        BBQ bbq = new BBQ(resultTemp.stick, resultTemp.foodInstances);
+        DealContext dealContext = new DealContext(bbq, this, new CustomerSatisfaction());
+        int score = 0;
+        foreach (var requirement in requirements){
+            if (requirement.IsMet(this, new List<object>{dealContext})){
+                score += requirement.StarAmount;
+            }
+        }
+        return score;
+    }
 }
 
 public enum CustomerState{

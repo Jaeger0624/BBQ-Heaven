@@ -8,6 +8,7 @@ using QFramework;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using TMPro;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 // 这种Type不会决定逻辑区别，只是用来导向不同的预制体而已
@@ -85,6 +86,8 @@ public class SelectionPanel : MonoBehaviour, IController
     {
         if (evt.SelectionPanelType != selectionPanelType) return;
 
+        AsyncSubject<Unit> sub = evt.GetSubject();
+
         // 1. 重置选择与刷新次数
         ResetSelection();
         refreshAmount = evt.RefreshAmount;
@@ -121,6 +124,11 @@ public class SelectionPanel : MonoBehaviour, IController
                 
                 // B. 关闭面板
                 Hide();
+
+
+                // C. 触发回调
+                sub.OnNext(Unit.Default);
+                sub.OnCompleted();
             });
         }
         Show();

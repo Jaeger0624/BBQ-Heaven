@@ -1,12 +1,11 @@
 using QFramework;
-using UnityEngine;
 using cfg;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using System.Linq;
 public interface IStickSystem : ISystem, ISavable
 {
     Stick selectedStick { get; }
+    List<Stick> CurrentSticks { get; }
     Stick AddStickToRepository(string id);
     void AddCurrentStick(Stick stick);
     void UseCurrentStick(Stick stick);
@@ -26,6 +25,7 @@ public class StickSystem : AbstractSystem, IStickSystem
     private Dictionary<string, Stick> stickRepository;
     // 当前烤串列表
     private List<Stick> currentSticks;
+    public List<Stick> CurrentSticks => currentSticks;
     public Stick selectedStick { get; private set; }
     protected override void OnInit()
     {

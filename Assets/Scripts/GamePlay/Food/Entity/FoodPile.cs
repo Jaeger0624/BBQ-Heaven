@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using cfg;
 using QFramework;
-using UnityEngine;
-using UnityEngine.Rendering;
+
 [Serializable]
 public class FoodPile : ICanGetSystem, ICanSendEvent{
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;

@@ -11,11 +11,13 @@ public class TooltipParent : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public IDisposable showTask;
     public IShowTooltip tooltip;
     public bool followMouse => targetTransform == null;
+    private float waitTime => SettingManager.Instance.DevSettings.tooltipWaitTime;
     public void OnPointerEnter(PointerEventData eventData)
     {
+        // 不受时间缩放影响
         // 等待0.5s
         showTask = Observable
-            .Timer(TimeSpan.FromSeconds(0.5))
+            .Timer(TimeSpan.FromSeconds(waitTime), Scheduler.MainThread)
             .Subscribe(_ => {
                 ShowTooltip();
             });

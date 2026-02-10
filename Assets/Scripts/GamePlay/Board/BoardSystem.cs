@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using cfg;
-using PrimeTweenDemo;
 using QFramework;
 using UniRx;
 using UnityEngine;
@@ -36,7 +34,7 @@ public class BoardSystem : AbstractSystem, IBoardSystem
     // 1. 定义一个 Subject (它是幕后的“广播站”)
     private Subject<BoardCell> _cellClickedSubject = new Subject<BoardCell>();
     private Subject<Unit> _boardStateChangedSubject = new Subject<Unit>();
-    private TileHandler tileHandler = new TileHandler();
+    private TileHandler tileHandler = new TileHandler(); // 地块处理者
 
     // 2. 实现接口：将 Subject 也就是这个管道暴露出去供人订阅
     public IObservable<BoardCell> OnCellClicked => _cellClickedSubject;

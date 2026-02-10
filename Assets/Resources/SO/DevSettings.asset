@@ -38,3 +38,4 @@ MonoBehaviour:
   hoverScale: 1.4
   hoverHeightOffset: 80
   targetingHeightOffset: 40
+  tooltipWaitTime: 0.31

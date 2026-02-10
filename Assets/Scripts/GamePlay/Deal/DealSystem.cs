@@ -16,6 +16,7 @@ using cfg;
 public interface IDealSystem : ISystem{
     // 执行交易
 	void ExecuteDeal(BBQ bbq, Customer customer);
+	DealResult ExecuteTempDeal(BBQResultTemp resultTemp, Customer customer);
 	void AddScoreMultiplier(string name, float multiplier);
 	void RemoveScoreMultiplier(string name);
 }
@@ -76,6 +77,7 @@ public class DealSystem : AbstractSystem, IDealSystem
         if (currentSatisfaction != null) Debug.LogError("当前满意度应当为空");
         this.GetSystem<ICustomerSystem>().Satisfaction = new CustomerSatisfaction();
 	}
+
 	public async void ExecuteDeal(BBQ bbq, Customer customer)
     {
 		if (bbq == null || customer == null) return;
@@ -252,12 +254,60 @@ public class DealSystem : AbstractSystem, IDealSystem
 		// 触发顾客订单完成后动作
 		this.GetSystem<ICustomerSystem>().CustomerActionHandler.HandleCustomerAction(new List<Customer>{context.Customer}, CustomerActionType.订单完成后, new List<object>{result, context});
 
+		// 记录顾客服务次数
+		this.GetSystem<ICustomerSystem>().Recorder.OnServeCustomer(context, result);
+
 		// 顾客离开（服务完成）
 		this.GetSystem<ICustomerSystem>().LeaveCustomer(new List<Customer>{context.Customer});
 
 		// 归还烤串
 		Stick stick = context.BBQ.stick;
 		stick.TryReturnStick();
+	}
+
+	
+	// 不引入Satisfaction的临时交易（同时也不触发食材效果，只是简单的加值计算）
+	public DealResult ExecuteTempDeal(BBQResultTemp resultTemp, Customer customer){
+		if (resultTemp == null || customer == null) return null;
+		BBQ bbq = new BBQ(resultTemp.stick, resultTemp.foodInstances);
+
+		DealContext context = new DealContext(bbq, customer, new CustomerSatisfaction());
+		int rarity = bbq.foodInstances.Sum(x => x.rarity);
+		int taste = bbq.foodInstances.Sum(x => x.taste);
+		float rawPrice = rarity * taste;
+		Dictionary<string, float> otherMultipliers = new();
+		// 1. 添加得分乘区
+		foreach (var multiplier in scoreMultipliers){
+			otherMultipliers.Add(multiplier.Key, multiplier.Value);
+		}
+		// 2. 添加其他得分乘区
+		foreach (var multiplier in context.OtherMultipliers){
+			otherMultipliers.Add(multiplier.Key, multiplier.Value);
+		}
+
+		// 执行乘区计算
+		foreach (var multiplier in otherMultipliers){
+			rawPrice *= multiplier.Value;
+		}
+
+		ReviewResult reviewResult = customer.Review(context);
+
+		// 星级计算
+		foreach (var record in reviewResult.Records){
+			if (record.IsMet){
+				if (record.StarValue <= 2){
+					Debug.LogError($"【DealSystem】星级计算至少要是3星，否则无效，错误记录：{record.Description}");
+					continue;
+				}
+				rawPrice *= record.StarValue / 2f;
+			}
+		}
+
+		int roundedRawPrice = Mathf.RoundToInt(rawPrice);
+		// 计算价格
+		int money = earnMoneyStrategy.EarnMoney(roundedRawPrice);
+		DealResult result = new DealResult(context.BBQ, context.Customer, 1f, null, otherMultipliers, rarity, taste, money, rawPrice, null);
+		return result;
 	}
 }
 
