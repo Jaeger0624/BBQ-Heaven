@@ -4,6 +4,14 @@ using System.Linq;
 using cfg;
 using QFramework;
 
+public enum RequirementAwardType{
+    倍率,
+    声望,
+    金币,
+}
+
+
+// 要求冲突组
 public enum RequirementConflictGroup{
     无,
     食材数量,

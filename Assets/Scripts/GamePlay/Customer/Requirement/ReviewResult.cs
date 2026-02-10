@@ -6,8 +6,6 @@ public class ReviewResult
     public int TotalStars;
     // 记录细节，方便UI展示（比如：[√] 少于3个食材 (+1.5★)）
     public List<RequirementCheckRecord> Records = new List<RequirementCheckRecord>();
-
-
     public string ReviewInfo(){
         StringBuilder sb = new StringBuilder();
         sb.AppendLine($"评价：{TotalStars/2f:F1}星");
@@ -23,4 +21,15 @@ public struct RequirementCheckRecord
     public string Description;
     public int StarValue;
     public bool IsMet;
+    public RequirementAward Award;
+}
+
+public class RequirementAward
+{
+    public RequirementAwardType AwardType;
+    public float AwardValue;
+    public RequirementAward(RequirementAwardType awardType, float awardValue){
+        this.AwardType = awardType;
+        this.AwardValue = awardValue;
+    }
 }

@@ -85,7 +85,8 @@ public class Customer : ICanGetSystem, ICanRegisterEvent, ICanSendEvent{
             reviewResult.Records.Add(new RequirementCheckRecord{
                 Description = requirement.GetDescription(),
                 StarValue = requirement.StarAmount,
-                IsMet = isMet
+                IsMet = isMet,
+                Award = new RequirementAward(RequirementAwardType.倍率, requirement.StarAmount/2f)
             });
             if (isMet){
                 reviewResult.TotalStars += requirement.StarAmount;

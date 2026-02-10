@@ -169,8 +169,17 @@ public class DealSystem : AbstractSystem, IDealSystem
 					Debug.LogError($"【DealSystem】星级计算至少要是3星，否则无效，错误记录：{record.Description}");
 					continue;
 				}
-				rawPrice *= record.StarValue / 2f;
-				scoreRecords.Add(new ScoreRecord(record.Description, record.StarValue / 2f, rawPrice));
+
+				// 根据奖励类型计算
+				switch (record.Award.AwardType){
+					case RequirementAwardType.倍率:
+						rawPrice *= record.Award.AwardValue;
+						break;
+					default:
+						Debug.LogError($"【DealSystem】未知奖励类型: {record.Award.AwardType}");
+						break;
+				}
+				scoreRecords.Add(new ScoreRecord(record.Description, record.Award.AwardValue, rawPrice));
 			}
 		}
 
