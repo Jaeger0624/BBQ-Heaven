@@ -129,7 +129,6 @@ public class BBQSystem : AbstractSystem, IBBQSystem
         });
 
         if (!this.GetSystem<IProxySystem>().isTesting){
-            Debug.Log($"<color=purple>当前是否在测试：{this.GetSystem<IProxySystem>().isTesting}</color>");
             this.GetSystem<IGASystem>().SetTrigger(context.targetBBQ);   
         }
         //

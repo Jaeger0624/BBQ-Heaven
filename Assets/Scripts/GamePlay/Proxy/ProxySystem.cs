@@ -36,6 +36,10 @@ public class ProxySystem : AbstractSystem, IProxySystem{
 
     // 处理选择事件
     private void HandleSelection(CreateSelectionEvent evt){
+        if (!isTesting){
+            return;
+        }
+
         Debug.Log("<color=purple>【HeadlessTest】代理处理选择事件: " + evt.SelectionRequest.Title + "</color>");
         // 从选项中随机选择一个
         ISelectionRequest selectionRequest = evt.SelectionRequest;
@@ -50,6 +54,9 @@ public class ProxySystem : AbstractSystem, IProxySystem{
 
     private void HandleInstantEncounter(TriggerInstantEncounterEvent evt)
     {
+        if (!isTesting){
+            return;
+        }
         Debug.Log("<color=purple>【ProxySystem】处理瞬间遭遇事件: " + evt.instantEncounter.Name + "</color>");
         // 从选项中随机选择一个
         InstantEncounter instantEncounter = evt.instantEncounter;
@@ -141,7 +148,9 @@ public class ProxySystem : AbstractSystem, IProxySystem{
 
     DealRequest dealRequest = null;
     private void OnAddBBQToRepository(AddBBQToRepositoryEvent evt){
-
+        if (!isTesting){
+            return;
+        }   
         if (dealRequest != null){
             Debug.Log("<color=purple>【ProxySystem】有交易请求，执行交易</color>");
             // 1. 立刻完成交易

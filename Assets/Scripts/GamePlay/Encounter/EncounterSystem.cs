@@ -142,13 +142,13 @@ public class EncounterSystem : AbstractSystem, IEncounterSystem
         // 3. 创建瞬间遭遇实例
         InstantEncounter instantEncounter = new InstantEncounter(instantEncounterData, options);
 
-        // 4. 发送事件
-        this.SendEvent(new TriggerInstantEncounterEvent(instantEncounter));
+
         Debug.Log($"【EncounterSystem】触发瞬间遭遇: {instantEncounter.Name}");
 
-        // 5. 实例化 AsyncSubject
+        // 4. 实例化 AsyncSubject
         _currentEncounterSubject = new AsyncSubject<string>();
-
+        // 5. 发送事件
+        this.SendEvent(new TriggerInstantEncounterEvent(instantEncounter));
         return _currentEncounterSubject;
     }
     private void OnSelectOptionEvent(SelectOptionEvent evt) => HandleOption(evt.optionData);

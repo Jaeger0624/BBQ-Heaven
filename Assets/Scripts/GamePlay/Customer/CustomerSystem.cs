@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using cfg;
 using QFramework;
+using UnityEngine;
 
 
 /// <summary>
@@ -173,6 +174,12 @@ public class CustomerSystem : AbstractSystem, ICustomerSystem
 
     private void OnTimeTick_迎来新顾客(TimeTickEvent evt){
         int timePoint = evt.timePoint;
+
+        // 如果当前已经在超时状态
+        if (this.GetSystem<ITimeSystem>().isTimeUp){
+            Debug.Log("【CustomerSystem】当前已经在超时状态，不创建新顾客");
+            return;
+        }
         List<Customer> customersToCreate = new();
         for (int i = 0; i < timePoint; i++){
 
@@ -181,7 +188,9 @@ public class CustomerSystem : AbstractSystem, ICustomerSystem
                 customersToCreate.Add(customer);
             }
         }
-
+        if (customersToCreate.Count == 0){
+            return;
+        }
         // 只创建一次，可能含有多个顾客
         this.CreateCustomer(customersToCreate);
     }

@@ -1,8 +1,10 @@
 using System;
 using Sirenix.OdinInspector;
+using UnityEngine;
 
 [Serializable]
 public class TextInfo{
+    [TextArea(3, 10)]
     public string text;
     [ShowIf("needResize")]
     public float size;

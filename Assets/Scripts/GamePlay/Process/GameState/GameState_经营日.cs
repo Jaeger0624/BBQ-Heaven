@@ -6,9 +6,6 @@ public class GameState_经营日 : AbstractGameState
 
     public override void OnEnter(){
 
-
-
-
         this.SendEvent(new ShowMainGamePlayEvent());
         this.SendEvent(new ChangePanelEvent(ProcessPanel.Kitchen));
 

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   "supplyFoodTime_\u9ED8\u8BA4": 5
   "\u70E4\u4E32\u989D\u5916\u65F6\u95F4\u6210\u672C_\u9ED8\u8BA4": 2
-  "targetTime_\u9ED8\u8BA4": {x: 0, y: 21}
+  "targetTime_\u9ED8\u8BA4": {x: 40, y: 20}
   "currentTime_\u9ED8\u8BA4": {x: 0, y: 20}
   "\u9ED8\u8BA4\u6BCF\u65E5\u5F00\u59CB\u5BA2\u6237\u6570": 2
   "\u6BCF\u5206\u949F\u6765\u4E00\u4E2A\u987E\u5BA2\u7684\u53EF\u80FD\u6027": 0.1
