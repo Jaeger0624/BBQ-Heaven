@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c7f20cef6680c34a87de54419efd3b8, type: 3}
+  m_Name: "\u5F97\u5206"
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  tooltipInfos:
+  - text: "\u5F97\u5206\u9762\u677F"
+    size: 48
+    needResize: 1
+  - text: "<line-height=25%>\\n</line-height><color=yellow>\u76EE\u6807\u5F97\u5206</color>\uFF1A\u4ECA\u5929<color=yellow>\u6253\u70CA</color>\u524D\u9700\u8981\u8FBE\u5230\u7684\u5F97\u5206\uFF0C\u82E5\u672A\u8FBE\u5230\uFF0C\u540E\u679C\u5F88\u4E25\u91CD\uFF01<line-height=25%>\\n</line-height>\n<color=yellow>\u5F53\u524D\u5F97\u5206</color>\uFF1A\u4ECA\u5929\u76EE\u524D\u7684\u603B\u8BA1\u5F97\u5206\uFF0C\u52AA\u529B\u83B7\u53D6\u5427\uFF01"
+    size: 30
+    needResize: 1

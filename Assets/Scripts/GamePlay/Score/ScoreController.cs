@@ -6,20 +6,22 @@ using UnityEngine;
 
 public class ScoreController : MonoBehaviour, IController
 {
+    [SerializeField] private string scoreTextPrefix = "当前:";
     [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private string targetScoreTextPrefix = "目标:";
     [SerializeField] private TextMeshProUGUI targetScoreText;
 
     private int currentScore = 0;
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
     void Start()
     {
-        scoreText.text = $"当前:0";
+        scoreText.text = scoreTextPrefix + "0";
         this.RegisterEvent<ChangeScoreEvent>(OnChangeScoreEvent).UnRegisterWhenGameObjectDestroyed(this.gameObject);
         this.RegisterEvent<SetTargetScoreEvent>(OnSetTargetScoreEvent).UnRegisterWhenGameObjectDestroyed(this.gameObject);
     }
     void Update()
     {
-        scoreText.text = $"当前:{currentScore.ToString()}";
+        scoreText.text = scoreTextPrefix + currentScore.ToString();
     }
 
     private void OnChangeScoreEvent(ChangeScoreEvent evt)
@@ -33,6 +35,6 @@ public class ScoreController : MonoBehaviour, IController
 
     private void OnSetTargetScoreEvent(SetTargetScoreEvent evt)
     {
-        targetScoreText.text = $"目标:{evt.targetScore.ToString()}";
+        targetScoreText.text = targetScoreTextPrefix + evt.targetScore.ToString();
     }
 }
