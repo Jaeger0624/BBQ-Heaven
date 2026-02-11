@@ -16,3 +16,4 @@ MonoBehaviour:
   foodCardItemPrefab: {fileID: 1620924827716092986, guid: 3e09223fe58785f40877b4e251841c86, type: 3}
   mascotItemPrefab: {fileID: 3437480002341611895, guid: 25d3c74d1ba1bbc41ada10b08697ff43, type: 3}
   cardItemPrefab: {fileID: 6391668975714276064, guid: 57581d3ea8beca240adbc740209f854d, type: 3}
+  redDotPrefab: {fileID: 931457222717416310, guid: 2e9f437e2e1010a46b5a439a44e28358, type: 3}

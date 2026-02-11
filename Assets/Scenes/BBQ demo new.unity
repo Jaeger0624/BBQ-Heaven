@@ -4851,6 +4851,7 @@ GameObject:
   - component: {fileID: 215330533}
   - component: {fileID: 215330535}
   - component: {fileID: 215330534}
+  - component: {fileID: 215330536}
   m_Layer: 0
   m_Name: "\u6807\u9898"
   m_TagString: Untagged
@@ -4938,6 +4939,20 @@ MonoBehaviour:
     SerializationNodes: []
   tooltipInfoSOs:
   - {fileID: 11400000, guid: 8edaf49eecd70f244a5c659ddf6a5810, type: 2}
+--- !u!114 &215330536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 215330531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edd5fc9ecdf873845a26a52db0a62017, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RedDotShower
+  corner: 0
+  offset: {x: 0, y: 0}
 --- !u!1 &217384339
 GameObject:
   m_ObjectHideFlags: 0
@@ -32650,7 +32665,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -17.149902, y: -115.8999}
+  m_AnchoredPosition: {x: -24, y: -115.8999}
   m_SizeDelta: {x: 192.39, y: 334.35}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1424225158

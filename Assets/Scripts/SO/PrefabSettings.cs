@@ -14,4 +14,7 @@ public class PrefabSettings : ScriptableObject
 
     [Header("卡牌展示")]
     public DisplayCardView cardItemPrefab;
+
+    [Header("其他预制体")]
+    public GameObject redDotPrefab;
 }
