@@ -58,6 +58,7 @@ public class CustomerActionHandler : ICanGetSystem, ICanSendEvent, ICanRegisterE
                     };
                     HandleCustomerAction(this.GetSystem<ICustomerSystem>().OrderingCustomers.ToList(), customerActionType, parameters);
                 });
+                unRegisters.Add(unRegister);
                 break;
             default:
                 LogKit.E($"【CustomerActionHandler】未实现的系统外顾客动作类型: {customerActionType}");

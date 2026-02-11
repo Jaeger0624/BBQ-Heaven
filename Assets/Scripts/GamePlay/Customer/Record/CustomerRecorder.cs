@@ -29,8 +29,7 @@ public class CustomerRecorder : ICanGetSystem, ICanSendEvent{
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
     private List<CustomerRecord> customerRecords = new();
     // 创建顾客元数据
-    public MetaCustomer CreateMeta(bool needRecord){
-        
+    public MetaCustomer CreateMeta(){
         MetaCustomer metaCustomer = new MetaCustomer(GetName());
         return metaCustomer;
     }
@@ -56,11 +55,12 @@ public class CustomerRecorder : ICanGetSystem, ICanSendEvent{
 
     public Customer CreateCustomer(bool isOld){
         if (isOld){
+            
             // 从老顾客中筛选出未到达的顾客
             return CreateCustomer(GetMeta(notArrived: true));
         }
         else{
-            return CreateCustomer(CreateMeta(true));
+            return CreateCustomer(CreateMeta());
         }
     }
 
@@ -75,7 +75,7 @@ public class CustomerRecorder : ICanGetSystem, ICanSendEvent{
         
         if (metaCustomers.Count == 0){
             Debug.LogWarning("【CustomerRecorder】顾客记录为空，无法获取顾客元数据");
-            return CreateMeta(true);
+            return CreateMeta();
         }
         else{
             return rng.PickOne(metaCustomers);

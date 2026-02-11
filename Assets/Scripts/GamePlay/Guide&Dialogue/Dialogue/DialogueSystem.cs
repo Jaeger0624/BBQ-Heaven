@@ -15,8 +15,6 @@ public interface IDialogueSystem : ISystem{
 public class DialogueSystem : AbstractSystem, IDialogueSystem{
     // 用来接收UI点击事件的信号流
     private Subject<Unit> _nextClickSubject = new Subject<Unit>();
-    // 是否有UI（不能让对话流的推进依赖于UI，否则纯
-    private bool hasUI = true;
     protected override void OnInit()
     {
         _nextClickSubject = new Subject<Unit>();

@@ -93,8 +93,8 @@ public class CustomerController : MonoBehaviour, IController, ICanSendEvent
 
     // 更新等待顾客文本
     private void UpdateWaitingCustomerText(){
-        int waitingCustomerCount = customerSystem.GetAmount(CustomerState.Waiting);
-        waitingCustomerText.text = $"Waiting: {waitingCustomerCount}";
+        int waitingCustomerCount = customerSystem.GetAmount(CustomerState.Ordering);
+        waitingCustomerText.text = $"Ordering: {waitingCustomerCount}";
     }
 
     private void ClearView() => customerView.Bind(null);

@@ -15,8 +15,20 @@ public class DealResult{
     public readonly int rarity; // 珍稀度
     public readonly int taste;  // 美味度
     public readonly float rawPrice;  // 原始价格
-    public int price;  // 价格
+    public int price { get; private set; }
 	public List<ScoreRecord> scoreRecords;
+	public DealResult(BBQ bbq, Customer customer, float satisfaction, int rarity, int taste, float rawPrice)
+	{
+		this.bbq = bbq;
+		this.customer = customer;
+		this.satisfaction = satisfaction;
+		this.otherMultipliers = new Dictionary<string, float>();
+		this.satisfactionSystem = new CustomerSatisfaction();
+		this.rarity = rarity;
+		this.taste = taste;
+		this.rawPrice = rawPrice;
+		this.scoreRecords = new List<ScoreRecord>();
+	}
 	public DealResult(BBQ bbq, Customer customer, float satisfaction, CustomerSatisfaction satisfactionSystem,Dictionary<string, float> otherMultipliers, int rarity, int taste, int price, float rawPrice, List<ScoreRecord> scoreRecords){
 		this.bbq = bbq;
 		this.customer = customer;
@@ -40,6 +52,10 @@ public class DealResult{
 		sb.AppendLine($"其他得分乘区：{string.Join(", ", otherMultipliers.Select(x => $"[{x.Key}] {x.Value}x"))}");
 		sb.AppendLine($"最终得分：{price}");
 		return sb.ToString();
+	}
+
+	public void SetPrice(int price){
+		this.price = price;
 	}
 }
 

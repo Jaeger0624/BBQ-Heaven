@@ -10,6 +10,16 @@ public class CustomerRecordController : MonoBehaviour, IController{
     void Start()
     {
         this.RegisterEvent<CreateMetaCustomerEvent>(OnCreateMetaCustomerEvent).UnRegisterWhenGameObjectDestroyed(this);
+        this.RegisterEvent<ClearCustomerRecordViewsEvent>(OnClearCustomerRecordViewsEvent).UnRegisterWhenGameObjectDestroyed(this);
+    }
+
+    private void OnClearCustomerRecordViewsEvent(ClearCustomerRecordViewsEvent _){
+        foreach (var view in customerRecordViews){
+            if (view != null && view.gameObject != null){
+                Destroy(view.gameObject);
+            }
+        }
+        customerRecordViews.Clear();
     }
     private void OnCreateMetaCustomerEvent(CreateMetaCustomerEvent e) => CreateRecordView(e.record);
 

@@ -27,7 +27,6 @@ public class ButtonUI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
     [ShowIf("isCustom")]
     public UnityEvent OnExit;
     public bool isCustom = false;
-    private bool isHovering = false;
     public ButtonAnim anim = ButtonAnim.Scale;
     private bool isInteractable = true;
     public void OnPointerClick(PointerEventData eventData)
@@ -43,7 +42,6 @@ public class ButtonUI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (!isInteractable) return;
-        isHovering = true;
         if (isCustom)
         {
             OnEnter?.Invoke();
@@ -62,7 +60,6 @@ public class ButtonUI : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
     public void OnPointerExit(PointerEventData eventData)
     {
         if (!isInteractable) return;
-        isHovering = false;
         if (isCustom)
         {
             OnExit?.Invoke();

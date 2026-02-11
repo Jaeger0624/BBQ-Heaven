@@ -8,8 +8,7 @@ public class DealController : MonoBehaviour, IController
 {
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
     private BBQView draggingBBQView;
-    private Vector3 dragOffset;
-    private bool isDragging = false;
+    private Vector3 dragOffset; 
     void OnEnable()
     {
         this.RegisterEvent<DealStartedEvent>(OnDealStartedEvent);

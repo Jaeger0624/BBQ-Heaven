@@ -109,4 +109,9 @@ public class CreateMetaCustomerEvent : AbstractEvent
         this.record = metaCustomer;
     }
 }
+
+/// <summary>
+/// 清除顾客志视图（新游戏/重置时发送，防止旧视图堆积导致内存泄漏）
+/// </summary>
+public class ClearCustomerRecordViewsEvent : AbstractEvent { }
 #endregion

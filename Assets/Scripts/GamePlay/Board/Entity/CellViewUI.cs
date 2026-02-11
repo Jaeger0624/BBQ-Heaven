@@ -11,7 +11,6 @@ public class CellViewUI : MonoBehaviour, IPointerClickHandler, IController{
     [SerializeField] private Image image;
     [SerializeField] private Image highlightImage;
     [SerializeField] private TextMeshProUGUI tileNameText;
-    private bool isHighlighted = false;
     void Start()
     {
            
@@ -33,11 +32,9 @@ public class CellViewUI : MonoBehaviour, IPointerClickHandler, IController{
     }
     public void Highlight(){
         // Debug.Log($"Highlight: {cell.position}");
-        isHighlighted = true;
         highlightImage.gameObject.SetActive(true);
     }
     public void Unhighlight(){
-        isHighlighted = false;
         highlightImage.gameObject.SetActive(false);
     }
 

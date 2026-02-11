@@ -13,15 +13,17 @@ public class OrderController : MonoBehaviour, IController, ICanSendEvent
     [SerializeField] private TextMeshProUGUI orderCountText;
     private Dictionary<string, OrderView> orderViews = new Dictionary<string, OrderView>();
     void OnEnable(){
+        // 添加顾客时，创建订单
         this.RegisterEvent<AddCustomerEvent>(OnAddCustomerEvent).UnRegisterWhenDisabled(this);
+        // 移除顾客时，移除订单
         this.RegisterEvent<RemoveCustomerEvent>(OnRemoveCustomerEvent).UnRegisterWhenDisabled(this);
+        // 切换当前顾客时，切换选中的订单
         this.RegisterEvent<CurrentCustomerUpdateEvent>(OnCurrentCustomerUpdate).UnRegisterWhenDisabled(this);
-
-
+        // 高亮顾客时，高亮选中的订单
         this.RegisterEvent<HighlightCustomersEvent>(OnHighlightCustomersEvent).UnRegisterWhenDisabled(this);
+        // 取消高亮顾客时，取消高亮选中的订单
         this.RegisterEvent<UnhighlightCustomersEvent>(OnUnhighlightCustomersEvent).UnRegisterWhenDisabled(this);
-
-
+        // 改变顾客等待值时，改变选中的订单的等待值
         this.RegisterEvent<ChangeCustomerPatienceEvent>(OnChangeCustomerPatienceEvent).UnRegisterWhenDisabled(this);
     }
     private void OnChangeCustomerPatienceEvent(ChangeCustomerPatienceEvent e){
@@ -45,11 +47,15 @@ public class OrderController : MonoBehaviour, IController, ICanSendEvent
         e.customers.ForEach(customer => {
             CreateOrderView(customer);
         });
+
+        UpdateOrderCountText();
     }
     private void OnRemoveCustomerEvent(RemoveCustomerEvent e){
         e.customers.ForEach(customer => {
             RemoveOrderView(customer);
         });
+
+        UpdateOrderCountText();
     }
     private void OnCurrentCustomerUpdate(CurrentCustomerUpdateEvent e){
         foreach (var orderView in orderViews.Values)

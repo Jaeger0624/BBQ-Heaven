@@ -11,7 +11,7 @@ public class ReviewResult
         sb.AppendLine($"评价：{TotalStars/2f:F1}星");
         sb.AppendLine($"评价记录：");
         foreach (var record in Records){
-            sb.AppendLine($"{record.Description}：{record.StarValue/2f:F1}星，{(record.IsMet ? "√" : "×")}");
+            sb.AppendLine($"{record.Description}：{record.StarValue/2f:F1}星，{(record.IsMet ? "√" : "×")} 【{record.Award.AwardType.ToString()}】");
         }
         return sb.ToString();
     }

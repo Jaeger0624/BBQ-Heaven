@@ -39,7 +39,7 @@ public class AudioReferenceSO : SerializedScriptableObject
     public void LoadBGMClips(){
         string bgmPath = "BGM";
         bgmClips = new Dictionary<string, AudioClip>();
-        AudioClip[] allBGMClips = Resources.LoadAll<AudioClip>("BGM");
+        AudioClip[] allBGMClips = Resources.LoadAll<AudioClip>(bgmPath);
         foreach (AudioClip bgmClip in allBGMClips){
             bgmClips.Add(bgmClip.name, bgmClip);
         }

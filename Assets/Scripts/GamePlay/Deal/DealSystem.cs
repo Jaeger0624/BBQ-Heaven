@@ -107,11 +107,8 @@ public class DealSystem : AbstractSystem, IDealSystem
 			new DelayAnimTask(0.1f, true),
 			new ActionAnimTask(() => this.SendEvent(new ShowScoreTextEvent($"{rarity.ToString().ToColor(rarityColor)} x {taste.ToString().ToColor(tasteColor)}"))),
 			new DelayAnimTask(scoreTextAnimDuration + 0.2f, true),
-			// new ActionAnimTask(() => this.SendEvent(new UpdateScoreViewEvent(rarity))),
-			// new DelayAnimTask(0.6f, true),
 			new ActionAnimTask(() => this.SendEvent(new UpdateScoreViewEvent(taste * rarity))),
 			new DelayAnimTask(scoreTextAnimDuration + 0.2f, true),
-			// new ActionAnimTask(() => this.SendEvent(new CloseScorePanelEvent())),
 		};
 
 		IAnimTask animTask = new SequenceAnimTask(animTasks);
@@ -119,7 +116,7 @@ public class DealSystem : AbstractSystem, IDealSystem
 
 		// 进行满意度的处理计算
 		DealResult result = GetResult(context);
-				
+
 		Debug.Log(result.DealInfo());
 
 		AfterDeal(result, context);
@@ -133,7 +130,7 @@ public class DealSystem : AbstractSystem, IDealSystem
 
 		// 获取满意度（含顾客身上 Tag 的效果执行）
 		Debug.Log($"【DealSystem】开始计算满意度：顾客:{context.Customer.name}");
-		List<ScoreRecord> scoreRecords = new List<ScoreRecord>();
+
 		// 最终满意度总乘区
 		(float satisfaction, CustomerSatisfaction Satis) = GetSatisfaction(context);
 
@@ -142,24 +139,23 @@ public class DealSystem : AbstractSystem, IDealSystem
 		int taste = context.BBQ.totalTaste.Value;
 		float rawPrice = satisfaction * rarity * taste;
 
-		scoreRecords.Add(new ScoreRecord("满意度", satisfaction, rawPrice));
+		DealResult result = new DealResult(context.BBQ, context.Customer, satisfaction, rarity, taste, rawPrice);
 
-		// 获取其他得分乘区
-		Dictionary<string, float> otherMultipliers = new();
+		result.scoreRecords.Add(new ScoreRecord("满意度", satisfaction, rawPrice));
 
 		// 1. 添加得分乘区
 		foreach (var multiplier in scoreMultipliers){
-			otherMultipliers.Add(multiplier.Key, multiplier.Value);
+			result.otherMultipliers.Add(multiplier.Key, multiplier.Value);
 		}
 		// 2. 添加其他得分乘区
 		foreach (var multiplier in context.OtherMultipliers){
-			otherMultipliers.Add(multiplier.Key, multiplier.Value);
+			result.otherMultipliers.Add(multiplier.Key, multiplier.Value);
 		}
-
+		
 		// 执行乘区计算
-		foreach (var multiplier in otherMultipliers){
+		foreach (var multiplier in result.otherMultipliers){
 			rawPrice *= multiplier.Value;
-			scoreRecords.Add(new ScoreRecord(multiplier.Key, multiplier.Value, rawPrice));
+			result.scoreRecords.Add(new ScoreRecord(multiplier.Key, multiplier.Value, rawPrice));
 		}
 
 		// 星级计算
@@ -169,33 +165,31 @@ public class DealSystem : AbstractSystem, IDealSystem
 					Debug.LogError($"【DealSystem】星级计算至少要是3星，否则无效，错误记录：{record.Description}");
 					continue;
 				}
-
 				// 根据奖励类型计算
 				switch (record.Award.AwardType){
 					case RequirementAwardType.倍率:
 						rawPrice *= record.Award.AwardValue;
+						result.otherMultipliers.Add(record.Description, record.Award.AwardValue);
+						result.scoreRecords.Add(new ScoreRecord(record.Description, record.Award.AwardValue, rawPrice));
+						break;
+					case RequirementAwardType.声望:
+						this.GetSystem<IPCSystem>().AddReputation(Mathf.RoundToInt(record.Award.AwardValue));
+						break;
+					case RequirementAwardType.金币:
+						this.GetSystem<IEconomySystem>().AddCoin(Mathf.RoundToInt(record.Award.AwardValue));
 						break;
 					default:
 						Debug.LogError($"【DealSystem】未知奖励类型: {record.Award.AwardType}");
 						break;
 				}
-				scoreRecords.Add(new ScoreRecord(record.Description, record.Award.AwardValue, rawPrice));
 			}
 		}
 
 		int roundedRawPrice = Mathf.RoundToInt(rawPrice);
 		// 计算价格
-		int money = earnMoneyStrategy.EarnMoney(roundedRawPrice);
-
-		DealResult result = new DealResult(context.BBQ, context.Customer, satisfaction, Satis, otherMultipliers, rarity, taste, money, rawPrice, scoreRecords);
-
-
-		// 基础计算完成：派发事件，允许 GA 基于当前交易对结果进行调整
+		result.SetPrice(earnMoneyStrategy.EarnMoney(roundedRawPrice));
 		return result;
 	}
-
-
-
     //TODO: 此处安插公式计算顾客满意度
     private (float satisfaction, CustomerSatisfaction satisfactionSystem) GetSatisfaction(DealContext context)
 	{
@@ -233,7 +227,6 @@ public class DealSystem : AbstractSystem, IDealSystem
 		List<ScoreRecord> scoreRecords = result.scoreRecords;
 		List<IAnimTask> animTasks = new List<IAnimTask>();
 		foreach (var record in scoreRecords){
-			
 			// 更新得分面板
 			string multiplierText = $"<size=36><color=yellow>{record.name}</color></size>\n<size=56>{record.multiplier}x</size>";
 			animTasks.Add(new ActionAnimTask(() => this.SendEvent(new UpdateScoreViewEvent(Mathf.RoundToInt(record.currentScore), multiplierText))));
@@ -284,18 +277,20 @@ public class DealSystem : AbstractSystem, IDealSystem
 		int rarity = bbq.foodInstances.Sum(x => x.rarity);
 		int taste = bbq.foodInstances.Sum(x => x.taste);
 		float rawPrice = rarity * taste;
-		Dictionary<string, float> otherMultipliers = new();
+
+		DealResult result = new DealResult(bbq, customer, 1f, rarity, taste, rawPrice);
+
 		// 1. 添加得分乘区
 		foreach (var multiplier in scoreMultipliers){
-			otherMultipliers.Add(multiplier.Key, multiplier.Value);
+			result.otherMultipliers.Add(multiplier.Key, multiplier.Value);
 		}
 		// 2. 添加其他得分乘区
 		foreach (var multiplier in context.OtherMultipliers){
-			otherMultipliers.Add(multiplier.Key, multiplier.Value);
+			result.otherMultipliers.Add(multiplier.Key, multiplier.Value);
 		}
 
 		// 执行乘区计算
-		foreach (var multiplier in otherMultipliers){
+		foreach (var multiplier in result.otherMultipliers){
 			rawPrice *= multiplier.Value;
 		}
 
@@ -308,14 +303,26 @@ public class DealSystem : AbstractSystem, IDealSystem
 					Debug.LogError($"【DealSystem】星级计算至少要是3星，否则无效，错误记录：{record.Description}");
 					continue;
 				}
-				rawPrice *= record.StarValue / 2f;
+				switch (record.Award.AwardType){
+					case RequirementAwardType.倍率:
+						rawPrice *= record.Award.AwardValue;
+						result.scoreRecords.Add(new ScoreRecord(record.Description, record.Award.AwardValue, rawPrice));
+						break;
+					case RequirementAwardType.声望:
+						this.GetSystem<IPCSystem>().AddReputation(Mathf.RoundToInt(record.Award.AwardValue));
+						break;
+					case RequirementAwardType.金币:
+						this.GetSystem<IEconomySystem>().AddCoin(Mathf.RoundToInt(record.Award.AwardValue));
+						break;
+					default:
+						Debug.LogError($"【DealSystem】未知奖励类型: {record.Award.AwardType}");
+						break;
+				}
 			}
 		}
 
-		int roundedRawPrice = Mathf.RoundToInt(rawPrice);
 		// 计算价格
-		int money = earnMoneyStrategy.EarnMoney(roundedRawPrice);
-		DealResult result = new DealResult(context.BBQ, context.Customer, 1f, null, otherMultipliers, rarity, taste, money, rawPrice, null);
+		result.SetPrice(earnMoneyStrategy.EarnMoney(Mathf.RoundToInt(rawPrice)));
 		return result;
 	}
 }

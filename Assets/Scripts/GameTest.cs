@@ -139,31 +139,15 @@ public class GameTest : MonoBehaviour, IController, ICanSendEvent{
 
     private void CustomerTest(){
         GUILayout.Label($"正在点餐的顾客数量: {this.GetSystem<ICustomerSystem>().GetAmount(CustomerState.Ordering)}");
-        GUILayout.Label($"等待中的顾客数量: {this.GetSystem<ICustomerSystem>().GetAmount(CustomerState.Waiting)}");
         GUILayout.Label($"已离开的顾客数量: {this.GetSystem<ICustomerSystem>().GetAmount(CustomerState.Leaved)}");
         if (GUILayout.Button("添加一个立刻会到的顾客")){
-            CustomerFactory_默认影响权重 customerFactory = new CustomerFactory_默认影响权重();
-            Customer customer = customerFactory.GenerateCustomer();
-            this.GetSystem<ICustomerSystem>().CreateCustomer(new List<Customer>{customer});
-        }
-        if (GUILayout.Button("添加一个预定顾客")){
-            CustomerFactory_默认影响权重 customerFactory = new CustomerFactory_默认影响权重();
-            Customer customer = customerFactory.GenerateCustomer();
-            float arriveTime = 0.1f + 0.9f * this.GetSystem<IRngSystem>().GetSubRng<ICustomerSystem>().NextFloat();
-            LogKit.I($"添加一个预定顾客: {customer.meta.name} 到达时间: {arriveTime}");
-            LogKit.W("预定顾客功能暂未实现");
+            this.GetSystem<ICustomerSystem>().CreateCustomer(1);
         }
         if (GUILayout.Button("刷新顾客")){
-
             // 让当前顾客离开
             List<Customer> customers = this.GetSystem<ICustomerSystem>().OrderingCustomers.ToList();
             this.GetSystem<ICustomerSystem>().LeaveCustomer(customers);
-            CustomerFactory_默认影响权重 customerFactory = new CustomerFactory_默认影响权重();
-            List<Customer> customersToCreate = new List<Customer>();
-            for (int i = 0; i < 3; i++){
-                customersToCreate.Add(customerFactory.GenerateCustomer());
-            }
-            this.GetSystem<ICustomerSystem>().CreateCustomer(customersToCreate);
+            this.GetSystem<ICustomerSystem>().CreateCustomer(3);
         }
     }
 

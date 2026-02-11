@@ -21,7 +21,7 @@ public class Customer : ICanGetSystem, ICanRegisterEvent, ICanSendEvent{
     // 当前耐心值
     public ReactiveProperty<int> PatienceNow;
     // 顾客状态
-    public CustomerState state = CustomerState.Waiting;
+    public CustomerState state = CustomerState.Ordering;
     // 是否已服务
     public bool isServed = false;
     // 是否即将离开
@@ -86,7 +86,7 @@ public class Customer : ICanGetSystem, ICanRegisterEvent, ICanSendEvent{
                 Description = requirement.GetDescription(),
                 StarValue = requirement.StarAmount,
                 IsMet = isMet,
-                Award = new RequirementAward(RequirementAwardType.倍率, requirement.StarAmount/2f)
+                Award = new RequirementAward(requirement.AwardType, requirement.StarAmount/2f)
             });
             if (isMet){
                 reviewResult.TotalStars += requirement.StarAmount;
@@ -119,10 +119,6 @@ public class Customer : ICanGetSystem, ICanRegisterEvent, ICanSendEvent{
 }
 
 public enum CustomerState{
-    /// <summary>
-    /// 等待
-    /// </summary>
-    Waiting,
     /// <summary>
     /// 点餐
     /// </summary>
