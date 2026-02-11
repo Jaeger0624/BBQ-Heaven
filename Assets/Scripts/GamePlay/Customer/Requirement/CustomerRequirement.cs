@@ -22,6 +22,7 @@ public abstract class CustomerRequirement : ICanGetSystem{
     public abstract string Name { get; }
     public abstract RequirementConflictGroup ConflictGroup { get; }
     public int StarAmount;
+    public RequirementAwardType AwardType = RequirementAwardType.倍率;
     private bool isInited = false;
     public bool IsMet(Customer customer, List<object> context){
         if (!isInited){
@@ -31,7 +32,18 @@ public abstract class CustomerRequirement : ICanGetSystem{
         return InternalCheckMet(customer, context);
     }
     public void Init(Customer customer, List<object> context, Rng rng){
+        // 声明已初始化
         isInited = true;
+
+        // 随机奖励类型
+        List<RequirementAwardType> awardTypes = new List<RequirementAwardType>(){
+            RequirementAwardType.倍率,
+            RequirementAwardType.声望,
+            RequirementAwardType.金币,
+        };
+        AwardType = rng.PickOne(awardTypes);
+
+        // 局部初始化逻辑
         InternalInit(customer, context, rng);
     }
     public bool IsConflicted(CustomerRequirement otherRequirement){

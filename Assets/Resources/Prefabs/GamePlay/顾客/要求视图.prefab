@@ -246,6 +246,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startAmountText: {fileID: 5930917707242482733}
   descriptionText: {fileID: 707356969067791724}
+  awardIcon: {fileID: 2765105437627529410}
 --- !u!1 &6104343426126495998
 GameObject:
   m_ObjectHideFlags: 0

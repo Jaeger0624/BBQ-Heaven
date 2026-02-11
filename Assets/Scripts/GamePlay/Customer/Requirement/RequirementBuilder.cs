@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using QFramework;
 
+// 要求构造器类
+// 可以指定总的奖励范围
 public class RequirementBuilder : ICanGetSystem{
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
 
@@ -15,15 +17,12 @@ public class RequirementBuilder : ICanGetSystem{
     
     // 最大重试次数，避免死循环
     private int maxRetryCount = 100;
+    // 允许的模板列表
     private List<CustomerRequirement> requirementsTemplates = new List<CustomerRequirement>(){
         new Requirement_是否包含食材种类(),
-
         new Requirement_食材少于(),
-        // new Requirement_食材多于(),
         new Requirement_食材范围(),
-        
         new Requirement_具体食材站位(),
-
         new Requirement_食材连续(),
     };
 
@@ -40,10 +39,8 @@ public class RequirementBuilder : ICanGetSystem{
             if (result != null){
                 return result;
             }
-            
             retryCount++;
         }
-        
         // 如果重试多次仍无法生成，返回一个基础的要求组（放宽限制）
         UnityEngine.Debug.LogWarning($"【RequirementBuilder】无法在{maxRetryCount}次尝试内生成符合规则的要求组，返回基础要求组");
         return GenerateFallbackGroup(customer, rng);
