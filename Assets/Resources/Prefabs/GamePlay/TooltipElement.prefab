@@ -105,6 +105,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 8
   m_lineSpacingMax: 0
@@ -277,6 +278,7 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 8
   m_lineSpacingMax: 0
@@ -411,7 +413,6 @@ MonoBehaviour:
   _contentText: {fileID: 7400711662358060579}
   _headerObj: {fileID: 5893211762567756149}
   _contentObj: {fileID: 5297064310303514022}
-  _layoutElement: {fileID: 2336462709583317981}
 --- !u!114 &501887332201273341
 MonoBehaviour:
   m_ObjectHideFlags: 0
