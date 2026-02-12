@@ -10,56 +10,6 @@ using UnityEngine.Rendering.Universal;
 
 namespace cfg{
 
-public struct GAResult{
-    public IAnimTask AnimTask;
-    public static GAResult Empty => new GAResult{ AnimTask = new EmptyAnimTask() };
-    public static GAResult FromAnim(IAnimTask animTask) => new GAResult{ AnimTask = animTask };
-}
-
-public abstract partial class GameAction : ICanGetSystem, IHaveAnim, ICanSendEvent
-{
-    public GameAction(){}
-    // 默认实现：如果子类没重写 ExecuteAsync，就跑同步逻辑 + 获取 GetAnimTask
-    public virtual IObservable<GAResult> ExecuteAsync(object sender, List<object> param)
-    {
-        return Observable.Create<GAResult>(observer =>
-        {
-            try
-            {
-                // 1. 跑你原来的同步逻辑 (Execute)
-                this.Execute(sender, param); 
-                
-                if (this.GetSystem<IProxySystem>().isTesting){
-                    observer.OnNext(GAResult.Empty);
-                    observer.OnCompleted();
-                    return Disposable.Empty;
-                }
-                // 2. 拿你原来的动画 (GetAnimTask)
-                var anim = this.GetAnimTask();
-                
-                // 3. 发送结果并结束
-                observer.OnNext(GAResult.FromAnim(anim));
-                observer.OnCompleted();
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError($"【GameAction】执行出错: {this.GetType().Name} {ex}");
-                observer.OnError(ex);
-            }
-            return Disposable.Empty;
-        });
-    }
-    public abstract void Execute(object sender, List<object> param);
-    public virtual void ApplyMultiplier(int multiplier){}
-    public abstract IAnimTask GetAnimTask();
-    public IArchitecture GetArchitecture()
-    {
-        return GameArchitecture.Interface;
-    }
-    public abstract GameAction Clone();
-    public virtual void SetRelation(object target){}
-    
-}
 
 #region 配置GA
 
@@ -318,23 +268,16 @@ public partial class GA_创建满意度乘区 : GameAction
             // 使用 Defer 确保流被订阅时才开始构建
             return Observable.Defer(() => 
             {
-                var system = this.GetSystem<IGASystem>();
-                var streams = new List<IObservable<Unit>>();
-
                 for (int i = 0; i < count; i++)
                 {
                     // 关键点：每次循环都克隆一个新的 Action 实例
                     GameAction subAction = Action.Clone();
-                    
-                    // 关键点：调用 System 的 Immediate 方法，而不是 ApplyGA
-                    // 这样这些动作会串行链接在当前流中
-                    streams.Add(system.ApplyGAImmediate(sender, subAction, param));
+
+                    // streams.Add(subAction.ExecuteAsync(sender, param));
+                    this.GetSystem<IGASystem>().TriggerReaction(subAction, sender, param);
                 }
 
-                // 3. 串行执行所有子任务
-                // Concat 保证了：第1次逻辑+动画完全结束 -> 第2次逻辑+动画 ...
-                return Observable.Concat(streams)
-                    .Select(_ => GAResult.Empty); // 所有子任务跑完后，返回 Empty 给外层
+                return Observable.Return(GAResult.Empty);
             });
         }
         public override void Execute(object sender, List<object> param) { }

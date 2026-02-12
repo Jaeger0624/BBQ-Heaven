@@ -104,7 +104,7 @@ public class BoardEntityMover : ICanGetSystem, ICanSendEvent
             Debug.Log($"触发主动方的碰撞效果: {initiatorFoodInstance.name}");
             if (initiatorFoodInstance.food.foodGAs.TryGetValue(FoodGAType.碰撞时, out List<CGA> cgas)){
                 foreach (var cga in cgas){
-                    this.GetSystem<IGASystem>().ApplyCGA(initiatorFoodInstance, cga, param);
+                    this.GetSystem<IGASystem>().TriggerReaction(cga, initiatorFoodInstance, param);
                 }
             }
         }
@@ -115,7 +115,7 @@ public class BoardEntityMover : ICanGetSystem, ICanSendEvent
             if (receiverFoodInstance.food.foodGAs.TryGetValue(FoodGAType.被碰撞时, out List<CGA> cgas)){
                 Debug.Log($"触发被动方的被撞效果: {receiverFoodInstance.name} 的碰撞效果数量: {cgas.Count}");
                 foreach (var cga in cgas){
-                    this.GetSystem<IGASystem>().ApplyCGA(receiverFoodInstance, cga, param);
+                    this.GetSystem<IGASystem>().TriggerReaction(cga, receiverFoodInstance, param);
                 }
             }
         }

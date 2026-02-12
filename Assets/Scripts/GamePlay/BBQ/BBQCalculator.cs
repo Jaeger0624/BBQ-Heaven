@@ -28,7 +28,7 @@ public class BBQCalculator_食材基础值逐个加 : AbstractBBQCalculator{
         foreach (var foodInstance in bbq.foodInstances){
             if (foodInstance.food.foodGAs.ContainsKey(FoodGAType.烤串构建后)){
                 foreach (var cga in foodInstance.food.foodGAs[FoodGAType.烤串构建后]){
-                    this.GetSystem<IGASystem>().ApplyCGA(foodInstance, cga, new List<object>{context});
+                    this.GetSystem<IGASystem>().TriggerReaction(cga, foodInstance, new List<object>{context});
                 }
             }
         }
@@ -44,7 +44,7 @@ public class BBQCalculator_食材基础值逐个加 : AbstractBBQCalculator{
             // 执行食材实例的CGA
             foreach (var cga in foodInstance.food.foodGAs[FoodGAType.放上烤串前]){
                 // Debug.Log($"【BBQCalculator】执行食材实例的CGA：{cga.ID}");
-                this.GetSystem<IGASystem>().ApplyCGA(foodInstance, cga, new List<object>{context});
+                this.GetSystem<IGASystem>().TriggerReaction(cga, foodInstance, new List<object>{context});
             }
         }
         this.GetSystem<IGASystem>().SendAction(foodInstance, () => {
@@ -57,7 +57,7 @@ public class BBQCalculator_食材基础值逐个加 : AbstractBBQCalculator{
         });
 
         // 执行食材实例的GA并执行
-        this.GetSystem<IGASystem>().ApplyGA(foodInstance, new GA_添加单个食材基础值(foodInstance), new List<object>{context});
+        this.GetSystem<IGASystem>().TriggerReaction(new GA_添加单个食材基础值(foodInstance), foodInstance, new List<object>{context});
     }
     private void ExecuteStickStrategy(){
 

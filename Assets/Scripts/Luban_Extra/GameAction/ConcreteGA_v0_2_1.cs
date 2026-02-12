@@ -188,9 +188,7 @@ namespace cfg{
 
             Rng rng = this.GetSystem<IRngSystem>().GetSubRng<IGASystem>();
             GameAction randomAction = rng.PickOne(Actions);
-            this.GetSystem<IGASystem>().ApplyGAImmediate(sender, randomAction, param).Subscribe(unit => {
-                Debug.Log($"<color=blue>【GA_随机触发】执行: {randomAction.GetType().Name}</color>");
-            });
+            this.GetSystem<IGASystem>().TriggerReaction(randomAction, sender, param);
         }
         public override IAnimTask GetAnimTask() => new EmptyAnimTask();
     }

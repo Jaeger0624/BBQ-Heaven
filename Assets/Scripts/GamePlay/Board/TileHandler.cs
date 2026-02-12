@@ -43,7 +43,7 @@ public class TileHandler : ICanGetSystem{
                 // Debug.Log($"【TileHandler】实体移动进入: {context.boardEntity.name} 进入 {context.boardCell.position}");
                 foreach (var cga in tileData.CGAs){
                     if (cga.Type == TileEffectType.实体移动进入){
-                        this.GetSystem<IGASystem>().ApplyCGA(context.boardEntity, cga.Action, new List<object>{context});
+                        this.GetSystem<IGASystem>().TriggerReaction(cga.Action, context.boardEntity, new List<object>{context});
                     }
                 }
                 break;

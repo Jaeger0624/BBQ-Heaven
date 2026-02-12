@@ -53,7 +53,7 @@ public class Card : ICanGetSystem{
         List<CGA> useCGAs = cardData.CGAs.Where(x => x.Type == CardGAType.使用时).Select(x => new CGA(x.Action)).ToList();
         // 2. 执行使用时效果
         foreach (var cga in useCGAs){
-            this.GetSystem<IGASystem>().ApplyCGA(this, cga, param);
+            this.GetSystem<IGASystem>().TriggerReaction(cga, this, param);
         }
 
         this.GetSystem<IGASystem>().SendAction(this, () => {

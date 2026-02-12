@@ -5,184 +5,175 @@ using QFramework;
 using UniRx;
 using UnityEngine;
 
-
 /// <summary>
 /// 游戏效果系统 - 系统层
-/// 用于处理游戏效果相关的逻辑
+/// 核心职责：维护动作执行树（Action Tree），确保连锁反应的正确顺序（DFS），并提供执行日志
 /// </summary>
-public interface IGASystem : ISystem{
-    // 处理GA
-    // param是用于让玩家在runtime时传递参数给GA（例如操作决定的参数）
-    IObservable<Unit> ApplyGA(object sender, GameAction gameAction, List<object> param, bool insertAtHead = false);
-    IObservable<Unit> ApplyCGA(object sender, CGA cga, List<object> param, bool insertAtHead = false);
-    IObservable<Unit> SetTrigger(object sender);
-    IObservable<Unit> SendAction(object sender, Action action);
+public interface IGASystem : ISystem
+{
+// --- 新核心接口 ---
+    void AddRootAction(GameAction action, object sender, List<object> args);
+    void TriggerReaction(GameAction reactionAction, object sender, List<object> args);
+    void TriggerReaction(CGA cga, object sender, List<object> args);
+    void SendAction(object sender, Action action);
 
-    IObservable<Unit> ApplyGAImmediate(object sender, GameAction gameAction, List<object> param); 
-    IObservable<Unit> ApplyCGAImmediate(object sender, CGA cga, List<object> param);
-
-    
-    // 处理SE
+    // --- 独立功能模块 ---
     void ApplySE(object sender, SustainEffect sustainEffect);
     void RemoveSE(object sender, SustainEffect sustainEffect);
-    // 评估条件
     bool EvaluateConditions(object sender, List<Condition> conditions, List<object> param);
     bool CheckFoodPreview(FoodInstance food, FoodGAType foodGAType);
 }
 
-public class GASystem : AbstractSystem, IGASystem{
-    # region 队列管理
-    // 任务封装
-    private class GATask
-    {
-        public bool IsCGA; // 标记是普通GA还是CGA
-        public object Data; // 存 GameAction 或 CGA 对象
-        public object Sender;
-        public List<object> Param;
+public class GASystem : AbstractSystem, IGASystem
+{
+    #region 核心状态 (Action Tree)
 
-        // 【新增】用于通知GA执行完成
-        public AsyncSubject<Unit> CompletionSource;
-    }
+    // 当前正在处理的“根”动作（树的根节点，用于生成完整日志）
+    private ActionNode _currentRootNode;
 
-    private LinkedList<GATask> _queue = new LinkedList<GATask>();
-    private bool _isRunning = false; // 队列锁
+    // 当前执行焦点（新触发的连锁反应会挂载到这个节点的子列表中，实现优先执行）
+    private ActionNode _activeNode;
+
+    // 历史记录（UI日志系统直接读取此列表）
+    public ReactiveCollection<ActionNode> ActionHistory = new ReactiveCollection<ActionNode>();
+
+    // 锁：防止递归执行过程中意外开启新的根流程
+    private bool _isRunning = false;
+
+    // SE 状态存储
+    private Dictionary<string, SustainEffect> AddedSEs = new Dictionary<string, SustainEffect>();
 
     #endregion
-    protected override void OnInit(){}
 
-    #region  主要外部入口
-    /// <summary>
-    /// 执行游戏效果
-    /// </summary>
-    /// <param name="gameAction">游戏效果</param>
-    /// <param name="sender">发送者</param>
-    public IObservable<Unit> ApplyGA(object sender, GameAction gameAction, List<object> param, bool insertAtHead = false)
-    {
-        return EnqueueTask(new GATask 
-        { 
-            IsCGA = false, 
-            Data = gameAction, 
-            Sender = sender, 
-            Param = param 
-        }, insertAtHead);
-    }
-    public IObservable<Unit> ApplyCGA(object sender, CGA cga, List<object> param, bool insertAtHead = false)
-    {
-        return EnqueueTask(new GATask 
-        { 
-            IsCGA = true, 
-            Data = cga, 
-            Sender = sender, 
-            Param = param 
-        }, insertAtHead);
-    }
+    protected override void OnInit() { }
 
-    public IObservable<Unit> SendAction(object sender, Action action)
-    {
-        GameAction gameAction = new GA_Action(action);
-        return EnqueueTask(new GATask 
-        { 
-            IsCGA = false, 
-            Data = gameAction, 
-            Sender = sender, 
-            Param = null 
-        }, false);
-    }
-    public IObservable<Unit> SetTrigger(object sender)
-    {
-        Debug.Log($"<color=yellow>【GA_WaitForEvent】开始等待触发...</color>");
-        GameAction gameAction = new GA_WaitForEvent();
-        return EnqueueTask(new GATask 
-        { 
-            IsCGA = false, 
-            Data = gameAction, 
-            Sender = sender, 
-            Param = null 
-        }, false);
-    }
+    #region 新版核心入口 (AddRoot / TriggerReaction)
 
-    private IObservable<Unit> EnqueueTask(GATask task, bool insertAtHead)
+    public void AddRootAction(GameAction action, object sender, List<object> args)
     {
-        // 1. 创建完成源
-        task.CompletionSource = new AsyncSubject<Unit>();
+        if (action == null) return;
 
-        // 2. 插入队列
-        if (insertAtHead)
+        // 1. 创建根节点
+        var node = new ActionNode(action, sender, args, null);
+
+        if (!_isRunning)
         {
-            _queue.AddFirst(task);
+            _currentRootNode = node;
+            // 2. 启动递归树执行流
+            RunTree(node).Subscribe(
+                _ => { }, 
+                error => Debug.LogError($"[GASystem] Root Execution Error: {error}"),
+                () => OnRootActionFinished()
+            );
         }
         else
         {
-            _queue.AddLast(task);
+            // 简单处理并发：如果系统正忙，暂时打印警告
+            // TODO: 未来可以引入一个 PendingQueue 来排队处理并发的根事件
+            Debug.LogWarning($"GASystem Busy: 正在执行 {_activeNode?.ActionData?.GetType().Name}，新请求被忽略/排队");
+        }
+    }
+
+    public void TriggerReaction(GameAction action, object sender, List<object> args)
+    {
+        if (action == null) return;
+
+        if (_activeNode == null)
+        {
+            // 兜底：如果当前没有焦点，当作根节点处理
+            AddRootAction(action, sender, args);
+            return;
         }
 
-        // 3. 尝试处理队列
-        ProcessQueue();
+        // 关键逻辑：挂载到当前焦点下，成为子节点
+        // 在 RunTree 的逻辑中，子节点会被优先执行（深度优先）
+        new ActionNode(action, sender, args, _activeNode);
+    }
 
-        return task.CompletionSource;
+    public void TriggerReaction(CGA cga, object sender, List<object> args)
+    {
+        if (cga == null) return;
+        if (_activeNode == null)
+        {
+            AddRootAction(new GA_CGAWrapper(cga), sender, args);
+            return;
+        }
+        new ActionNode(new GA_CGAWrapper(cga), sender, args, _activeNode);
     }
 
     #endregion
 
-    #region  核心流水线
-    private void ProcessQueue()
+    #region 核心递归执行逻辑 (DFS)
+
+    // 执行单个节点（及其衍生的所有子节点）
+    private IObservable<Unit> RunTree(ActionNode node)
     {
-        if (_isRunning || _queue.Count == 0) return;
-
-        _isRunning = true;
-        var task = _queue.First.Value;
-        _queue.RemoveFirst();
-
-        // 根据类型选择不同的执行流
-        IObservable<Unit> executionStream;
-
-        if (task.IsCGA)
+        return Observable.Create<Unit>(observer =>
         {
-            var cga = task.Data as CGA;
-            executionStream = ExecuteCGAStream(task.Sender, cga, task.Param);
-        }
-        else
-        {
-            var ga = task.Data as GameAction;
-            executionStream = ExecuteSingleGAStream(task.Sender, ga, task.Param);
-        }
+            _isRunning = true;
+            _activeNode = node; // 1. 切换焦点到当前节点
 
-        // 订阅执行流
-        executionStream.Subscribe(
-            _ => { }, 
-            error => 
-            {
-                Debug.LogError($"[GASystem] 执行出错: {error}");
-                // 出错也视为完成，避免Deadlock
-                task.CompletionSource.OnError(error);
-                _isRunning = false;
-                ProcessQueue(); 
-            },
-            () => 
-            {
-                // 核心点：当前任务流跑完后，通知外部
-                task.CompletionSource.OnNext(Unit.Default);
-                task.CompletionSource.OnCompleted();
-                _isRunning = false;
-                ProcessQueue(); // 递归处理下一个
-            }
-        ).AddTo(SettingManager.Instance.gameObject);
+            // 2. 执行节点自身的逻辑 (包含 CGA 的特殊处理)
+            return ExecuteNodeLogic(node)
+                .Concat(Observable.Defer(() =>
+                {
+                    // 3. 自身逻辑跑完后，立刻检查有没有产生子节点（连锁反应）
+                    if (node.Children.Count > 0)
+                    {
+                        // 如果有，优先执行子节点序列（这就是插队成功的原理）
+                        return RunChildrenSequence(node.Children);
+                    }
+                    return Observable.Return(Unit.Default);
+                }))
+                .Subscribe(
+                    result => { }, 
+                    error => {
+                        Debug.LogError($"[GASystem] Node Error ({node.ActionData?.GetType().Name}): {error}");
+                        observer.OnError(error);
+                    },
+                    () =>
+                    {
+                        // 4. 节点及其所有子孙执行完毕
+                        node.IsFinished = true;
+                        _activeNode = node.Parent; // 焦点回溯给父节点
+                        observer.OnNext(Unit.Default);
+                        observer.OnCompleted();
+                    }
+                );
+        });
     }
-    // --- 核心逻辑块 A：执行单个 GA ---
-    // 流程：GA.ExecuteAsync -> 拿到结果 -> AnimationSystem.Play -> 结束
-    private IObservable<Unit> ExecuteSingleGAStream(object sender, GameAction ga, List<object> param) => ApplyGAImmediate(sender, ga, param);
 
-    // 修改前：直接调用，导致同步逻辑在构建流时立即执行
-    
-    public IObservable<Unit> ApplyGAImmediate(object sender, GameAction ga, List<object> param)
+    // 串行执行子节点列表
+    private IObservable<Unit> RunChildrenSequence(List<ActionNode> children)
     {
+        var sequence = Observable.Return(Unit.Default);
+        foreach (var child in children)
+        {
+            // 串行执行所有子节点
+            sequence = sequence.Concat(Observable.Defer(() => RunTree(child)));
+        }
+        return sequence;
+    }
+
+    // 真正的逻辑执行 + 动画播放
+    private IObservable<Unit> ExecuteNodeLogic(ActionNode node)
+    {
+        // 这里的 node.ActionData 就是 GameAction
+        var ga = node.ActionData;
+        var sender = node.Sender;
+        var param = node.Params;
+
+        // 执行核心：ExecuteAsync -> Play Animation
         return ga.ExecuteAsync(sender, param)
             .SelectMany(result => 
             {
-                // 如果是测试模式，则不执行动画
-                if (this.GetSystem<IProxySystem>().isTesting){
+                // 如果是测试模式，跳过动画
+                if (this.GetSystem<IProxySystem>().isTesting)
+                {
                     return Observable.ReturnUnit();
                 }
+                
+                // 播放动画
                 if (result.AnimTask != null)
                 {
                     return this.GetSystem<IAnimationSystem>().PlayTaskAsync(result.AnimTask);
@@ -190,53 +181,73 @@ public class GASystem : AbstractSystem, IGASystem{
                 return Observable.ReturnUnit();
             });
     }
-    
 
-    public IObservable<Unit> ApplyCGAImmediate(object sender, CGA cga, List<object> param)
+    private void OnRootActionFinished()
     {
-        // 直接调用内部的执行流构建方法，不经过 EnqueueTask 和 ProcessQueue
-        // 注意：这里假设 ExecuteCGAStream 是你内部处理CGA逻辑的方法
-        return ExecuteCGAStream(sender, cga, param);
+        _isRunning = false;
+        
+        // 保存历史记录供日志UI显示
+        if (_currentRootNode != null)
+        {
+            ActionHistory.Add(_currentRootNode);
+            // 限制历史数量防止内存泄漏
+            if (ActionHistory.Count > 50) ActionHistory.RemoveAt(0);
+        }
+        
+        _currentRootNode = null;
+        _activeNode = null;
     }
 
-    // --- 核心逻辑块 B：执行 CGA ---
-    // 流程：Check Condition -> 遍历子 Actions -> 串行执行(逻辑A->动画A->逻辑B->动画B)
-    private IObservable<Unit> ExecuteCGAStream(object sender, CGA cga, List<object> param)
+    public IObservable<Unit> ApplyCGA(object sender, CGA cga, List<object> param, bool insertAtHead = false)
     {
-        return Observable.Defer(() => 
+        // 核心：CGA 在新架构中被视为一个特殊的“容器型动作”
+        // 我们需要手动把 CGA 拆解成逻辑，融入树中
+        
+        // 1. 评估条件
+        if (!EvaluateConditions(sender, cga.Conditions, param))
         {
-            // 1. 评估条件 (同步)
-            if (!EvaluateConditions(sender, cga.Conditions, param))
-            {
-                // Debug.Log($"【GASystem】条件不满足，直接结束: {sender.GetType().Name}");
-                return Observable.ReturnUnit(); // 条件不满足，直接结束
-            }
+            return Observable.ReturnUnit(); // 条件不满足
+        }
 
-            // 2. 串行化执行所有子 GA
-            // 使用 Observable.Concat 将列表中的 GA 变成串行流
-            // 每一个子 GA 都会复用 ExecuteSingleGAStream 的逻辑 (即包含动画等待)
-            var actionStreams = new List<IObservable<Unit>>();
-            
+        // 2. 如果满足，将 CGA 的 Actions 列表依次加入树中
+        // 注意：这里我们模拟成“当前节点触发了这一组 Actions”
+        // 如果当前没有运行树，则这一组 Actions 成为新的 Root（串行）
+        
+        if (cga.Actions != null)
+        {
             foreach (var subAction in cga.Actions)
             {
-                actionStreams.Add(ExecuteSingleGAStream(sender, subAction, param));
+                if (_isRunning && _activeNode != null)
+                {
+                    TriggerReaction(subAction, sender, param);
+                }
+                else
+                {
+                    AddRootAction(subAction, sender, param);
+                }
             }
+        }
 
-            // Concat 会订阅第一个流，等OnCompleted后，再订阅第二个...
-            return Observable.Concat(actionStreams);
-        });
+        return Observable.ReturnUnit();
     }
+
+    public void SendAction(object sender, Action action)
+    {
+        var wrapper = new GA_Action(action);
+        TriggerReaction(wrapper, sender, null);
+    }
+
     #endregion
+
+    #region 辅助功能 (SE & Condition)
 
     public void ApplySE(object sender, SustainEffect sustainEffect)
     {
         if (AddedSEs.TryGetValue(sustainEffect.guid, out SustainEffect se))
         {
-            // 若已存在，则修改层数
             se.OnChangeStack(sender, se.StackNumber + 1);
             return;
         }
-        // 加入到已添加的SE列表中
         AddedSEs.Add(sustainEffect.guid, sustainEffect);
         sustainEffect.OnAdd(sender);
     }
@@ -252,18 +263,13 @@ public class GASystem : AbstractSystem, IGASystem{
         sustainEffect.OnRemove(sender);
     }
 
-
-    // 基于Guid的SE列表
-    private Dictionary<string, SustainEffect> AddedSEs = new Dictionary<string, SustainEffect>();
-
-
     public bool EvaluateConditions(object sender, List<Condition> conditions, List<object> param)
     {
-        if (conditions == null) return true;
-        if (conditions.Count == 0) return true;
-        foreach (var condition in conditions){
-            if (!condition.Evaluate(sender, param)){
-                // AddToContext(condition);
+        if (conditions == null || conditions.Count == 0) return true;
+        foreach (var condition in conditions)
+        {
+            if (!condition.Evaluate(sender, param))
+            {
                 return false;
             }
         }
@@ -274,37 +280,47 @@ public class GASystem : AbstractSystem, IGASystem{
     {
         if (food == null || food.food == null) return false;
 
-        // 1. 找到该触发时机下的所有 CGA
         if (!food.food.foodGAs.TryGetValue(triggerType, out List<CGA> cgas))
         {
-            return false; // 没有配置这个时机的效果
+            return false;
         }
 
-        // 2. 只要有一个 CGA 的条件满足，就返回 true (或者你可以返回满足的数量)
         foreach (var cga in cgas)
         {
-            if (cga.Conditions.Count == 0 || cga.Conditions == null) continue;
-            // 这里只评估 Condition，不执行 Action
-            // sender 就是 food 本身
+            if (cga.Conditions == null || cga.Conditions.Count == 0) continue;
             if (EvaluateConditions(food, cga.Conditions, null))
             {
-                return true; 
+                return true;
             }
         }
-
         return false;
     }
 
-
+    #endregion
 }
 
-// 拥有动画的任务（如GA、CGA，执行的是动作效果）
-public interface IHaveAnim{
-    IAnimTask GetAnimTask();
-}
-public class TriggerGAEvent : AbstractEvent{
-    public string triggerName;
-    public TriggerGAEvent(string triggerName){
-        this.triggerName = triggerName;
+// 辅助接口定义，确保 ActionNode 能正常使用
+// (请确保 ActionNode.cs 文件已存在于工程中，类定义如下)
+/*
+public class ActionNode
+{
+    private static int _globalIdCounter = 0;
+    public int RuntimeID { get; private set; }
+    public GameAction ActionData { get; private set; }
+    public object Sender { get; private set; }
+    public List<object> Params { get; private set; }
+    public ActionNode Parent { get; private set; }
+    public List<ActionNode> Children { get; private set; } = new List<ActionNode>();
+    public bool IsFinished { get; set; } = false;
+
+    public ActionNode(GameAction action, object sender, List<object> parameters, ActionNode parent = null)
+    {
+        RuntimeID = _globalIdCounter++;
+        ActionData = action;
+        Sender = sender;
+        Params = parameters;
+        Parent = parent;
+        if (parent != null) parent.Children.Add(this);
     }
 }
+*/

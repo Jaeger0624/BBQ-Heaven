@@ -91,7 +91,7 @@ public class BBQSystem : AbstractSystem, IBBQSystem
             if (x.food.foodGAs.ContainsKey(FoodGAType.被选中时)){
                 // 执行食材实例的CGA
                 foreach (var cga in x.food.foodGAs[FoodGAType.被选中时]){
-                    this.GetSystem<IGASystem>().ApplyCGA(x, cga, new List<object>{context});
+                    this.GetSystem<IGASystem>().TriggerReaction(cga, x, new List<object>{context});
                 }
             }
         });
@@ -129,7 +129,7 @@ public class BBQSystem : AbstractSystem, IBBQSystem
         });
 
         if (!this.GetSystem<IProxySystem>().isTesting){
-            this.GetSystem<IGASystem>().SetTrigger(context.targetBBQ);   
+            // this.GetSystem<IGASystem>().SetTrigger(context.targetBBQ);   
         }
         //
 
