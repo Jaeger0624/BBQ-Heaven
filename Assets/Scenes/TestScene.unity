@@ -1621,8 +1621,11 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
+  - OFFSETUV_ON
   - OUTBASE_ON
   - OUTDIST_ON
+  - RECTSIZE_ON
+  - WIND_ON
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -1685,18 +1688,18 @@ Material:
     m_Ints: []
     m_Floats:
     - _Alpha: 1
-    - _AlphaCutoffValue: 0.25
+    - _AlphaCutoffValue: 0.48
     - _AlphaOutlineBlend: 1
     - _AlphaOutlineGlow: 5
     - _AlphaOutlineMinAlpha: 0
     - _AlphaOutlinePower: 1
-    - _AlphaRoundThreshold: 0.5
+    - _AlphaRoundThreshold: 0.359
     - _BillboardY: 0
     - _BlurHD: 0
     - _BlurIntensity: 10
-    - _Brightness: 0
+    - _Brightness: 0.8
     - _ChromAberrAlpha: 0.4
-    - _ChromAberrAmount: 1
+    - _ChromAberrAmount: 0
     - _ClipUvDown: 0
     - _ClipUvLeft: 0
     - _ClipUvRight: 0
@@ -1712,7 +1715,7 @@ Material:
     - _ColorSwapBlueLuminosity: 0.5
     - _ColorSwapGreenLuminosity: 0.5
     - _ColorSwapRedLuminosity: 0.5
-    - _Contrast: 1
+    - _Contrast: 3.94
     - _CullingOption: 0
     - _DistortAmount: 0.5
     - _DistortTexXSpeed: 5
@@ -1724,30 +1727,30 @@ Material:
     - _FadeBurnWidth: 0.025
     - _FishEyeUvAmount: 0.35
     - _FlickerAlpha: 0
-    - _FlickerFreq: 0.2
+    - _FlickerFreq: 4.12
     - _FlickerPercent: 0.05
     - _GhostBlend: 1
     - _GhostColorBoost: 1
     - _GhostTransparency: 0
-    - _GlitchAmount: 3
-    - _GlitchSize: 1
-    - _GlitchSpeed: 20
+    - _GlitchAmount: 1.7
+    - _GlitchSize: 3.55
+    - _GlitchSpeed: 7.5
     - _Glow: 10
     - _GlowGlobal: 1
     - _GradBlend: 1
     - _GradBoostX: 1.2
     - _GradBoostY: 1.2
     - _GradIsRadial: 0
-    - _GrassManualAnim: 1
+    - _GrassManualAnim: 0.47
     - _GrassManualToggle: 0
     - _GrassRadialBend: 0.1
-    - _GrassSpeed: 2
-    - _GrassWind: 20
+    - _GrassSpeed: 11.3
+    - _GrassWind: 2.1
     - _GreyscaleBlend: 1
     - _GreyscaleLuminosity: 0
     - _GreyscaleOutline: 0
-    - _HandDrawnAmount: 10
-    - _HandDrawnSpeed: 5
+    - _HandDrawnAmount: 11.2
+    - _HandDrawnSpeed: 3.3
     - _HitEffectBlend: 1
     - _HitEffectGlow: 5
     - _HologramBlend: 1
@@ -1771,8 +1774,8 @@ Material:
     - _MyDstMode: 10
     - _MySrcMode: 5
     - _NegativeAmount: 1
-    - _OffsetUvX: 0
-    - _OffsetUvY: 0
+    - _OffsetUvX: -0.04
+    - _OffsetUvY: -0.1
     - _OnlyInnerOutline: 0
     - _OnlyOutline: 0
     - _OutlineAlpha: 1
@@ -1784,8 +1787,8 @@ Material:
     - _OutlineTexXSpeed: 10
     - _OutlineTexYSpeed: 0
     - _OutlineWidth: 0.069
-    - _OverlayBlend: 1
-    - _OverlayGlow: 1
+    - _OverlayBlend: 0.232
+    - _OverlayGlow: 0.8
     - _OverlayTextureScrollXSpeed: 0.25
     - _OverlayTextureScrollYSpeed: 0.25
     - _PinchUvAmount: 0.35
@@ -1797,18 +1800,18 @@ Material:
     - _RadialClip2: 0
     - _RadialStartAngle: 90
     - _RandomSeed: 0
-    - _RectSize: 1
+    - _RectSize: 2
     - _RotateUvAmount: 0
     - _RoundWaveSpeed: 2
     - _RoundWaveStrength: 0.7
-    - _ShadowAlpha: 0.5
-    - _ShadowX: 0.1
-    - _ShadowY: -0.05
+    - _ShadowAlpha: 0.278
+    - _ShadowX: -0.013
+    - _ShadowY: 0
     - _ShakeUvSpeed: 2.5
     - _ShakeUvX: 1.5
     - _ShakeUvY: 1
     - _ShineGlow: 1
-    - _ShineLocation: 0.5
+    - _ShineLocation: 1
     - _ShineRotate: 0
     - _ShineWidth: 0.1
     - _TextureScrollXSpeed: 1
@@ -1820,7 +1823,7 @@ Material:
     - _WarpScale: 0.5
     - _WarpSpeed: 8
     - _WarpStrength: 0.025
-    - _WaveAmount: 7
+    - _WaveAmount: 21.5
     - _WaveSpeed: 10
     - _WaveStrength: 7.5
     - _WaveX: 0
