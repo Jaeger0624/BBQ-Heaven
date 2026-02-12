@@ -35,7 +35,7 @@ public class SatisCreater_测试 : AbstractSatisCreater
         foodInstancesGuids.ForEach(x => {
             // 1. 执行乘区（真正乘到满意度上的）
             GameAction ga = new GA_创建满意度乘区(1.1f, Name, false);
-            this.GetSystem<IGASystem>().ApplyGA(context.Customer, ga, new List<object>{context});
+            this.GetSystem<IGASystem>().TriggerReaction(ga, context.Customer, new List<object>{context});
             // 2. 添加动画任务
             Transform target = SettingManager.Instance.SatisfactionTextParent;
             animTasks.Add(AnimCombine_顾客Tag.Anim_Tag触发_单一突出(x, 1.1f, Name, target));

@@ -190,6 +190,10 @@ public class GameTest : MonoBehaviour, IController, ICanSendEvent{
     }
 
     private void ShowBaseInfo(){
+
+        GUILayout.Label("当前是否在测试模式: " + this.GetSystem<IProxySystem>().isTesting);
+
+        GUILayout.Label("=== 动画系统播放状态 ===");
         foreach (var key in this.GetSystem<IAnimationSystem>().IsPlaying.Keys)
         {
             GUILayout.Label($"动画系统播放状态: {key} - {this.GetSystem<IAnimationSystem>().IsPlaying[key]}");
@@ -329,6 +333,9 @@ public class GameTest : MonoBehaviour, IController, ICanSendEvent{
     }
 
     private void GameActionTest(){
+        // 当前状态
+        GUILayout.Label($"当前状态: {this.GetSystem<IGASystem>().IsRunning}");
+
         if (GUILayout.Button("测试食材位移")){
 
             GameAction gameAction = new GA_食材位移(new GetFoodInstancesInfo(GetFoodInstanceStrategy.随机, new DV_值(1), new List<FoodInstanceState>{FoodInstanceState.棋盘上}), new GetCellInfo(GetCellStrategy.周围空位, true));
@@ -340,7 +347,7 @@ public class GameTest : MonoBehaviour, IController, ICanSendEvent{
 
             FoodInstance foodInstance = this.GetSystem<IRngSystem>().GetSubRng<IFoodSystem>().PickOne(foodInstances);
 
-            this.GetSystem<IGASystem>().ApplyGA(this, gameAction, new List<object>{foodInstance});
+            this.GetSystem<IGASystem>().TriggerReaction(gameAction, this, new List<object>{foodInstance});
         }    
     }
 

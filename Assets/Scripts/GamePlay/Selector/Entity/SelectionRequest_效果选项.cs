@@ -30,7 +30,7 @@ public class SelectionRequest_效果选项 : AbstractSelectionRequest{
             return;
         }
         foreach (var cga in optionData.Actions){
-            this.GetSystem<IGASystem>().ApplyCGA(Sender, new CGA(cga), Param);
+            this.GetSystem<IGASystem>().TriggerReaction(new CGA(cga), Sender, Param);
         }
     }
 }

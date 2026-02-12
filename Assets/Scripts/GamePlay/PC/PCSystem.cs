@@ -127,7 +127,7 @@ public class PCSystem : AbstractSystem, IPCSystem
         {
             foreach (var se in reputationData.Actions)
             {
-                this.GetSystem<IGASystem>().ApplyCGA(currentPC, new CGA(se), null);
+                this.GetSystem<IGASystem>().TriggerReaction(new CGA(se), currentPC, null);
             }
         }
     } 

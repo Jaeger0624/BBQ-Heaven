@@ -15,7 +15,7 @@ namespace cfg{
         }
         public void Execute(BBQ bbq, List<object> param)
         {
-            this.GetSystem<IGASystem>().ApplyCGA(bbq, Action, param);
+            this.GetSystem<IGASystem>().TriggerReaction(Action, bbq, param);
         }
         public IArchitecture GetArchitecture()
         {

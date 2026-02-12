@@ -46,7 +46,7 @@ namespace cfg{
             this.GetSystem<IGASystem>().SendAction(sender, () => {
                 foreach (var action in Actions){
                     action.ApplyMultiplier(StackNumber);
-                    this.GetSystem<IGASystem>().ApplyCGA(sender, action, parameters);
+                    this.GetSystem<IGASystem>().TriggerReaction(action, sender, parameters);
                 }
             });
         }
@@ -63,7 +63,7 @@ namespace cfg{
         {
             foreach (var action in OnAddAction){
                 action.ApplyMultiplier(StackNumber);
-                this.GetSystem<IGASystem>().ApplyGA(sender, action, null);
+                this.GetSystem<IGASystem>().TriggerReaction(action, sender, null);
             }
         }
         public override void OnChangeStack(object sender, int newStackNumber)
@@ -73,14 +73,14 @@ namespace cfg{
             StackNumber = newStackNumber;
             foreach (var action in OnAddAction){
                 action.ApplyMultiplier(diff);
-                this.GetSystem<IGASystem>().ApplyGA(sender, action, null);
+                this.GetSystem<IGASystem>().TriggerReaction(action, sender, null);
             }
         }
         public override void OnRemove(object sender)
         {
             foreach (var action in OnRemoveAction){
                 action.ApplyMultiplier(StackNumber);
-                this.GetSystem<IGASystem>().ApplyGA(sender, action, null);
+                this.GetSystem<IGASystem>().TriggerReaction(action, sender, null);
             }
         }
         public override SustainEffect Clone() => new SE_基于线性GA(this);

@@ -52,7 +52,7 @@ public class CustomerTag : ICustomerTag, ICanGetSystem, ICanSendEvent
             cga.Cga.Actions.ForEach(x => x.SetRelation(previewResults));
             
             // 2.2 执行
-            this.GetSystem<IGASystem>().ApplyCGA(context.Customer, cga.Cga, new List<object>{context});
+            this.GetSystem<IGASystem>().TriggerReaction(cga.Cga, context.Customer, new List<object>{context});
         }
 
         int index = results.FindIndex(x => x == true);

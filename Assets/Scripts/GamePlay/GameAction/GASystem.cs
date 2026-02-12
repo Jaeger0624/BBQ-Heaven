@@ -11,6 +11,9 @@ using UnityEngine;
 /// </summary>
 public interface IGASystem : ISystem
 {
+    bool IsRunning { get; }
+    ReactiveCollection<ActionNode> ActionHistory { get; }
+    
 // --- 新核心接口 ---
     void AddRootAction(GameAction action, object sender, List<object> args);
     void TriggerReaction(GameAction reactionAction, object sender, List<object> args);
@@ -35,9 +38,11 @@ public class GASystem : AbstractSystem, IGASystem
     private ActionNode _activeNode;
 
     // 历史记录（UI日志系统直接读取此列表）
-    public ReactiveCollection<ActionNode> ActionHistory = new ReactiveCollection<ActionNode>();
+    private ReactiveCollection<ActionNode> _actionHistory = new ReactiveCollection<ActionNode>();
+    public ReactiveCollection<ActionNode> ActionHistory => _actionHistory;
 
     // 锁：防止递归执行过程中意外开启新的根流程
+    public bool IsRunning => _isRunning;
     private bool _isRunning = false;
 
     // SE 状态存储
@@ -217,14 +222,7 @@ public class GASystem : AbstractSystem, IGASystem
         {
             foreach (var subAction in cga.Actions)
             {
-                if (_isRunning && _activeNode != null)
-                {
-                    TriggerReaction(subAction, sender, param);
-                }
-                else
-                {
-                    AddRootAction(subAction, sender, param);
-                }
+                TriggerReaction(subAction, sender, param);
             }
         }
 
@@ -298,29 +296,3 @@ public class GASystem : AbstractSystem, IGASystem
 
     #endregion
 }
-
-// 辅助接口定义，确保 ActionNode 能正常使用
-// (请确保 ActionNode.cs 文件已存在于工程中，类定义如下)
-/*
-public class ActionNode
-{
-    private static int _globalIdCounter = 0;
-    public int RuntimeID { get; private set; }
-    public GameAction ActionData { get; private set; }
-    public object Sender { get; private set; }
-    public List<object> Params { get; private set; }
-    public ActionNode Parent { get; private set; }
-    public List<ActionNode> Children { get; private set; } = new List<ActionNode>();
-    public bool IsFinished { get; set; } = false;
-
-    public ActionNode(GameAction action, object sender, List<object> parameters, ActionNode parent = null)
-    {
-        RuntimeID = _globalIdCounter++;
-        ActionData = action;
-        Sender = sender;
-        Params = parameters;
-        Parent = parent;
-        if (parent != null) parent.Children.Add(this);
-    }
-}
-*/

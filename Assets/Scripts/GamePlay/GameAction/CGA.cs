@@ -131,9 +131,3 @@ public class GA_CGAWrapper : GameAction
 public interface IHaveAnim{
     IAnimTask GetAnimTask();
 }
-public class TriggerGAEvent : AbstractEvent{
-    public string triggerName;
-    public TriggerGAEvent(string triggerName){
-        this.triggerName = triggerName;
-    }
-}

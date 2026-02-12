@@ -156,30 +156,20 @@ public class EncounterSystem : AbstractSystem, IEncounterSystem
     {
         Debug.Log($"【EncounterSystem】选择选项: {optionData.Name}");
 
-        List<IObservable<Unit>> cgaObservables = new List<IObservable<Unit>>();
-
         foreach (var cgaData in optionData.Actions){
             CGA cga = new CGA(cgaData);
 
-            var task = this.GetSystem<IGASystem>().ApplyCGAImmediate(this, cga, currentParams);
-            cgaObservables.Add(task);
+            this.GetSystem<IGASystem>().TriggerReaction(cga, this, currentParams);
         }
 
-        // 确保所有CGA都执行完成，才算整个遭遇结束
-        Observable.Concat(cgaObservables).Subscribe(
-            _ => {},
-            () => {
-                if (_currentEncounterSubject != null)
-                {
-                    _currentEncounterSubject.OnNext(optionData.Name);
-                    _currentEncounterSubject.OnCompleted();
-                    _currentEncounterSubject = null;
-                    Debug.Log($"【EncounterSystem】当前遭遇结束: {optionData.Name}");
-                }
-                else{
-                    Debug.LogError("【EncounterSystem】当前遭遇不存在或已结束");
-                }
+        this.GetSystem<IGASystem>().SendAction(null, () => {
+            if (_currentEncounterSubject != null)
+            {
+                _currentEncounterSubject.OnNext(optionData.Name);
+                _currentEncounterSubject.OnCompleted();
+                _currentEncounterSubject = null;
+                Debug.Log($"【EncounterSystem】当前遭遇结束: {optionData.Name}");
             }
-        ).AddTo(SettingManager.Instance.gameObject);
+        });
     }
 }

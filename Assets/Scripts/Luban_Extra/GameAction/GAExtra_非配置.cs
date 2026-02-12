@@ -35,40 +35,6 @@ namespace cfg{
         }
     }
 
-    public class GA_WaitForEvent : GameAction
-    {
-        // 这是一个 Subject，充当信号枪
-        // 你可以在 UI 按钮点击时调用 trigger.OnNext(Unit.Default)
-        private Subject<Unit> _trigger = new Subject<Unit>();
-
-        // 监听事件
-        IUnRegister eventUnRegister;
-        public void Trigger(string triggerName)
-        {
-            Debug.Log($"<color=yellow>【GA_WaitForEvent】触发事件: {triggerName}</color>");
-            eventUnRegister.UnRegister();
-            _trigger.OnNext(Unit.Default);
-            _trigger.OnCompleted();
-        }
-        public override IObservable<GAResult> ExecuteAsync(object sender, List<object> param)
-        {
-            // 这里我们把 trigger 暴露出去，或者注册到某个系统里让别人能访问到
-            // 比如 UIManager.ShowConfirmPanel(this.Trigger);
-
-            eventUnRegister = this.GetArchitecture().RegisterEvent<TriggerGAEvent>(evt => Trigger(evt.triggerName));
-            return _trigger
-                .Take(1) //以此确保只触发一次
-                .Select(_ => GAResult.Empty);
-        }
-        public override void Execute(object sender, List<object> param) { }
-        public override IAnimTask GetAnimTask() => new EmptyAnimTask();
-        public override GameAction Clone() => new GA_WaitForEvent();
-        public override int GetTypeId()
-        {
-            return 124532356;
-        }
-    }
-
 
 
     #endregion
