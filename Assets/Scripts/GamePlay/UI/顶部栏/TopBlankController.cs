@@ -42,6 +42,8 @@ public class TopBlankController : MonoBehaviour, IController
         UpdateReputationInfo(this.GetSystem<IPCSystem>().Reputation.Value, this.GetSystem<IPCSystem>().NextLevelReputation.Value);
         UpdateLevelInfo(this.GetSystem<IPCSystem>().Level.Value);
         UpdateIncomeInfo(this.GetSystem<IEconomySystem>().income.Value);
+
+        
     }
 
     private void UpateCoinInfo(int value) => coinText.text = $"<color=yellow>Q:</color>{value}";

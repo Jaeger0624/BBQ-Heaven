@@ -31,5 +31,5 @@ public class FloatingTextHandler : MonoBehaviour, IController
     // 顾客等待值变化跳字
     private void OnChangeCustomerPatienceEvent_飘字(ChangeCustomerPatienceEvent_飘字 evt)
     => FloatingTextManager.Instance.Show(evt.GetPosition(), evt.GetDescription(), Color.white, new FloatingTextInfo(evt.GetDescription(), 1.2f, Color.white, Vector2.right));
-    
+
 }

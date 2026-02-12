@@ -1,0 +1,85 @@
+# 串串天国 (Skewers Heaven) 代码规范指南
+
+## 1. 核心架构 (Architecture)
+- **框架**: QFramework (必须严格遵守 MVC/Architecture 分层)
+- **异步处理**: UniRx (禁止使用 Coroutine，除非设计到极复杂的帧操作)
+- **数据表**: Luban (所有 Config 加载必须通过 DataSystem)
+- **动画**：使用DOTween插件制作动画
+
+## 2. 命名约定 (Naming Conventions)
+- **变量**: public 属性使用 PascalCase (e.g., `Health`)。
+- **Subject**: UniRx 的 Subject 变量必须以 `Subject` 结尾 (e.g., `OnHitSubject`)。
+- **UI 组件**: 必须以组件类型结尾 (e.g., `StartGameButton`, `PlayerNameText`)。
+
+## 3. QFramework 特别规定
+- **事件发送**: 使用 `TypeEventSystem.Global.Send<T>()`。
+- **对于Model与Command**：本项目中聚焦使用System和Controller，没有涉及到Model和Command的使用，Controller可以直接访问System，System与Controller通信通过事件
+- ****
+
+## 4. 偏好与习惯 (My Preferences)
+- **注释**: 每个核心方法必须写 `<summary>` 注释。逻辑复杂的代码块内部需要写行内注释，解释“为什么这样做”。
+- **括号**: 即使 `if` 只有一行，也必须加 `{ }`。
+
+## 5. 禁忌 (Do Not Use)
+- 禁止使用 `SendMessage`。
+- 禁止使用 `GameObject.Find` (使用架构内的绑定或引用)。
+- 非Controller层（如System）中不允许使用UnityEngine中的Transform、GameObject等依赖（为了Headless Mode，并保证代码整洁干净）
+- 禁止使用 Unity协程，异步都使用UniRx
+
+
+## 6. 文件结构 (File Structure)
+具体文件结构与解释：
+Assets/Scripts/GamePlay/
+  - BBQ/
+  - Board/
+  - Food/
+  - PC/
+  - Mascot/
+  - GA/
+  - Encounter/
+  - Economy/
+  - Shop/
+  - Time/
+  - Recipe/
+  - Customer/
+  - Deal/
+  - Card/
+  - Score/
+  - Stick/
+  - Process/
+  - Dialogue&Guide/
+  - Selector/
+  - Display/
+  - Proxy/
+  - RandomPool/
+  - Seed/
+  - Rng/
+
+
+
+- BBQ系统 - 构造烧烤，计算烧烤属性
+- Board系统 - 棋盘系统，控制棋盘上实体的交互和棋盘地块的效果
+  - BoardEntity - 负责
+- Food系统 - 主要负责食材仓储（卡牌构筑）和单局中的食材实例补充
+- PC系统 - 玩家角色，主动、被动
+- Mascot系统 - 吉祥物系统，全局效果
+- GA系统 - GameAction，负责管理全局效果的实施，能够影响其他各系统
+- Board系统 - 提供基本的棋盘控制，后续也会兼入地块系统
+- Encounter系统 - 负责管理经营事件的系统
+- Economy系统 - 负责存储几类游戏货币
+- Shop系统 - 负责刷新商店内容
+- Time系统 - 负责发布时间推动事件
+- Recipe系统 - 管理配方的提醒、执行与获取
+- Customer系统 - 顾客的来去、Tag、要求刷新等
+- Deal系统 - 交易结算，单次得分
+- Score系统 - 用于总结、记录单局得分等
+- Stick系统 - 烤串的补充和使用
+- Process系统 - 一轮完整游戏的管理（流程管理，日、月、局结算）
+- Card系统 - 卡牌系统
+- Dialogue&Guide - 对话与教程系统（两个是独立的，文件夹放在一起）
+- Selector系统 - 用来统一处理高亮、选中逻辑，同时也负责创建选项（如从三张牌中选1个的界面）
+- Display - 展示与视图相关的内容，例如该项目中，同一种东西在不同地方的展现是不一样的，例如食材卡，在图鉴、构筑展示区、商店，这些地方，具体怎么显示、交互是什么逻辑（商店要额外显示出价格，点击是购买），有Display相关的逻辑负责。
+- Proxy系统 - 无头模式代理系统，用来在脱离View的情况下快速跑对局（正在开发中）
+- RandomPool 系统 - 随机池系统，根据当前玩家局内情况动态分配随机结果（还未实现）
+- Seed 系统 - Rng系统，种子，逻辑随机的唯一入口
+- GA系统 - GameAction，能够影响其他各系统的系统，是效果触发链的管理系统，也是GameAction的执行者

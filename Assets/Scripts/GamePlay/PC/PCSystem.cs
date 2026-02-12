@@ -91,8 +91,6 @@ public class PCSystem : AbstractSystem, IPCSystem
             Reputation.Value = 0;
             Debug.Log($"声望不能为负数，已重置为0");
         }
-
-
         this.SendEvent(new ReputationChangedEvent(amount));
     }
     
