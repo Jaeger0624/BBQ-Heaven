@@ -174,15 +174,9 @@ public class ScaleAnimationTask : IAnimTask
         public override IObservable<Unit> Play()
         {
             if (lifetime.HasValue){
-                this.SendEvent(new SpawnTextEvent(text, size, color.color, position, lifetime.Value));
-                
+                FloatingTextInfo info = new FloatingTextInfo(text, lifetime.Value, color.color);
+                FloatingTextManager.Instance.Show(position, text, color.color, info);
                 return Observable.ReturnUnit();
-            }
-
-            if (color.useColor){
-                this.SendEvent(new SpawnTextEvent(text, size, color.color, position));
-            } else {
-                this.SendEvent(new SpawnTextEvent(text, size, position));
             }
             return Observable.ReturnUnit();
         }
