@@ -30,7 +30,7 @@ namespace cfg{
         }
         public override void OnAdd(object sender)
         {
-            eventUnRegister = EventBinder.Convert(Evt, this, parameters => ApplyActions(sender, parameters));
+            eventUnRegister = EventBinder.Convert(Evt, this, parameters => ApplyActions(sender, parameters, Evt));
         }
         public override void OnRemove(object sender)
         {
@@ -41,9 +41,10 @@ namespace cfg{
             int diff = newStackNumber - StackNumber;
             StackNumber = newStackNumber;
         }
-        private void ApplyActions(object sender, List<object> parameters)
+        private void ApplyActions(object sender, List<object> parameters, EventType evt)
         {
-            this.GetSystem<IGASystem>().SendAction(sender, () => {
+            this.GetSystem<IGASystem>().SendAction(sender, (logContext) => {
+                logContext.SetLog($"触发事件：{evt}");
                 foreach (var action in Actions){
                     action.ApplyMultiplier(StackNumber);
                     this.GetSystem<IGASystem>().TriggerReaction(action, sender, parameters);

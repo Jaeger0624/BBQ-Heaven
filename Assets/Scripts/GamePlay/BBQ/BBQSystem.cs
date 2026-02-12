@@ -56,7 +56,8 @@ public class BBQSystem : AbstractSystem, IBBQSystem
     }
 
     public void FinishBBQ(Stick stick, List<FoodInstance> foodInstances){
-        this.GetSystem<IGASystem>().SendAction(null, () => {
+        this.GetSystem<IGASystem>().SendAction(null, (logContext) => {
+            logContext.SetLog($"开始制作烧烤: {stick.guid}");
             FinishBBQInternal(stick, foodInstances);
         });
     }
@@ -76,16 +77,16 @@ public class BBQSystem : AbstractSystem, IBBQSystem
 
 
         // 消耗时间
-        this.GetSystem<IGASystem>().SendAction(null, () => {
-        // 0.检测时间是否足够
+        this.GetSystem<IGASystem>().SendAction(null, (logContext) => {
             int timePoint = this.GetSystem<ITimeSystem>().GetCostTime(foodInstances, stick);
             this.GetSystem<ITimeSystem>().PushTimePoint(timePoint);
-            Debug.Log($"【BBQSystem】制作烧烤耗时：{timePoint}");
+            logContext.SetLog($"消耗时间：{timePoint}");
         });
 
 
         // 触发食材被选中时的GA
-        this.GetSystem<IGASystem>().SendAction(null, () => {
+        this.GetSystem<IGASystem>().SendAction(null, (logContext) => {
+            logContext.SetLog($"触发食材被选中时的GA");
             foodInstances.ForEach(x => 
             {
                 x.SetState(FoodInstanceState.被选中);
@@ -100,14 +101,16 @@ public class BBQSystem : AbstractSystem, IBBQSystem
         });
 
         // 计算并得出当前烧烤实例的最终结果
-        this.GetSystem<IGASystem>().SendAction(bbq, () => {
+        this.GetSystem<IGASystem>().SendAction(bbq, (logContext) => {
+            logContext.SetLog($"计算并得出当前烧烤实例的最终结果");
             CalculateCurrentBBQ(context);
         });
     }
     // 计算并得出当前烧烤实例的最终结果
     private void CalculateCurrentBBQ(BBQProcessContext context){
         // 1. 重置烧烤计算器用于执行计算过程
-        this.GetSystem<IGASystem>().SendAction(null, () => {
+        this.GetSystem<IGASystem>().SendAction(null, (logContext) => {
+            logContext.SetLog($"将食材逐个放上串签");
             BBQCalculator_食材基础值逐个加 calculator = new BBQCalculator_食材基础值逐个加();
             calculator.Calculate(context);
         });
@@ -115,7 +118,8 @@ public class BBQSystem : AbstractSystem, IBBQSystem
         // 2.1 在计算完成后，添加动画暂停
         // 2.2 清除高亮显示
         if (!this.GetSystem<IProxySystem>().isTesting){
-            this.GetSystem<IGASystem>().SendAction(context.targetBBQ, () => {
+            this.GetSystem<IGASystem>().SendAction(context.targetBBQ, (logContext) => {
+                logContext.SetLog($"添加动画暂停");
                 this.GetSystem<IAnimationSystem>().Append(new DelayAnimTask(0.3f, true));
                 this.SendEvent(new ClearAllBoardsHighlight());
                 Debug.Log("【BBQSystem】清除高亮显示");
@@ -124,22 +128,26 @@ public class BBQSystem : AbstractSystem, IBBQSystem
         }
 
 
-        this.GetSystem<IGASystem>().SendAction(context.targetBBQ, () => {
+        this.GetSystem<IGASystem>().SendAction(context.targetBBQ, (logContext) => {
+            logContext.SetLog($"检测配方触发情况");
             // 4. 检测配方触发情况
             this.GetSystem<IRecipeSystem>().MatchRecipe(new List<object>{context});
         });
 
-        this.GetSystem<IGASystem>().SendAction(context.targetBBQ, () => {
+        this.GetSystem<IGASystem>().SendAction(context.targetBBQ, (logContext) => {
+            logContext.SetLog($"串串已串制完毕");
             this.SendEvent(new AfterCalculateBBQEvent(context.targetBBQ, context));
         });
 
-        this.GetSystem<IGASystem>().SendAction(context.targetBBQ, () => {
+        this.GetSystem<IGASystem>().SendAction(context.targetBBQ, (logContext) => {
+            logContext.SetLog($"本次串串制作完全结束");
             this.SendEvent(new FinishCombineBBQEvent(context.targetBBQ, context));
         });
 
 
         if (!this.GetSystem<IProxySystem>().isTesting){
-            this.GetSystem<IGASystem>().SendAction(context.targetBBQ, () => {
+            this.GetSystem<IGASystem>().SendAction(context.targetBBQ, (logContext) => {
+                logContext.SetLog($"添加动画暂停");
                 List<IAnimTask> animTasks = new List<IAnimTask>
                 {
 

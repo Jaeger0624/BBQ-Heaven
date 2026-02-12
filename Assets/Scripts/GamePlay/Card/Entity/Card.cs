@@ -56,8 +56,8 @@ public class Card : ICanGetSystem{
             this.GetSystem<IGASystem>().TriggerReaction(cga, this, param);
         }
 
-        this.GetSystem<IGASystem>().SendAction(this, () => {
-            
+        this.GetSystem<IGASystem>().SendAction(this, (logContext) => {
+            logContext.SetLog($"使用卡牌：{name}");
             this.GetSystem<ICardSystem>().State = CardSystemState.正常;
         });
 

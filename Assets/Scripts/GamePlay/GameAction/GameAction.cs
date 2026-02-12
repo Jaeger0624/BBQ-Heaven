@@ -112,6 +112,40 @@ public abstract partial class GameAction : ICanGetSystem, IHaveAnim, ICanSendEve
     }
 }
 
+    public partial class GA_Action : GameAction
+    {
+        Action<GALogContext> action;
+        private GALogContext logContext;
+        public GA_Action(Action<GALogContext> action){
+            this.action = action;
+        }
+        public override GameAction Clone()
+        {
+            return new GA_Action(action);
+        }
+        public override void Execute(object sender, List<object> param)
+        {
+            // 创建日志上下文
+            logContext = new GALogContext();
+
+            // 执行动作，并提供日志上下文以修改
+            action?.Invoke(logContext);
+        }
+        public override IAnimTask GetAnimTask()
+        {
+            return new EmptyAnimTask();
+        }
+        public override int GetTypeId()
+        {
+            return 124532355; // 随便写
+        }
+        public override string GetDescription(object sender, List<object> args)
+        {
+            return logContext.Log;
+        }
+    }
+
+
 }
 
 

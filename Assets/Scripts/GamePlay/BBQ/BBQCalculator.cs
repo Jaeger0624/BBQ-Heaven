@@ -47,12 +47,9 @@ public class BBQCalculator_食材基础值逐个加 : AbstractBBQCalculator{
                 this.GetSystem<IGASystem>().TriggerReaction(cga, foodInstance, new List<object>{context});
             }
         }
-        this.GetSystem<IGASystem>().SendAction(foodInstance, () => {
+        this.GetSystem<IGASystem>().SendAction(foodInstance, (logContext) => {
+            logContext.SetLog($"将食材实例放上烤串");
             this.GetSystem<IFoodSystem>().PutFoodInstanceToStick(foodInstance.guid);
-        });
-        // 2. 通过GA_Action执行食材实例的CGA
-        this.GetSystem<IGASystem>().SendAction(foodInstance, () => {
-            // 3. 设置食材实例状态为在烤串上
             foodInstance.SetState(FoodInstanceState.烤串上);
         });
 

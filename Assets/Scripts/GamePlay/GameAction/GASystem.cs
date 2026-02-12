@@ -18,7 +18,7 @@ public interface IGASystem : ISystem
     void AddRootAction(GameAction action, object sender, List<object> args);
     void TriggerReaction(GameAction reactionAction, object sender, List<object> args);
     void TriggerReaction(CGA cga, object sender, List<object> args);
-    void SendAction(object sender, Action action);
+    void SendAction(object sender, Action<GALogContext> action);
 
     // --- 独立功能模块 ---
     void ApplySE(object sender, SustainEffect sustainEffect);
@@ -233,7 +233,7 @@ public class GASystem : AbstractSystem, IGASystem
         return Observable.ReturnUnit();
     }
 
-    public void SendAction(object sender, Action action)
+    public void SendAction(object sender, Action<GALogContext> action)
     {
         var wrapper = new GA_Action(action);
         TriggerReaction(wrapper, sender, null);

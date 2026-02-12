@@ -7,38 +7,6 @@ using UnityEngine;
 
 namespace cfg{
 
-    # region 功能性GA，本身不带有意义
-    public partial class GA_Action : GameAction
-    {
-        Action action;
-        public GA_Action(Action action){
-            this.action = action;
-        }
-        public override GameAction Clone()
-        {
-            return new GA_Action(action);
-        }
-
-        public override void Execute(object sender, List<object> param)
-        {
-            action?.Invoke();
-        }
-
-        public override IAnimTask GetAnimTask()
-        {
-            return new EmptyAnimTask();
-        }
-
-        public override int GetTypeId()
-        {
-            return 124532355;
-        }
-    }
-
-
-
-    #endregion
-    
     // 注意GA原子化，串串顺序执行其实应该拆成基础值逐一增加
     public partial class GA_添加单个食材基础值 : GameAction
     {
@@ -46,6 +14,8 @@ namespace cfg{
         private FoodInstanceViewAnimEvent foodInstanceViewAnimEvent;
         private AddBBQPropertyAnimEvent addBBQPropertyEvent;
         private PlaceFoodInstanceEvent placeFoodInstanceEvent;
+        private int finalRarity;
+        private int finalTaste;
         public GA_添加单个食材基础值(FoodInstance foodInstance){
             this.foodInstance = foodInstance;
         }
@@ -74,7 +44,8 @@ namespace cfg{
             // 向上取整
             int newFoodBaseRarity = (int)Mathf.Ceil(foodBaseRarity * multiplier);
             int newFoodBaseTaste = (int)Mathf.Ceil(foodBaseTaste * multiplier);
-
+            finalRarity = newFoodBaseRarity;
+            finalTaste = newFoodBaseTaste;
             if (isCritical){
                 Debug.Log($"【GA_添加单个食材基础值】食材实例{foodInstance.name}暴击，倍率：{multiplier}\n原值: {foodBaseRarity}|{foodBaseTaste} -> 新值: {newFoodBaseRarity}({foodBaseRarity*multiplier})|{newFoodBaseTaste}({foodBaseTaste*multiplier})");
             }
@@ -105,6 +76,14 @@ namespace cfg{
                 new DelayAnimTask(SettingManager.Instance.AnimSettings.foodInstanceOnStickAnimInterval, true),
             });
             return anim;
+        }
+
+        public override string GetDescription(object sender, List<object> args)
+        {
+            string rarityText = finalRarity > 0 ? $"<color=green>+{(finalRarity)}</color>" : $"<color=red>{(finalRarity)}</color>";
+            string tasteText = finalTaste > 0 ? $"<color=green>+{(finalTaste)}</color>" : $"<color=red>{(finalTaste)}</color>";
+
+            return $"将【{foodInstance.name}】放上烤串，属性值修改：{rarityText}|{tasteText}";
         }
 
         public override int GetTypeId()

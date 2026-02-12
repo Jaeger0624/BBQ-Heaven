@@ -75,7 +75,8 @@ public class DealSystem : AbstractSystem, IDealSystem
 	
 	public void ExecuteDeal(BBQ bbq, Customer customer)
 	{
-		this.GetSystem<IGASystem>().SendAction(null, () => {
+		this.GetSystem<IGASystem>().SendAction(null, (logContext) => {
+			logContext.SetLog($"执行交易：选择顾客:{customer.name}");
 			ExecuteDealInternal(bbq, customer);
 		});
 	}
@@ -92,8 +93,10 @@ public class DealSystem : AbstractSystem, IDealSystem
 		// 触发顾客订单进行时动作（如“讨价还价”等）
 		this.GetSystem<ICustomerSystem>().CustomerActionHandler.HandleCustomerAction(new List<Customer>{customer}, CustomerActionType.订单进行时, new List<object>{bbq, context});
 
-		// 执行满意度计算
-		this.GetSystem<IGASystem>().SendAction(null, () => {
+
+		this.GetSystem<IGASystem>().SendAction(null, (logContext) => {
+			logContext.SetLog($"执行满意度计算");
+
 			int rarity = bbq.totalRarity.Value;
 			int taste = bbq.totalTaste.Value;
 			Color rarityColor = SettingManager.Instance.DevSettings.AddRarityTextColor;
@@ -115,7 +118,8 @@ public class DealSystem : AbstractSystem, IDealSystem
 		});
 
 		// 执行AfterDeal
-		this.GetSystem<IGASystem>().SendAction(null, () => {
+		this.GetSystem<IGASystem>().SendAction(null, (logContext) => {
+			logContext.SetLog($"订单结算完毕");
 			DealResult result = GetResult(context);
 			Debug.Log(result.DealInfo());
 			AfterDeal(result, context);
