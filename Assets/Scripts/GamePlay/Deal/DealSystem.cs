@@ -77,8 +77,14 @@ public class DealSystem : AbstractSystem, IDealSystem
         if (currentSatisfaction != null) Debug.LogError("当前满意度应当为空");
         this.GetSystem<ICustomerSystem>().Satisfaction = new CustomerSatisfaction();
 	}
-
-	public async void ExecuteDeal(BBQ bbq, Customer customer)
+	
+	public void ExecuteDeal(BBQ bbq, Customer customer)
+	{
+		this.GetSystem<IGASystem>().SendAction(null, () => {
+			ExecuteDealInternal(bbq, customer);
+		});
+	}
+	private void ExecuteDealInternal(BBQ bbq, Customer customer)
     {
 		if (bbq == null || customer == null) return;
 		this.SendEvent(new DealStartedEvent(bbq, customer));
@@ -91,37 +97,37 @@ public class DealSystem : AbstractSystem, IDealSystem
 		DealContext context = new DealContext(bbq, customer, this.GetSystem<ICustomerSystem>().Satisfaction);
 
 		// 触发顾客订单进行时动作（如“讨价还价”等）
-		IObservable<Unit> encounterObservable = this.GetSystem<ICustomerSystem>().CustomerActionHandler.HandleCustomerAction(new List<Customer>{customer}, CustomerActionType.订单进行时, new List<object>{bbq, context});
+		this.GetSystem<ICustomerSystem>().CustomerActionHandler.HandleCustomerAction(new List<Customer>{customer}, CustomerActionType.订单进行时, new List<object>{bbq, context});
 
-		// 等待顾客订单进行时动作完成
-		await encounterObservable;
+		// 执行满意度计算
+		this.GetSystem<IGASystem>().SendAction(null, () => {
+			int rarity = bbq.totalRarity.Value;
+			int taste = bbq.totalTaste.Value;
+			Color rarityColor = SettingManager.Instance.DevSettings.AddRarityTextColor;
+			Color tasteColor = SettingManager.Instance.DevSettings.AddTasteTextColor;
+			float scoreTextAnimDuration = SettingManager.Instance.AnimSettings.ScoreTextAnimDuration;
+			// 乘上基本得分
+			List<IAnimTask> animTasks = new List<IAnimTask>(){
+				new ActionAnimTask(() => this.SendEvent(new ShowScorePanelEvent())),
+				new DelayAnimTask(0.1f, true),
+				new ActionAnimTask(() => this.SendEvent(new ShowScoreTextEvent($"{rarity.ToString().ToColor(rarityColor)} x {taste.ToString().ToColor(tasteColor)}"))),
+				new DelayAnimTask(scoreTextAnimDuration + 0.2f, true),
+				new ActionAnimTask(() => this.SendEvent(new UpdateScoreViewEvent(taste * rarity))),
+				new DelayAnimTask(scoreTextAnimDuration + 0.2f, true),
+			};
 
-		int rarity = bbq.totalRarity.Value;
-		int taste = bbq.totalTaste.Value;
-		Color rarityColor = SettingManager.Instance.DevSettings.AddRarityTextColor;
-		Color tasteColor = SettingManager.Instance.DevSettings.AddTasteTextColor;
-		float scoreTextAnimDuration = SettingManager.Instance.AnimSettings.ScoreTextAnimDuration;
-		// 乘上基本得分
-		List<IAnimTask> animTasks = new List<IAnimTask>(){
-			new ActionAnimTask(() => this.SendEvent(new ShowScorePanelEvent())),
-			new DelayAnimTask(0.1f, true),
-			new ActionAnimTask(() => this.SendEvent(new ShowScoreTextEvent($"{rarity.ToString().ToColor(rarityColor)} x {taste.ToString().ToColor(tasteColor)}"))),
-			new DelayAnimTask(scoreTextAnimDuration + 0.2f, true),
-			new ActionAnimTask(() => this.SendEvent(new UpdateScoreViewEvent(taste * rarity))),
-			new DelayAnimTask(scoreTextAnimDuration + 0.2f, true),
-		};
+			IAnimTask animTask = new SequenceAnimTask(animTasks);
+			this.GetSystem<IAnimationSystem>().Append(animTask);
 
-		IAnimTask animTask = new SequenceAnimTask(animTasks);
-		this.GetSystem<IAnimationSystem>().Append(animTask);
+		});
 
-		// 进行满意度的处理计算
-		DealResult result = GetResult(context);
-
-		Debug.Log(result.DealInfo());
-
-		AfterDeal(result, context);
+		// 执行AfterDeal
+		this.GetSystem<IGASystem>().SendAction(null, () => {
+			DealResult result = GetResult(context);
+			Debug.Log(result.DealInfo());
+			AfterDeal(result, context);
+		});
     }
-
 	private DealResult GetResult(DealContext context)    
 	{
 		// 获得顾客评价

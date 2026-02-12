@@ -26,25 +26,19 @@ public class CustomerActionHandler : ICanGetSystem, ICanSendEvent, ICanRegisterE
         unRegisters.Clear();
     }
 
-    public IObservable<Unit> HandleCustomerAction(List<Customer> customers, CustomerActionType customerActionType, List<object> parameters){
+    public void HandleCustomerAction(List<Customer> customers, CustomerActionType customerActionType, List<object> parameters){
         // 1. 获取正在点餐的顾客
-        if (customers.Count == 0){LogKit.W("【CustomerActionHandler】触发顾客动作时，传入的顾客列表为空"); return Observable.ReturnUnit();}
-
-        // Debug.Log($"【CustomerActionHandler】触发顾客动作: {customerActionType}");
-        List<IObservable<Unit>> actionsToRun = new List<IObservable<Unit>>();
-
+        if (customers.Count == 0){LogKit.W("【CustomerActionHandler】触发顾客动作时，传入的顾客列表为空"); return;}
+        
         // 2. 遍历顾客，执行顾客动作
         foreach (var customer in customers){
             foreach (var tag in customer.meta.customerTags){
                 List<CustomerCGA> customerCGAs = tag.CustomerActionCGAs.Where(x => x.Type == customerActionType).ToList();
                 foreach (var cga in customerCGAs){
-                    actionsToRun.Add(this.GetSystem<IGASystem>().ApplyCGA(customer, cga.Cga, parameters));
+                    this.GetSystem<IGASystem>().TriggerReaction(cga.Cga, customer, parameters);
                 }
             }
         }
-        if (actionsToRun.Count == 0){return Observable.ReturnUnit();}
-        // 3. 执行顾客动作
-        return actionsToRun.Concat().Select(_ => Unit.Default);
     }
     // 与系统外的交互，需要注册事件
     private void RegisterSingleAction(CustomerActionType customerActionType){
