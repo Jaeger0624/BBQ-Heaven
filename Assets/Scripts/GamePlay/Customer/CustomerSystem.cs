@@ -14,7 +14,6 @@ public interface ICustomerSystem : ISystem, ICanSendQuery{
     #region field
     List<MetaCustomer> ArrivedCustomers { get; }
     List<Customer> OrderingCustomers { get; }
-    CustomerSatisfaction Satisfaction { get; set; }
     CustomerActionHandler CustomerActionHandler { get; }
     // 顾客日志
     CustomerRecorder Recorder { get; }
@@ -47,7 +46,6 @@ public class CustomerSystem : AbstractSystem, ICustomerSystem
     public CustomerActionHandler CustomerActionHandler => customerActionHandler;
     public List<Customer> OrderingCustomers { get; protected set; } = new();
     public List<MetaCustomer> ArrivedCustomers { get; protected set; } = new();
-    public CustomerSatisfaction Satisfaction { get; set; } = new();
     private List<Customer> leavedCustomers = new();
     public CustomerRecorder Recorder { get; protected set; } = new();
     

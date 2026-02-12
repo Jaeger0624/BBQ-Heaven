@@ -71,12 +71,7 @@ public class DealSystem : AbstractSystem, IDealSystem
 		scoreMultipliers.Clear();
 	}
 
-	private void ResetSatisfaction(){	
-        // 暴露给GA的满意度计算
-        CustomerSatisfaction currentSatisfaction = this.GetSystem<ICustomerSystem>().Satisfaction;
-        if (currentSatisfaction != null) Debug.LogError("当前满意度应当为空");
-        this.GetSystem<ICustomerSystem>().Satisfaction = new CustomerSatisfaction();
-	}
+	
 	
 	public void ExecuteDeal(BBQ bbq, Customer customer)
 	{
@@ -89,12 +84,10 @@ public class DealSystem : AbstractSystem, IDealSystem
 		if (bbq == null || customer == null) return;
 		this.SendEvent(new DealStartedEvent(bbq, customer));
 
-		// 重置满意度
-		ResetSatisfaction();
 		customer.isServed = true;
 
 		// 创建上下文
-		DealContext context = new DealContext(bbq, customer, this.GetSystem<ICustomerSystem>().Satisfaction);
+		DealContext context = new DealContext(bbq, customer);
 
 		// 触发顾客订单进行时动作（如“讨价还价”等）
 		this.GetSystem<ICustomerSystem>().CustomerActionHandler.HandleCustomerAction(new List<Customer>{customer}, CustomerActionType.订单进行时, new List<object>{bbq, context});
@@ -138,16 +131,14 @@ public class DealSystem : AbstractSystem, IDealSystem
 		Debug.Log($"【DealSystem】开始计算满意度：顾客:{context.Customer.name}");
 
 		// 最终满意度总乘区
-		(float satisfaction, CustomerSatisfaction Satis) = GetSatisfaction(context);
+		ExecuteTags(context);
 
 		// 定价：满意度乘区 × 珍稀度 × 美味度（耐心作为可选修正，不在基础公式中）
 		int rarity = context.BBQ.totalRarity.Value;
 		int taste = context.BBQ.totalTaste.Value;
-		float rawPrice = satisfaction * rarity * taste;
+		float rawPrice = rarity * taste;
 
-		DealResult result = new DealResult(context.BBQ, context.Customer, satisfaction, rarity, taste, rawPrice);
-
-		result.scoreRecords.Add(new ScoreRecord("满意度", satisfaction, rawPrice));
+		DealResult result = new DealResult(context.BBQ, context.Customer, rarity, taste, rawPrice);
 
 		// 1. 添加得分乘区
 		foreach (var multiplier in scoreMultipliers){
@@ -197,9 +188,8 @@ public class DealSystem : AbstractSystem, IDealSystem
 		return result;
 	}
     //TODO: 此处安插公式计算顾客满意度
-    private (float satisfaction, CustomerSatisfaction satisfactionSystem) GetSatisfaction(DealContext context)
+    private void ExecuteTags(DealContext context)
 	{
-
 		// 1. 检测是否有标签满足条件
 		bool hasAnyTagTriggered = context.Customer.meta.customerTags.Any(tag => tag.Preview(context).Any(x => x));
 		if (hasAnyTagTriggered) this.GetSystem<IAnimationSystem>().Append(AnimCombine_顾客Tag.Anim_顾客Tag_显示标签视图());
@@ -215,16 +205,6 @@ public class DealSystem : AbstractSystem, IDealSystem
 			this.GetSystem<IAnimationSystem>().AddDelay(0.4f, true);
 			this.GetSystem<IAnimationSystem>().Append(AnimCombine_顾客Tag.Anim_顾客Tag_隐藏标签视图());
 		}
-
-        // 取回当前值后，设置为空
-        float satisfaction = context.Satisfaction.GetFinal();
-
-        // 获取并传出，随后设置为空
-        CustomerSatisfaction cur = context.Satisfaction;
-
-		// 设置满意度为空
-		this.GetSystem<ICustomerSystem>().Satisfaction = null;
-        return (satisfaction, cur);
     }
 
 
@@ -279,12 +259,12 @@ public class DealSystem : AbstractSystem, IDealSystem
 		if (resultTemp == null || customer == null) return null;
 		BBQ bbq = new BBQ(resultTemp.stick, resultTemp.foodInstances);
 
-		DealContext context = new DealContext(bbq, customer, new CustomerSatisfaction());
+		DealContext context = new DealContext(bbq, customer);
 		int rarity = bbq.foodInstances.Sum(x => x.rarity);
 		int taste = bbq.foodInstances.Sum(x => x.taste);
 		float rawPrice = rarity * taste;
 
-		DealResult result = new DealResult(bbq, customer, 1f, rarity, taste, rawPrice);
+		DealResult result = new DealResult(bbq, customer, rarity, taste, rawPrice);
 
 		// 1. 添加得分乘区
 		foreach (var multiplier in scoreMultipliers){

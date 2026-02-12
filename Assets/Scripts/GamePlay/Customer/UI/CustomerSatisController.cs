@@ -47,7 +47,7 @@ public class CustomerSatisController : MonoBehaviour, IController{
         this.UnRegisterEvent<HideStatisBarEvent>(OnHideStatisBarEvent);
         this.UnRegisterEvent<ShowStatisBarEvent>(OnShowStatisBarEvent);
     }
-    private void OnUpdateStatisEvent(UpdateStatisEvent evt) => UpdateCustomerSatis(evt.name, evt.satis, evt.multiplier, evt.previewResults, evt.animTarget, evt.hasReset);
+    private void OnUpdateStatisEvent(UpdateStatisEvent evt) => UpdateCustomerSatis(evt.name, evt.multiplier, evt.previewResults, evt.animTarget, evt.hasReset);
     private void OnHideStatisBarEvent(HideStatisBarEvent evt){
         ResetStatisBars(true);
         Hide();
@@ -56,7 +56,7 @@ public class CustomerSatisController : MonoBehaviour, IController{
         ResetStatisBars(false);
         Show();
     }
-    public void UpdateCustomerSatis(string name, float satis, float multiplier, List<bool> previewResults, Transform animTarget, bool hasReset){
+    public void UpdateCustomerSatis(string name, float multiplier, List<bool> previewResults, Transform animTarget, bool hasReset){
 
         if (hasReset) ResetStatisBars(true);
         Transform targetTransform = animTarget; // 默认为传入的 animTarget (可能为空)
@@ -83,10 +83,10 @@ public class CustomerSatisController : MonoBehaviour, IController{
         IAnimTask animTask_跳字 = AnimCombine_顾客Tag.Anim_Tag触发_满意度乘区文本(multiplier, name, targetTransform);
 
         // 取小数点后两位
-        satis = Mathf.Round(satis * 100) / 100;
-        customerSatisText.text = $"{satis}x";
+        multiplier = Mathf.Round(multiplier * 100) / 100;
+        customerSatisText.text = $"{multiplier}x";
         
-        float value = RevisedValue(satis);
+        float value = RevisedValue(multiplier);
 
         IAnimTask animTask_进度条 = UpdateStatisBarAnimTask(value, 0.5f);
 
@@ -193,13 +193,11 @@ public class CustomerSatisController : MonoBehaviour, IController{
 
 public class UpdateStatisEvent : AbstractEvent, ICanGetSystem{
     public string name = "未知";
-    public float satis;
     public float multiplier;
     public List<bool> previewResults = null;
     public bool hasReset;
     public Transform animTarget = SettingManager.Instance.SatisfactionTextParent;
     public UpdateStatisEvent(float multiplier, List<bool> previewResults, Transform animTarget = null, bool hasReset = true){
-        this.satis = this.GetSystem<ICustomerSystem>().Satisfaction.GetFinal();
         this.hasReset = hasReset;
         this.multiplier = multiplier;
         this.previewResults = previewResults;

@@ -77,13 +77,22 @@ public partial class GA_创建满意度乘区 : GameAction
     }
     public override void Execute(object sender, List<object> param)
     {
+
+        DealContext context = param.First(x => x is DealContext) as DealContext;
+
+        if (context == null)
+        {
+            Debug.LogError("【GA_创建满意度乘区】没有DealContext");
+            return;
+        }
+
         float multiplier = Value;
         if (Name == null) str = "未知";
         else if (String.IsNullOrEmpty(Name)) str = "未知";
         else str = Name;
 
         // 获取当前顾客实例
-        this.GetSystem<ICustomerSystem>().Satisfaction.AddSatisfactionMultiplier(multiplier, str);
+        context.OtherMultipliers.Add(str, multiplier);
         e = new UpdateStatisEvent(multiplier, previewResults, null, false).SetName(str);
     }
     public override void SetRelation(object target){

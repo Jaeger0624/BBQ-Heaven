@@ -26,7 +26,6 @@ public class DealController : MonoBehaviour, IController
     private void OnDealCompletedEvent(DealCompletedEvent dealCompletedEvent)
     {
         DealResult result = dealCompletedEvent.result;
-        CustomerSatisfaction satis = result.satisfactionSystem;
     }
 
 }
