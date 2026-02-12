@@ -195,8 +195,12 @@ public class GASystem : AbstractSystem, IGASystem
         if (_currentRootNode != null)
         {
             ActionHistory.Add(_currentRootNode);
-            // 限制历史数量防止内存泄漏
-            if (ActionHistory.Count > 50) ActionHistory.RemoveAt(0);
+
+            // 【调试打印】
+            GALogger.LogTree(_currentRootNode);
+            
+            // // 限制历史数量防止内存泄漏
+            // if (ActionHistory.Count > 50) ActionHistory.RemoveAt(0);
         }
         
         _currentRootNode = null;

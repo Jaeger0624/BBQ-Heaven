@@ -105,6 +105,11 @@ public abstract partial class GameAction : ICanGetSystem, IHaveAnim, ICanSendEve
             Chain(cga, sender, args);
         }
     }
+    public virtual string GetDescription(object sender, List<object> args)
+    {
+        // 默认返回类名，子类应该重写这个方法提供更有意义的文本
+        return $"执行: {this.GetType().Name}";
+    }
 }
 
 }

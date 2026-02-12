@@ -161,15 +161,12 @@ public class EncounterSystem : AbstractSystem, IEncounterSystem
 
             this.GetSystem<IGASystem>().TriggerReaction(cga, this, currentParams);
         }
-
-        this.GetSystem<IGASystem>().SendAction(null, () => {
-            if (_currentEncounterSubject != null)
-            {
-                _currentEncounterSubject.OnNext(optionData.Name);
-                _currentEncounterSubject.OnCompleted();
-                _currentEncounterSubject = null;
-                Debug.Log($"【EncounterSystem】当前遭遇结束: {optionData.Name}");
-            }
-        });
+        if (_currentEncounterSubject != null)
+        {
+            _currentEncounterSubject.OnNext(optionData.Name);
+            _currentEncounterSubject.OnCompleted();
+            _currentEncounterSubject = null;
+            Debug.Log($"【EncounterSystem】当前遭遇结束: {optionData.Name}");
+        }
     }
 }

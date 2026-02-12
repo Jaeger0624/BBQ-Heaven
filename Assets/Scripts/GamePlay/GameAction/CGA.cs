@@ -69,10 +69,11 @@ public partial class CGA : ICanGetSystem, IHaveAnim{
 public class GA_CGAWrapper : GameAction
 {
     private CGA _cgaData;
-
+    private bool _isConditionMet = false;
     public GA_CGAWrapper(CGA cgaData)
     {
         _cgaData = cgaData;
+        _isConditionMet = false;
     }
 
     public override GameAction Clone()
@@ -90,7 +91,7 @@ public class GA_CGAWrapper : GameAction
         // 2. 检查条件
         // 即使条件不满足，GA_CGAWrapper 这个节点本身已经存在于树中，IsFinished=true，日志可查
         bool isConditionMet = gaSystem.EvaluateConditions(sender, _cgaData.Conditions, args);
-
+        _isConditionMet = isConditionMet;
         // 3. 根据结果执行分支
         if (isConditionMet)
         {
@@ -109,10 +110,30 @@ public class GA_CGAWrapper : GameAction
         {
             // 条件不满足：什么都不做，Wrapper 执行结束
             // Log 系统可以读取 ActionNode 的状态，看到它没有子节点，或者通过扩展字段标记为“条件失败”
+            _isConditionMet = false;
         }
 
         return Observable.Return(GAResult.Empty);
     }
+
+        public override string GetDescription(object sender, List<object> args)
+        {
+            if (_cgaData.Conditions.Count > 0)
+            {
+                if (_isConditionMet)
+                {
+                    return $"[CGA] 执行: {_cgaData.GetType().Name} (条件: {_cgaData.Conditions.Count}，满足)";
+                }
+                else
+                {
+                    return $"[CGA] 执行: {_cgaData.GetType().Name} (条件: {_cgaData.Conditions.Count}，不满足)";
+                }
+            }
+            else
+            {
+                return $"[CGA] 执行: {_cgaData.GetType().Name} (条件: 0，满足)";
+            }
+        }
 
         public override IAnimTask GetAnimTask()
         {
