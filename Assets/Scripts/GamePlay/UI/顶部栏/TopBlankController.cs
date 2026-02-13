@@ -13,6 +13,8 @@ public class TopBlankController : MonoBehaviour, IController
     // 收入
     [LabelText("收入")]
     [SerializeField] private TextMeshProUGUI incomeText;
+
+    
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
 
     
@@ -36,14 +38,13 @@ public class TopBlankController : MonoBehaviour, IController
         this.GetSystem<IEconomySystem>().income.Subscribe((baseScore) => {
             UpdateIncomeInfo(baseScore);
         }).AddTo(this);
-
+        
         // 初始化
         UpateCoinInfo(this.GetSystem<IEconomySystem>().coin.Value);
         UpdateReputationInfo(this.GetSystem<IPCSystem>().Reputation.Value, this.GetSystem<IPCSystem>().NextLevelReputation.Value);
         UpdateLevelInfo(this.GetSystem<IPCSystem>().Level.Value);
         UpdateIncomeInfo(this.GetSystem<IEconomySystem>().income.Value);
 
-        
     }
 
     private void UpateCoinInfo(int value) => coinText.text = $"<color=yellow>Q:</color>{value}";
@@ -54,4 +55,7 @@ public class TopBlankController : MonoBehaviour, IController
         incomeText.text = $"+{value}<color=yellow>Q</color>";
         incomeText.ForceMeshUpdate();
     }
+    
+
+
 }

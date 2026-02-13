@@ -18,10 +18,17 @@ public class CustomerRecord{
     public MetaCustomer metaCustomer;
     public int visitCount;
     public int totalSpent;
+    
+    /// <summary>
+    /// 上次来访的日期（GameSystem.CurrentDay），0表示未来过
+    /// </summary>
+    public int lastVisitDay;
+    
     public CustomerRecord(MetaCustomer metaCustomer){
         this.metaCustomer = metaCustomer;
         this.visitCount = 0;
         this.totalSpent = 0;
+        this.lastVisitDay = 0;
     }
 }
 
@@ -39,6 +46,9 @@ public class CustomerRecorder : ICanGetSystem, ICanSendEvent{
 
         this.SendEvent(new CreateMetaCustomerEvent(record));
     }
+    /// <summary>
+    /// 当顾客被服务时调用，更新顾客记录
+    /// </summary>
     public void OnServeCustomer(DealContext context, DealResult result){
         // 如果已经在顾客志中
         if (!customerRecords.Any(record => record.metaCustomer == context.Customer.meta)){
@@ -48,6 +58,9 @@ public class CustomerRecorder : ICanGetSystem, ICanSendEvent{
         CustomerRecord record = customerRecords.FirstOrDefault(record => record.metaCustomer == context.Customer.meta);
         record.visitCount++;
         record.totalSpent += result.price;
+        
+        // 记录上次来访日期
+        record.lastVisitDay = this.GetSystem<IGameSystem>().CurrentDay;
     }
     private Customer CreateCustomer(MetaCustomer metaCustomer){
         return new Customer(metaCustomer, 30, 2);

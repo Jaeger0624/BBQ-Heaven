@@ -31,6 +31,21 @@ public interface ICustomerSystem : ISystem, ICanSendQuery{
     #region query
     bool IsMaxOrderAmount();
     int GetAmount(CustomerState state);
+    
+    /// <summary>
+    /// 获取当前时段的老客概率（0-1之间）
+    /// </summary>
+    float GetOldCustomerChance();
+    
+    /// <summary>
+    /// 获取当前时段的显示名称（如 "☀️ 午市"）
+    /// </summary>
+    string GetCustomerTimeDisplayName();
+    
+    /// <summary>
+    /// 获取当前时段的描述文本（用于Tooltip）
+    /// </summary>
+    string GetCustomerTimeDescription();
     #endregion
 }
 
@@ -49,7 +64,7 @@ public class CustomerSystem : AbstractSystem, ICustomerSystem
     private List<Customer> leavedCustomers = new();
     public CustomerRecorder Recorder { get; protected set; } = new();
     
-    private float oldCustomerChance = 0.3f; // 老顾客来店的可能性
+    private float oldCustomerChance = 0.2f; // 老顾客来店的可能性
     public CustomerTime CustomerTime { get; set; } = CustomerTime.午间;
     public void SetCustomerTime(string customerTime){
         this.CustomerTime = Enum.Parse<CustomerTime>(customerTime);
@@ -58,7 +73,7 @@ public class CustomerSystem : AbstractSystem, ICustomerSystem
                 oldCustomerChance = 0.5f;
                 break;
             case CustomerTime.夜间:
-                oldCustomerChance = 0.3f;
+                oldCustomerChance = 0.2f;   
                 break;
             default:
                 Debug.LogError($"【CustomerSystem】不支持的顾客时间：{customerTime}");
@@ -232,5 +247,39 @@ public class CustomerSystem : AbstractSystem, ICustomerSystem
     public int GetAmount(CustomerState state)
     {
         return OrderingCustomers.Count(customer => customer.state == state);
+    }
+    
+    /// <summary>
+    /// 获取当前时段的老客概率（0-1之间）
+    /// </summary>
+    public float GetOldCustomerChance()
+    {
+        return oldCustomerChance;
+    }
+    
+    /// <summary>
+    /// 获取当前时段的显示名称（如 "☀️ 午市"）
+    /// </summary>
+    public string GetCustomerTimeDisplayName()
+    {
+        return CustomerTime switch
+        {
+            CustomerTime.午间 => "午市",
+            CustomerTime.夜间 => "夜市",
+            _ => "未知时段"
+        };
+    }
+    
+    /// <summary>
+    /// 获取当前时段的描述文本（用于Tooltip）
+    /// </summary>
+    public string GetCustomerTimeDescription()
+    {
+        return CustomerTime switch
+        {
+            CustomerTime.午间 => "老客概率: 50%\n适合积累熟客关系",
+            CustomerTime.夜间 => "老客概率: 20%\n人流量大更热闹",
+            _ => ""
+        };
     }
 }
