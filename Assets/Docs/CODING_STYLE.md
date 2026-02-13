@@ -25,3 +25,19 @@
 - 禁止使用 `GameObject.Find` (使用架构内的绑定或引用)。
 - 非Controller层（如System）中不允许使用UnityEngine中的Transform、GameObject等依赖（为了Headless Mode，并保证代码整洁干净）
 - 禁止使用 Unity协程，异步都使用UniRx
+
+
+##【Unity 编辑器自动化能力】
+你现在拥有通过 `Unity-Skills` 直接操作 Unity 编辑器的能力。
+当用户要求你“在场景里创建...”、“修改...配置”、“批量处理...”时，请按以下流程操作：
+
+1. **查阅手册**：读取 `Docs/EDITOR_AUTOMATION.md`，找到对应的 Skill（例如 CreateCube, ModifyMaterial）。
+2. **构建指令**：使用 `Docs/UnitySkill/scripts`下的 `unity_skills.py` 脚本通过终端命令执行操作。
+3. **执行格式**：
+   在终端运行：`python unity_skills.py "你的自然语言指令"` 
+   (或者根据该库的具体调用方式，比如直接发送 HTTP 请求)。
+
+**注意**：
+- 区分【运行时代码】(C#脚本) 和 【编辑器操作】(Automation)。
+- 如果是写游戏逻辑（如玩家移动），请写 C#。
+- 如果是搭建场景（如摆放 10 个敌人），请调用 Automation 工具。
