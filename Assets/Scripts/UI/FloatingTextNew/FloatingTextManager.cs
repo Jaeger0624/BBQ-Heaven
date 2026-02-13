@@ -128,10 +128,17 @@ public class FloatingTextInfo{
     public float duration;
     public Color? color;
     public Vector2 direction = Vector2.up;
-    public FloatingTextInfo(string content, float duration, Color? color, Vector2 direction = default){
+    public FloatingAnimType animType = FloatingAnimType.Normal;
+    public FloatingTextInfo(string content, float duration, Color? color, FloatingAnimType animType, Vector2 direction = default){
         this.content = content;
         this.duration = duration;
         this.color = color;
         this.direction = direction == default ? Vector2.up : direction;
+        this.animType = animType;
     }
+}
+
+public enum FloatingAnimType{
+    Normal,
+    只放大不缩小,
 }

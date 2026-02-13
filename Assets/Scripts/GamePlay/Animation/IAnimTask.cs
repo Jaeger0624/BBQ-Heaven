@@ -174,7 +174,7 @@ public class ScaleAnimationTask : IAnimTask
         public override IObservable<Unit> Play()
         {
             if (lifetime.HasValue){
-                FloatingTextInfo info = new FloatingTextInfo(text, lifetime.Value, color.color);
+                FloatingTextInfo info = new FloatingTextInfo(text, lifetime.Value, color.color, FloatingAnimType.Normal);
                 FloatingTextManager.Instance.Show(position, text, color.color, info);
                 return Observable.ReturnUnit();
             }

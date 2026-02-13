@@ -65,16 +65,16 @@ public class RecipeController : MonoBehaviour, IController, ICanSendEvent
     }
     private string BuildRecipeText(Recipe recipe){
         StringBuilder sb = new StringBuilder();
-        sb.Append("<size=6> 激活配方:</size>");
+        sb.Append("激活配方:".ToSize(36f));
         sb.Append("\n<color=yellow>");
-        sb.Append(recipe.name);
+        sb.Append(recipe.name.ToSize(54f));
         sb.Append("</color>");
-        sb.Append("\n<color=white><size=4>");
-        sb.Append($"配方:{recipe.ruleDescription}");
-        sb.Append("</size></color>");
-        sb.Append("\n<color=white><size=4>");
-        sb.Append($"食效:{recipe.actionDescription}");
-        sb.Append("</size></color>");
+        sb.Append("\n<color=white>");
+        sb.Append($"配方:{recipe.ruleDescription}".ToSize(48f));
+        sb.Append("</color>");
+        sb.Append("\n<color=white>");
+        sb.Append($"食效:{recipe.actionDescription}".ToSize(48f));
+        sb.Append("</color>");
         return sb.ToString();
     }
 }

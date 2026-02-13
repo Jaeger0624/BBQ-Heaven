@@ -70,10 +70,12 @@ public class FoodCardController : MonoBehaviour, IController, ICanSendEvent{
 
         int amount = foodCards.Count;
         if (amount > 0){
-            FloatingTextManager.Instance.Show(foodCardContainer.position + new Vector3(0, 0.5f, 0), $"抽取{amount}张食材卡牌", Color.white, new FloatingTextInfo("", 1.2f, Color.white));
+            FloatingTextManager.Instance.Show(foodCardContainer.position + new Vector3(0, 0.5f, 0), $"抽取{amount}张食材卡牌", Color.white, 
+            new FloatingTextInfo("", 1.2f, Color.white, FloatingAnimType.Normal));
         }
         else{
-            FloatingTextManager.Instance.Show(foodCardContainer.position + new Vector3(0, 0.5f, 0), $"食材仓储已空\n<color=yellow>请补充食材</color>", Color.white, new FloatingTextInfo("", 1.2f, Color.white));
+            FloatingTextManager.Instance.Show(foodCardContainer.position + new Vector3(0, 0.5f, 0), $"食材仓储已空\n<color=yellow>请补充食材</color>", Color.white, 
+            new FloatingTextInfo("", 1.2f, Color.white, FloatingAnimType.Normal));
         }
     }
     public void OnRefreshFoodPileButtonClick()

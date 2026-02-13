@@ -62,7 +62,8 @@ public class ScorePanel : MonoBehaviour, IController, ICanSendEvent{
         ShakeNumber();
 
         if (evt.multiplierText != null){  
-            FloatingTextManager.Instance.Show(transform.position, evt.multiplierText, Color.white, new FloatingTextInfo(evt.multiplierText, 1.2f, Color.white));
+            FloatingTextManager.Instance.Show(transform.position, evt.multiplierText, Color.white, 
+            new FloatingTextInfo(evt.multiplierText, 1.2f, Color.white, FloatingAnimType.Normal));
         }
     }
 

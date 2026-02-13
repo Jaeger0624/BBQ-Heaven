@@ -21,7 +21,7 @@ public class FloatingTextHandler : MonoBehaviour, IController
         IEntityView entityView = entity.GetEntityView();
         if (entityView != null){
             string text = $"<color=yellow>{entity.name}</color> 撞击了 <color=yellow>{evt.receiver.name}</color>";
-            FloatingTextManager.Instance.Show(entityView.GO().transform.position, text, Color.white, new FloatingTextInfo(text, 1.2f, Color.white));
+            FloatingTextManager.Instance.Show(entityView.GO().transform.position, text, Color.white, new FloatingTextInfo(text, 1.2f, Color.white, FloatingAnimType.Normal));
         }
         else{
             Debug.LogError($"【FloatingTextHandler】实体视图不存在: {entity.guid}");
@@ -30,6 +30,10 @@ public class FloatingTextHandler : MonoBehaviour, IController
 
     // 顾客等待值变化跳字
     private void OnChangeCustomerPatienceEvent_飘字(ChangeCustomerPatienceEvent_飘字 evt)
-    => FloatingTextManager.Instance.Show(evt.GetPosition(), evt.GetDescription(), Color.white, new FloatingTextInfo(evt.GetDescription(), 1.2f, Color.white, Vector2.right));
+    => FloatingTextManager.Instance.Show(
+        evt.GetPosition(),
+        evt.GetDescription(),
+        Color.white,
+        new FloatingTextInfo(evt.GetDescription(), 1.2f, Color.white, FloatingAnimType.Normal, Vector2.right));
 
 }
