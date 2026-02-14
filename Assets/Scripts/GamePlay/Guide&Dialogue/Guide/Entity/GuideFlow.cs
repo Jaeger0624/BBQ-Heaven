@@ -11,7 +11,6 @@ public class GuideFlow : ScriptableObject
     [Header("流程信息")]
     [Tooltip("唯一标识符")]
     public string flowID;
-
     [Tooltip("是否为线性流程（true=按顺序执行，false=可跳步）")]
     public bool isLinear = true;
 

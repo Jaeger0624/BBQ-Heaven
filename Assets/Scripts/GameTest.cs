@@ -74,7 +74,8 @@ public class GameTest : MonoBehaviour, IController, ICanSendEvent{
             "PC信息测试",
             "种子测试",
             "GA测试",
-            "卡牌测试"
+            "卡牌测试",
+            "教程测试"
         }, 8);
         // GUI.skin.label.fontSize = 16;
 
@@ -113,6 +114,9 @@ public class GameTest : MonoBehaviour, IController, ICanSendEvent{
                 break;
             case 8:
                 CardTest();
+                break;
+            case 9:
+                GuideTest();
                 break;
         }
         GUILayout.EndArea();
@@ -378,6 +382,16 @@ public class GameTest : MonoBehaviour, IController, ICanSendEvent{
         if (GUILayout.Button("获取一张指定id的卡牌")){
             this.GetSystem<ICardSystem>().AddCardToRepository(cardId);
             LogKit.I($"【GameTest】获取了一张指定id的卡牌: {cardId}");
+        }
+    }
+
+    private void GuideTest(){
+        if (GUILayout.Button("启动教程")){
+            GuideFlow flow = SettingManager.Instance.GuideSettings.GetDefaultGuideFlow();
+            this.GetSystem<IGuideSystem>().StartGuide(flow);
+        }
+        if (GUILayout.Button("停止教程")){
+            this.GetSystem<IGuideSystem>().StopGuide();
         }
     }
 }

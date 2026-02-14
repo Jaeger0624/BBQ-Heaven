@@ -8,7 +8,6 @@ public class GuidePanel : MonoBehaviour, IController // 继承你自己的基类
     [Header("UI组件")]
     public GuideRaycastFilter MaskFilter; // 拖入挂了Filter的全屏黑色Image
     public RectTransform HollowRect;   // 拖入那个透明的高亮框 Image
-    public GameObject HandIcon;        // 手指图标
     public TextMeshProUGUI DialogueText;          // 对话文字
 
     // 单例方便调用，或者通过架构获取
@@ -44,13 +43,6 @@ public class GuidePanel : MonoBehaviour, IController // 继承你自己的基类
         // 切换pivot为中心
         HollowRect.pivot = rectTransform.pivot;
         HollowRect.sizeDelta = rectTransform.sizeDelta + new Vector2(margin * 2, margin * 2);
-
-        // 2. 设置手指位置
-        if(HandIcon != null)
-        {
-            HandIcon.SetActive(true);
-            HandIcon.transform.position = rectTransform.position; // 简单设置
-        }
 
         // 3. 设置文字
         if(!string.IsNullOrEmpty(content) && DialogueText != null)

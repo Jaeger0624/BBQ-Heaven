@@ -48,6 +48,8 @@ public class SettingManager : MonoBehaviour, IController,ICanSendEvent{
     public FloatingTextSettings FloatingTextSettings => _floatingTextSettings;
     [SerializeField] private ArtSettings _artSettings;
     public ArtSettings ArtSettings => _artSettings;
+    [SerializeField] private GuideSettings _guideSettings;
+    public GuideSettings GuideSettings => _guideSettings;
     public static T GetSetting<T>() where T : ScriptableObject{
         if (typeof(T) == typeof(DevSettings)){
             return Instance.DevSettings as T;

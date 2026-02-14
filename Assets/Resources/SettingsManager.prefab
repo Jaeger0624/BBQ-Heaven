@@ -51,6 +51,7 @@ MonoBehaviour:
   _prefabSettings: {fileID: 11400000, guid: eb7df1ddd6a2ba5418ab90f6df589b05, type: 2}
   _floatingTextSettings: {fileID: 11400000, guid: 1649860ee12bf0244baf51010d466b8e, type: 2}
   _artSettings: {fileID: 11400000, guid: 4aefc14e3083fa748b383ad1df4e9c25, type: 2}
+  _guideSettings: {fileID: 11400000, guid: 96ddd67ff8801d849b205acbe8d590f1, type: 2}
   SatisfactionTextParent: {fileID: 5324351430562989847}
 --- !u!1 &4117943351024649558
 GameObject:

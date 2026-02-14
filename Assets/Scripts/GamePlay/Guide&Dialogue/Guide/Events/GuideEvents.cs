@@ -5,19 +5,10 @@ using QFramework;
 /// </summary>
 public class GuideStartEvent : AbstractEvent
 {
-    /// <summary>
-    /// 教程流程ID
-    /// </summary>
-    public string flowID;
-    
-    /// <summary>
-    /// 教程流程配置
-    /// </summary>
     public GuideFlow flow;
 
-    public GuideStartEvent(string flowID, GuideFlow flow)
+    public GuideStartEvent(GuideFlow flow)
     {
-        this.flowID = flowID;
         this.flow = flow;
     }
 }

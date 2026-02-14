@@ -24,3 +24,4 @@ MonoBehaviour:
   - 2.5
   - 3
   "\u6BCF\u65E5\u76EE\u6807\u5206\u6570\u5217\u8868": dc050000c4090000a00f00006419000010270000
+  guideSettings: {fileID: 11400000, guid: 96ddd67ff8801d849b205acbe8d590f1, type: 2}

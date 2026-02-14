@@ -18,7 +18,7 @@ public interface IGuideSystem : ISystem
     /// <summary>
     /// 启动指定教程
     /// </summary>
-    void StartGuide(string flowID);
+    void StartGuide(GuideFlow flow);
 
     /// <summary>
     /// 停止当前教程
@@ -137,22 +137,18 @@ public class GuideSystem : AbstractSystem, IGuideSystem
     /// <summary>
     /// 启动指定教程
     /// </summary>
-    public void StartGuide(string flowID)
+    public void StartGuide(GuideFlow flow)
     {
         if (IsGuideActive)
         {
             Debug.LogWarning($"[GuideSystem] 已有教程在运行: {CurrentFlowID}，请先停止");
             return;
         }
-
-        // 1. 加载 GuideFlow 配置（通过 Resources 加载）
-        var flow = Resources.Load<GuideFlow>($"Tutorial/{flowID}");
         if (flow == null)
         {
-            Debug.LogError($"[GuideSystem] 找不到教程配置: {flowID}");
+            Debug.LogError($"[GuideSystem] 教程流程为空");
             return;
         }
-
         // 2. 初始化状态
         _currentFlow = flow;
         _currentStepIndex = 0;
@@ -160,12 +156,12 @@ public class GuideSystem : AbstractSystem, IGuideSystem
         _completedSteps.Clear();
 
         // 3. 发送教程开始事件
-        this.SendEvent(new GuideStartEvent(flowID, flow));
+        this.SendEvent(new GuideStartEvent(flow));
 
         // 4. 显示第一步
         ShowCurrentStep();
 
-        Debug.Log($"[GuideSystem] 教程启动: {flowID}");
+        Debug.Log($"[GuideSystem] 教程启动: {flow.flowID}");
     }
 
     /// <summary>
@@ -277,13 +273,6 @@ public class GuideSystem : AbstractSystem, IGuideSystem
             return;
         }
 
-        var currentStep = CurrentStep;
-        if (currentStep != null && !currentStep.isOptional)
-        {
-            Debug.LogWarning("[GuideSystem] 必选步骤不能跳过");
-            return;
-        }
-
         // 标记为已完成
         _completedSteps.Add(_currentStepIndex);
         
@@ -310,16 +299,6 @@ public class GuideSystem : AbstractSystem, IGuideSystem
 
         // 发送步骤显示事件
         this.SendEvent(new GuideStepShowEvent(CurrentFlowID, _currentStepIndex, step));
-
-        // 如果有高亮目标，激活高亮
-        if (!string.IsNullOrEmpty(step.targetID))
-        {
-            var target = GetTarget(step.targetID);
-            if (target != null)
-            {
-                // 这里可以触发高亮效果，由 GuidePanel 处理
-            }
-        }
     }
 
     /// <summary>
@@ -421,14 +400,10 @@ public class GuideSystem : AbstractSystem, IGuideSystem
     {
         foreach (var step in _currentFlow.steps)
         {
-            // 如果有必选步骤未完成，则未完成
-            if (!step.isOptional)
+            int index = _currentFlow.steps.IndexOf(step);
+            if (!_completedSteps.Contains(index))
             {
-                int index = _currentFlow.steps.IndexOf(step);
-                if (!_completedSteps.Contains(index))
-                {
-                    return false;
-                }
+                return false;
             }
         }
         return true;

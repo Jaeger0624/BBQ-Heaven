@@ -12,8 +12,7 @@ public class BoardEntityMover : ICanGetSystem, ICanSendEvent
     # region API Functions
     public void DirectionalMove(BoardEntity entity, Vector2Int direction, int distance){
         if (distance <= 0) return;
-        Direction directionEnum = direction.ToDirection();
-        // Debug.Log($"【BoardEntityMover】方向移动实体: {entity.name} 向 {directionEnum} 移动 {distance} 步");
+        
         BoardCell endCell = this.GetSystem<IBoardSystem>().GetStopPosition(entity.position, direction, distance, out BoardEntity target);
         if (target != null){
             Debug.Log($"<color=orange>触发碰撞: {entity.name} 和 {target.name}</color>");
@@ -23,6 +22,11 @@ public class BoardEntityMover : ICanGetSystem, ICanSendEvent
         if (entity == null)
         {
             Debug.LogError($"【BoardEntityMover】实体为空: {entity.name}");
+            return;
+        }
+        if (endCell == null)
+        {
+            Debug.LogError($"【BoardEntityMover】终点格子为空: {entity.name} 方向: {direction} 距离: {distance}");
             return;
         }
         if (endCell.position != entity.position){

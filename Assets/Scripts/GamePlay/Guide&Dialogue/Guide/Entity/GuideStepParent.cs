@@ -3,6 +3,8 @@ using UnityEngine;
 using UniRx;
 using QFramework;
 using UnityEngine.UI;
+using System.ComponentModel;
+using Sirenix.OdinInspector;
 
 /// <summary>
 /// 教程步骤展示器 - 挂载在需要显示教程的UI元素上
@@ -22,8 +24,7 @@ public class GuideStepParent : MonoBehaviour, IController, ICanSendEvent
     [Tooltip("文本偏移量")]
     [SerializeField] private Vector2 textOffset = new Vector2(20, 0);
 
-    [Header("运行时状态（只读）")]
-    [SerializeField] private bool isActive = false;
+    private bool isActive = false;
 
     // ========== UniRx Subject ==========
     private Subject<Unit> _onShowSubject = new Subject<Unit>();
@@ -101,8 +102,6 @@ public class GuideStepParent : MonoBehaviour, IController, ICanSendEvent
         
         Debug.Log($"[GuideStepParent] 隐藏教程步骤: {stepInfo?.name}");
     }
-
-    // ========== 事件处理 ==========
     /// <summary>
     /// 处理教程步骤显示事件
     /// </summary>
@@ -112,16 +111,7 @@ public class GuideStepParent : MonoBehaviour, IController, ICanSendEvent
         if (stepInfo != null && evt.stepInfo == stepInfo)
         {
             // 延迟显示
-            if (stepInfo.delayBeforeShow > 0)
-            {
-                Observable.Timer(TimeSpan.FromSeconds(stepInfo.delayBeforeShow))
-                    .Subscribe(_ => ShowStep())
-                    .AddTo(_disposables);
-            }
-            else
-            {
-                ShowStep();
-            }
+            ShowStep();
         }
     }
 
@@ -141,7 +131,7 @@ public class GuideStepParent : MonoBehaviour, IController, ICanSendEvent
     /// </summary>
     private void SetupClickListener()
     {
-        if (stepInfo == null || !stepInfo.waitForClick) return;
+        if (stepInfo == null) return;
 
         var button = GetComponent<Button>();
         if (button != null)
@@ -161,14 +151,12 @@ public class GuideStepParent : MonoBehaviour, IController, ICanSendEvent
         }
     }
 
-    // ========== 编辑器辅助方法 ==========
-    /// <summary>
-    /// 在编辑器中预览教程步骤（仅用于编辑器调试）
-    /// </summary>
-    [ContextMenu("预览教程步骤")]
+    // ========== 测试方法 ==========
+
+    [Button("预览教程步骤")]
     private void PreviewStep()
     {
-        #if UNITY_EDITOR
+
         if (Application.isPlaying)
         {
             ShowStep();
@@ -177,20 +165,13 @@ public class GuideStepParent : MonoBehaviour, IController, ICanSendEvent
         {
             Debug.LogWarning("[GuideStepParent] 预览功能仅在运行时可用");
         }
-        #endif
     }
-
-    /// <summary>
-    /// 在编辑器中隐藏教程步骤（仅用于编辑器调试）
-    /// </summary>
-    [ContextMenu("隐藏教程步骤")]
+    [Button("隐藏教程步骤")]
     private void HideStepEditor()
     {
-        #if UNITY_EDITOR
         if (Application.isPlaying)
         {
             HideStep();
         }
-        #endif
     }
 }
