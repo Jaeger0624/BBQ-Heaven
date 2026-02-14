@@ -28,6 +28,30 @@ public partial class FoodInstance : BoardEntity, IAnimPlayer{
     // Runtime部分：不保存
     public List<SustainEffect> sustainEffects = new List<SustainEffect>();
     public Action OnViewStatusChanged;
+    
+    /// <summary>状态层数系统：用于玉米等食材的状态层数机制</summary>
+    private Dictionary<string, int> stateLayers = new Dictionary<string, int>();
+    
+    /// <summary>
+    /// 获取指定状态的层数
+    /// </summary>
+    /// <param name="stateID">状态ID，如 "corn_kernel"</param>
+    /// <returns>当前层数，如果状态不存在则返回0</returns>
+    public int GetStateLayers(string stateID)
+    {
+        return stateLayers.TryGetValue(stateID, out int layers) ? layers : 0;
+    }
+    
+    /// <summary>
+    /// 设置指定状态的层数
+    /// </summary>
+    /// <param name="stateID">状态ID</param>
+    /// <param name="layers">要设置的层数</param>
+    public void SetStateLayers(string stateID, int layers)
+    {
+        stateLayers[stateID] = layers;
+    }
+    
     public FoodInstance(FoodCard food, Vector2Int position) : base(){
         this.food = food;
         this.position = position;

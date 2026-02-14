@@ -216,4 +216,20 @@ namespace cfg{
             return context.targetBBQ.foodInstances.Count(x => x.food.foodData.ID == FoodID);
         }
     }
+
+    /// <summary>
+    /// DV_食材状态层数：获取食材的某个状态层数
+    /// 用于玉米等食材的状态层数机制
+    /// </summary>
+    // public partial class DV_食材状态层数 : DynamicValue
+    // {
+    //     public override int GetValue(object target, List<object> param)
+    //     {
+    //         if (target is FoodInstance food)
+    //         {
+    //             return food.GetStateLayers(StateID);
+    //         }
+    //         return 0;
+    //     }
+    // }
 }

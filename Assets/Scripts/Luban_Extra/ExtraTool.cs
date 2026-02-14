@@ -24,6 +24,15 @@ public class ExtraTool : IController{
         return false;
     }
 
+    /// <summary>
+    /// 根据策略获取食材实例列表
+    /// </summary>
+    /// <param name="types">食材状态类型列表（当strategy为串上某类型食材时，用作FoodType列表）</param>
+    /// <param name="strategy">选择策略</param>
+    /// <param name="amount">数量（-1表示全部）</param>
+    /// <param name="sender">发起者</param>
+    /// <param name="param">参数列表</param>
+    /// <returns>食材实例列表</returns>
     public static List<FoodInstance> GetFoodInstances(List<FoodInstanceState> types, GetFoodInstanceStrategy strategy, int amount, object sender, List<object> param){
         IFoodSystem foodSystem = GameArchitecture.Interface.GetSystem<IFoodSystem>();
         IBoardSystem boardSystem = GameArchitecture.Interface.GetSystem<IBoardSystem>();
@@ -84,7 +93,7 @@ public class ExtraTool : IController{
                 break;
         }
 
-        // 过滤掉不在类型列表中的食材实例
+        // 过滤掉不在类型列表中的食材实例（仅对非类型筛选策略生效）
         if (!types.Contains(FoodInstanceState.棋盘上)) {
             foods.RemoveAll(x => x.state == FoodInstanceState.棋盘上);
         }
