@@ -401,4 +401,42 @@ this.GetSystem<IDataSystem>().GetXxxData(id);
 
 ---
 
+## C. 关键资源位置
+
+### 配置与数据
+
+| 资源 | 位置 | 说明 |
+|------|------|------|
+| **Luban配置表** | `Config/Datas/*.xlsx` | Excel格式的数据配置 |
+| **Luban生成脚本** | `Config/gen.bat` | 执行后生成CS代码和JSON |
+| **生成的CS类** | `Assets/Luban/*.cs` | Luban自动生成，**禁止手动修改** |
+| **运行时扩展** | `Assets/Scripts/Luban_Extra/` | 对生成类的逻辑扩展 |
+| **配置JSON** | `Assets/Resources/Config/*.json` | 运行时读取的配置数据，可查阅已配置内容 |
+
+### 核心扩展目录
+
+| 目录 | 说明 |
+|------|------|
+| `Assets/Scripts/Luban_Extra/GameAction/` | GA运行时实现 |
+| `Assets/Scripts/Luban_Extra/Info/` | 获取食材/格子/顾客信息的策略实现 |
+| `Assets/Scripts/Luban_Extra/Other/` | 其他扩展（Direction、Dialogue等） |
+
+### 设计文档
+
+| 目录 | 说明 |
+|------|------|
+| `Assets/Docs/Designs/` | 具体功能/内容的设计文档 |
+| `Assets/Docs/` | 项目整体文档（架构、规范、工作流等） |
+
+### 查阅已配置内容
+
+要了解项目中已配置的GA、Condition、DV等，可以查看：
+1. **JSON配置文件**: `Assets/Resources/Config/*.json` - 包含所有已配置的数据
+2. **Luban生成类**: `Assets/Luban/GA_*.cs`, `Assets/Luban/Condition_*.cs`, `Assets/Luban/DV_*.cs`
+3. **运行时实现**: `Assets/Scripts/Luban_Extra/GameAction/GameActionExtra.cs`
+
+> 📖 **详细工作流**: [WORKFLOW.md](WORKFLOW.md)
+
+---
+
 *本文档由架构师维护，如有疑问请联系技术负责人。*
