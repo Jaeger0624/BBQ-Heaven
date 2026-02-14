@@ -20,28 +20,22 @@ public abstract partial class GameAction : ICanGetSystem, IHaveAnim, ICanSendEve
     {
         return Observable.Create<GAResult>(observer =>
         {
-            try
-            {
-                // 1. 跑你原来的同步逻辑 (Execute)
-                this.Execute(sender, param); 
-                
-                if (this.GetSystem<IProxySystem>().isTesting){
-                    observer.OnNext(GAResult.Empty);
-                    observer.OnCompleted();
-                    return Disposable.Empty;
-                }
-                // 2. 拿你原来的动画 (GetAnimTask)
-                var anim = this.GetAnimTask();
-                
-                // 3. 发送结果并结束
-                observer.OnNext(GAResult.FromAnim(anim));
+            // 开发期：不捕获异常，让堆栈直接暴露到 Console 便于定位
+            // 1. 跑你原来的同步逻辑 (Execute)
+            this.Execute(sender, param);
+            
+            if (this.GetSystem<IProxySystem>().isTesting){
+                observer.OnNext(GAResult.Empty);
                 observer.OnCompleted();
+                return Disposable.Empty;
             }
-            catch (Exception ex)
-            {
-                Debug.LogError($"【GameAction】执行出错: {this.GetType().Name} {ex}");
-                observer.OnError(ex);
-            }
+            // 2. 拿你原来的动画 (GetAnimTask)
+            var anim = this.GetAnimTask();
+            
+            // 3. 发送结果并结束
+            observer.OnNext(GAResult.FromAnim(anim));
+            observer.OnCompleted();
+            
             return Disposable.Empty;
         });
     }

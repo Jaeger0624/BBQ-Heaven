@@ -162,22 +162,35 @@ public class ScaleAnimationTask : IAnimTask
         private (Color color, bool useColor) color;
         private Vector3 position;
         private float? lifetime;
+        
+        /// <summary>
+        /// 默认跳字生命周期常量 (秒)
+        /// 当构造函数未传入 lifetime 时使用此默认值
+        /// </summary>
+        private const float DEFAULT_LIFETIME = 1.0f;
+        
         public SpawnTextAnimationTask(string text, float size, Color color, Vector3 position, float? lifetime = null)
         {
             this.text = text;
             this.size = size;
             this.color = (color, true);
             this.position = position;
-            this.lifetime = lifetime ?? null;
+            this.lifetime = lifetime;
         }
 
+        /// <summary>
+        /// 播放跳字动画
+        /// 使用 null 合并运算符确保 lifetime 始终有有效值
+        /// </summary>
+        /// <returns>Observable.Unit 完成信号</returns>
         public override IObservable<Unit> Play()
         {
-            if (lifetime.HasValue){
-                FloatingTextInfo info = new FloatingTextInfo(text, lifetime.Value, color.color, FloatingAnimType.Normal);
-                FloatingTextManager.Instance.Show(position, text, color.color, info);
-                return Observable.ReturnUnit();
-            }
+            // 修复: 使用 ?? 运算符处理 null lifetime，确保跳字始终显示
+            float actualLifetime = lifetime ?? DEFAULT_LIFETIME;
+            
+            FloatingTextInfo info = new FloatingTextInfo(text, actualLifetime, color.color, FloatingAnimType.Normal);
+            FloatingTextManager.Instance.Show(position, text, color.color, info);
+            
             return Observable.ReturnUnit();
         }
     }

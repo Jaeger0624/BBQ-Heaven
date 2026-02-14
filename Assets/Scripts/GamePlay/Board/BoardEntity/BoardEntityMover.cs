@@ -20,7 +20,11 @@ public class BoardEntityMover : ICanGetSystem, ICanSendEvent
             TriggerCollision(entity, target);
             this.SendEvent(new CollisionEntityEvent(entity, target, direction));
         }
-
+        if (entity == null)
+        {
+            Debug.LogError($"【BoardEntityMover】实体为空: {entity.name}");
+            return;
+        }
         if (endCell.position != entity.position){
             PerformMove(entity, endCell, direction);
         }

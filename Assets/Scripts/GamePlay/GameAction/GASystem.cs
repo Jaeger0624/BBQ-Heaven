@@ -131,11 +131,9 @@ public class GASystem : AbstractSystem, IGASystem
                     return Observable.Return(Unit.Default);
                 }))
                 .Subscribe(
-                    result => { }, 
-                    error => {
-                        Debug.LogError($"[GASystem] Node Error ({node.ActionData?.GetType().Name}): {error}");
-                        observer.OnError(error);
-                    },
+                    result => { },
+                    // 开发期：不捕获错误，让异常堆栈直接暴露到 Console 便于定位
+                    // error => { ... }
                     () =>
                     {
                         // 4. 节点及其所有子孙执行完毕

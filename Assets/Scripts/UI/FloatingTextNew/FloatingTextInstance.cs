@@ -71,7 +71,10 @@ public class FloatingTextInstance : MonoBehaviour
                 Vector2 direction = info?.direction ?? Vector2.up;
                 Vector3 t = _rectTransform.position + new Vector3(direction.x * _floatHeight, direction.y * _floatHeight, 0);
                 _seq.Join(_rectTransform.DOMove(t, duration).SetEase(Ease.OutSine, 10f,0.5f).SetLink(gameObject));
-                DoScalePunch(_seq); // Q弹
+                
+                // 根据动画类型选择缩放效果
+                FloatingAnimType animType = info?.animType ?? FloatingAnimType.Normal;
+                DoScaleByType(_seq, animType);
                 break;
 
             case FloatingTextMode.Physics:
@@ -170,6 +173,35 @@ public class FloatingTextInstance : MonoBehaviour
         transform.DOScale(_settings.FlightScale, _settings.FlightDuration).SetUpdate(_useUnscaledTime).SetEase(_settings.FlightScaleEase).SetLink(gameObject); // 飞行变小
     }
 
+    /// <summary>
+    /// 根据动画类型执行不同的缩放效果
+    /// </summary>
+    /// <param name="seq">DOTween Sequence</param>
+    /// <param name="animType">动画类型</param>
+    private void DoScaleByType(Sequence seq, FloatingAnimType animType)
+    {
+        switch (animType)
+        {
+            case FloatingAnimType.Normal:
+                // 原有行为: 放大后缩小 (Q弹效果)
+                DoScalePunch(seq);
+                break;
+
+            case FloatingAnimType.只放大不缩小:
+                // 只放大，保持不缩小
+                // 放大到 1.5 倍，使用 OutBack 缓动产生弹性效果
+                seq.Insert(0, transform.DOScale(1.5f, 0.2f)
+                    .SetEase(Ease.OutBack)
+                    .SetLink(gameObject));
+                // 不添加缩小动画，最终保持 1.5 倍直到淡出消失
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Q弹缩放效果: 放大后缩小回原始大小
+    /// </summary>
+    /// <param name="seq">DOTween Sequence</param>
     private void DoScalePunch(Sequence seq)
     {
         seq.Insert(0, transform.DOScale(1.5f, 0.2f).SetEase(Ease.OutBack).SetLink(gameObject))
