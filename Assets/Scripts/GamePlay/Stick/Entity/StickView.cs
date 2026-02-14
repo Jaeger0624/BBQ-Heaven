@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class StickView : MonoBehaviour, IController, IShowTooltip, IPointerClickHandler{
+public class StickView : MonoBehaviour, IController, IShowTooltip, IPointerClickHandler, ICanSendEvent{
     public Stick stick;
     public Transform slot{get; private set;}
     [SerializeField] private Image image;
@@ -77,6 +77,8 @@ public class StickView : MonoBehaviour, IController, IShowTooltip, IPointerClick
         else{
             OnSelect();
         }
+
+        this.SendEvent(new PlayerActionEvent(PlayerActionType.选择串签));
     }
 
     public List<TooltipInfo> GetTooltipInfo()

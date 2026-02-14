@@ -15,9 +15,6 @@ public class GuideStepInfo : ScriptableObject
     [Header("触发条件")]
     [Tooltip("监听的玩家行为类型，触发后推进教程")]
     public PlayerActionType triggerAction = PlayerActionType.无;
-    [Header("高亮目标（可选）")]
-    [Tooltip("高亮目标类型")]
-    public GuideTargetType targetType = GuideTargetType.无;
     [Tooltip("是否需要玩家点击才能推进（不监听 PlayerAction）")]
     public bool waitForClick = false;
 }

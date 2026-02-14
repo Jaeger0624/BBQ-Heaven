@@ -22,6 +22,10 @@ public class GuidePanel : MonoBehaviour, IController // 继承你自己的基类
         HideGuide();
     }
 
+    void Start()
+    {
+    }
+
     public void ShowGuideFocus(RectTransform rectTransform, string content = "")
     {
         gameObject.SetActive(true);

@@ -14,57 +14,17 @@ public interface IGuideSystem : ISystem
     void UnregisterTarget(GuideTarget target);
     GuideTarget GetTarget(string targetID);
 
-    // ========== 新增方法 - 流程控制 ==========
-    /// <summary>
-    /// 启动指定教程
-    /// </summary>
     void StartGuide(GuideFlow flow);
-
-    /// <summary>
-    /// 停止当前教程
-    /// </summary>
     void StopGuide();
-
-    /// <summary>
-    /// 暂停教程（保留当前状态）
-    /// </summary>
     void PauseGuide();
-
-    /// <summary>
-    /// 恢复教程
-    /// </summary>
     void ResumeGuide();
 
-    // ========== 新增方法 - 步骤控制 ==========
-    /// <summary>
-    /// 推进到下一步
-    /// </summary>
     void NextStep();
-
-    /// <summary>
-    /// 跳过当前步骤（仅非线性流程）
-    /// </summary>
     void SkipStep();
 
-    // ========== 状态查询 ==========
-    /// <summary>
-    /// 当前是否有教程在运行
-    /// </summary>
     bool IsGuideActive { get; }
-
-    /// <summary>
-    /// 当前教程流程ID
-    /// </summary>
     string CurrentFlowID { get; }
-
-    /// <summary>
-    /// 当前步骤索引
-    /// </summary>
     int CurrentStepIndex { get; }
-
-    /// <summary>
-    /// 当前步骤信息
-    /// </summary>
     GuideStepInfo CurrentStep { get; }
 }
 
@@ -230,11 +190,8 @@ public class GuideSystem : AbstractSystem, IGuideSystem
         HideCurrentStep();
 
         // 标记当前步骤为已完成（非线性流程）
-        if (!_currentFlow.isLinear)
-        {
-            _completedSteps.Add(_currentStepIndex);
-        }
-
+        _completedSteps.Add(_currentStepIndex);
+        
         // 推进索引
         _currentStepIndex++;
 
@@ -267,12 +224,6 @@ public class GuideSystem : AbstractSystem, IGuideSystem
     {
         if (!IsGuideActive || _isPaused) return;
         
-        if (_currentFlow.isLinear)
-        {
-            Debug.LogWarning("[GuideSystem] 线性流程不支持跳过步骤");
-            return;
-        }
-
         // 标记为已完成
         _completedSteps.Add(_currentStepIndex);
         
@@ -338,26 +289,16 @@ public class GuideSystem : AbstractSystem, IGuideSystem
     /// </summary>
     private void OnPlayerAction(PlayerActionEvent evt)
     {
+        Debug.Log($"[GuideSystem] 玩家动作事件处理: {evt.actionType}");
         if (!IsGuideActive || _isPaused) return;
 
         var currentStep = CurrentStep;
         if (currentStep == null) return;
 
-        // 如果是等待点击类型，不处理
-        if (currentStep.waitForClick) return;
-
         // 线性流程：严格匹配当前步骤
-        if (_currentFlow.isLinear)
+        if (currentStep.triggerAction == evt.actionType)
         {
-            if (currentStep.triggerAction == evt.actionType)
-            {
-                NextStep();
-            }
-        }
-        // 非线性流程：检查所有未完成步骤
-        else
-        {
-            CheckNonLinearProgress(evt.actionType);
+            NextStep();
         }
     }
 
@@ -392,7 +333,6 @@ public class GuideSystem : AbstractSystem, IGuideSystem
             }
         }
     }
-
     /// <summary>
     /// 检查非线性流程是否完成
     /// </summary>

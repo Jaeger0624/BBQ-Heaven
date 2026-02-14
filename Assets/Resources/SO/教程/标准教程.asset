@@ -16,6 +16,7 @@ MonoBehaviour:
   isLinear: 1
   steps:
   - {fileID: 11400000, guid: 112dc7faed7741540b95cf7279094ec3, type: 2}
+  - {fileID: 11400000, guid: bfdc7a1f12956674f830408a029ab796, type: 2}
   canSkip: 0
   pauseGame: 0
   rewardID: 

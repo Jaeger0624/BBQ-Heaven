@@ -5,11 +5,3 @@ public enum GuideTextDirection
     左,
     右,
 }
-
-
-public enum GuideTargetType
-{
-    无,
-    顾客志,
-    串签存放处,
-}

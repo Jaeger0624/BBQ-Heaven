@@ -132,22 +132,16 @@ public class GuideStepParent : MonoBehaviour, IController, ICanSendEvent
     private void SetupClickListener()
     {
         if (stepInfo == null) return;
-
-        var button = GetComponent<Button>();
-        if (button != null)
+        if (stepInfo.triggerAction == PlayerActionType.点击按钮)
         {
-            button.OnClickAsObservable()
-                .Where(_ => isActive)
-                .Subscribe(_ => 
-                {
-                    // 发送点击事件，推进教程
-                    this.SendEvent(new PlayerActionEvent(PlayerActionType.点击UI));
-                })
-                .AddTo(_disposables);
-        }
-        else
-        {
-            Debug.LogWarning($"[GuideStepParent] 步骤 {stepInfo.name} 需要等待点击，但未找到 Button 组件");
+            // 如果有按钮组件，则设置点击监听
+            var button = GetComponent<ButtonUI>();
+            if (button != null)
+            {
+                button.OnClick.AddListener(() => {
+                    this.SendEvent(new PlayerActionEvent(PlayerActionType.点击按钮));
+                });
+            }
         }
     }
 
