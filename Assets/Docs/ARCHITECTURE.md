@@ -1,7 +1,7 @@
 # 串串天国 (Skewers Heaven) - 技术架构文档
 
-> **文档版本**: v1.0  
-> **最后更新**: 2026-02-13  
+> **文档版本**: v1.1
+> **最后更新**: 2026-02-14
 > **维护者**: 架构师
 
 ---
@@ -22,23 +22,44 @@
 
 ### 1.1 核心框架
 
-| 框架 | 用途 | 版本要求 | 文档链接 |
-|------|------|----------|----------|
-| **QFramework** | 架构框架 (MVC/Architecture) | - | [官方文档](https://qframework.cn) |
-| **UniRx** | 响应式编程/异步处理 | - | [GitHub](https://github.com/neuecc/UniRx) |
-| **Luban** | 配置表生成工具 | - | [官方文档](https://luban.doc.code-philosophy.com/) |
-| **DOTween** | 动画插件 | - | [官方网站](http://dotween.demigiant.com/) |
+| 框架 | 用途 | 文档链接 |
+|------|------|----------|
+| **QFramework** | 架构框架 (MVC/Architecture) | [官方文档](https://qframework.cn) |
+| **UniRx** | 响应式编程/异步处理 | [GitHub](https://github.com/neuecc/UniRx) |
+| **Reflex** | 依赖注入容器 | [GitHub](https://github.com/gustavopsantos/reflex) |
+| **Luban** | 配置表生成工具 | [官方文档](https://luban.doc.code-philosophy.com/) |
 
-### 1.2 开发环境
+### 1.2 UI与动画
+
+| 插件 | 用途 | 文档链接 |
+|------|------|----------|
+| **Odin Inspector** | Inspector增强 & 序列化 | [官方文档](https://odininspector.com/) |
+| **DOTween** | 动画插件 (主力) | [官方网站](http://dotween.demigiant.com/) |
+| **PrimeTween** | 高性能动画库 (备选) | [GitHub](https://github.com/KyryloKuzyk/PrimeTween) |
+| **UI Effect** | UI特效 (灰度/模糊/发光) | [GitHub](https://github.com/mob-sakai/UIEffect) |
+| **UI Particle** | UI粒子特效 | [GitHub](https://github.com/mob-sakai/ParticleEffectForUGUI) |
+
+### 1.3 开发工具
+
+| 工具 | 用途 |
+|------|------|
+| **Hot Reload** | 运行时代码热更新 |
+| **Console Pro** | 增强版控制台 |
+| **vHierarchy** | Hierarchy窗口增强 |
+| **Unity Skills** | 技能系统框架 |
+
+### 1.4 开发环境
 
 - **引擎**: Unity 2022.3+ (URP)
 - **语言**: C# (.NET Standard 2.1)
 - **IDE**: Visual Studio / VS Code + ReSharper/Rider
 
-### 1.3 项目特性
+### 1.5 项目特性
 
 - **无头模式 (Headless Mode)**: 支持脱离View快速运行对局逻辑
 - **热重载**: 使用 HotReload 插件支持运行时代码更新
+
+> 📖 **详细插件文档**: [PLUGINS_AND_TOOLS.md](PLUGINS_AND_TOOLS.md)
 
 ---
 
