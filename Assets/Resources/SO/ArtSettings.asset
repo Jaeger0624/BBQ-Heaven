@@ -12,8 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04745a14a7922fc47b1302e55f302334, type: 3}
   m_Name: ArtSettings
   m_EditorClassIdentifier: 
+  NameSize: 54
+  DescriptionSize: 36
   StickSprites: {fileID: 11400000, guid: 627d6eb007c2cf647915abc2331db87d, type: 2}
   EnhancementSprites: {fileID: 11400000, guid: 3368b352e7536354293db5866a3ec09b, type: 2}
   PlanetSprites: {fileID: 11400000, guid: 68278bfbb718b00408ce0a8a11f8417b, type: 2}
   CustomerSprites: {fileID: 11400000, guid: 12890a58a346dce4f94ddcfa6d756eb3, type: 2}
   PicturesGuides: {fileID: 11400000, guid: ca60cead9d8b0334884f49ce3785eb6d, type: 2}
+  TilesSprites: {fileID: 11400000, guid: 93653ceef0008c9489fca5b415430c75, type: 2}
+  DefaultTileSprite: {fileID: 1477289264, guid: 857f7c3bc6b16404694ce5050e7f9408, type: 3}

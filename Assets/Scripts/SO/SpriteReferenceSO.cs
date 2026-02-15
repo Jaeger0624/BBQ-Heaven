@@ -10,8 +10,6 @@ public class SpriteReferenceSO : ScriptableObject
     public Sprite GetSprite(string name){
         return sprites.Find(sprite => sprite.name == name);
     }
-
-
     [Button("Load Sprites")]
     public void LoadSprites(string prefix){
         // 寻找相同名字的Sprite，并添加到sprites列表中

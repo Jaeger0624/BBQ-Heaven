@@ -2,12 +2,14 @@
   {
     "ID": "Default",
     "name": "默认",
+    "spriteName": "",
     "description": "默认的地块",
     "CGAs": []
   },
   {
     "ID": "Ice",
     "name": "冰",
+    "spriteName": "AI地块_0",
     "description": "冰面，会滑",
     "CGAs": [
       {

@@ -58,4 +58,8 @@ public class DevSettings : ScriptableObject{
 
     [Header("Tooltip")]
     public float tooltipWaitTime = 0.5f;
+
+
+    [Header("Debug")]
+    public bool showEntityPosShower = true;
 }

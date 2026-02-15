@@ -11,4 +11,7 @@ public class ArtSettings : ScriptableObject
     public SpriteReferenceSO PlanetSprites;
     public SpriteReferenceSO CustomerSprites;
     public SpriteReferenceSO PicturesGuides;
+    [Header("Tiles")]
+    public SpriteReferenceSO TilesSprites;
+    public Sprite DefaultTileSprite;
 }
