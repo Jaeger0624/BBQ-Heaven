@@ -23,11 +23,17 @@ public class GuidePanel : MonoBehaviour, IController // 继承你自己的基类
     {
     }
 
-    public void ShowGuideFocus(RectTransform rectTransform, string content, Transform targetTransform, GuideTextDirection textDirection)
+    public void ShowGuideFocus(RectTransform rectTransform,
+        string content,
+        Transform targetTransform,
+        GuideTextDirection textDirection,
+        bool isConcerned,
+        bool isShow = true)
     {
         gameObject.SetActive(true);
-        MaskFilter.gameObject.SetActive(true);
-        HollowRect.gameObject.SetActive(true);
+
+        MaskFilter.gameObject.SetActive(isConcerned);
+        HollowRect.gameObject.SetActive(isShow);
 
         // 1. 设置遮罩挖孔位置
         // 将世界坐标转为本地坐标

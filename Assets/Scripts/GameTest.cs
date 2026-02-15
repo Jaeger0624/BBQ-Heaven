@@ -79,9 +79,9 @@ public class GameTest : MonoBehaviour, IController, ICanSendEvent{
         }, 8);
         // GUI.skin.label.fontSize = 16;
 
-        showLayout = GUILayout.Toggle(showLayout, "显示布局");
-        GUILayout.Space(10);
-        if (!showLayout) return;
+        // showLayout = GUILayout.Toggle(showLayout, "显示布局");
+        // GUILayout.Space(10);
+        // if (!showLayout) return;
         GUILayout.BeginArea(new Rect(0, 100, 150, 1000), GUI.skin.box);
         // 背景色
         
@@ -392,6 +392,9 @@ public class GameTest : MonoBehaviour, IController, ICanSendEvent{
         }
         if (GUILayout.Button("停止教程")){
             this.GetSystem<IGuideSystem>().StopGuide();
+        }
+        if (GUILayout.Button("启动教程_初始教程")){
+            this.GetSystem<IGuideSystem>().StartGuide("初始教程");
         }
     }
 }

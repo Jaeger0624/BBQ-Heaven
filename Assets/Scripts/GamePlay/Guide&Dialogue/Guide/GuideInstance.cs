@@ -24,6 +24,11 @@ public class GuideInstance : MonoBehaviour, IController
         float textDirectionInt = isRight ? 1 : -1;
         guideText.transform.localScale = new Vector3(textDirectionInt, 1, 1);
 
+        LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(guideText.transform as RectTransform);
+
+        guideText.ForceMeshUpdate();
+
         Show();
     }
 

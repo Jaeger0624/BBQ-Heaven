@@ -1,14 +1,47 @@
 [
   {
     "stepID": "1_1",
+    "stepName": "初见1",
     "flowID": "初始教程",
-    "guideText": "",
-    "triggerAction": 0
+    "guideText": "哎呀，你就是那个新来的星际旅商？",
+    "triggerAction": 1,
+    "target": 4,
+    "isConcerned": true
   },
   {
     "stepID": "1_2",
+    "stepName": "初见2",
     "flowID": "初始教程",
+    "guideText": "我是莫奇，这家店的房东~ ",
+    "triggerAction": 1,
+    "target": 4,
+    "isConcerned": true
+  },
+  {
+    "stepID": "1_3",
+    "stepName": "初见3",
+    "flowID": "初始教程",
+    "guideText": "店铺我都给你准备好了\n租金嘛...看你经营情况再说咯！",
+    "triggerAction": 1,
+    "target": 4,
+    "isConcerned": true
+  },
+  {
+    "stepID": "2_1",
+    "stepName": "串签教程",
+    "flowID": "初始教程",
+    "guideText": "哔哔哔哔",
+    "triggerAction": 3,
+    "target": 1,
+    "isConcerned": true
+  },
+  {
+    "stepID": "2_2",
+    "stepName": "",
+    "flowID": "",
     "guideText": "",
-    "triggerAction": 0
+    "triggerAction": 0,
+    "target": 4,
+    "isConcerned": false
   }
 ]

@@ -61,6 +61,9 @@ public interface IDataSystem : ISystem{
     // 获取声望配置
     ReputationData GetReputationData(string id);
     List<ReputationData> GetAllReputationData();
+    // 获取教程流程配置
+    GuideStepData GetGuideStepData(string id);
+    List<GuideStepData> GetAllGuideStepData();
 
 }
 public class DataSystem : AbstractSystem, IDataSystem{
@@ -206,5 +209,15 @@ public class DataSystem : AbstractSystem, IDataSystem{
     public List<ReputationData> GetAllReputationData()
     {
         return tables.ReputationDataTable.DataList;
+    }
+
+    public GuideStepData GetGuideStepData(string id)
+    {
+        return tables.GuideStepDataTable.Get(id);
+    }
+
+    public List<GuideStepData> GetAllGuideStepData()
+    {
+        return tables.GuideStepDataTable.DataList;
     }
 }

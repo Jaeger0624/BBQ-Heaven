@@ -5,6 +5,7 @@ using QFramework;
 using UnityEngine.UI;
 using System.ComponentModel;
 using Sirenix.OdinInspector;
+using cfg;
 
 /// <summary>
 /// 教程步骤展示器 - 挂载在需要显示教程的UI元素上
@@ -13,32 +14,18 @@ using Sirenix.OdinInspector;
 public class GuideStepParent : MonoBehaviour, IController, ICanSendEvent
 {
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
-    [Header("配置")]
-    [Tooltip("关联的教程步骤配置")]
-    [SerializeField] private GuideStepInfo stepInfo;
-
     [Header("显示配置")]
     [Tooltip("文本显示方向")]
     [SerializeField] private GuideTextDirection textDirection = GuideTextDirection.右;
+    [SerializeField] private GuideTargetType targetType = GuideTargetType.无;
     [SerializeField] private Transform targetTransform;
     private bool isActive = false;
 
     // ========== UniRx Subject ==========
     private Subject<Unit> _onShowSubject = new Subject<Unit>();
     private Subject<Unit> _onHideSubject = new Subject<Unit>();
-    
-    /// <summary>
-    /// 显示事件 Observable
-    /// </summary>
-    public IObservable<Unit> OnShowAsObservable => _onShowSubject;
-    
-    /// <summary>
-    /// 隐藏事件 Observable
-    /// </summary>
-    public IObservable<Unit> OnHideAsObservable => _onHideSubject;
-
     private CompositeDisposable _disposables = new CompositeDisposable();
-
+    private GuideStepInfo _stepInfo;
     private void Start()
     {
         // 监听教程步骤显示事件
@@ -66,21 +53,23 @@ public class GuideStepParent : MonoBehaviour, IController, ICanSendEvent
         if (isActive) return;
         
         isActive = true;
+
+        bool isShow = _stepInfo.target != GuideTargetType.简单对话;
         
         // 调用 GuidePanel 显示教程气泡
-        if (GuidePanel.Instance != null && stepInfo != null)
+        if (GuidePanel.Instance != null)
         {
             GuidePanel.Instance.ShowGuideFocus(
                 GetComponent<RectTransform>(), 
-                stepInfo.guideText,
+                _stepInfo.guideText,
                 targetTransform,
-                textDirection
+                textDirection,
+                _stepInfo.isConcerned,
+                isShow
             );
         }
         
-        _onShowSubject.OnNext(Unit.Default);
-        
-        Debug.Log($"[GuideStepParent] 显示教程步骤: {stepInfo?.name}");
+        Debug.Log($"[GuideStepParent] 显示教程步骤: {_stepInfo?.name}");
     }
 
     /// <summary>
@@ -97,21 +86,20 @@ public class GuideStepParent : MonoBehaviour, IController, ICanSendEvent
             GuidePanel.Instance.HideGuide();
         }
         
-        _onHideSubject.OnNext(Unit.Default);
-        
-        Debug.Log($"[GuideStepParent] 隐藏教程步骤: {stepInfo?.name}");
+        Debug.Log($"[GuideStepParent] 隐藏教程步骤: {_stepInfo?.name}");
+
+        // 清空步骤信息
+        _stepInfo = null;
     }
     /// <summary>
     /// 处理教程步骤显示事件
     /// </summary>
     private void OnStepShow(GuideStepShowEvent evt)
     {
-        // 检查是否是当前步骤
-        if (stepInfo != null && evt.stepInfo == stepInfo)
-        {
-            // 延迟显示
-            ShowStep();
-        }
+        if (evt.stepInfo.target != targetType) return;
+
+        _stepInfo = evt.stepInfo;
+        ShowStep();
     }
 
     /// <summary>
@@ -119,10 +107,7 @@ public class GuideStepParent : MonoBehaviour, IController, ICanSendEvent
     /// </summary>
     private void OnStepHide(GuideStepHideEvent evt)
     {
-        if (stepInfo != null && evt.stepInfo == stepInfo)
-        {
-            HideStep();
-        }
+        HideStep();
     }
 
     /// <summary>
@@ -130,8 +115,8 @@ public class GuideStepParent : MonoBehaviour, IController, ICanSendEvent
     /// </summary>
     private void SetupClickListener()
     {
-        if (stepInfo == null) return;
-        if (stepInfo.triggerAction == PlayerActionType.点击按钮)
+        if (_stepInfo == null) return;
+        if (_stepInfo.triggerAction == PlayerActionType.点击按钮)
         {
             // 如果有按钮组件，则设置点击监听
             var button = GetComponent<ButtonUI>();
@@ -141,30 +126,6 @@ public class GuideStepParent : MonoBehaviour, IController, ICanSendEvent
                     this.SendEvent(new PlayerActionEvent(PlayerActionType.点击按钮));
                 });
             }
-        }
-    }
-
-    // ========== 测试方法 ==========
-
-    [Button("预览教程步骤")]
-    private void PreviewStep()
-    {
-
-        if (Application.isPlaying)
-        {
-            ShowStep();
-        }
-        else
-        {
-            Debug.LogWarning("[GuideStepParent] 预览功能仅在运行时可用");
-        }
-    }
-    [Button("隐藏教程步骤")]
-    private void HideStepEditor()
-    {
-        if (Application.isPlaying)
-        {
-            HideStep();
         }
     }
 }

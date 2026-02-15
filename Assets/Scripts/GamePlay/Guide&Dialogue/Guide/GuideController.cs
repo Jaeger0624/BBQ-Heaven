@@ -1,44 +1,22 @@
+using cfg;
 using MoreMountains.Feedbacks;
 using QFramework;
 using Sirenix.OdinInspector;
 using UnityEngine;
-public enum CharacterEnterDirection
-{
-    Left = 0,
-    Right = 1,
-    Center = 2,
-}
-public class GuideController : MonoBehaviour, IController{
+
+public class GuideController : MonoBehaviour, IController, ICanSendEvent{
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
-    [SerializeField] private MMF_Player leftEnterFeedback;
-    [SerializeField] private MMF_Player rightEnterFeedback;
-    [SerializeField] private MMF_Player centerEnterFeedback;
-    void Start()
+
+    public void StartGuide(string guideID)
     {
-        
+        this.GetSystem<IGuideSystem>().StartGuide(guideID);
     }
 
-    void OnDestroy()
+    void Update()
     {
-        
-    }
-
-    [Button("测试")]
-    private void Test(CharacterEnterDirection direction){
-        switch (direction)
+        if (Input.GetMouseButtonDown(0))
         {
-            case CharacterEnterDirection.Left:
-                leftEnterFeedback.PlayFeedbacks();
-                break;
-            case CharacterEnterDirection.Right:
-                rightEnterFeedback.PlayFeedbacks();
-                break;
-            case CharacterEnterDirection.Center:
-                centerEnterFeedback.PlayFeedbacks();
-                break;
-            default:
-                Debug.LogError("Unknown direction: " + direction);
-                break;
+            this.SendEvent(new PlayerActionEvent(PlayerActionType.点击任意处));
         }
     }
 }

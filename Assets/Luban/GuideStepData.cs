@@ -18,9 +18,12 @@ public sealed partial class GuideStepData : Luban.BeanBase
     public GuideStepData(JSONNode _buf) 
     {
         { if(!_buf["stepID"].IsString) { throw new SerializationException(); }  StepID = _buf["stepID"]; }
+        { if(!_buf["stepName"].IsString) { throw new SerializationException(); }  StepName = _buf["stepName"]; }
         { if(!_buf["flowID"].IsString) { throw new SerializationException(); }  FlowID = _buf["flowID"]; }
         { if(!_buf["guideText"].IsString) { throw new SerializationException(); }  GuideText = _buf["guideText"]; }
         { if(!_buf["triggerAction"].IsNumber) { throw new SerializationException(); }  TriggerAction = (PlayerActionType)_buf["triggerAction"].AsInt; }
+        { if(!_buf["target"].IsNumber) { throw new SerializationException(); }  Target = (GuideTargetType)_buf["target"].AsInt; }
+        { if(!_buf["isConcerned"].IsBoolean) { throw new SerializationException(); }  IsConcerned = _buf["isConcerned"]; }
     }
 
     public static GuideStepData DeserializeGuideStepData(JSONNode _buf)
@@ -35,9 +38,15 @@ public sealed partial class GuideStepData : Luban.BeanBase
     /// <summary>
     /// 流程标识符
     /// </summary>
+    public readonly string StepName;
     public readonly string FlowID;
     public readonly string GuideText;
     public readonly PlayerActionType TriggerAction;
+    public readonly GuideTargetType Target;
+    /// <summary>
+    /// 是否聚焦
+    /// </summary>
+    public readonly bool IsConcerned;
    
     public const int __ID__ = 16594834;
     public override int GetTypeId() => __ID__;
@@ -50,9 +59,12 @@ public sealed partial class GuideStepData : Luban.BeanBase
     {
         return "{ "
         + "stepID:" + StepID + ","
+        + "stepName:" + StepName + ","
         + "flowID:" + FlowID + ","
         + "guideText:" + GuideText + ","
         + "triggerAction:" + TriggerAction + ","
+        + "target:" + Target + ","
+        + "isConcerned:" + IsConcerned + ","
         + "}";
     }
 }

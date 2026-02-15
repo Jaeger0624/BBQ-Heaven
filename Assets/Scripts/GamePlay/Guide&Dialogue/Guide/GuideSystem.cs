@@ -3,13 +3,16 @@ using UnityEngine;
 using QFramework;
 using UniRx;
 using System;
+using cfg;
+using System.Linq;
 
 /// <summary>
 /// 教程系统接口 - 管理教程流程和步骤
 /// </summary>
 public interface IGuideSystem : ISystem 
 {
-    void StartGuide(GuideFlow flow);
+    void StartGuide(string flowID);
+    void StartGuide(IGuideFlow flow);
     void StopGuide();
     void PauseGuide();
     void ResumeGuide();
@@ -29,7 +32,7 @@ public interface IGuideSystem : ISystem
 public class GuideSystem : AbstractSystem, IGuideSystem
 {
     // ========== 教程状态 ==========
-    private GuideFlow _currentFlow;
+    private IGuideFlow _currentFlow;
     private int _currentStepIndex = -1;
     private bool _isPaused = false;
     private CompositeDisposable _guideDisposables = new CompositeDisposable();
@@ -39,15 +42,19 @@ public class GuideSystem : AbstractSystem, IGuideSystem
 
     // ========== 属性实现 ==========
     public bool IsGuideActive => _currentFlow != null;
-    public string CurrentFlowID => _currentFlow?.flowID;
+    public string CurrentFlowID => _currentFlow?.FlowID;
     public int CurrentStepIndex => _currentStepIndex;
     public GuideStepInfo CurrentStep => 
-        (_currentFlow != null && _currentStepIndex >= 0 && _currentStepIndex < _currentFlow.steps.Count) 
-            ? _currentFlow.steps[_currentStepIndex] 
+        (_currentFlow != null && _currentStepIndex >= 0 && _currentStepIndex < _currentFlow.Steps.Count) 
+            ? _currentFlow.Steps[_currentStepIndex] 
             : null;
+
+    private List<IGuideFlow> _guideFlows;
 
     protected override void OnInit()
     {
+        _guideFlows = new List<IGuideFlow>();
+        InitGuideFlows(this.GetSystem<IDataSystem>().GetAllGuideStepData());
         // 监听玩家动作事件
         this.RegisterEvent<PlayerActionEvent>(OnPlayerAction);
     }
@@ -55,12 +62,30 @@ public class GuideSystem : AbstractSystem, IGuideSystem
     {
         this.UnRegisterEvent<PlayerActionEvent>(OnPlayerAction);
     }
+    private void InitGuideFlows(List<GuideStepData> guideStepDatas)
+    {
+        // 按照FlowID分组
+        var groupedSteps = guideStepDatas.GroupBy(x => x.FlowID);
+        foreach (var group in groupedSteps)
+        {
+            IGuideFlow guideFlow = new GuideFlowInstance(group.Key, group.ToList());
+            _guideFlows.Add(guideFlow);
+        }
+    }
+
 
     // ========== 新增方法 - 流程控制实现 ==========
-    /// <summary>
-    /// 启动指定教程
-    /// </summary>
-    public void StartGuide(GuideFlow flow)
+    public void StartGuide(string flowID)
+    {
+        var flow = _guideFlows.FirstOrDefault(x => x.FlowID == flowID);
+        if (flow == null)
+        {
+            Debug.LogError($"[GuideSystem] 教程流程不存在: {flowID}");
+            return;
+        }
+        StartGuide(flow);
+    }
+    public void StartGuide(IGuideFlow flow)
     {
         if (IsGuideActive)
         {
@@ -84,7 +109,7 @@ public class GuideSystem : AbstractSystem, IGuideSystem
         // 4. 显示第一步
         ShowCurrentStep();
 
-        Debug.Log($"[GuideSystem] 教程启动: {flow.flowID}");
+        Debug.Log($"[GuideSystem] 教程启动: {flow.FlowID}, 共有{flow.Steps.Count}步");
     }
 
     /// <summary>
@@ -159,7 +184,7 @@ public class GuideSystem : AbstractSystem, IGuideSystem
         _currentStepIndex++;
 
         // 检查是否完成
-        if (_currentStepIndex >= _currentFlow.steps.Count)
+        if (_currentStepIndex >= _currentFlow.Steps.Count)
         {
             CompleteGuide();
             return;
@@ -209,7 +234,11 @@ public class GuideSystem : AbstractSystem, IGuideSystem
     private void ShowCurrentStep()
     {
         var step = CurrentStep;
-        if (step == null) return;
+        if (step == null)
+        {
+            Debug.LogError($"[GuideSystem] 当前步骤为空: {CurrentFlowID}");
+            return;
+        }
 
         // 发送步骤显示事件
         this.SendEvent(new GuideStepShowEvent(CurrentFlowID, _currentStepIndex, step));
@@ -221,7 +250,11 @@ public class GuideSystem : AbstractSystem, IGuideSystem
     private void HideCurrentStep()
     {
         var step = CurrentStep;
-        if (step == null) return;
+        if (step == null)
+        {
+            Debug.LogError($"[GuideSystem] 当前步骤为空: {CurrentFlowID}");
+            return;
+        }
 
         // 发送步骤隐藏事件
         this.SendEvent(new GuideStepHideEvent(CurrentFlowID, _currentStepIndex, step));
@@ -252,7 +285,7 @@ public class GuideSystem : AbstractSystem, IGuideSystem
     /// </summary>
     private void OnPlayerAction(PlayerActionEvent evt)
     {
-        Debug.Log($"[GuideSystem] 玩家动作事件处理: {evt.actionType}");
+        // Debug.Log($"[GuideSystem] 玩家动作事件处理: {evt.actionType}");
         if (!IsGuideActive || _isPaused) return;
 
         var currentStep = CurrentStep;
@@ -271,11 +304,11 @@ public class GuideSystem : AbstractSystem, IGuideSystem
     private void CheckNonLinearProgress(PlayerActionType actionType)
     {
         // 遍历所有步骤，找到匹配的未完成步骤
-        for (int i = 0; i < _currentFlow.steps.Count; i++)
+        for (int i = 0; i < _currentFlow.Steps.Count; i++)
         {
             if (_completedSteps.Contains(i)) continue;
 
-            var step = _currentFlow.steps[i];
+            var step = _currentFlow.Steps[i];
             if (step.triggerAction == actionType)
             {
                 // 标记为已完成
@@ -301,9 +334,9 @@ public class GuideSystem : AbstractSystem, IGuideSystem
     /// </summary>
     private bool CheckNonLinearComplete()
     {
-        foreach (var step in _currentFlow.steps)
+        foreach (var step in _currentFlow.Steps)
         {
-            int index = _currentFlow.steps.IndexOf(step);
+            int index = _currentFlow.Steps.IndexOf(step);
             if (!_completedSteps.Contains(index))
             {
                 return false;
@@ -317,7 +350,7 @@ public class GuideSystem : AbstractSystem, IGuideSystem
     /// </summary>
     private void MoveToNextUncompletedStep()
     {
-        for (int i = 0; i < _currentFlow.steps.Count; i++)
+        for (int i = 0; i < _currentFlow.Steps.Count; i++)
         {
             if (!_completedSteps.Contains(i))
             {

@@ -11,12 +11,13 @@
 
 namespace cfg
 { 
-    public enum PlayerActionType
+    public enum GuideTargetType
     {
         无 = 0,
-        点击任意处 = 1,
-        点击按钮 = 2,
-        选择串签 = 3,
+        串签栏 = 1,
+        待售串串 = 2,
+        棋盘 = 3,
+        简单对话 = 4,
     }
 
 } 

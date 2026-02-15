@@ -5,9 +5,9 @@ using QFramework;
 /// </summary>
 public class GuideStartEvent : AbstractEvent
 {
-    public GuideFlow flow;
+    public IGuideFlow flow;
 
-    public GuideStartEvent(GuideFlow flow)
+    public GuideStartEvent(IGuideFlow flow)
     {
         this.flow = flow;
     }
@@ -123,9 +123,9 @@ public class GuideCompleteEvent : AbstractEvent
     /// <summary>
     /// 教程流程配置
     /// </summary>
-    public GuideFlow flow;
+    public IGuideFlow flow;
 
-    public GuideCompleteEvent(string flowID, GuideFlow flow)
+    public GuideCompleteEvent(string flowID, IGuideFlow flow)
     {
         this.flowID = flowID;
         this.flow = flow;
