@@ -8,9 +8,7 @@ public class GuidePanel : MonoBehaviour, IController // 继承你自己的基类
     [Header("UI组件")]
     public GuideRaycastFilter MaskFilter; // 拖入挂了Filter的全屏黑色Image
     public RectTransform HollowRect;   // 拖入那个透明的高亮框 Image
-    public TextMeshProUGUI DialogueText;          // 对话文字
-
-    // 单例方便调用，或者通过架构获取
+    [SerializeField] private GuideInstance guideInstance;
     public static GuidePanel Instance { get; private set; }
 
     [SerializeField] private float margin = 10f;
@@ -21,12 +19,11 @@ public class GuidePanel : MonoBehaviour, IController // 继承你自己的基类
         // 初始隐藏
         HideGuide();
     }
-
     void Start()
     {
     }
 
-    public void ShowGuideFocus(RectTransform rectTransform, string content = "")
+    public void ShowGuideFocus(RectTransform rectTransform, string content, Transform targetTransform, GuideTextDirection textDirection)
     {
         gameObject.SetActive(true);
         MaskFilter.gameObject.SetActive(true);
@@ -48,16 +45,7 @@ public class GuidePanel : MonoBehaviour, IController // 继承你自己的基类
         HollowRect.pivot = rectTransform.pivot;
         HollowRect.sizeDelta = rectTransform.sizeDelta + new Vector2(margin * 2, margin * 2);
 
-        // 3. 设置文字
-        if(!string.IsNullOrEmpty(content) && DialogueText != null)
-        {
-            DialogueText.transform.parent.gameObject.SetActive(true);
-            DialogueText.text = content;
-        }
-        else{
-            Debug.LogWarning("GuidePanel: 文字内容为空，或没有设置文字组件");
-            // DialogueText.transform.parent.gameObject.SetActive(false);
-        }
+        guideInstance.ShowGuide(content, targetTransform, textDirection);
     }
 
     public void HideGuide()

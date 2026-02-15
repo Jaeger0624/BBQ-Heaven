@@ -12,8 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1751d7d076c6c6c429910f5da0667862, type: 3}
   m_Name: "\u6559\u7A0B_\u4E32\u7B7E"
   m_EditorClassIdentifier: Assembly-CSharp::GuideStepInfo
-  guideText: "\u8FD9\u662F\u6559\u7A0B\u6587\u672C"
+  guideText: "\u9009\u62E9\u4E00\u6839\u4E32\u5427\n"
   triggerAction: 1
-  targetID: 
-  waitForClick: 1
-  isOptional: 0
+  waitForClick: 0

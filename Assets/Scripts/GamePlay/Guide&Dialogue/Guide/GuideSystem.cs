@@ -9,11 +9,6 @@ using System;
 /// </summary>
 public interface IGuideSystem : ISystem 
 {
-    // ========== 现有方法 ==========
-    void RegisterTarget(GuideTarget target);
-    void UnregisterTarget(GuideTarget target);
-    GuideTarget GetTarget(string targetID);
-
     void StartGuide(GuideFlow flow);
     void StopGuide();
     void PauseGuide();
@@ -33,9 +28,6 @@ public interface IGuideSystem : ISystem
 /// </summary>
 public class GuideSystem : AbstractSystem, IGuideSystem
 {
-    // ========== 依赖注入 ==========
-    private Dictionary<string, GuideTarget> _targets = new Dictionary<string, GuideTarget>();
-    
     // ========== 教程状态 ==========
     private GuideFlow _currentFlow;
     private int _currentStepIndex = -1;
@@ -62,35 +54,6 @@ public class GuideSystem : AbstractSystem, IGuideSystem
     protected override void OnDeinit()
     {
         this.UnRegisterEvent<PlayerActionEvent>(OnPlayerAction);
-    }
-
-    // ========== 现有方法实现 ==========
-    public void RegisterTarget(GuideTarget target)
-    {
-        if (string.IsNullOrEmpty(target.TargetID)) return;
-        if (!_targets.ContainsKey(target.TargetID))
-        {
-            _targets.Add(target.TargetID, target);
-        }
-    }
-
-    public void UnregisterTarget(GuideTarget target)
-    {
-        if (string.IsNullOrEmpty(target.TargetID)) return;
-        if (_targets.ContainsKey(target.TargetID))
-        {
-            _targets.Remove(target.TargetID);
-        }
-    }
-
-    public GuideTarget GetTarget(string targetID)
-    {
-        if (_targets.TryGetValue(targetID, out var target))
-        {
-            return target;
-        }
-        Debug.LogWarning($"[GuideSystem] 找不到目标: {targetID}, 请检查Target是否激活或ID拼写");
-        return null;
     }
 
     // ========== 新增方法 - 流程控制实现 ==========

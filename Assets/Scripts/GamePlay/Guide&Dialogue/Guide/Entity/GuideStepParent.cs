@@ -20,10 +20,7 @@ public class GuideStepParent : MonoBehaviour, IController, ICanSendEvent
     [Header("显示配置")]
     [Tooltip("文本显示方向")]
     [SerializeField] private GuideTextDirection textDirection = GuideTextDirection.右;
-    
-    [Tooltip("文本偏移量")]
-    [SerializeField] private Vector2 textOffset = new Vector2(20, 0);
-
+    [SerializeField] private Transform targetTransform;
     private bool isActive = false;
 
     // ========== UniRx Subject ==========
@@ -75,7 +72,9 @@ public class GuideStepParent : MonoBehaviour, IController, ICanSendEvent
         {
             GuidePanel.Instance.ShowGuideFocus(
                 GetComponent<RectTransform>(), 
-                stepInfo.guideText
+                stepInfo.guideText,
+                targetTransform,
+                textDirection
             );
         }
         
