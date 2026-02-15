@@ -25,10 +25,20 @@ public class CellViewUI : MonoBehaviour, IPointerClickHandler, IController{
         tileNameText.text = cell.TileData.Name;
         if (cell.TileData.ID == "Default"){
             tileNameText.gameObject.SetActive(false);
+            image.sprite = SettingManager.Instance.ArtSettings.DefaultTileSprite;
         }
         else{
             tileNameText.gameObject.SetActive(true);
+            Sprite sprite = SettingManager.Instance.ArtSettings.TilesSprites.GetSprite(cell.TileData.SpriteName);
+            if (sprite == null){
+                Debug.LogError($"CellViewUI: 获取地块图标失败: {cell.TileData.SpriteName}");
+                image.sprite = SettingManager.Instance.ArtSettings.DefaultTileSprite;
+            }
+            else{
+                image.sprite = sprite;
+            }
         }
+        
     }
     public void Highlight(){
         // Debug.Log($"Highlight: {cell.position}");

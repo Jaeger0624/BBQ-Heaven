@@ -31,6 +31,7 @@ public partial class FoodInstance : BoardEntity, IAnimPlayer{
     
     /// <summary>状态层数系统：用于玉米等食材的状态层数机制</summary>
     private Dictionary<string, int> stateLayers = new Dictionary<string, int>();
+    private bool needRemoveSE = false;
     
     /// <summary>
     /// 获取指定状态的层数
@@ -80,17 +81,24 @@ public partial class FoodInstance : BoardEntity, IAnimPlayer{
 
     public void OnAddSE(){
         if (sustainEffects == null || sustainEffects.Count == 0) return;
-        // Debug.Log($"【FoodInstance】添加食材实例SE: {sustainEffects.Count}");
+        needRemoveSE = true;
         foreach (var se in sustainEffects){
             this.GetSystem<IGASystem>().ApplySE(this, se);
         }
     }
     public void OnRemoveSE(){
         if (sustainEffects == null || sustainEffects.Count == 0) return;
-        // Debug.Log($"【FoodInstance】移除食材实例SE: {sustainEffects.Count}");
+        if (!needRemoveSE) return;
+        
         foreach (var se in sustainEffects){
             this.GetSystem<IGASystem>().RemoveSE(this, se);
         }
+        needRemoveSE = false;
+    }
+
+    public void OnRemove()
+    {
+        OnRemoveSE();
     }
 
     public override List<TooltipInfo> GetTooltipInfos()

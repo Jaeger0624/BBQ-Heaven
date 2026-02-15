@@ -195,6 +195,9 @@ public partial class FoodSystem : AbstractSystem, IFoodSystem
             Debug.LogError($"【FoodPile】移除食材实例失败: {guid} 不存在");
             return;
         }
+        // 取消SE
+        foodInstance.OnRemove();
+        
         if (foodInstance.position != new Vector2Int(-1, -1) && foodInstance.state == FoodInstanceState.棋盘上){
             // 从棋盘上移除
             this.GetSystem<IBoardSystem>().RemoveCellInstance(foodInstance.position);
