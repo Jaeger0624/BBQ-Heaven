@@ -39,3 +39,4 @@ MonoBehaviour:
   hoverHeightOffset: 80
   targetingHeightOffset: 40
   tooltipWaitTime: 0.31
+  showEntityPosShower: 0

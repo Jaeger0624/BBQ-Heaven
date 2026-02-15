@@ -1,26 +1,18 @@
 using QFramework;
+using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using TMPro;
 using UnityEngine;
 
-[RequireComponent(typeof(IEntityView))]
-public class EntityPosShower : MonoBehaviour, IController{
+public class EntityPosShower : SerializedMonoBehaviour, IController{
     public IArchitecture GetArchitecture() => GameArchitecture.Interface;
     [SerializeField] private TextMeshProUGUI posText;
-    private IEntityView entityView;
-    void Awake()
+    [OdinSerialize] public IEntityView entityView;
+    void Start()
     {
-        entityView = GetComponent<IEntityView>();
-
-        if (SettingManager.Instance.DevSettings.showEntityPosShower)
-        {
-            gameObject.SetActive(true);
-        }
-        else
-        {
-            gameObject.SetActive(false);
-        }
+        gameObject.SetActive(SettingManager.Instance.DevSettings.showEntityPosShower);
     }
-    private void Update()
+    void Update()
     {
         posText.text = entityView.Entity.position.ToString();
     }

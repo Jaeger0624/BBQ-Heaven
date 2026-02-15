@@ -5288,7 +5288,6 @@ GameObject:
   - component: {fileID: 8688993332346762261}
   - component: {fileID: 3182713117381466945}
   - component: {fileID: 8114392197664508157}
-  - component: {fileID: 4440148041384323746}
   m_Layer: 5
   m_Name: "\u98DF\u6750\u89C6\u56FE"
   m_TagString: Untagged
@@ -5551,19 +5550,6 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   StartShakingButton: 0
---- !u!114 &4440148041384323746
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7318560754695737606}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ee8630d2b3a3694c975c7e5ae53efb9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EntityPosShower
-  posText: {fileID: 6652289174468164871}
 --- !u!1 &7842435785721180399
 GameObject:
   m_ObjectHideFlags: 0
@@ -5575,6 +5561,7 @@ GameObject:
   - component: {fileID: 8812803769389761683}
   - component: {fileID: 5065223961894122997}
   - component: {fileID: 6652289174468164871}
+  - component: {fileID: 398249840293887949}
   m_Layer: 5
   m_Name: "\u4F4D\u7F6E\u4FE1\u606F"
   m_TagString: Untagged
@@ -5701,6 +5688,32 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &398249840293887949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7842435785721180399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ee8630d2b3a3694c975c7e5ae53efb9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EntityPosShower
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 2572865994769599630}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: entityView
+      Entry: 10
+      Data: 0
+  posText: {fileID: 6652289174468164871}
 --- !u!1 &8581596060559427353
 GameObject:
   m_ObjectHideFlags: 0
