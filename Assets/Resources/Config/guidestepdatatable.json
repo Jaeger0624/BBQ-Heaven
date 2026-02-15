@@ -1,0 +1,14 @@
+[
+  {
+    "stepID": "1_1",
+    "flowID": "初始教程",
+    "guideText": "",
+    "triggerAction": 0
+  },
+  {
+    "stepID": "1_2",
+    "flowID": "初始教程",
+    "guideText": "",
+    "triggerAction": 0
+  }
+]

@@ -211,11 +211,55 @@
 - [ ] 字段：XXX, YYY, ZZZ
 
 ## 5. 实现步骤
-1. 在Luban中配置XXX
+1. **使用配置表生成器**创建Luban配置（见下方说明）
 2. 执行`Config/gen.bat`生成代码
 3. 在`Assets/Scripts/Luban_Extra/GameAction/`实现XXX
 4. 测试验证
 ```
+
+---
+
+## Luban配置表生成工具
+
+> ⚠️ **重要**：所有Luban配置表的修改和创建**必须**使用配置表生成工具，禁止手动编辑Excel文件！
+
+### 工具位置
+- **脚本路径**：`Config/luban_table_generator.py`
+- **文档说明**：`Config/LUBAN_GENERATOR_README.md`
+
+### 使用流程
+
+1. **创建Schema文件**（JSON格式）
+   ```bash
+   # 生成示例Schema
+   python Config/luban_table_generator.py --sample my_schema.json
+   ```
+
+2. **编辑Schema文件**
+   - 定义Beans（数据结构）
+   - 定义Enums（枚举）
+   - 定义Tables（数据表）
+   - 填充数据
+
+3. **生成配置表**
+   ```bash
+   # 生成到Datas目录（需要用户批准）
+   python Config/luban_table_generator.py my_schema.json Config/Datas
+   ```
+
+### 为什么必须使用工具？
+
+1. **格式规范**：自动保证Excel格式符合Luban规范
+2. **避免错误**：防止手动编辑导致的格式错误
+3. **版本控制**：JSON Schema更容易进行版本对比
+4. **可追溯性**：清晰记录每次配置变更的内容
+
+### 注意事项
+
+- 🔴 **禁止**直接编辑 `Config/Datas/` 下的Excel文件
+- ✅ **必须**通过工具生成配置表
+- 📝 **建议**将Schema文件也提交到版本控制
+- ⚠️ **警告**：生成到 `Config/Datas/` 目录会覆盖现有文件，需要用户批准
 
 ---
 
