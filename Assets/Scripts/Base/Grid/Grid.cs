@@ -56,7 +56,11 @@ public class Grid<T> : GridBase where T : IGridComponent
     }
     public T GetCell(int x, int y)
     {
-        if (!IsValidPosition(x, y)) return default;
+        if (!IsValidPosition(x, y))
+        {
+            Debug.LogError($"【Grid】获取格子失败: {x},{y} 不存在");
+            return default;
+        }
         return cells[x, y];
     }
     private T CreateNewCell(int x, int y) => this.createCell();

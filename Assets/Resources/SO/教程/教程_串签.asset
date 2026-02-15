@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: "\u6559\u7A0B_\u4E32\u7B7E"
   m_EditorClassIdentifier: Assembly-CSharp::GuideStepInfo
   guideText: "\u9009\u62E9\u4E00\u6839\u4E32\u5427\n"
-  triggerAction: 1
+  triggerAction: 9
   waitForClick: 0

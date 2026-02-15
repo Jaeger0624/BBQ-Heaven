@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1751d7d076c6c6c429910f5da0667862, type: 3}
-  m_Name: "\u6559\u7A0B_\u987E\u5BA2\u5FD7"
+  m_Name: "\u6559\u7A0B_\u8865\u5145\u724C\u5E93"
   m_EditorClassIdentifier: Assembly-CSharp::GuideStepInfo
-  guideText: "\u8FD9\u662F\u6559\u7A0B\u6587\u672C"
-  triggerAction: 2
-  waitForClick: 1
+  guideText: "\u98DF\u6750\u62BD\u5B8C\u4E86\u600E\u4E48\u529E\uFF1F\u70B9\u51FB\u8FD9\u91CC\u8865\u5145\uFF01\u5F53\u7136\uFF0C\u8FD9\u4E5F\u8981\u6D88\u8017\u65F6\u95F4~"
+  triggerAction: 8
+  waitForClick: 0
