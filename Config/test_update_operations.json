@@ -1,0 +1,37 @@
+{
+  "tables": [
+    {
+      "name": "TbCard",
+      "value": "CardData",
+      "index": "ID",
+      "mode": "map",
+      "comment": "卡牌配置表",
+      "inputFile": "TbCard/TbCard.xlsx",
+      "operations": [
+        {
+          "action": "update",
+          "key": "火球术",
+          "comment": "更新火球术的费用和描述",
+          "data": {
+            "cost": 5,
+            "description": "对目标造成200点伤害（已加强）"
+          }
+        },
+        {
+          "action": "delete",
+          "key": "治愈术",
+          "comment": "删除治愈术"
+        }
+      ],
+      "data": [
+        {
+          "ID": "冰冻术",
+          "name": "冰冻术",
+          "description": "冻结目标2回合",
+          "cost": 4,
+          "target": "Single"
+        }
+      ]
+    }
+  ]
+}

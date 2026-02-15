@@ -3,10 +3,18 @@
 """
 Luban Configuration Table Generator
 ====================================
-This script generates Luban-compatible Excel configuration files from JSON schema definitions.
+This script generates and updates Luban-compatible Excel configuration files from JSON schema definitions.
+
+Features:
+- Generate new configuration tables from JSON schema
+- Update existing tables with new data (incremental mode)
+- Add/Update/Delete records in existing tables
+- Preserve existing table structure and formatting
 
 Usage:
     python luban_table_generator.py <schema_json_file> [output_dir]
+    python luban_table_generator.py --update <schema_json_file> [output_dir]
+    python luban_table_generator.py --sample [output_file]
 
 Author: BBQ Game Project
 Date: 2026-02-15
@@ -16,7 +24,7 @@ import json
 import sys
 import os
 from typing import Dict, List, Any, Optional
-from openpyxl import Workbook
+from openpyxl import Workbook, load_workbook
 from openpyxl.styles import Font, Alignment, PatternFill, Border, Side
 from openpyxl.utils import get_column_letter
 
@@ -26,16 +34,19 @@ class LubanTableGenerator:
     Luban配置表生成器
     
     负责将JSON格式的数据结构定义转换为符合Luban规范的Excel配置表
+    支持增量更新模式，可以在原表基础上修改数据
     """
     
-    def __init__(self, output_dir: str = "Config/Datas"):
+    def __init__(self, output_dir: str = "Config/Datas", update_mode: bool = False):
         """
         初始化生成器
         
         Args:
             output_dir: 输出目录路径
+            update_mode: 是否为更新模式（True=增量更新，False=完全覆盖）
         """
         self.output_dir = output_dir
+        self.update_mode = update_mode
         self.beans = []
         self.enums = []
         self.tables = []
@@ -344,7 +355,7 @@ class LubanTableGenerator:
     
     def _generate_data_table(self, table: Dict[str, Any]):
         """
-        生成数据表Excel文件
+        生成或更新数据表Excel文件
         
         Args:
             table: table定义字典
@@ -362,19 +373,43 @@ class LubanTableGenerator:
         
         # 获取数据
         data = table.get('data', [])
-        if not data:
-            print(f"[LubanGenerator] 警告: 表 {table_name} 没有数据，生成空表")
-        
-        # 创建Excel文件
-        wb = Workbook()
-        ws = wb.active
-        ws.title = table_name
+        update_operations = table.get('operations', [])  # 增量更新操作
         
         # 获取字段定义
         fields = table.get('fields', [])
-        if not fields and data:
-            # 如果没有字段定义，从第一条数据推断
-            fields = [{'name': k, 'type': 'string'} for k in data[0].keys()]
+        
+        # 检查是否存在原表文件
+        output_path = os.path.join(table_dir, f"{table_name}.xlsx")
+        existing_file = os.path.exists(output_path)
+        
+        if self.update_mode and existing_file:
+            # 更新模式：在原表基础上修改
+            self._update_existing_table(output_path, table, data, update_operations)
+        else:
+            # 生成模式：创建新表
+            if not data:
+                print(f"[LubanGenerator] 警告: 表 {table_name} 没有数据，生成空表")
+            
+            if not fields and data:
+                # 如果没有字段定义，从第一条数据推断
+                fields = [{'name': k, 'type': 'string'} for k in data[0].keys()]
+            
+            self._create_new_table(output_path, table, data, fields)
+    
+    def _create_new_table(self, output_path: str, table: Dict[str, Any], data: List[Dict], fields: List[Dict]):
+        """
+        创建新的数据表
+        
+        Args:
+            output_path: 输出文件路径
+            table: table定义
+            data: 数据列表
+            fields: 字段定义列表
+        """
+        table_name = table['name']
+        wb = Workbook()
+        ws = wb.active
+        ws.title = table_name
         
         # 第1行：字段名行（##var行）
         header_row = ['##var'] + [f.get('name') for f in fields]
@@ -407,9 +442,131 @@ class LubanTableGenerator:
         self._apply_data_table_style(ws, len(fields) + 1)
         
         # 保存文件
-        output_path = os.path.join(table_dir, f"{table_name}.xlsx")
         wb.save(output_path)
         print(f"[LubanGenerator] 生成数据表: {output_path} ({len(data)} 行数据)")
+    
+    def _update_existing_table(self, output_path: str, table: Dict[str, Any],
+                               data: List[Dict], operations: List[Dict]):
+        """
+        更新现有的数据表
+        
+        Args:
+            output_path: 输出文件路径
+            table: table定义
+            data: 新增数据列表
+            operations: 更新操作列表
+        """
+        table_name = table['name']
+        primary_key = table.get('index', 'ID')  # 主键字段
+        
+        print(f"[LubanGenerator] 更新表: {table_name}, 主键: {primary_key}")
+        print(f"[LubanGenerator] 操作数: {len(operations)}, 新增数据数: {len(data)}")
+        
+        try:
+            # 加载现有Excel文件
+            wb = load_workbook(output_path)
+            ws = wb.active
+            
+            # 读取表头信息（第1行）
+            header_row = [cell.value for cell in ws[1]]
+            field_names = header_row[1:]  # 跳过第一列的 ##var
+            
+            print(f"[LubanGenerator] 字段列表: {field_names}")
+            
+            # 读取现有数据到字典（以主键为key）
+            existing_data = {}
+            for row_idx in range(4, ws.max_row + 1):  # 从第4行开始是数据
+                row_values = [cell.value for cell in ws[row_idx]]
+                # row_values[0] 是 ##var 列，实际数据从 row_values[1] 开始
+                if len(row_values) > 1 and row_values[1]:  # 确保有数据（检查第一个字段）
+                    record = {}
+                    for i, field_name in enumerate(field_names):
+                        # row_values[0] 是 ##var，所以字段从 row_values[1] 开始
+                        record[field_name] = row_values[i + 1] if i + 1 < len(row_values) else None
+                    
+                    pk_value = record.get(primary_key)
+                    if pk_value:
+                        existing_data[pk_value] = {'row_idx': row_idx, 'data': record}
+                        print(f"[LubanGenerator] 读取行 {row_idx}: {primary_key}={pk_value}")
+            
+            # 处理更新操作
+            updated_count = 0
+            added_count = 0
+            deleted_count = 0
+            
+            print(f"[LubanGenerator] 现有数据记录数: {len(existing_data)}")
+            print(f"[LubanGenerator] 现有数据键: {list(existing_data.keys())}")
+            
+            # 1. 处理删除操作
+            for op in operations:
+                if op.get('action') == 'delete':
+                    pk_value = op.get('key')
+                    print(f"[LubanGenerator] 尝试删除: {pk_value}, 存在: {pk_value in existing_data}")
+                    if pk_value in existing_data:
+                        # 删除行（通过清空内容）
+                        row_idx = existing_data[pk_value]['row_idx']
+                        for col_idx in range(1, len(field_names) + 2):
+                            ws.cell(row=row_idx, column=col_idx).value = None
+                        del existing_data[pk_value]
+                        deleted_count += 1
+                        print(f"[LubanGenerator] 删除记录: {pk_value}")
+            
+            # 2. 处理更新操作
+            for op in operations:
+                if op.get('action') == 'update':
+                    pk_value = op.get('key')
+                    update_data = op.get('data', {})
+                    
+                    print(f"[LubanGenerator] 尝试更新: {pk_value}, 存在: {pk_value in existing_data}")
+                    if pk_value in existing_data:
+                        # 更新现有记录
+                        row_idx = existing_data[pk_value]['row_idx']
+                        for field_name, value in update_data.items():
+                            if field_name in field_names:
+                                col_idx = field_names.index(field_name) + 2  # +2 因为第1列是 ##var
+                                
+                                # 处理复杂类型
+                                if isinstance(value, (list, dict)):
+                                    value = json.dumps(value, ensure_ascii=False)
+                                
+                                ws.cell(row=row_idx, column=col_idx).value = value
+                                print(f"[LubanGenerator] 更新字段 {field_name} = {value}")
+                        
+                        updated_count += 1
+                        print(f"[LubanGenerator] 更新记录: {pk_value}")
+            
+            # 3. 处理新增操作（来自data字段）
+            for new_record in data:
+                pk_value = new_record.get(primary_key)
+                
+                if pk_value and pk_value not in existing_data:
+                    # 添加新记录
+                    new_row_idx = ws.max_row + 1
+                    
+                    # 填充数据
+                    for i, field_name in enumerate(field_names):
+                        value = new_record.get(field_name, '')
+                        
+                        # 处理复杂类型
+                        if isinstance(value, (list, dict)):
+                            value = json.dumps(value, ensure_ascii=False)
+                        
+                        ws.cell(row=new_row_idx, column=i + 2).value = value
+                    
+                    added_count += 1
+                    print(f"[LubanGenerator] 新增记录: {pk_value}")
+            
+            # 保存文件
+            wb.save(output_path)
+            print(f"[LubanGenerator] 更新数据表: {output_path}")
+            print(f"  - 新增: {added_count} 条")
+            print(f"  - 更新: {updated_count} 条")
+            print(f"  - 删除: {deleted_count} 条")
+            
+        except Exception as e:
+            print(f"[LubanGenerator] 更新表失败: {e}")
+            import traceback
+            traceback.print_exc()
     
     def _apply_header_style(self, ws, col_count: int):
         """
@@ -517,6 +674,21 @@ def create_sample_schema(output_file: str = "sample_schema.json"):
                         "cost": 2,
                         "target": "Single"
                     }
+                ],
+                "operations": [
+                    {
+                        "action": "update",
+                        "key": "card_001",
+                        "comment": "更新火球术的费用",
+                        "data": {
+                            "cost": 4
+                        }
+                    },
+                    {
+                        "action": "delete",
+                        "key": "card_002",
+                        "comment": "删除治愈术"
+                    }
                 ]
             }
         ]
@@ -535,11 +707,22 @@ def main():
         print("=" * 50)
         print("用法:")
         print("  python luban_table_generator.py <schema.json> [output_dir]")
+        print("  python luban_table_generator.py --update <schema.json> [output_dir]")
         print("  python luban_table_generator.py --sample [output_file]")
         print()
+        print("模式说明:")
+        print("  默认模式: 生成新表（覆盖现有文件）")
+        print("  --update: 更新模式（在原表基础上增量修改）")
+        print()
         print("示例:")
+        print("  # 生成新表")
         print("  python luban_table_generator.py my_schema.json")
         print("  python luban_table_generator.py my_schema.json Config/Datas")
+        print()
+        print("  # 更新现有表")
+        print("  python luban_table_generator.py --update my_schema.json Config/Datas")
+        print()
+        print("  # 生成示例schema")
         print("  python luban_table_generator.py --sample sample_schema.json")
         return
     
@@ -549,17 +732,32 @@ def main():
         create_sample_schema(output_file)
         return
     
-    # 加载并生成配置
-    schema_file = sys.argv[1]
-    output_dir = sys.argv[2] if len(sys.argv) > 2 else "Config/Datas"
+    # 检查是否为更新模式
+    update_mode = False
+    args = sys.argv[1:]
     
-    generator = LubanTableGenerator(output_dir)
+    if args[0] == '--update':
+        update_mode = True
+        args = args[1:]
+    
+    if not args:
+        print("[ERROR] 请指定schema文件路径")
+        sys.exit(1)
+    
+    # 加载并生成配置
+    schema_file = args[0]
+    output_dir = args[1] if len(args) > 1 else "Config/Datas"
+    
+    generator = LubanTableGenerator(output_dir, update_mode=update_mode)
+    
+    mode_str = "更新" if update_mode else "生成"
+    print(f"[LubanGenerator] 运行模式: {mode_str}模式")
     
     if generator.load_schema(schema_file):
         if generator.generate_all():
-            print("\n[SUCCESS] 配置表生成成功！")
+            print(f"\n[SUCCESS] 配置表{mode_str}成功！")
         else:
-            print("\n[ERROR] 配置表生成失败！")
+            print(f"\n[ERROR] 配置表{mode_str}失败！")
             sys.exit(1)
     else:
         print("\n[ERROR] Schema加载失败！")

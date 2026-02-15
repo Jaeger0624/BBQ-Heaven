@@ -239,13 +239,55 @@
    - 定义Beans（数据结构）
    - 定义Enums（枚举）
    - 定义Tables（数据表）
-   - 填充数据
+   - 填充数据或更新操作
 
-3. **生成配置表**
+3. **生成或更新配置表**
+   
+   **推荐：使用更新模式（增量修改）**
    ```bash
-   # 生成到Datas目录（需要用户批准）
+   # 在原表基础上增量修改（安全，不会丢失数据）
+   python Config/luban_table_generator.py --update my_schema.json Config/Datas
+   ```
+   
+   **仅在需要时：使用生成模式（完全覆盖）**
+   ```bash
+   # 生成新表（会覆盖现有文件，需要用户批准）
    python Config/luban_table_generator.py my_schema.json Config/Datas
    ```
+
+### 更新模式操作类型
+
+在Schema中可以通过 `operations` 字段定义增量操作：
+
+```json
+{
+  "tables": [
+    {
+      "name": "TbCard",
+      "index": "ID",
+      "operations": [
+        {
+          "action": "update",
+          "key": "card_001",
+          "data": {"cost": 4}
+        },
+        {
+          "action": "delete",
+          "key": "card_002"
+        }
+      ],
+      "data": [
+        {"ID": "card_new", "name": "新卡牌"}
+      ]
+    }
+  ]
+}
+```
+
+**支持的操作：**
+- `update`: 更新现有记录的指定字段
+- `delete`: 删除指定记录
+- `data` 数组: 新增记录
 
 ### 为什么必须使用工具？
 
@@ -253,13 +295,15 @@
 2. **避免错误**：防止手动编辑导致的格式错误
 3. **版本控制**：JSON Schema更容易进行版本对比
 4. **可追溯性**：清晰记录每次配置变更的内容
+5. **安全性**：更新模式不会意外丢失数据
 
 ### 注意事项
 
 - 🔴 **禁止**直接编辑 `Config/Datas/` 下的Excel文件
-- ✅ **必须**通过工具生成配置表
+- ✅ **必须**通过工具生成或更新配置表
 - 📝 **建议**将Schema文件也提交到版本控制
-- ⚠️ **警告**：生成到 `Config/Datas/` 目录会覆盖现有文件，需要用户批准
+- ⚠️ **推荐**优先使用 `--update` 模式，避免覆盖现有数据
+- ⚠️ **警告**：生成模式（不带 `--update`）会覆盖现有文件，需要用户批准
 
 ---
 

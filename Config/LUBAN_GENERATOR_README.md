@@ -2,7 +2,7 @@
 
 ## 简介
 
-这是一个用于生成符合 Luban 配置表规范的 Excel 文件的 Python 脚本。通过 JSON Schema 定义数据结构，脚本会自动生成所有必要的配置文件。
+这是一个用于生成和更新符合 Luban 配置表规范的 Excel 文件的 Python 脚本。通过 JSON Schema 定义数据结构，脚本会自动生成或增量更新所有必要的配置文件。
 
 ## 功能特性
 
@@ -10,9 +10,24 @@
 - ✅ 支持生成 Enum 定义文件 (`__enums__.xlsx`)
 - ✅ 支持生成 Table 定义文件 (`__tables__.xlsx`)
 - ✅ 支持生成数据表文件（包含实际数据的 Excel 文件）
+- ✅ **支持增量更新现有数据表（新增、修改、删除记录）**
 - ✅ 自动处理 Luban 特有的 Excel 格式规范
 - ✅ 支持复杂的嵌套数据结构
 - ✅ 提供示例 Schema 生成功能
+
+## 两种运行模式
+
+### 1. 生成模式（默认）
+完全覆盖现有文件，生成全新的配置表。适用于：
+- 首次创建配置表
+- 需要完全重建表结构
+
+### 2. 更新模式（推荐）
+在现有表基础上进行增量修改，保留未修改的数据。适用于：
+- 修改现有配置表
+- 添加新记录
+- 更新特定字段
+- 删除不需要的记录
 
 ## 安装依赖
 
@@ -157,7 +172,9 @@ Schema 文件是一个 JSON 文件，包含以下三个主要部分：
 
 ### 3. 生成配置表
 
-使用 Schema 文件生成配置表：
+#### 3.1 生成模式（完全覆盖）
+
+使用 Schema 文件生成全新的配置表：
 
 ```bash
 # 使用默认输出目录 (Config/Datas)
@@ -165,6 +182,105 @@ python Config/luban_table_generator.py my_schema.json
 
 # 指定输出目录
 python Config/luban_table_generator.py my_schema.json Config/MyOutput
+```
+
+#### 3.2 更新模式（增量修改，推荐）
+
+在现有表基础上进行增量修改：
+
+```bash
+# 更新现有配置表
+python Config/luban_table_generator.py --update my_schema.json Config/Datas
+```
+
+**更新模式的优势：**
+- ✅ 保留未修改的数据
+- ✅ 只更新指定的记录
+- ✅ 可以新增、修改、删除记录
+- ✅ 更安全，不会意外丢失数据
+
+#### 3.3 更新操作类型
+
+在 Schema 的 `tables` 中，可以通过 `operations` 字段定义更新操作：
+
+```json
+{
+  "tables": [
+    {
+      "name": "TbCard",
+      "index": "ID",
+      "operations": [
+        {
+          "action": "update",
+          "key": "card_001",
+          "comment": "更新火球术的费用",
+          "data": {
+            "cost": 4,
+            "description": "对目标造成150点伤害"
+          }
+        },
+        {
+          "action": "delete",
+          "key": "card_002",
+          "comment": "删除治愈术"
+        }
+      ],
+      "data": [
+        {
+          "ID": "card_003",
+          "name": "冰冻术",
+          "cost": 2
+        }
+      ]
+    }
+  ]
+}
+```
+
+**操作类型说明：**
+
+| 操作 | 说明 | 必需字段 |
+|------|------|----------|
+| `update` | 更新现有记录 | `action`, `key`, `data` |
+| `delete` | 删除记录 | `action`, `key` |
+| `data` 数组 | 新增记录 | 包含主键的完整记录 |
+
+**更新示例：**
+
+```json
+{
+  "action": "update",
+  "key": "card_001",
+  "comment": "更新火球术（可选）",
+  "data": {
+    "cost": 4,
+    "description": "新的描述"
+  }
+}
+```
+
+**删除示例：**
+
+```json
+{
+  "action": "delete",
+  "key": "card_002",
+  "comment": "删除治愈术（可选）"
+}
+```
+
+**新增示例（通过 data 数组）：**
+
+```json
+{
+  "data": [
+    {
+      "ID": "card_new",
+      "name": "新卡牌",
+      "cost": 1
+    }
+  ]
+}
 ```
 
 ### 4. 生成的文件结构
