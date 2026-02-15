@@ -11,10 +11,10 @@
 
 namespace cfg
 { 
-    public enum GetCellStrategy
+    public enum GridShapeType
     {
-        选取 = 2,
-        自己 = 3,
+        标准 = 0,
+        矩形 = 1,
     }
 
 } 

@@ -31,6 +31,7 @@ public partial class Tables
     public BuffDataTable BuffDataTable {get; }
     public ReputationDataTable ReputationDataTable {get; }
     public GuideStepDataTable GuideStepDataTable {get; }
+    public GridShapeDataTable GridShapeDataTable {get; }
 
     public Tables(System.Func<string, JSONNode> loader)
     {
@@ -51,6 +52,7 @@ public partial class Tables
         BuffDataTable = new BuffDataTable(loader("buffdatatable"));
         ReputationDataTable = new ReputationDataTable(loader("reputationdatatable"));
         GuideStepDataTable = new GuideStepDataTable(loader("guidestepdatatable"));
+        GridShapeDataTable = new GridShapeDataTable(loader("gridshapedatatable"));
         ResolveRef();
     }
     
@@ -73,6 +75,7 @@ public partial class Tables
         BuffDataTable.ResolveRef(this);
         ReputationDataTable.ResolveRef(this);
         GuideStepDataTable.ResolveRef(this);
+        GridShapeDataTable.ResolveRef(this);
     }
 }
 

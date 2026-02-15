@@ -65,6 +65,10 @@ public interface IDataSystem : ISystem{
     GuideStepData GetGuideStepData(string id);
     List<GuideStepData> GetAllGuideStepData();
 
+    // 获取网格形状配置
+    GridShapeData GetGridShapeData(string id);
+    List<GridShapeData> GetAllGridShapeData();
+
 }
 public class DataSystem : AbstractSystem, IDataSystem{
 
@@ -219,5 +223,13 @@ public class DataSystem : AbstractSystem, IDataSystem{
     public List<GuideStepData> GetAllGuideStepData()
     {
         return tables.GuideStepDataTable.DataList;
+    }
+    public GridShapeData GetGridShapeData(string id)
+    {
+        return tables.GridShapeDataTable.Get(id);
+    }
+    public List<GridShapeData> GetAllGridShapeData()
+    {
+        return tables.GridShapeDataTable.DataList;
     }
 }

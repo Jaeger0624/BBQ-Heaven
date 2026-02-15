@@ -13,6 +13,7 @@ public interface IBoardSystem : ISystem{
     void ClickCell(Vector2Int position);
     BoardCell GetCell(Vector2Int position);
     List<BoardCell> GetAdjacentCells(Vector2Int position);
+    List<BoardCell> GetCenteredCells(Vector2Int center, List<Vector2Int> cells);
     BoardCell GetRandomEmptyCell();
     BoardCell GetStopPosition(Vector2Int origin, Vector2Int direction, int distance, out BoardEntity entity);
 
@@ -50,6 +51,9 @@ public class BoardSystem : AbstractSystem, IBoardSystem
             grid.GetCell(position.x, position.y + 1),
             grid.GetCell(position.x, position.y - 1)
         }.Where(x => x != null).ToList();
+    }
+    public List<BoardCell> GetCenteredCells(Vector2Int center, List<Vector2Int> cells){
+        return cells.Select(cell => grid.GetCell(cell.x + center.x, cell.y + center.y)).Where(x => x != null).ToList();
     }
     public BoardCell GetRandomEmptyCell(){
         return this.GetSystem<IRngSystem>().GetSubRng<IBoardSystem>().PickOne(GetEmptyCells());

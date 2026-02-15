@@ -14,120 +14,70 @@ namespace cfg{
             this.IsRandom = isRandom;
         }
         public IObservable<BoardCell> GetCell(object origin, List<object> param){
-            ICellPosition cellPosition = param.FirstOrDefault(x => x is ICellPosition) as ICellPosition;
-            if (cellPosition == null){
-                cellPosition = origin as ICellPosition;
-                if (cellPosition == null){
-                    Debug.LogError($"GetCellInfo: 没有目标格子");
-                    return Observable.Return<BoardCell>(null);
-                }
+            List<BoardCell> cells = GetCells(origin, param);
+            if (cells == null || cells.Count == 0){
+                Debug.LogWarning($"GetCellInfo: 没有目标格子");
+                return Observable.Return<BoardCell>(null);
             }
-            if (Strategy == GetCellStrategy.周围空位){
-                List<BoardCell> adjacentCells = this.GetSystem<IBoardSystem>().GetAdjacentCells(cellPosition.GetCellPosition());
-                List<BoardCell> emptyCells = adjacentCells.Where(x => x.IsEmpty()).ToList();
-                if (emptyCells.Count == 0){
-                    Debug.LogWarning($"GetCellInfo: 周围没有空位");
-                    return Observable.Return<BoardCell>(null);
-                }
-                if (IsRandom){
-                    BoardCell randomCell = rng.PickOne(emptyCells);
-                    return Observable.Return(randomCell);
-                }
-                else{
-                    return this.GetSystem<ISelectorSystem>().SelectCell(emptyCells)
-                        .Do(cell => {
-                            if (cell == null){
-                                Debug.LogError($"GetCellInfo: 选择空位失败");
-                            }
-                        });
-                }
-            }
-            else if (Strategy == GetCellStrategy.周围食材){
-                List<BoardCell> adjacentCells = this.GetSystem<IBoardSystem>().GetAdjacentCells(cellPosition.GetCellPosition());
-                List<BoardCell> foodCells = adjacentCells.Where(x => x.instanceGuid != null).ToList();
-                if (foodCells.Count == 0){
-                    Debug.LogWarning($"GetCellInfo: 周围没有食材");
-                    return Observable.Return<BoardCell>(null);
-                }
-                if (IsRandom){
-                    BoardCell randomCell = rng.PickOne(foodCells);
-                    return Observable.Return(randomCell);
-                }
-                else{
-                    return this.GetSystem<ISelectorSystem>().SelectCell(foodCells)
-                        .Do(cell => {
-                            if (cell == null){
-                                Debug.LogError($"GetCellInfo: 选择食材失败");
-                            }
-                        });
-                }
-            }
-            else if (Strategy == GetCellStrategy.选取){
-                BoardCell cell = param.FirstOrDefault(x => x is BoardCell) as BoardCell;
+            if (IsRandom){
+                BoardCell cell = rng.PickOne(cells);
                 if (cell == null){
-                    Debug.LogError($"GetCellInfo: 没有目标格子");
+                    Debug.LogWarning($"GetCellInfo: 随机选择目标格子失败");
                     return Observable.Return<BoardCell>(null);
                 }
                 return Observable.Return(cell);
             }
             else{
-                Debug.LogError($"GetCellInfo: 不支持的策略: {Strategy}");
-                return Observable.Return<BoardCell>(null);
+                return this.GetSystem<ISelectorSystem>().SelectCell(cells);
             }
         }
         
         public List<BoardCell> GetCells(object sender, List<object> param){
-            ICellPosition cellPosition = param.FirstOrDefault(x => x is ICellPosition) as ICellPosition;
 
-            if (cellPosition == null){
-                cellPosition = sender as ICellPosition;
-                if (cellPosition == null){
-                    Debug.LogError($"GetCellInfo: 没有目标格子");
-                    return null;
-                }
+            ICellPosition center = null;
+
+            // 获取中心
+            if (Strategy == GetCellStrategy.自己){
+                center = sender as ICellPosition;
             }
-            else{
-                Debug.Log($"GetCellInfo: 目标格子: {cellPosition.GetCellPosition()}");
-            }
-            if (Strategy == GetCellStrategy.选取){
-                ICellPosition cellPos = param.FirstOrDefault(x => x is ICellPosition) as ICellPosition;
-                if (cellPos == null){
-                    Debug.LogError($"GetCellInfo: 没有目标格子");
-                    return null;
-                }
-                return new List<BoardCell>{this.GetSystem<IBoardSystem>().GetCell(cellPos.GetCellPosition())};
-            }
-            else if (Strategy == GetCellStrategy.周围空位){
-                
-                List<BoardCell> adjacentCells = this.GetSystem<IBoardSystem>().GetAdjacentCells(cellPosition.GetCellPosition());
-                List<BoardCell> emptyCells = adjacentCells.Where(x => x.IsEmpty()).ToList();
-                if (emptyCells.Count == 0){
-                    Debug.LogWarning($"GetCellInfo: 周围没有空位");
-                    return null;
-                }
-                return emptyCells;
-            }
-            else if (Strategy == GetCellStrategy.周围食材){
-                List<BoardCell> adjacentCells = this.GetSystem<IBoardSystem>().GetAdjacentCells(cellPosition.GetCellPosition());
-                List<BoardCell> foodCells = adjacentCells.Where(x => x.instanceGuid != null).ToList();
-                if (foodCells.Count == 0){
-                    Debug.LogWarning($"GetCellInfo: 周围没有食材");
-                    return null;
-                }
-                return foodCells;
-            }
-            else if (Strategy == GetCellStrategy.自己){
-                ICellPosition cellPos = sender as ICellPosition;
-                if (cellPos == null){
-                    Debug.LogError($"GetCellInfo: 自己没有坐标");
-                    return null;
-                }
-                return new List<BoardCell>{this.GetSystem<IBoardSystem>().GetCell(cellPos.GetCellPosition())};
+            else if (Strategy == GetCellStrategy.选取){
+                center = param.FirstOrDefault(x => x is ICellPosition) as ICellPosition;
             }
             else{
                 Debug.LogError($"GetCellInfo: 不支持的策略: {Strategy}");
                 return null;
             }
+            if (center == null){
+                Debug.LogError($"GetCellInfo: 没有目标格子");
+                return null;
+            }
+
+            // 获取网格形状
+            GridShape shape = GridShape.Get(ShapeID);
+            if (shape == null){
+                Debug.LogError($"GetCellInfo: 没有找到网格形状: {ShapeID}");
+                return null;
+            }
+    
+            // 获取格子
+            List<Vector2Int> originCells = shape.GetRotatedCells(0);
+            List<BoardCell> cells = this.GetSystem<IBoardSystem>().GetCenteredCells(center.GetCellPosition(), originCells);
+
+            // 筛选格子
+            switch (Type){
+                case CellType.空格:
+                    cells = cells.Where(x => x.IsEmpty()).ToList();
+                    break;
+                case CellType.有实体:
+                    cells = cells.Where(x => !x.IsEmpty()).ToList();
+                    break;
+                case CellType.任意:
+                    break;
+                default:
+                    Debug.LogError($"GetCellInfo: 不支持的格子类型: {Type}");
+                    return null;
+            }
+            return cells;
         }
     }
 }

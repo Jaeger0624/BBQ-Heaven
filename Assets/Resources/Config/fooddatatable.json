@@ -358,7 +358,9 @@
               "$type": "GA_定点爆破",
               "info": {
                 "strategy": 3,
-                "isRandom": false
+                "type": 1,
+                "isRandom": false,
+                "shapeID": "GS_1x1"
               }
             }
           ]

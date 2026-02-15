@@ -11,10 +11,11 @@
 
 namespace cfg
 { 
-    public enum GetCellStrategy
+    public enum CellType
     {
-        选取 = 2,
-        自己 = 3,
+        任意 = 1,
+        空格 = 2,
+        有实体 = 3,
     }
 
 } 

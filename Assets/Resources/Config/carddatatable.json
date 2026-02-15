@@ -25,8 +25,10 @@
                 ]
               },
               "cellInfo": {
-                "strategy": 0,
-                "isRandom": false
+                "strategy": 2,
+                "type": 2,
+                "isRandom": false,
+                "shapeID": "GS_周围"
               }
             }
           ]
@@ -85,8 +87,10 @@
                 ]
               },
               "cellInfo": {
-                "strategy": 1,
-                "isRandom": false
+                "strategy": 2,
+                "type": 3,
+                "isRandom": false,
+                "shapeID": "GS_周围"
               }
             }
           ]
@@ -147,7 +151,9 @@
               "$type": "GA_修改地块",
               "info": {
                 "strategy": 2,
-                "isRandom": false
+                "type": 1,
+                "isRandom": false,
+                "shapeID": "GS_实心周围"
               },
               "tileId": "Ice"
             }
@@ -220,7 +226,9 @@
               "$type": "GA_定点爆破",
               "info": {
                 "strategy": 2,
-                "isRandom": false
+                "type": 1,
+                "isRandom": false,
+                "shapeID": "GS_1x1"
               }
             }
           ]

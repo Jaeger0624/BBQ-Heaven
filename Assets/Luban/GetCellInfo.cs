@@ -18,7 +18,9 @@ public sealed partial class GetCellInfo : Luban.BeanBase
     public GetCellInfo(JSONNode _buf) 
     {
         { if(!_buf["strategy"].IsNumber) { throw new SerializationException(); }  Strategy = (GetCellStrategy)_buf["strategy"].AsInt; }
+        { if(!_buf["type"].IsNumber) { throw new SerializationException(); }  Type = (CellType)_buf["type"].AsInt; }
         { if(!_buf["isRandom"].IsBoolean) { throw new SerializationException(); }  IsRandom = _buf["isRandom"]; }
+        { if(!_buf["shapeID"].IsString) { throw new SerializationException(); }  ShapeID = _buf["shapeID"]; }
     }
 
     public static GetCellInfo DeserializeGetCellInfo(JSONNode _buf)
@@ -27,7 +29,9 @@ public sealed partial class GetCellInfo : Luban.BeanBase
     }
 
     public readonly GetCellStrategy Strategy;
+    public readonly CellType Type;
     public readonly bool IsRandom;
+    public readonly string ShapeID;
    
     public const int __ID__ = -1467103610;
     public override int GetTypeId() => __ID__;
@@ -40,7 +44,9 @@ public sealed partial class GetCellInfo : Luban.BeanBase
     {
         return "{ "
         + "strategy:" + Strategy + ","
+        + "type:" + Type + ","
         + "isRandom:" + IsRandom + ","
+        + "shapeID:" + ShapeID + ","
         + "}";
     }
 }
