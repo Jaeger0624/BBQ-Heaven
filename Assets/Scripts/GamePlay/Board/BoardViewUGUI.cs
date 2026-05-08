@@ -52,8 +52,11 @@ public class BoardViewUGUI : MonoBehaviour, IController
         foreach (var position in positions)
         {
             if (position == new Vector2Int(-1, -1)) continue;
-            highlightedCells.Add(position);
-            boardCellDict[position].Highlight();
+            if (boardCellDict.TryGetValue(position, out var cellViewUI))
+            {
+                highlightedCells.Add(position);
+                cellViewUI.Highlight();
+            }
         }
     }
     public void UnhighlightAll()
@@ -62,7 +65,10 @@ public class BoardViewUGUI : MonoBehaviour, IController
         foreach (var position in highlightedCells)
         {
             if (position == new Vector2Int(-1, -1)) continue;
-            boardCellDict[position].Unhighlight();
+            if (boardCellDict.TryGetValue(position, out var cellViewUI))
+            {
+                cellViewUI.Unhighlight();
+            }
         }
         highlightedCells.Clear();
     }
@@ -105,7 +111,8 @@ public class BoardViewUGUI : MonoBehaviour, IController
                 BoardCell bottomCell = this.GetSystem<IBoardSystem>().GetGrid().GetCell(hoveredCellPos.x, 0);
                 if (bottomCell != null)
                 {
-                    arrowParent.transform.position = GetCellTransform(bottomCell.position).position;
+                    var tf = GetCellTransform(bottomCell.position);
+                    if (tf != null) arrowParent.transform.position = tf.position;
                 }
                 arrowParent.transform.rotation = Quaternion.Euler(0, 0, 180);
                 break;
@@ -114,7 +121,8 @@ public class BoardViewUGUI : MonoBehaviour, IController
                 BoardCell leftCell = this.GetSystem<IBoardSystem>().GetGrid().GetCell(0, hoveredCellPos.y);
                 if (leftCell != null)
                 {
-                    arrowParent.transform.position = GetCellTransform(leftCell.position).position;
+                    var tf = GetCellTransform(leftCell.position);
+                    if (tf != null) arrowParent.transform.position = tf.position;
                 }
                 arrowParent.transform.rotation = Quaternion.Euler(0, 0, 90);
                 break;
@@ -123,7 +131,8 @@ public class BoardViewUGUI : MonoBehaviour, IController
                 BoardCell TopCell = this.GetSystem<IBoardSystem>().GetGrid().GetCell(hoveredCellPos.x, this.GetSystem<IBoardSystem>().GetGrid().height - 1);
                 if (TopCell != null)
                 {
-                    arrowParent.transform.position = GetCellTransform(TopCell.position).position;
+                    var tf = GetCellTransform(TopCell.position);
+                    if (tf != null) arrowParent.transform.position = tf.position;
                 }
                 arrowParent.transform.rotation = Quaternion.Euler(0, 0, 0);
                 break;
@@ -132,7 +141,8 @@ public class BoardViewUGUI : MonoBehaviour, IController
                 BoardCell rightCell = this.GetSystem<IBoardSystem>().GetGrid().GetCell(this.GetSystem<IBoardSystem>().GetGrid().width - 1, hoveredCellPos.y);
                 if (rightCell != null)
                 {
-                    arrowParent.transform.position = GetCellTransform(rightCell.position).position;
+                    var tf = GetCellTransform(rightCell.position);
+                    if (tf != null) arrowParent.transform.position = tf.position;
                 }
                 arrowParent.transform.rotation = Quaternion.Euler(0, 0, 270);
                 break;
@@ -150,12 +160,18 @@ public class BoardViewUGUI : MonoBehaviour, IController
             Destroy(cell.Value.gameObject);
         }
         boardCellDict.Clear();
+        // Reset 后清理旧的高亮引用，避免访问已销毁/已不存在的格子 key
+        highlightedCells.Clear();
     }
     private void OnHide(HideBoardEvent evt) => Hide();
     private void OnShow(ShowBoardEvent evt) => Show();
     public Transform GetCellTransform(Vector2Int position)
     {
-        return boardCellDict[position].gameObject.transform;
+        if (boardCellDict.TryGetValue(position, out var cellViewUI))
+        {
+            return cellViewUI.gameObject.transform;
+        }
+        return null;
     }
     private void OnHighlightCells(HighlightCellsEvent evt) => HighlightCells(evt.positions, true);
     private void OnClearAllBoardsHighlight(ClearAllBoardsHighlight evt) => UnhighlightAll();

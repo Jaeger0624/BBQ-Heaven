@@ -17,6 +17,18 @@ public class BoardController : MonoBehaviour, IController, ICanSendEvent
     void Start()
     {
         this.RegisterEvent<ChangePanelEvent>(OnChangePanel).UnRegisterWhenGameObjectDestroyed(this.gameObject);
+        this.RegisterEvent<ResetBoardEvent>(OnResetBoard).UnRegisterWhenGameObjectDestroyed(this.gameObject);
+    }
+
+    private void OnResetBoard(ResetBoardEvent evt)
+    {
+        // Reset 时清掉鼠标悬浮/高亮/预览状态，避免 frame 内继续用旧 cell/数据进行交互计算
+        boardViewUGUI.UnhighlightAll();
+        highlightedCells.Clear();
+        SendClearEvents();
+        hoveredCell = null;
+        boardViewUGUI.ChangeArrowVisible(false);
+        this.GetSystem<BlackboardSystem>().hoveredCell = null;
     }
     void Update()
     {
@@ -37,7 +49,17 @@ public class BoardController : MonoBehaviour, IController, ICanSendEvent
         if (TryGetGridIndex(screenPos, out Vector2Int gridIndex))
         {
             // Debug.Log($"gridIndex: {gridIndex}");
-            BoardCell newHoveredCell = boardViewUGUI.boardCellDict[gridIndex].cell;
+            if (!boardViewUGUI.boardCellDict.TryGetValue(gridIndex, out var cellViewUI) || cellViewUI == null)
+            {
+                boardViewUGUI.UnhighlightAll();
+                highlightedCells.Clear();
+                SendClearEvents();
+                hoveredCell = null;
+                boardViewUGUI.ChangeArrowVisible(false);
+                return;
+            }
+
+            BoardCell newHoveredCell = cellViewUI.cell;
 
             // 如果鼠标右键点击，则增加方向值
             if (Input.GetMouseButtonDown(1))
@@ -47,7 +69,7 @@ public class BoardController : MonoBehaviour, IController, ICanSendEvent
 
             // 1. 高亮范围
             IStickStrategy updateStrategy = selectedStick.strategy;
-            List<BoardCell> highlightedCells = updateStrategy.GetRange(newHoveredCell.position, selectedStick);
+            List<BoardCell> newHighlightedCells = updateStrategy.GetRange(newHoveredCell.position, selectedStick);
 
             // 2. 修改方向箭头
             ShowDirectionArrow(IStickStrategy.directionValue, newHoveredCell.position);
@@ -55,14 +77,14 @@ public class BoardController : MonoBehaviour, IController, ICanSendEvent
 
             if (Input.GetMouseButtonDown(1))
             {
-                UpdateView(newHoveredCell.position, highlightedCells, selectedStick);
+                UpdateView(newHoveredCell.position, newHighlightedCells, selectedStick);
             }
             else if (hoveredCell != newHoveredCell && newHoveredCell != null)
             {
                 hoveredCell = newHoveredCell;
-                if (!highlightedCells.SequenceEqual(this.highlightedCells))
+                if (!newHighlightedCells.SequenceEqual(this.highlightedCells))
                 {
-                    UpdateView(hoveredCell.position, highlightedCells, selectedStick);
+                    UpdateView(hoveredCell.position, newHighlightedCells, selectedStick);
                 }
             }
             hoveredCell = newHoveredCell;
@@ -172,6 +194,11 @@ public class BoardController : MonoBehaviour, IController, ICanSendEvent
         // 4. 计算索引
         int indexX = Mathf.FloorToInt(x / cellSize);
         int indexY = Mathf.FloorToInt(y / cellSize);
+
+        // 5. 再对照逻辑层棋盘尺寸做边界校验（Reset 后 UI 容器尺寸可能滞后）
+        var grid = this.GetSystem<IBoardSystem>().GetGrid();
+        if (grid == null) return false;
+        if (indexX < 0 || indexX >= grid.width || indexY < 0 || indexY >= grid.height) return false;
 
         gridIndex = new Vector2Int(indexX, indexY);
         return true;

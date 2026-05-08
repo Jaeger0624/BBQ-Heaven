@@ -17,6 +17,8 @@ public class FoodIndexController : MonoBehaviour, IController
         // 1. 监听食材创建事件
         this.RegisterEvent<CreateFoodInstanceEvent>(OnCreateFoodInstance).UnRegisterWhenGameObjectDestroyed(this);
         this.RegisterEvent<FoodRemoveFromBoardEvent>(OnFoodRemoveFromBoard).UnRegisterWhenGameObjectDestroyed(this);
+        // 棋盘 Reset 时食材视图会被销毁，需要清掉触发缓存避免后续动画访问失效引用
+        this.RegisterEvent<ResetBoardEvent>(OnResetBoard).UnRegisterWhenGameObjectDestroyed(this);
 
         // 2. 监听Indexer触发事件
         this.RegisterEvent<TriggerFoodIndexEvent>(TriggerIndexer).UnRegisterWhenGameObjectDestroyed(this);
@@ -90,6 +92,11 @@ public class FoodIndexController : MonoBehaviour, IController
         foreach (var foodInstance in triggeredFoodInstances){
             foodInstance.foodInstanceView.GO().transform.DOScale(1f, 0.2f).SetEase(Ease.OutBack).SetUpdate(true).SetLink(foodInstance.foodInstanceView.GO());
         }
+        triggeredFoodInstances.Clear();
+    }
+
+    private void OnResetBoard(ResetBoardEvent evt)
+    {
         triggeredFoodInstances.Clear();
     }
 }

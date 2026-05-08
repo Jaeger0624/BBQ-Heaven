@@ -53,6 +53,8 @@ public partial class FoodSystem : AbstractSystem, IFoodSystem
         FoodInstances = new Dictionary<string, FoodInstance>();
         this.RegisterEvent<StartNewDayEvent>(OnStartNewDay);
         this.RegisterEvent<EndDayEvent>(OnEndDay);
+        // Reset 棋盘时需要清理棋盘上食材实例，避免策略层仍可拾取到旧数据
+        this.RegisterEvent<ResetBoardEvent>(OnResetBoard);
 
         this.RegisterEvent<FinishCombineBBQEvent>(OnFinishCombineBBQ);
     }
@@ -61,8 +63,22 @@ public partial class FoodSystem : AbstractSystem, IFoodSystem
         FoodInstances.Clear();
         this.UnRegisterEvent<StartNewDayEvent>(OnStartNewDay);
         this.UnRegisterEvent<EndDayEvent>(OnEndDay);
+        this.UnRegisterEvent<ResetBoardEvent>(OnResetBoard);
 
         this.UnRegisterEvent<FinishCombineBBQEvent>(OnFinishCombineBBQ);
+    }
+
+    private void OnResetBoard(ResetBoardEvent evt)
+    {
+        // 仅清理棋盘上的食材实例（仓库不动）
+        ClearAllFoodFromBoard();
+    }
+
+    private bool IsInBoard(Vector2Int position)
+    {
+        var grid = this.GetSystem<IBoardSystem>()?.GetGrid();
+        if (grid == null) return false;
+        return position.x >= 0 && position.x < grid.width && position.y >= 0 && position.y < grid.height;
     }
     public void Save(GameArchive archive)
     {
@@ -197,10 +213,23 @@ public partial class FoodSystem : AbstractSystem, IFoodSystem
         }
         // 取消SE
         foodInstance.OnRemove();
+
+        // FoodRemoveFromBoardEvent 语义是“从棋盘上移除”，避免食材已经被放上烤串（position=-1）时重复递减计数
+        // 说明：FoodInstance.state 在 PutFoodInstanceToStick 时不会更新，所以不要用 state 做判断
+        bool wasOnBoardCell = foodInstance.position != new Vector2Int(-1, -1);
         
         if (foodInstance.position != new Vector2Int(-1, -1) && foodInstance.state == FoodInstanceState.棋盘上){
-            // 从棋盘上移除
-            this.GetSystem<IBoardSystem>().RemoveCellInstance(foodInstance.position);
+            // 从棋盘上移除（Reset 后旧坐标可能已越界，新棋盘无该格，跳过移除格子实例即可）
+            if (IsInBoard(foodInstance.position))
+            {
+                this.GetSystem<IBoardSystem>().RemoveCellInstance(foodInstance.position);
+            }
+        }
+        if (wasOnBoardCell)
+        {
+            // 计数/索引类UI依赖 FoodRemoveFromBoardEvent 来递减
+            // 注意：必须在 FoodInstances.Remove(guid) 之前发送，确保 GetFoodInstance 能找到实例
+            this.SendEvent(new FoodRemoveFromBoardEvent(guid));
         }
         // 从棋盘实体系统中移除
         this.GetSystem<IBoardEntitySystem>().UnregisterEntity(foodInstance);
@@ -224,7 +253,15 @@ public partial class FoodSystem : AbstractSystem, IFoodSystem
             return;
         }
 
-        this.GetSystem<IBoardSystem>().RemoveCellInstance(foodInstance.position);
+        if (IsInBoard(foodInstance.position))
+        {
+            this.GetSystem<IBoardSystem>().RemoveCellInstance(foodInstance.position);
+        }
+        // 消耗发生在棋盘上，计数/索引类UI需要同步递减
+        if (foodInstance.position != new Vector2Int(-1, -1))
+        {
+            this.SendEvent(new FoodRemoveFromBoardEvent(guid));
+        }
         this.GetSystem<IBoardEntitySystem>().UnregisterEntity(foodInstance);
 
         this.SendEvent(new ConsumeFoodInstanceEvent(foodInstance));
@@ -239,7 +276,10 @@ public partial class FoodSystem : AbstractSystem, IFoodSystem
         FoodInstance foodInstance = GetFoodInstance(guid);
         if (foodInstance == null) {Debug.LogError($"【FoodSystem】放上烤串失败: {guid} 不存在"); return;}
         // 从棋盘上移除
-        this.GetSystem<IBoardSystem>().SetCellInstance(foodInstance.position, null);
+        if (IsInBoard(foodInstance.position))
+        {
+            this.GetSystem<IBoardSystem>().SetCellInstance(foodInstance.position, null);
+        }
         // 清除食材实例的position
         foodInstance.position = new Vector2Int(-1, -1);
         // 发送事件，通知视图更新

@@ -26,6 +26,9 @@ public class EntityViewController : MonoBehaviour, IController
     }
     void OnEnable()
     {
+        // Reset 棋盘：统一销毁所有实体视图缓存（食材/非食材都可能残留）
+        this.RegisterEvent<ResetBoardEvent>(OnResetBoard).UnRegisterWhenDisabled(this);
+
         // 1. 生成食材
         this.RegisterEvent<CreateFoodInstanceEvent>(OnCreateFoodInstanceEvent).UnRegisterWhenDisabled(this);
         this.RegisterEvent<RemoveFoodInstanceEvent>(OnRemoveFoodInstanceEvent).UnRegisterWhenDisabled(this);
@@ -71,6 +74,18 @@ public class EntityViewController : MonoBehaviour, IController
         Debug.Log($"【EntityViewController】创建实体: {entity.name}");
         // 2. 生成食材实例视图
         ControlView(entity);
+    }
+
+    private void OnResetBoard(ResetBoardEvent evt)
+    {
+        if (entityViews.Count == 0) return;
+        foreach (var kv in entityViews)
+        {
+            if (kv.Value == null) continue;
+            var go = kv.Value.GO();
+            if (go != null) Destroy(go);
+        }
+        entityViews.Clear();
     }
 
     

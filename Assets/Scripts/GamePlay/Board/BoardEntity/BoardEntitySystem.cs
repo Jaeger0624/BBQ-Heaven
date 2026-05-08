@@ -20,6 +20,20 @@ public class BoardEntitySystem : AbstractSystem, IBoardEntitySystem
     {
         _entities = new Dictionary<string, BoardEntity>();
         Mover = new BoardEntityMover();
+        // Reset 棋盘时清理实体逻辑缓存（食材会由 FoodSystem 触发 RemoveFoodInstance 从而 unregister）
+        this.RegisterEvent<ResetBoardEvent>(OnResetBoard);
+    }
+
+    protected override void OnDeinit()
+    {
+        this.UnRegisterEvent<ResetBoardEvent>(OnResetBoard);
+        _entities.Clear();
+    }
+
+    private void OnResetBoard(ResetBoardEvent evt)
+    {
+        // 逻辑层的清理：避免策略层/动态值继续引用旧实体
+        _entities.Clear();
     }
     public BoardEntity GetEntity(string guid)
     {
