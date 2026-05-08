@@ -44,7 +44,6 @@ public class BoardViewUGUI : MonoBehaviour, IController
         UpdateBoardCell();
     }
 
-    
     #region 公共API
     public void HighlightCells(List<Vector2Int> positions, bool reset)
     {
@@ -72,6 +71,7 @@ public class BoardViewUGUI : MonoBehaviour, IController
     public void UpdateBoardCell()
     {
         ClearBoardCellDict();
+
         foreach (var cell in this.GetSystem<IBoardSystem>().GetGrid().GetAllCells())
         {
             CellViewUI boardCell = Instantiate(boardCellPrefab, boardCellParent).GetComponent<CellViewUI>();
@@ -79,6 +79,10 @@ public class BoardViewUGUI : MonoBehaviour, IController
             boardCell.transform.position = new Vector3(cell.position.x, cell.position.y, 0);
             boardCellDict.Add(cell.position, boardCell);
         }
+
+        // 更新网格布局
+        gridLayoutGroup.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+        gridLayoutGroup.constraintCount = this.GetSystem<IBoardSystem>().GetGrid().width;
     }
     public void Show()
     {

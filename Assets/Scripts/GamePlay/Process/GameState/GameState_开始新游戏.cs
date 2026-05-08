@@ -72,6 +72,10 @@ public class GameState_开始新游戏 : AbstractGameState
         // List<FoodPack> foodPacks = foodRng.PickMany<FoodPack>(this.GetSystem<IDataSystem>().GetAllFoodData().Select(foodData => new FoodPack(foodData.ID, 10, enhancements)).ToList(), 4);
         this.GetSystem<IFoodSystem>().AddFoodToRepository(foodPacks);
 
+
+        // 5. 重置棋盘
+        this.GetSystem<IBoardSystem>().ResetGrid(8, 8);
+        
         Debug.Log("【GameSystem】新游戏初始化完成");
     }
 }

@@ -59,13 +59,15 @@ public class BoardSystem : AbstractSystem, IBoardSystem
     public BoardCell GetRandomEmptyCell(){
         return this.GetSystem<IRngSystem>().GetSubRng<IBoardSystem>().PickOne(GetEmptyCells());
     }
-    public void ResetGrid(int width, int height){
+    public void ResetGrid(int width, int height)
+    {
+        Debug.Log($"【BoardSystem】重置棋盘: {width}x{height}");
+        
         grid = new Grid<BoardCell>(width, height, () => new BoardCell(null));
+        this.SendEvent(new ResetBoardEvent(width, height));
     }
     protected override void OnInit()
     {
-        grid = new Grid<BoardCell>(8, 8, () => new BoardCell(null));
-
         _cellClickedSubject = new Subject<BoardCell>();
         _boardStateChangedSubject = new Subject<Unit>();
 
