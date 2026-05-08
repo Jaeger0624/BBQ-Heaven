@@ -9,6 +9,7 @@ public interface IBoardSystem : ISystem{
     IObservable<Unit> OnBoardStateChanged { get; }
     IObservable<BoardCell> OnCellClicked { get; }
     Grid<BoardCell> GetGrid();
+    void ResetGrid(int width, int height);
     List<BoardCell> GetEmptyCells();
     void ClickCell(Vector2Int position);
     BoardCell GetCell(Vector2Int position);
@@ -58,6 +59,9 @@ public class BoardSystem : AbstractSystem, IBoardSystem
     public BoardCell GetRandomEmptyCell(){
         return this.GetSystem<IRngSystem>().GetSubRng<IBoardSystem>().PickOne(GetEmptyCells());
     }
+    public void ResetGrid(int width, int height){
+        grid = new Grid<BoardCell>(width, height, () => new BoardCell(null));
+    }
     protected override void OnInit()
     {
         grid = new Grid<BoardCell>(8, 8, () => new BoardCell(null));
@@ -67,7 +71,7 @@ public class BoardSystem : AbstractSystem, IBoardSystem
 
 
         this.RegisterEvent<MoveEntityEvent>(tileHandler.EntityMove);
-        this.RegisterEvent<PlaceEntityEvent>(tileHandler.EntityPlaced);   
+        this.RegisterEvent<PlaceEntityEvent>(tileHandler.EntityPlaced);
     }
     protected override void OnDeinit()
     {

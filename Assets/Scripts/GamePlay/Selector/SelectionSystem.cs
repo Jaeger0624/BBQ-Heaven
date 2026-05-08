@@ -6,12 +6,12 @@ using UniRx;
 using UnityEngine;
 
 // 负责目标选择和选择面板的显示的系统
-public interface ISelectorSystem : ISystem
+public interface ISelectionSystem : ISystem
 {
     IObservable<BoardCell> SelectCell(List<BoardCell> validCells);
     IObservable<Unit> RequestSelection(ISelectionRequest selectionRequest, int refreshAmount, SelectionPanelType selectionPanelType);
 }
-public class SelectorSystem : AbstractSystem, ISelectorSystem
+public class SelectionSystem : AbstractSystem, ISelectionSystem
 {
 
     protected override void OnInit()

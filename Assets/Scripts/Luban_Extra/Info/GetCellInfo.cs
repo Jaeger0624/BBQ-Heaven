@@ -28,7 +28,7 @@ namespace cfg{
                 return Observable.Return(cell);
             }
             else{
-                return this.GetSystem<ISelectorSystem>().SelectCell(cells);
+                return this.GetSystem<ISelectionSystem>().SelectCell(cells);
             }
         }
         

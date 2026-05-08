@@ -162,7 +162,7 @@ public class SelectionPanel : MonoBehaviour, IController
         // 随机选取3张卡牌
         cardDatas = this.GetSystem<IDataSystem>().GetAllCardData().OrderBy(x => Guid.NewGuid()).Take(3).ToList();
 
-        this.GetSystem<ISelectorSystem>().RequestSelection(new SelectionRequest_随机卡牌(3), 3, selectionPanelType);
+        this.GetSystem<ISelectionSystem>().RequestSelection(new SelectionRequest_随机卡牌(3), 3, selectionPanelType);
     }
     [Button("测试：选择食材")]
     private void Test_FoodSelection(SelectionPanelType selectionPanelType)
@@ -170,13 +170,13 @@ public class SelectionPanel : MonoBehaviour, IController
         List<FoodData> foodDatas = new List<FoodData>();
         foodDatas = this.GetSystem<IDataSystem>().GetAllFoodData().OrderBy(x => Guid.NewGuid()).Take(3).ToList();
 
-        this.GetSystem<ISelectorSystem>().RequestSelection(new SelectionRequest_随机食材(3), 3, selectionPanelType);
+        this.GetSystem<ISelectionSystem>().RequestSelection(new SelectionRequest_随机食材(3), 3, selectionPanelType);
     }
     [Button("测试：选择商店")]
     private void Test_ShopSelection(SelectionPanelType selectionPanelType){
         List<ShopType> shopTypes = new List<ShopType>();
         shopTypes.Add(ShopType.普通);
         shopTypes.Add(ShopType.批发);
-        this.GetSystem<ISelectorSystem>().RequestSelection(new SelectionRequest_选择商店(shopTypes), 0, selectionPanelType);
+        this.GetSystem<ISelectionSystem>().RequestSelection(new SelectionRequest_选择商店(shopTypes), 0, selectionPanelType);
     }
 }

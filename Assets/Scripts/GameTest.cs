@@ -383,4 +383,7 @@ public class GameTest : MonoBehaviour, IController, ICanSendEvent{
             this.GetSystem<IGuideSystem>().StartGuide("初始教程");
         }
     }
+
+
+    //wadawd
 }

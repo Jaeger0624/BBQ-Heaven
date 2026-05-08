@@ -83,7 +83,7 @@ public class GameArchitecture : Architecture<GameArchitecture>
         sb.Append("\nEconomySystem - 经济系统");
         Interface.RegisterSystem<ICardSystem>(new CardSystem());  // 卡牌系统
         sb.Append("\nCardSystem - 卡牌系统");
-        Interface.RegisterSystem<ISelectorSystem>(new SelectorSystem());  // 选择系统
+        Interface.RegisterSystem<ISelectionSystem>(new SelectionSystem());  // 选择系统
         sb.Append("\nSelectorSystem - 选择系统");
         Interface.RegisterSystem<IDialogueSystem>(new DialogueSystem());  // 对话系统
         sb.Append("\nDialogueSystem - 对话系统");

@@ -1,12 +1,23 @@
 using QFramework;
 using UnityEngine;
 
-public class MoveEntityEvent : AbstractEvent{
+public class ResetBoardEvent : AbstractEvent{
+    public int width;
+    public int height;
+    public ResetBoardEvent(int width, int height){
+        this.width = width;
+        this.height = height;
+    }
+}
+
+public class MoveEntityEvent : AbstractEvent
+{
     public BoardEntity entity;
     public Vector2Int newPos;
     public Vector2Int originPosition;
     public Vector2Int direction;
-    public MoveEntityEvent(Vector2Int newPos, Vector2Int originPosition, BoardEntity entity, Vector2Int direction = default){
+    public MoveEntityEvent(Vector2Int newPos, Vector2Int originPosition, BoardEntity entity, Vector2Int direction = default)
+    {
         this.newPos = newPos;
         this.originPosition = originPosition;
         this.entity = entity;

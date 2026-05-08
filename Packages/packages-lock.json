@@ -44,6 +44,12 @@
       },
       "hash": "04c1ca72cde82318e11eb1281dc4c3d314a2e68c"
     },
+    "com.farlocus.locus": {
+      "version": "file:com.farlocus.locus",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.gustavopsantos.reflex": {
       "version": "https://github.com/gustavopsantos/reflex.git?path=/Assets/Reflex/#13.0.3",
       "depth": 0,

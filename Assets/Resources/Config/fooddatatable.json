@@ -495,5 +495,20 @@
     "SEs": [],
     "rank": 1,
     "timeCost": 1
+  },
+  {
+    "ID": "fish",
+    "name": "金枪鱼",
+    "description": "",
+    "type": 8,
+    "tag": 0,
+    "rarity": 5,
+    "taste": 5,
+    "sprite": "Fish",
+    "effectDescription": "",
+    "CGAs": [],
+    "SEs": [],
+    "rank": 2,
+    "timeCost": 2
   }
 ]
